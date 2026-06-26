@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+}
+
+@layer utilities {
+  .animate-float {
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  .pill-scroll::-webkit-scrollbar {
+    height: 0px;
+  }
+  
+  .chev {
+    transition: transform 0.25s ease;
+  }
+  
+  .rotate-open {
+    transform: rotate(180deg);
+  }
+}

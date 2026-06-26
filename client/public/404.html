@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>404 - Page Not Found</title>
+  <link href="../assets/css/output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 font-nunito transition-colors duration-300 min-h-screen flex flex-col">
+  <!-- Nav -->
+  <div id="nav-placeholder"></div>
+
+  <main class="flex-grow flex items-center justify-center pt-12 pb-20 px-6">
+    <div class="bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-12 md:p-20 shadow-sm relative overflow-hidden text-center max-w-2xl w-full">
+      <div class="absolute w-72 h-72 -top-32 -left-32 rounded-full bg-[#ff385c] opacity-5 blur-3xl pointer-events-none"></div>
+      <div class="absolute w-72 h-72 -bottom-32 -right-32 rounded-full bg-[#ff385c] opacity-5 blur-3xl pointer-events-none"></div>
+      
+      <div class="relative z-10">
+        <h1 class="text-7xl md:text-[100px] font-black text-[#ff385c] mb-4 tracking-tighter leading-none drop-shadow-sm">404</h1>
+        <p class="text-2xl md:text-3xl font-extrabold text-gray-900 dark:text-white mb-4 tracking-tight">Oops! Page Not Found</p>
+        <p class="text-gray-500 dark:text-gray-400 mb-10 text-[15px] max-w-sm mx-auto">
+          The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.
+        </p>
+        <a href="index.html" class="inline-flex items-center justify-center px-8 py-3.5 rounded-xl bg-[#ff385c] text-white font-bold text-[15px] hover:bg-[#e03150] transition-all duration-300 border-0 cursor-pointer shadow-md shadow-[#ff385c]/20 no-underline hover:-translate-y-0.5">
+          Go Back Home
+        </a>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/theme.js"></script>
+  <script src="../assets/js/theme-toggle.js"></script>
+  <script src="../assets/js/partials.js"></script>
+</body>
+</html>

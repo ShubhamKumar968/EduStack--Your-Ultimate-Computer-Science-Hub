@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../../assets/js/partials.js"></script>
+  <link rel="stylesheet" href="../../assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+  <div id="nav-placeholder"></div>
+  <main class="flex-grow flex items-center justify-center px-4 py-12 relative z-0">
+    <div class="absolute w-[420px] h-[420px] -top-40 -left-32 rounded-full bg-brand opacity-10 blur-3xl z-[-1]"></div>
+    <div class="absolute w-[380px] h-[380px] -bottom-40 -right-24 rounded-full bg-brand-deep opacity-10 blur-3xl z-[-1]"></div>
+    <div class="w-full max-w-xl bg-white dark:bg-[#222222] p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 transition-colors duration-300 relative z-10">
+      <div class="flex justify-between items-center relative mb-8 max-w-sm mx-auto">
+        <div class="absolute h-[2px] bg-gray-200 dark:bg-gray-800 left-0 right-0 top-1/2 -translate-y-1/2 z-0"></div>
+        <div id="bar-step-1" class="w-9 h-9 rounded-full bg-brand text-white flex items-center justify-center font-bold text-sm z-10 transition-all duration-300 shadow-[0_0_12px_rgba(255,56,92,0.4)]">1</div>
+        <div id="bar-step-2" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center font-bold text-sm z-10 transition-all duration-300">2</div>
+        <div id="bar-step-3" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center font-bold text-sm z-10 transition-all duration-300">3</div>
+        <div id="bar-step-4" class="w-9 h-9 rounded-full bg-gray-200 dark:bg-gray-800 text-gray-400 dark:text-gray-500 flex items-center justify-center font-bold text-sm z-10 transition-all duration-300">4</div>
+      </div>
+      <div class="text-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight" id="wizard-title">Personal Information</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1" id="wizard-subtitle">Welcome to EduStack. Please provide your details.</p>
+      </div>
+      <form id="signup-form" class="m-0 p-0">
+        <!-- STEP 1 -->
+        <div id="step-panel-1" class="block space-y-4">
+          <a href="#" class="w-full inline-flex items-center justify-center gap-2.5 bg-white dark:bg-[#181818] border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-[#2e2e2e] text-gray-700 dark:text-gray-200 font-bold py-2.5 px-4 rounded-xl shadow-sm transition-all text-sm no-underline mb-2">
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l3.66-2.85z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.47 3.47 2.18 7.06l3.66 2.85c.87-2.6 3.3-4.53 12-4.53z" fill="#EA4335"/></svg>
+            <span>Sign Up with Google</span>
+          </a>
+          <div class="relative flex py-2 items-center">
+            <div class="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
+            <span class="flex-shrink mx-4 text-gray-400 dark:text-gray-500 text-xs font-bold uppercase tracking-wider">Or register manually</span>
+            <div class="flex-grow border-t border-gray-200 dark:border-gray-800"></div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">First Name <span class="text-brand font-bold">*</span></label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-regular fa-user"></i></span>
+                <input type="text" name="firstName" required placeholder="John" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Last Name <span class="text-brand font-bold">*</span></label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-regular fa-user"></i></span>
+                <input type="text" name="lastName" required placeholder="Doe" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Date of Birth <span class="text-brand font-bold">*</span></label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-regular fa-calendar"></i></span>
+                <input type="date" name="dob" required class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Gender (Optional)</label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500 pointer-events-none"><i class="fa-solid fa-venus-mars"></i></span>
+                <select name="gender" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer">
+                  <option value="Not Specified">Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Email Address <span class="text-brand font-bold">*</span></label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-regular fa-envelope"></i></span>
+                <input type="email" name="email" required placeholder="name@example.com" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Phone Number <span class="text-brand font-bold">*</span></label>
+              <div class="relative">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-solid fa-phone"></i></span>
+                <input type="text" name="phoneNumber" required placeholder="+91 XXXX XXXXXX" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+          </div>
+          <div class="grid grid-cols-3 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">City</label>
+              <input type="text" name="city" placeholder="City" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">State <span class="text-brand font-bold">*</span></label>
+              <select name="state" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer">
+                <option value="" disabled selected>Select State</option>
+                <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
+                <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                <option value="Assam">Assam</option>
+                <option value="Bihar">Bihar</option>
+                <option value="Chandigarh">Chandigarh</option>
+                <option value="Chhattisgarh">Chhattisgarh</option>
+                <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
+                <option value="Delhi">Delhi</option>
+                <option value="Goa">Goa</option>
+                <option value="Gujarat">Gujarat</option>
+                <option value="Haryana">Haryana</option>
+                <option value="Himachal Pradesh">Himachal Pradesh</option>
+                <option value="Jammu and Kashmir">Jammu and Kashmir</option>
+                <option value="Jharkhand">Jharkhand</option>
+                <option value="Karnataka">Karnataka</option>
+                <option value="Kerala">Kerala</option>
+                <option value="Ladakh">Ladakh</option>
+                <option value="Lakshadweep">Lakshadweep</option>
+                <option value="Madhya Pradesh">Madhya Pradesh</option>
+                <option value="Maharashtra">Maharashtra</option>
+                <option value="Manipur">Manipur</option>
+                <option value="Meghalaya">Meghalaya</option>
+                <option value="Mizoram">Mizoram</option>
+                <option value="Nagaland">Nagaland</option>
+                <option value="Odisha">Odisha</option>
+                <option value="Puducherry">Puducherry</option>
+                <option value="Punjab">Punjab</option>
+                <option value="Rajasthan">Rajasthan</option>
+                <option value="Sikkim">Sikkim</option>
+                <option value="Tamil Nadu">Tamil Nadu</option>
+                <option value="Telangana">Telangana</option>
+                <option value="Tripura">Tripura</option>
+                <option value="Uttar Pradesh">Uttar Pradesh</option>
+                <option value="Uttarakhand">Uttarakhand</option>
+                <option value="West Bengal">West Bengal</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">PIN Code</label>
+              <input type="text" name="pincode" placeholder="PIN Code" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+            </div>
+          </div>
+          <!-- Emergency contact removed per user request -->
+          <div class="flex justify-between items-center pt-6 border-t border-gray-100 dark:border-gray-800 mt-6">
+            <a href="login.html" class="text-sm font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition no-underline flex items-center gap-2"><i class="fa-solid fa-caret-left text-brand"></i> LOGIN</a>
+            <button type="button" onclick="navigateWizard(1, 2)" class="bg-brand hover:bg-brand-deep text-white font-semibold py-2 px-5 rounded-xl transition text-sm flex items-center gap-2 border-0 cursor-pointer"><span>CONTINUE</span> <i class="fa-solid fa-arrow-right text-xs"></i></button>
+          </div>
+        </div>
+        <!-- STEP 2: Academic Background -->
+        <div id="step-panel-2" class="hidden space-y-4">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Academic Details <span class="text-brand font-bold">*</span></label>
+            <div class="relative">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-solid fa-graduation-cap"></i></span>
+              <input type="text" name="college" placeholder="College / University" required class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+            </div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-2">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Branch <span class="text-brand font-bold">*</span></label>
+              <select name="branch" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer">
+                <option value="" disabled selected>Select Branch</option>
+                <option value="CSE">Computer Science & Engineering</option>
+                <option value="IT">Information Technology</option>
+                <option value="ECE">Electronics & Communication</option>
+                <option value="EE">Electrical Engineering</option>
+                <option value="ME">Mechanical Engineering</option>
+                <option value="CE">Civil Engineering</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Semester <span class="text-brand font-bold">*</span></label>
+              <select name="semester" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer">
+                <option value="" disabled selected>Select Sem</option>
+                <option value="1">1st Semester</option>
+                <option value="2">2nd Semester</option>
+                <option value="3">3rd Semester</option>
+                <option value="4">4th Semester</option>
+                <option value="5">5th Semester</option>
+                <option value="6">6th Semester</option>
+                <option value="7">7th Semester</option>
+                <option value="8">8th Semester</option>
+              </select>
+            </div>
+          </div>
+          <div class="flex justify-between items-center pt-6 border-t border-gray-100 dark:border-gray-800 mt-6">
+            <button type="button" onclick="navigateWizard(2, 1)" class="text-sm font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition border-0 bg-transparent cursor-pointer flex items-center gap-2"><i class="fa-solid fa-caret-left text-brand"></i> PREVIOUS</button>
+            <button type="button" onclick="navigateWizard(2, 3)" class="bg-brand hover:bg-brand-deep text-white font-semibold py-2 px-5 rounded-xl transition text-sm flex items-center gap-2 border-0 cursor-pointer"><span>CONTINUE</span> <i class="fa-solid fa-arrow-right text-xs"></i></button>
+          </div>
+        </div>
+        <!-- STEP 3: User Type and Upload -->
+        <div id="step-panel-3" class="hidden space-y-5">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Register As <span class="text-brand font-bold">*</span></label>
+            <div class="relative flex items-center">
+              <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500 pointer-events-none"><i class="fa-solid fa-user-gear"></i></span>
+              <select id="userTypeSelect" name="userType" required class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer">
+                <option value="student">Student (Access all learning materials)</option>
+                <option value="contributor">Contributor (Upload notes & papers)</option>
+              </select>
+            </div>
+          </div>
+          <div class="space-y-4">
+            <div class="bg-gray-50/50 dark:bg-[#222222]/30 p-5 rounded-2xl border border-gray-100 dark:border-gray-800">
+              <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2.5">Profile Image</label>
+              <div id="profile-dropzone" class="border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-brand dark:hover:border-brand-soft rounded-xl p-5 text-center cursor-pointer bg-white dark:bg-[#181818] transition-all select-none group relative">
+                <input type="file" id="profile-file-input" name="profileImage" accept="image/png, image/jpeg, image/webp" class="hidden">
+                <div class="w-10 h-10 mx-auto bg-brand/10 text-brand rounded-full flex items-center justify-center transform transition group-hover:scale-110 mb-2 shadow-sm">
+                  <i class="fa-solid fa-cloud-arrow-up text-md"></i>
+                </div>
+                <p class="text-xs font-semibold text-gray-600 dark:text-gray-300">Drag profile image here or <span class="text-brand font-bold underline">Browse</span></p>
+                <p class="text-[10px] text-gray-400 mt-0.5">PNG, JPG, or WEBP (Max 5MB)</p>
+              </div>
+              <div id="profile-progress-box" class="hidden mt-3 bg-white dark:bg-[#181818] border border-gray-100 dark:border-gray-800 rounded-xl p-3">
+                <div class="flex items-center gap-3">
+                  <div class="w-8 h-8 bg-brand rounded-lg flex flex-col items-center justify-center text-white font-black text-[8px] tracking-tighter uppercase flex-shrink-0">
+                    <i class="fa-solid fa-file-image text-xs mb-0.5"></i>
+                    <span id="profile-ext-badge">IMG</span>
+                  </div>
+                  <div class="flex-grow min-w-0">
+                    <div class="flex justify-between items-center mb-1">
+                      <h5 id="profile-filename" class="text-xs font-bold text-gray-700 dark:text-gray-300 truncate pr-2">avatar.jpg</h5>
+                      <span id="profile-percent" class="text-[9px] font-extrabold text-brand bg-brand/10 px-1.5 py-0.5 rounded">0%</span>
+                    </div>
+                    <div class="w-full h-1 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                      <div id="profile-bar-fill" class="h-full w-0 bg-brand transition-all duration-150 rounded-full"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex justify-between items-center pt-6 border-t border-gray-100 dark:border-gray-800 mt-6">
+            <button type="button" onclick="navigateWizard(3, 2)" class="text-sm font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition border-0 bg-transparent cursor-pointer flex items-center gap-2"><i class="fa-solid fa-caret-left text-brand"></i> PREVIOUS</button>
+            <button type="button" onclick="navigateWizard(3, 4)" class="bg-brand hover:bg-brand-deep text-white font-semibold py-2 px-5 rounded-xl transition text-sm flex items-center gap-2 border-0 cursor-pointer"><span>CONTINUE</span> <i class="fa-solid fa-arrow-right text-xs"></i></button>
+          </div>
+        </div>
+        <!-- STEP 4: Password -->
+        <div id="step-panel-4" class="hidden space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Password <span class="text-brand font-bold">*</span></label>
+              <div class="relative flex items-center">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-solid fa-lock"></i></span>
+                <input id="password-input" type="password" name="password" required placeholder="••••••••" class="w-full pl-10 pr-10 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+                <button id="password-toggle-btn" type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300 focus:outline-none cursor-pointer border-0 bg-transparent"><i id="eye-icon" class="fa-solid fa-eye"></i></button>
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Confirm Password <span class="text-brand font-bold">*</span></label>
+              <div class="relative flex items-center">
+                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-solid fa-lock-open"></i></span>
+                <input id="confirm-password-input" type="password" name="confirmPassword" required placeholder="••••••••" class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              </div>
+            </div>
+          </div>
+          <div class="flex items-start pt-2">
+            <input id="terms" name="terms" type="checkbox" required class="h-4 w-4 mt-0.5 rounded border-gray-300 text-brand focus:ring-brand dark:bg-[#181818] dark:border-gray-700 cursor-pointer">
+            <label for="terms" class="ml-2 block text-sm text-gray-600 dark:text-gray-400 cursor-pointer select-none">
+              I accept the <a href="#" class="text-brand hover:underline font-medium no-underline">Terms and Conditions</a> and privacy policies.
+            </label>
+          </div>
+          <div id="error-message" class="hidden text-xs font-semibold text-red-500 bg-red-50 dark:bg-red-500/10 p-3 rounded-xl border border-red-200 dark:border-red-500/20 transition-all duration-300"></div>
+          <div class="flex justify-between items-center pt-6 border-t border-gray-100 dark:border-gray-800 mt-6">
+            <button type="button" onclick="navigateWizard(4, 3)" class="text-sm font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition border-0 bg-transparent cursor-pointer flex items-center gap-2"><i class="fa-solid fa-caret-left text-brand"></i> PREVIOUS</button>
+            <button type="submit" class="bg-gradient-to-r from-brand to-brand-soft hover:from-brand-deep hover:to-brand text-white font-semibold py-2.5 px-6 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98] tracking-wide text-sm cursor-pointer flex items-center justify-center gap-2 border-0">
+              <span>Sign Up</span>
+              <i class="fa-solid fa-user-plus text-xs"></i>
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="text-center mt-6 pt-5 border-t border-gray-100 dark:border-gray-800 transition-colors duration-300">
+        <p class="text-sm text-gray-500 dark:text-gray-400">Already have an account? <a href="login.html" class="text-brand hover:text-brand-deep font-semibold transition-colors no-underline">Login here</a></p>
+      </div>
+    </div>
+  </main>
+  <footer class="py-4 text-center text-xs text-gray-400 dark:text-gray-500 mt-auto border-t border-transparent dark:border-gray-800/40">
+    Built with <span class="text-brand">♥</span> by a CSE student, for CSE students — EduStack
+  </footer>
+  <script src="../../assets/js/theme-toggle.js"></script>
+  <script>
+    const titles = {
+      1: { title: "Personal Information", subtitle: "Welcome to EduStack. Please provide your details." },
+      2: { title: "Academic Background", subtitle: "Tell us about your college and course." },
+      3: { title: "Profile Setup", subtitle: "Set your role and upload a profile picture." },
+      4: { title: "Secure Credentials", subtitle: "Set a password for your account." }
+    };
+    function navigateWizard(current, target) {
+      document.getElementById(`step-panel-${current}`).classList.replace('block', 'hidden');
+      document.getElementById(`step-panel-${target}`).classList.replace('hidden', 'block');
+      document.getElementById('wizard-title').textContent = titles[target].title;
+      document.getElementById('wizard-subtitle').textContent = titles[target].subtitle;
+      for (let i = 1; i <= 4; i++) {
+        const barIndicator = document.getElementById(`bar-step-${i}`);
+        if (i <= target) {
+          barIndicator.classList.add('bg-brand', 'text-white', 'shadow-[0_0_12px_rgba(255,56,92,0.4)]');
+          barIndicator.classList.remove('bg-gray-200', 'dark:bg-gray-800', 'text-gray-400', 'dark:text-gray-500');
+        } else {
+          barIndicator.classList.remove('bg-brand', 'text-white', 'shadow-[0_0_12px_rgba(255,56,92,0.4)]');
+          barIndicator.classList.add('bg-gray-200', 'dark:bg-gray-800', 'text-gray-400', 'dark:text-gray-500');
+        }
+      }
+    }
+    document.addEventListener('DOMContentLoaded', () => {
+      // Setup Dropzone
+      const dropzone = document.getElementById('profile-dropzone');
+      const input = document.getElementById('profile-file-input');
+      const box = document.getElementById('profile-progress-box');
+      const nameLabel = document.getElementById('profile-filename');
+      const percentLabel = document.getElementById('profile-percent');
+      const fillBar = document.getElementById('profile-bar-fill');
+      const extBadge = document.getElementById('profile-ext-badge');
+      dropzone.addEventListener('click', () => input.click());
+      ['dragenter', 'dragover'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.add('border-brand', 'bg-brand/10');
+        });
+      });
+      ['dragleave', 'drop'].forEach(name => {
+        dropzone.addEventListener(name, (e) => {
+          e.preventDefault(); e.stopPropagation();
+          dropzone.classList.remove('border-brand', 'bg-brand/10');
+        });
+      });
+      dropzone.addEventListener('drop', (e) => {
+        if(e.dataTransfer.files.length > 0) {
+          input.files = e.dataTransfer.files;
+          handleUpload(e.dataTransfer.files[0]);
+        }
+      });
+      input.addEventListener('change', (e) => {
+        if(e.target.files.length > 0) {
+          handleUpload(e.target.files[0]);
+        }
+      });
+      function handleUpload(file) {
+        nameLabel.innerText = file.name;
+        extBadge.innerText = file.name.split('.').pop().toUpperCase();
+        box.classList.remove('hidden');
+        let percentage = 0;
+        fillBar.style.width = '0%';
+        percentLabel.innerText = '0%';
+        const uploadInterval = setInterval(() => {
+          percentage += 20;
+          if (percentage >= 100) {
+            percentage = 100;
+            clearInterval(uploadInterval);
+          }
+          percentLabel.innerText = `${percentage}%`;
+          fillBar.style.width = `${percentage}%`;
+        }, 100);
+      }
+      // Password Toggle
+      const passwordInput = document.getElementById('password-input');
+      const toggleBtn = document.getElementById('password-toggle-btn');
+      const eyeIcon = document.getElementById('eye-icon');
+      toggleBtn?.addEventListener('click', () => {
+        const isPassword = passwordInput.getAttribute('type') === 'password';
+        passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+        eyeIcon.classList.toggle('fa-eye');
+        eyeIcon.classList.toggle('fa-eye-slash');
+      });
+      // Submit check
+      const form = document.getElementById('signup-form');
+      const confirmInput = document.getElementById('confirm-password-input');
+      const errorBox = document.getElementById('error-message');
+      form.addEventListener('submit', (e) => {
+        if (passwordInput.value !== confirmInput.value) {
+          e.preventDefault(); 
+          errorBox.textContent = "❌ Passwords do not match!";
+          errorBox.classList.remove('hidden');
+          navigateWizard(4, 4); 
+          confirmInput.focus();
+        } else {
+          e.preventDefault();
+          errorBox.classList.add('hidden');
+          alert('Registration successful!');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
+

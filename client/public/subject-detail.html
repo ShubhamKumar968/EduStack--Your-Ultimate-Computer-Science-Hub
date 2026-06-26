@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <script src="../assets/js/partials.js"></script>
+  <link rel="stylesheet" href="../assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+  <div id="nav-placeholder"></div>
+  
+  <main class="flex-grow px-4 sm:px-6 py-8 md:py-12 w-full flex justify-center">
+    
+    <div class="max-w-5xl w-full">
+      <!-- Back Link outside the card -->
+      <a href="/index.html" class="inline-flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-brand dark:hover:text-brand transition-colors mb-6 no-underline">
+        <i class="fa-solid fa-arrow-left"></i>
+        Back to All Subjects
+      </a>
+
+      <!-- Master Card Container -->
+      <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-[28px] p-5 md:p-6 shadow-sm flex flex-col lg:flex-row gap-8 lg:gap-12">
+        
+        <!-- Left Column: Large Image -->
+        <div class="w-full lg:w-[48%]">
+          <!-- Aspect ratio closer to the square house picture -->
+          <div class="w-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#ff5f6d] to-brand-deep aspect-[4/3] sm:aspect-square lg:aspect-[4/4.5] flex items-center justify-center shadow-inner">
+            <i class="fa-solid fa-book-open text-white opacity-95 text-7xl md:text-9xl relative z-10 drop-shadow-md"></i>
+            <i class="fa-solid fa-book-open text-white opacity-10 text-[250px] absolute -bottom-12 -right-12"></i>
+          </div>
+        </div>
+
+        <!-- Right Column: Details & Resources -->
+        <div class="w-full lg:w-[52%] flex flex-col pt-2 lg:pr-2">
+          
+          <!-- Header Area -->
+          <div class="flex items-start justify-between gap-4 mb-3">
+            <h1 class="text-3xl md:text-[34px] font-black text-gray-900 dark:text-white tracking-tight leading-tight">Engineering Mathematics I</h1>
+            <span class="flex items-center gap-1.5 bg-[#ffcc4d]/20 dark:bg-[#ffcc4d]/10 text-[#5a4400] dark:text-[#ffcc4d] border border-[#ffcc4d]/30 font-extrabold text-sm px-3 py-1.5 rounded-xl flex-shrink-0 mt-1">
+              <i class="fa-solid fa-star text-xs"></i> 4.5
+            </span>
+          </div>
+          
+          <p class="flex items-center gap-2 text-brand font-bold text-[15px] mb-8">
+            <i class="fa-solid fa-graduation-cap"></i> Semester 1
+          </p>
+
+          <hr class="border-gray-100 dark:border-gray-800 mb-8">
+
+          <!-- About Section -->
+          <div class="mb-10">
+            <label class="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">About This Subject</label>
+            <div class="bg-gray-50/70 dark:bg-[#1a1a1a] p-5 rounded-2xl text-[15px] text-gray-600 dark:text-gray-300 leading-relaxed border border-gray-100 dark:border-gray-800">
+              Master the foundational mathematical concepts essential for engineering. This course covers differential calculus, integral calculus, linear algebra, and differential equations, providing the analytical tools needed to solve complex engineering problems.
+            </div>
+          </div>
+
+          <!-- Resources Links -->
+          <div class="mb-10">
+            <label class="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">Study Resources</label>
+            
+            <div class="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-white dark:bg-[#222222]">
+              <!-- Notes -->
+              <a href="#" class="flex items-center gap-4 p-4 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
+                <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-500 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-brands fa-google-drive text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                  <p class="text-[15px] font-bold text-gray-900 dark:text-gray-100 mb-0.5 group-hover:text-blue-600 transition-colors">Class Notes Drive</p>
+                  <p class="text-[13px] text-gray-500 dark:text-gray-400">Complete handwritten notes & PDFs</p>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 text-sm group-hover:text-blue-500 transition-colors"></i>
+              </a>
+
+              <!-- YouTube -->
+              <a href="#" class="flex items-center gap-4 p-4 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
+                <div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/40 text-red-500 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-brands fa-youtube text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                  <p class="text-[15px] font-bold text-gray-900 dark:text-gray-100 mb-0.5 group-hover:text-red-600 transition-colors">YouTube Playlist</p>
+                  <p class="text-[13px] text-gray-500 dark:text-gray-400">Curated video lectures</p>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 text-sm group-hover:text-red-500 transition-colors"></i>
+              </a>
+
+              <!-- PYQs -->
+              <a href="#" class="flex items-center gap-4 p-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors group no-underline">
+                <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-500 flex items-center justify-center flex-shrink-0">
+                  <i class="fa-solid fa-file-pdf text-xl"></i>
+                </div>
+                <div class="flex-grow">
+                  <p class="text-[15px] font-bold text-gray-900 dark:text-gray-100 mb-0.5 group-hover:text-emerald-600 transition-colors">PYQs Collection</p>
+                  <p class="text-[13px] text-gray-500 dark:text-gray-400">Previous year question papers</p>
+                </div>
+                <i class="fa-solid fa-chevron-right text-gray-300 dark:text-gray-600 text-sm group-hover:text-emerald-500 transition-colors"></i>
+              </a>
+            </div>
+
+          </div>
+
+          <hr class="border-gray-100 dark:border-gray-800 mb-6 mt-auto">
+
+          <!-- Bottom Action Bar -->
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between px-2">
+              <span class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em]">Access Price</span>
+              <span class="font-black text-brand text-[22px]">Free <span class="font-semibold text-gray-400 text-[13px] tracking-normal">forever</span></span>
+            </div>
+            <button class="w-full bg-brand text-white font-bold text-[15px] py-3.5 rounded-xl hover:bg-brand-deep transition-all active:scale-[0.99] border-0 cursor-pointer shadow-sm">
+              Enroll Now
+            </button>
+          </div>
+
+        </div>
+      </div>
+      
+    </div>
+  </main>
+
+  <script src="../assets/js/theme-toggle.js"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Subject List - EduStack</title>
+  <link href="../../assets/css/output.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="bg-white dark:bg-[#121212] text-gray-900 dark:text-gray-100 font-nunito transition-colors duration-300">
+  <!-- Nav -->
+  <div id="nav-placeholder"></div>
+
+  <!-- Main Content -->
+  <main class="min-h-screen pt-12">
+    <section class="px-6 max-w-6xl mx-auto">
+      <h2 class="text-center text-3xl font-extrabold text-brand mb-2">Explore Subjects</h2>
+      <p id="countLabel" class="text-center text-sm text-gray-400 dark:text-gray-500 mb-8">Showing all subjects</p>
+      
+      <div class="flex flex-col sm:flex-row sm:items-center gap-4 mb-8">
+        <div class="relative flex-1">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input id="searchInput" type="text" placeholder="Search subjects..." class="w-full pl-11 pr-4 py-3 rounded-full border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#222222] text-[15px] font-semibold focus:outline-none focus:ring-2 focus:ring-brand/40 shadow-sm">
+        </div>
+      </div>
+      
+      <div id="pillRow" class="flex gap-2 overflow-x-auto pb-2 mb-10 -mx-1 px-1 no-scrollbar">
+        <button data-sem="0" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-brand text-white border-0 cursor-pointer shadow-md">All</button>
+        <button data-sem="1" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 1</button>
+        <button data-sem="2" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 2</button>
+        <button data-sem="3" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 3</button>
+        <button data-sem="4" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 4</button>
+        <button data-sem="5" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 5</button>
+        <button data-sem="6" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 6</button>
+        <button data-sem="7" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 7</button>
+        <button data-sem="8" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 8</button>
+      </div>
+
+      <p id="emptyState" class="hidden text-center text-gray-400 dark:text-gray-500 py-16 font-bold">No subjects match your search.</p>
+      
+      <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7 pb-20">
+        <!-- JS will populate -->
+      </div>
+    </section>
+  </main>
+
+  <script src="../../assets/js/theme.js"></script>
+  <script src="../../assets/js/theme-toggle.js"></script>
+  <script src="../../assets/js/partials.js"></script>
+  <script src="../../assets/js/subjects.js"></script>
+  <style>
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</body>
+</html>

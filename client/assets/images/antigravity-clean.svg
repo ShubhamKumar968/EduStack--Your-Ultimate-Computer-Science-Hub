@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <!-- Background Grid -->
+    <pattern id="grid" width="16" height="16" patternUnits="userSpaceOnUse">
+      <path d="M 16 0 L 0 0 0 16" fill="none" stroke="#2a2a2a" stroke-width="1"/>
+    </pattern>
+    
+    <linearGradient id="exact-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#38bdf8"/> <!-- Light Blue / Cyan -->
+      <stop offset="25%" stop-color="#3b82f6"/> <!-- Blue -->
+      <stop offset="50%" stop-color="#a3e635"/> <!-- Green/Yellow -->
+      <stop offset="65%" stop-color="#f97316"/> <!-- Orange -->
+      <stop offset="80%" stop-color="#ef4444"/> <!-- Red -->
+      <stop offset="100%" stop-color="#3b82f6"/> <!-- Blue -->
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Background matching the image -->
+  <rect width="128" height="128" fill="#141416" rx="20"/>
+  
+  <!-- Grid overlay -->
+  <rect width="128" height="128" fill="url(#grid)" rx="20" opacity="0.5"/>
+
+  <!-- The Wave/Arc -->
+  <!-- Starting bottom-left, curving up steeply, peaking, and curving down -->
+  <path 
+    d="M 32 100 C 40 20, 88 20, 96 100" 
+    fill="none" 
+    stroke="url(#exact-grad)" 
+    stroke-width="18" 
+    stroke-linecap="round"
+  />
+</svg>
