@@ -3,20 +3,77 @@
 <head>
   <script src="/assets/js/partials.js"></script>
   <link rel="stylesheet" href="../../assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
   <div id="nav-placeholder"></div>
   <main class="flex-grow flex items-center justify-center px-4 py-12 relative z-0">
     <div class="w-full max-w-md bg-white dark:bg-[#222222] p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 text-center">
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">Verify OTP</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-6">Enter the 6-digit code sent to your email.</p>
-      <form class="space-y-5">
-        <input type="text" maxlength="6" class="w-full text-center text-2xl tracking-[1em] py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all">
-        <button type="submit" class="w-full bg-brand hover:bg-brand-deep text-white font-semibold py-3 px-4 rounded-xl border-0 cursor-pointer">Verify Code</button>
+      <div class="w-12 h-12 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-3 text-xl font-bold">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">Verify Reset OTP</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 mb-6">Enter the 6-digit code sent to <span id="target-email" class="font-bold text-gray-700 dark:text-gray-200">your email</span>.</p>
+      
+      <div id="alert-box" class="hidden p-4 rounded-xl mb-4 text-xs font-medium"></div>
+
+      <form id="otp-verify-form" class="space-y-5">
+        <input type="text" id="otp-input" maxlength="6" required placeholder="000000" class="w-full text-center text-2xl tracking-[0.5em] py-3 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all font-mono">
+        <button type="submit" class="w-full bg-brand hover:bg-brand-deep text-white font-semibold py-3 px-4 rounded-xl border-0 cursor-pointer shadow-md hover:shadow-lg transition-all">Verify Code</button>
       </form>
+      <div class="mt-4">
+        <a href="/auth/forgot-password.html" class="text-xs font-semibold text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 no-underline">Resend Code / Change Email</a>
+      </div>
     </div>
   </main>
   <script src="/assets/js/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const email = sessionStorage.getItem('resetEmail');
+      const targetEmail = document.getElementById('target-email');
+      const form = document.getElementById('otp-verify-form');
+      const alertBox = document.getElementById('alert-box');
+
+      if (email && targetEmail) {
+        targetEmail.textContent = email;
+      }
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const otp = document.getElementById('otp-input').value.trim();
+
+        if (!email) {
+          alert('Email session expired. Please request a new OTP.');
+          window.location.href = '/auth/forgot-password.html';
+          return;
+        }
+
+        try {
+          const res = await fetch('/api/auth/verify-forgot-password', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email, otp })
+          });
+          const resData = await res.json();
+
+          if (res.ok && resData.success) {
+            sessionStorage.setItem('resetOtp', otp);
+            alertBox.textContent = '🎉 ' + (resData.message || 'OTP verified!');
+            alertBox.className = 'bg-emerald-50 text-emerald-600 dark:bg-emerald-950/30 border border-emerald-200 p-4 rounded-xl mb-4 text-xs font-medium block';
+            setTimeout(() => {
+              window.location.href = '/auth/reset-password.html';
+            }, 1000);
+          } else {
+            alertBox.textContent = '❌ ' + (resData.message || 'Invalid or expired OTP code.');
+            alertBox.className = 'bg-red-50 text-red-600 dark:bg-red-950/30 border border-red-200 p-4 rounded-xl mb-4 text-xs font-medium block';
+          }
+        } catch (err) {
+          alertBox.textContent = '❌ Server connection error while verifying OTP.';
+          alertBox.className = 'bg-red-50 text-red-600 p-4 rounded-xl mb-4 text-xs font-medium block';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
 

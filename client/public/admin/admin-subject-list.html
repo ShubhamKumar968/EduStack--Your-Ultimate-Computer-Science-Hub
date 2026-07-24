@@ -3,17 +3,345 @@
 <head>
   <script src="/assets/js/partials.js"></script>
   <link rel="stylesheet" href="../../assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
   <div id="nav-placeholder"></div>
-  <main class="flex-grow px-6 py-12 max-w-6xl mx-auto w-full">
-    <h1 class="text-3xl font-extrabold text-brand mb-6">Manage Subjects</h1>
-    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl p-8">
-      <p class="text-gray-500 dark:text-gray-400">Content for Manage Subjects goes here.</p>
+  
+  <main class="flex-grow px-6 py-10 max-w-7xl mx-auto w-full">
+    <!-- Header Title & Actions -->
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+      <div>
+        <h1 class="text-3xl font-black tracking-tight text-gray-900 dark:text-white flex items-center gap-3">
+          <i class="fa-solid fa-list-check text-brand"></i> Manage Uploaded Subjects
+        </h1>
+        <p class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mt-1">
+          Edit or update subjects uploaded by yourself or by contributors across all engineering branches.
+        </p>
+      </div>
+      <a href="/admin/add-subject.html" class="inline-flex items-center justify-center gap-2 bg-brand hover:bg-brand-deep text-white font-extrabold px-6 py-3 rounded-full transition shadow-lg no-underline text-xs self-start md:self-auto active:scale-95">
+        <i class="fa-solid fa-plus"></i> Add New Subject
+      </a>
+    </div>
+
+    <!-- Search & Filters -->
+    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-5 mb-8 shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between">
+      <div class="relative w-full md:w-80">
+        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        <input type="text" id="manageSearchInput" placeholder="Search subjects by name..." class="w-full pl-11 pr-4 py-2.5 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand">
+      </div>
+      <div class="flex items-center gap-2 w-full md:w-auto overflow-x-auto pb-1 md:pb-0" id="branchFilterContainer">
+        <button data-branch="All" class="branch-filter-btn active px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-brand text-white">All</button>
+        <button data-branch="CSE" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">CSE</button>
+        <button data-branch="ECE" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">ECE</button>
+        <button data-branch="EEE" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">EEE</button>
+        <button data-branch="MECH" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">MECH</button>
+        <button data-branch="CIVIL" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">CIVIL</button>
+        <button data-branch="IT" class="branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">IT</button>
+      </div>
+    </div>
+
+    <!-- Subjects Grid Container -->
+    <div id="adminSubjectsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="col-span-full py-12 text-center text-gray-400">
+        <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-brand"></i>
+        <p class="text-xs font-bold">Loading uploaded subjects database...</p>
+      </div>
     </div>
   </main>
+
+  <!-- EDIT SUBJECT MODAL -->
+  <div id="editSubjectModal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md hidden transition-opacity duration-300 opacity-0">
+    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 max-w-xl w-full shadow-2xl relative overflow-hidden max-h-[90vh] overflow-y-auto">
+      <button id="closeEditModalBtn" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-0 cursor-pointer transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="w-12 h-12 rounded-2xl bg-brand/10 text-brand flex items-center justify-center text-xl font-black">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div>
+          <h3 class="text-xl font-extrabold text-gray-900 dark:text-white">Edit Subject Details</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Update subject info, branch, semester & study materials.</p>
+        </div>
+      </div>
+
+      <form id="editSubjectForm" class="space-y-4">
+        <input type="hidden" id="editSubjectId">
+
+        <div>
+          <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Subject Name</label>
+          <input type="text" id="editSubjectName" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Engineering Branch</label>
+            <select id="editBranch" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+              <option value="CSE">CSE (Computer Science)</option>
+              <option value="IT">IT (Information Tech)</option>
+              <option value="ECE">ECE (Electronics)</option>
+              <option value="EEE">EEE (Electrical)</option>
+              <option value="MECH">MECH (Mechanical)</option>
+              <option value="CIVIL">CIVIL (Civil Engg)</option>
+              <option value="OTHER">OTHER (General)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Semester</label>
+            <input type="number" id="editSemester" min="1" max="8" required class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+          </div>
+        </div>
+
+        <div class="space-y-3 pt-2">
+          <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Resource Drives & Links</label>
+          <div>
+            <div class="flex items-center gap-2 mb-1 text-xs font-bold text-brand">
+              <i class="fa-solid fa-file-pdf"></i> Handwritten Notes Drive Link
+            </div>
+            <input type="url" id="editNotesLink" placeholder="https://drive.google.com/..." class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1 text-xs font-bold text-red-500">
+              <i class="fa-brands fa-youtube"></i> YouTube Playlist URL
+            </div>
+            <input type="url" id="editYoutubeLink" placeholder="https://youtube.com/playlist..." class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+          </div>
+          <div>
+            <div class="flex items-center gap-2 mb-1 text-xs font-bold text-amber-500">
+              <i class="fa-solid fa-clock-rotate-left"></i> PYQ Question Papers Link
+            </div>
+            <input type="url" id="editPyqLink" placeholder="https://drive.google.com/..." class="w-full px-4 py-2 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold text-gray-900 dark:text-white focus:ring-2 focus:ring-brand focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Subject Image (Optional)</label>
+          <input type="file" id="editThumbnailFile" accept="image/*" class="w-full text-xs text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-extrabold file:bg-brand/10 file:text-brand hover:file:bg-brand/20 cursor-pointer">
+        </div>
+
+        <div class="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
+          <button type="button" id="cancelEditBtn" class="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 font-bold text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">Cancel</button>
+          <button type="submit" id="saveEditBtn" class="px-6 py-2.5 rounded-full bg-brand text-white font-extrabold text-xs shadow-md hover:bg-brand-deep transition cursor-pointer border-0 flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Save Changes
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <script src="/assets/js/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      let allSubjectsList = [];
+      let activeFilterBranch = 'All';
+
+      const grid = document.getElementById('adminSubjectsGrid');
+      const searchInput = document.getElementById('manageSearchInput');
+
+      // 1. Fetch all subjects
+      async function loadAdminSubjects() {
+        try {
+          const res = await fetch('/api/subjects');
+          const data = await res.json();
+          if (res.ok && data.success) {
+            allSubjectsList = data.data.subjects || [];
+            renderGrid();
+          } else {
+            grid.innerHTML = `<div class="col-span-full py-12 text-center text-red-500 font-bold">Failed to load subjects.</div>`;
+          }
+        } catch (err) {
+          grid.innerHTML = `<div class="col-span-full py-12 text-center text-red-500 font-bold">Error connecting to server.</div>`;
+        }
+      }
+
+      function getBranchBadgeHtml(branchStr) {
+        const b = (branchStr || 'CSE').toUpperCase();
+        let icon = 'fa-solid fa-code';
+        if (b.includes('ECE')) icon = 'fa-solid fa-microchip';
+        else if (b.includes('EEE')) icon = 'fa-solid fa-bolt';
+        else if (b.includes('MECH')) icon = 'fa-solid fa-gear';
+        else if (b.includes('CIVIL')) icon = 'fa-solid fa-building-columns';
+        else if (b.includes('IT')) icon = 'fa-solid fa-network-wired';
+
+        return `<span class="bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 font-black text-xs px-3 py-1 rounded-full uppercase tracking-wider border border-pink-200 dark:border-pink-800/60 flex items-center gap-1.5 shadow-sm">
+          <i class="${icon} text-[11px] text-pink-500"></i><span>${branchStr || 'CSE'}</span>
+        </span>`;
+      }
+
+      function renderGrid() {
+        const q = searchInput.value.trim().toLowerCase();
+        const filtered = allSubjectsList.filter(s => {
+          const nameMatch = (s.name || '').toLowerCase().includes(q);
+          const branchMatch = activeFilterBranch === 'All' || (s.branch || 'CSE').toUpperCase() === activeFilterBranch.toUpperCase();
+          return nameMatch && branchMatch;
+        });
+
+        if (filtered.length === 0) {
+          grid.innerHTML = `
+            <div class="col-span-full py-12 text-center text-gray-400 bg-white dark:bg-[#222222] rounded-3xl border border-gray-100 dark:border-gray-800">
+              <i class="fa-solid fa-folder-open text-4xl mb-3 opacity-40"></i>
+              <p class="text-xs font-extrabold">No subjects match your current filter criteria.</p>
+            </div>
+          `;
+          return;
+        }
+
+        grid.innerHTML = filtered.map(s => {
+          const creatorName = s.createdBy ? `${s.createdBy.firstName || ''} ${s.createdBy.lastName || ''}`.trim() : 'EduStack Team';
+          return `
+            <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 shadow-sm flex flex-col justify-between hover:shadow-md transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="text-[11px] font-extrabold text-gray-400 flex items-center gap-1">
+                    <i class="fa-solid fa-graduation-cap text-brand"></i> Sem ${s.semester || 1}
+                  </span>
+                  ${getBranchBadgeHtml(s.branch)}
+                </div>
+
+                <h3 class="font-extrabold text-lg text-gray-900 dark:text-white mb-2 leading-snug">${s.name}</h3>
+
+                <p class="text-[11px] font-semibold text-gray-400 mb-4 flex items-center gap-1">
+                  <i class="fa-solid fa-user-pen text-brand"></i> Uploaded by: <span class="text-gray-700 dark:text-gray-300 font-bold">${creatorName}</span>
+                </p>
+
+                <!-- Resource Link Badges -->
+                <div class="flex flex-wrap gap-1.5 mb-6">
+                  ${s.notesLink ? '<span class="bg-emerald-50 text-emerald-600 text-[10px] font-bold px-2.5 py-1 rounded-lg"><i class="fa-solid fa-file-pdf"></i> Notes</span>' : ''}
+                  ${s.youtubeLink ? '<span class="bg-red-50 text-red-600 text-[10px] font-bold px-2.5 py-1 rounded-lg"><i class="fa-brands fa-youtube"></i> Playlist</span>' : ''}
+                  ${s.pyqLink ? '<span class="bg-amber-50 text-amber-600 text-[10px] font-bold px-2.5 py-1 rounded-lg"><i class="fa-solid fa-clock-rotate-left"></i> PYQ</span>' : ''}
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 pt-4 border-t border-gray-100 dark:border-gray-800">
+                <button onclick="openEditSubjectModal('${s._id}')" class="flex-1 py-2.5 rounded-xl bg-brand text-white font-extrabold text-xs hover:bg-brand-deep transition border-0 cursor-pointer flex items-center justify-center gap-1.5 active:scale-95 shadow-md">
+                  <i class="fa-solid fa-pen-to-square"></i> Edit Subject
+                </button>
+                <button onclick="deleteSubjectById('${s._id}', '${s.name.replace(/'/g, "\\'")}')" class="py-2.5 px-4 rounded-xl bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-extrabold text-xs hover:bg-red-100 transition border-0 cursor-pointer flex items-center justify-center gap-1 active:scale-95">
+                  <i class="fa-solid fa-trash-can"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // Branch Filter Button Handler
+      document.querySelectorAll('.branch-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.branch-filter-btn').forEach(b => {
+            b.className = 'branch-filter-btn px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300';
+          });
+          btn.className = 'branch-filter-btn active px-4 py-2 rounded-full text-xs font-extrabold transition cursor-pointer border-0 bg-brand text-white';
+          activeFilterBranch = btn.getAttribute('data-branch');
+          renderGrid();
+        });
+      });
+
+      searchInput.addEventListener('input', renderGrid);
+
+      // Edit Modal Logic
+      const modal = document.getElementById('editSubjectModal');
+      const closeBtn = document.getElementById('closeEditModalBtn');
+      const cancelBtn = document.getElementById('cancelEditBtn');
+      const editForm = document.getElementById('editSubjectForm');
+
+      function closeModal() {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        setTimeout(() => modal.classList.add('hidden'), 300);
+      }
+
+      closeBtn.onclick = closeModal;
+      cancelBtn.onclick = closeModal;
+
+      window.openEditSubjectModal = function(id) {
+        const sub = allSubjectsList.find(s => s._id === id);
+        if (!sub) return;
+
+        document.getElementById('editSubjectId').value = sub._id;
+        document.getElementById('editSubjectName').value = sub.name || '';
+        document.getElementById('editBranch').value = sub.branch || 'CSE';
+        document.getElementById('editSemester').value = sub.semester || 1;
+        document.getElementById('editNotesLink').value = sub.notesLink || '';
+        document.getElementById('editYoutubeLink').value = sub.youtubeLink || '';
+        document.getElementById('editPyqLink').value = sub.pyqLink || '';
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+          modal.classList.remove('opacity-0', 'pointer-events-none');
+        }, 10);
+      };
+
+      // Save Subject Edit
+      editForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('editSubjectId').value;
+        const saveBtn = document.getElementById('saveEditBtn');
+
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Saving...`;
+
+        const formData = new FormData();
+        formData.append('subjectName', document.getElementById('editSubjectName').value);
+        formData.append('branch', document.getElementById('editBranch').value);
+        formData.append('semester', document.getElementById('editSemester').value);
+        formData.append('notesLink', document.getElementById('editNotesLink').value);
+        formData.append('youtubeLink', document.getElementById('editYoutubeLink').value);
+        formData.append('pyqLink', document.getElementById('editPyqLink').value);
+
+        const fileInput = document.getElementById('editThumbnailFile');
+        if (fileInput && fileInput.files[0]) {
+          formData.append('thumbnail', fileInput.files[0]);
+        }
+
+        try {
+          const res = await fetch(`/api/subjects/${id}`, {
+            method: 'PUT',
+            credentials: 'include',
+            body: formData
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            if (window.showToast) window.showToast('🎉 Subject updated successfully!', 'success');
+            closeModal();
+            loadAdminSubjects();
+          } else {
+            alert(`❌ Edit Failed: ${data.message || 'Could not update subject.'}`);
+          }
+        } catch (err) {
+          alert('❌ Network error updating subject.');
+        } finally {
+          saveBtn.disabled = false;
+          saveBtn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Save Changes`;
+        }
+      });
+
+      // Delete Subject Logic
+      window.deleteSubjectById = async function(id, name) {
+        if (!confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) return;
+
+        try {
+          const res = await fetch(`/api/subjects/${id}`, {
+            method: 'DELETE',
+            credentials: 'include'
+          });
+          const data = await res.json();
+
+          if (res.ok && data.success) {
+            if (window.showToast) window.showToast('🗑️ Subject deleted successfully.', 'success');
+            loadAdminSubjects();
+          } else {
+            alert(`❌ Delete Failed: ${data.message || 'Could not delete subject.'}`);
+          }
+        } catch (err) {
+          alert('❌ Network error deleting subject.');
+        }
+      };
+
+      loadAdminSubjects();
+    });
+  </script>
 </body>
 </html>
-
-

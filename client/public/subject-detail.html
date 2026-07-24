@@ -20,12 +20,11 @@
       <!-- Master Card Container -->
       <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-[28px] p-5 md:p-6 shadow-sm flex flex-col lg:flex-row gap-8 lg:gap-12">
         
-        <!-- Left Column: Large Image -->
+        <!-- Left Column: Large Image / Cover -->
         <div class="w-full lg:w-[48%]">
-          <!-- Aspect ratio closer to the square house picture -->
-          <div class="w-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-[#ff5f6d] to-brand-deep aspect-[4/3] sm:aspect-square lg:aspect-[4/4.5] flex items-center justify-center shadow-inner">
-            <i class="fa-solid fa-book-open text-white opacity-95 text-7xl md:text-9xl relative z-10 drop-shadow-md"></i>
-            <i class="fa-solid fa-book-open text-white opacity-10 text-[250px] absolute -bottom-12 -right-12"></i>
+          <div id="subjectCoverBox" class="w-full relative rounded-2xl overflow-hidden bg-gradient-to-br from-brand to-rose-600 aspect-[4/3] sm:aspect-square lg:aspect-[4/4.5] flex items-center justify-center shadow-inner">
+            <i id="subjectIcon" class="fa-solid fa-book-open text-white opacity-95 text-7xl md:text-9xl relative z-10 drop-shadow-md"></i>
+            <img id="subjectCoverImg" class="hidden w-full h-full object-cover relative z-10" alt="Cover">
           </div>
         </div>
 
@@ -34,33 +33,38 @@
           
           <!-- Header Area -->
           <div class="flex items-start justify-between gap-4 mb-3">
-            <h1 class="text-3xl md:text-[34px] font-black text-gray-900 dark:text-white tracking-tight leading-tight">Engineering Mathematics I</h1>
+            <h1 id="subjectTitle" class="text-3xl md:text-[34px] font-black text-gray-900 dark:text-white tracking-tight leading-tight">Loading Subject...</h1>
             <span class="flex items-center gap-1.5 bg-[#ffcc4d]/20 dark:bg-[#ffcc4d]/10 text-[#5a4400] dark:text-[#ffcc4d] border border-[#ffcc4d]/30 font-extrabold text-sm px-3 py-1.5 rounded-xl flex-shrink-0 mt-1">
-              <i class="fa-solid fa-star text-xs"></i> 4.5
+              <i class="fa-solid fa-star text-xs"></i> <span id="subjectRating">4.5</span>
             </span>
           </div>
           
-          <p class="flex items-center gap-2 text-brand font-bold text-[15px] mb-8">
-            <i class="fa-solid fa-graduation-cap"></i> Semester 1
-          </p>
+          <div class="flex items-center justify-between gap-2 mb-6">
+            <p class="flex items-center gap-2 text-brand font-bold text-[15px] my-0">
+              <i class="fa-solid fa-graduation-cap"></i> <span id="subjectSemester">Semester 1</span>
+            </p>
+            <span id="subjectBranchBadge" class="bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 font-black text-xs px-3.5 py-1.5 rounded-full uppercase tracking-wider border border-pink-200 dark:border-pink-800/60 flex items-center gap-1.5 shadow-sm">
+              <i class="fa-solid fa-code text-[11px] text-pink-500"></i><span>CSE</span>
+            </span>
+          </div>
 
-          <hr class="border-gray-100 dark:border-gray-800 mb-8">
+          <hr class="border-gray-100 dark:border-gray-800 mb-6">
 
           <!-- About Section -->
-          <div class="mb-10">
-            <label class="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">About This Subject</label>
-            <div class="bg-gray-50/70 dark:bg-[#1a1a1a] p-5 rounded-2xl text-[15px] text-gray-600 dark:text-gray-300 leading-relaxed border border-gray-100 dark:border-gray-800">
-              Master the foundational mathematical concepts essential for engineering. This course covers differential calculus, integral calculus, linear algebra, and differential equations, providing the analytical tools needed to solve complex engineering problems.
+          <div class="mb-8">
+            <label class="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-3">About This Subject</label>
+            <div id="subjectDescription" class="bg-gray-50/70 dark:bg-[#1a1a1a] p-5 rounded-2xl text-[15px] text-gray-600 dark:text-gray-300 leading-relaxed border border-gray-100 dark:border-gray-800">
+              Loading course overview...
             </div>
           </div>
 
           <!-- Resources Links -->
-          <div class="mb-10">
+          <div class="mb-8">
             <label class="block text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em] mb-4">Study Resources</label>
             
             <div class="border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden bg-white dark:bg-[#222222]">
               <!-- Notes -->
-              <a href="#" class="flex items-center gap-4 p-4 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
+              <a id="notesDriveBtn" href="#" target="_blank" rel="noopener" class="flex items-center gap-4 p-4 hover:bg-blue-50 dark:hover:bg-blue-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
                 <div class="w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/40 text-blue-500 flex items-center justify-center flex-shrink-0">
                   <i class="fa-brands fa-google-drive text-xl"></i>
                 </div>
@@ -72,7 +76,7 @@
               </a>
 
               <!-- YouTube -->
-              <a href="#" class="flex items-center gap-4 p-4 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
+              <a id="ytPlaylistBtn" href="#" target="_blank" rel="noopener" class="flex items-center gap-4 p-4 hover:bg-red-50 dark:hover:bg-red-900/10 transition-colors group no-underline border-b border-gray-100 dark:border-gray-800">
                 <div class="w-10 h-10 rounded-lg bg-red-100 dark:bg-red-900/40 text-red-500 flex items-center justify-center flex-shrink-0">
                   <i class="fa-brands fa-youtube text-xl"></i>
                 </div>
@@ -84,7 +88,7 @@
               </a>
 
               <!-- PYQs -->
-              <a href="#" class="flex items-center gap-4 p-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors group no-underline">
+              <a id="pyqBtn" href="#" target="_blank" rel="noopener" class="flex items-center gap-4 p-4 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 transition-colors group no-underline">
                 <div class="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-500 flex items-center justify-center flex-shrink-0">
                   <i class="fa-solid fa-file-pdf text-xl"></i>
                 </div>
@@ -106,7 +110,7 @@
               <span class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em]">Access Price</span>
               <span class="font-black text-brand text-[22px]">Free <span class="font-semibold text-gray-400 text-[13px] tracking-normal">forever</span></span>
             </div>
-            <button class="w-full bg-brand text-white font-bold text-[15px] py-3.5 rounded-xl hover:bg-brand-deep transition-all active:scale-[0.99] border-0 cursor-pointer shadow-sm">
+            <button id="enrollNowBtn" class="w-full bg-brand text-white font-bold text-[15px] py-3.5 rounded-xl hover:bg-brand-deep transition-all active:scale-[0.99] border-0 cursor-pointer shadow-sm">
               Enroll Now
             </button>
           </div>
@@ -118,5 +122,100 @@
   </main>
 
   <script src="../assets/js/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const queryId = params.get('id') || '';
+
+      const titleEl = document.getElementById('subjectTitle');
+      const semEl = document.getElementById('subjectSemester');
+      const branchBadgeEl = document.getElementById('subjectBranchBadge');
+      const ratingEl = document.getElementById('subjectRating');
+      const descEl = document.getElementById('subjectDescription');
+      const coverBox = document.getElementById('subjectCoverBox');
+      const iconEl = document.getElementById('subjectIcon');
+      const imgEl = document.getElementById('subjectCoverImg');
+
+      const driveBtn = document.getElementById('notesDriveBtn');
+      const ytBtn = document.getElementById('ytPlaylistBtn');
+      const pyqBtn = document.getElementById('pyqBtn');
+      const enrollBtn = document.getElementById('enrollNowBtn');
+
+      function getBranchInfo(branchStr) {
+        const b = (branchStr || 'CSE').toUpperCase();
+        if (b.includes('CSE')) return { icon: 'fa-solid fa-laptop-code', badgeIcon: 'fa-solid fa-code', color: 'from-blue-600 to-indigo-700' };
+        if (b.includes('ECE')) return { icon: 'fa-solid fa-microchip', badgeIcon: 'fa-solid fa-microchip', color: 'from-purple-600 to-pink-600' };
+        if (b.includes('EEE') || b.includes('ELECTRICAL')) return { icon: 'fa-solid fa-bolt-lightning', badgeIcon: 'fa-solid fa-bolt', color: 'from-amber-500 to-orange-600' };
+        if (b.includes('MECH')) return { icon: 'fa-solid fa-gears', badgeIcon: 'fa-solid fa-gear', color: 'from-slate-700 to-gray-900' };
+        if (b.includes('CIVIL')) return { icon: 'fa-solid fa-building-columns', badgeIcon: 'fa-solid fa-building-columns', color: 'from-emerald-600 to-teal-700' };
+        if (b.includes('IT')) return { icon: 'fa-solid fa-network-wired', badgeIcon: 'fa-solid fa-network-wired', color: 'from-cyan-600 to-blue-700' };
+        return { icon: 'fa-solid fa-graduation-cap', badgeIcon: 'fa-solid fa-book-bookmark', color: 'from-brand to-rose-600' };
+      }
+
+      let targetSubject = null;
+
+      try {
+        const res = await fetch('/api/subjects');
+        const resData = await res.json();
+        if (res.ok && resData.success && Array.isArray(resData.data.subjects)) {
+          const subjects = resData.data.subjects;
+          targetSubject = subjects.find(s => s._id === queryId || (s.name && s.name.toLowerCase() === queryId.toLowerCase()));
+          if (!targetSubject && subjects.length > 0) {
+            targetSubject = subjects[0];
+          }
+        }
+      } catch (err) {
+        console.error('Error fetching subject details:', err);
+      }
+
+      if (targetSubject) {
+        const subName = targetSubject.name;
+        titleEl.textContent = subName;
+        semEl.textContent = `Semester ${targetSubject.semester || 1}`;
+        ratingEl.textContent = targetSubject.rating ? parseFloat(targetSubject.rating).toFixed(1) : '4.5';
+        
+        const bInfo = getBranchInfo(targetSubject.branch);
+        branchBadgeEl.innerHTML = `<i class="${bInfo.badgeIcon} text-[11px] text-pink-500"></i><span>${targetSubject.branch || 'CSE'}</span>`;
+        coverBox.className = `w-full relative rounded-2xl overflow-hidden bg-gradient-to-br ${bInfo.color} aspect-[4/3] sm:aspect-square lg:aspect-[4/4.5] flex items-center justify-center shadow-inner`;
+
+        if (targetSubject.thumbnail) {
+          imgEl.src = targetSubject.thumbnail;
+          imgEl.classList.remove('hidden');
+          iconEl.classList.add('hidden');
+        } else {
+          iconEl.className = `${bInfo.icon} text-white opacity-95 text-7xl md:text-9xl relative z-10 drop-shadow-md`;
+        }
+
+        descEl.textContent = targetSubject.description && targetSubject.description.trim() 
+          ? targetSubject.description 
+          : `Master the foundational engineering concepts and core modules for ${subName}. Covers essential theory, practical implementations, handwritten notes, and university exam preparation.`;
+
+        driveBtn.href = targetSubject.notesLink && targetSubject.notesLink.trim() 
+          ? targetSubject.notesLink 
+          : `https://drive.google.com/search?q=${encodeURIComponent(subName + ' Notes PDF')}`;
+
+        ytBtn.href = targetSubject.youtubeLink && targetSubject.youtubeLink.trim() 
+          ? targetSubject.youtubeLink 
+          : `https://www.youtube.com/results?search_query=${encodeURIComponent(subName + ' Full Course Lecture Playlist')}`;
+
+        pyqBtn.href = targetSubject.pyqLink && targetSubject.pyqLink.trim() 
+          ? targetSubject.pyqLink 
+          : `https://www.google.com/search?q=${encodeURIComponent(subName + ' Previous Year Question Papers PYQ PDF')}`;
+
+        enrollBtn.addEventListener('click', () => {
+          let enrolled = new Set(JSON.parse(localStorage.getItem('edustack_enrolled') || '[]'));
+          enrolled.add(subName);
+          localStorage.setItem('edustack_enrolled', JSON.stringify(Array.from(enrolled)));
+          if (window.showToast) window.showToast(`🎉 Enrolled in ${subName} successfully!`, 'success');
+          else alert(`Enrolled in ${subName} successfully!`);
+        });
+      } else {
+        titleEl.textContent = queryId || 'Subject Not Found';
+        descEl.textContent = 'No subject details available.';
+      }
+    });
+  </script>
+</body>
+</html>
 </body>
 </html>

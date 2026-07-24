@@ -24,8 +24,55 @@
         </div>
       </div>
       
+      <!-- Branch Logos Selector Bar -->
+      <div class="mb-6">
+        <p class="text-xs font-black uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-3 text-center sm:text-left">Select Engineering Branch</p>
+        <div id="branchRow" class="grid grid-cols-2 sm:grid-cols-6 gap-3">
+          <button data-branch="All" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-brand bg-brand text-white font-extrabold text-xs shadow-md cursor-pointer transition-all">
+            <i class="fa-solid fa-layer-group text-sm"></i>
+            <span>All Branches</span>
+          </button>
+          
+          <button data-branch="CSE" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-indigo-500 text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all">
+            <div class="w-6 h-6 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center">
+              <i class="fa-solid fa-laptop-code text-xs"></i>
+            </div>
+            <span>CSE</span>
+          </button>
+
+          <button data-branch="ECE" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-cyan-500 text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all">
+            <div class="w-6 h-6 rounded-lg bg-cyan-500/10 text-cyan-500 flex items-center justify-center">
+              <i class="fa-solid fa-microchip text-xs"></i>
+            </div>
+            <span>ECE</span>
+          </button>
+
+          <button data-branch="EEE" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-amber-500 text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all">
+            <div class="w-6 h-6 rounded-lg bg-amber-500/10 text-amber-500 flex items-center justify-center">
+              <i class="fa-solid fa-bolt text-xs"></i>
+            </div>
+            <span>EEE / EE</span>
+          </button>
+
+          <button data-branch="MECH" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-rose-500 text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all">
+            <div class="w-6 h-6 rounded-lg bg-rose-500/10 text-rose-500 flex items-center justify-center">
+              <i class="fa-solid fa-gear text-xs"></i>
+            </div>
+            <span>ME</span>
+          </button>
+
+          <button data-branch="CIVIL" class="branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-emerald-500 text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all">
+            <div class="w-6 h-6 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center">
+              <i class="fa-solid fa-building text-xs"></i>
+            </div>
+            <span>CE</span>
+          </button>
+        </div>
+      </div>
+
+      <p class="text-xs font-black uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-2">Filter by Semester</p>
       <div id="pillRow" class="flex gap-2 overflow-x-auto pb-2 mb-10 -mx-1 px-1 no-scrollbar">
-        <button data-sem="0" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-brand text-white border-0 cursor-pointer shadow-md">All</button>
+        <button data-sem="0" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-brand text-white border-0 cursor-pointer shadow-md">All Semesters</button>
         <button data-sem="1" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 1</button>
         <button data-sem="2" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 2</button>
         <button data-sem="3" class="pill shrink-0 px-5 py-2.5 rounded-full text-sm font-black tracking-wide bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400 border-0 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Sem 3</button>

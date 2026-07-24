@@ -1,19 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="/assets/js/partials.js"></script>
-  <link rel="stylesheet" href="../../assets/css/output.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduStack — Edit Profile</title>
+  <script src="/assets/js/partials.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
   <div id="nav-placeholder"></div>
-  <main class="flex-grow px-6 py-12 max-w-6xl mx-auto w-full">
-    <h1 class="text-3xl font-extrabold text-brand mb-6">Edit Profile</h1>
-    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl p-8">
-      <p class="text-gray-500 dark:text-gray-400">Content for Edit Profile goes here.</p>
+
+  <main class="flex-grow px-6 py-12 max-w-4xl mx-auto w-full">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+          Edit Profile
+          <span id="verified-badge-header" class="hidden text-blue-500 text-xl" title="Verified Account">
+            <i class="fa-solid fa-circle-check"></i>
+          </span>
+        </h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Manage your account information and preferences.</p>
+      </div>
+      <a href="/" class="text-sm font-bold text-brand hover:underline no-underline flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-left text-xs"></i> Back to Dashboard
+      </a>
     </div>
+
+    <div id="alert-box" class="hidden p-4 rounded-xl mb-6 text-sm font-medium"></div>
+
+    <form id="edit-profile-form" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 shadow-sm space-y-6">
+      
+      <!-- Avatar Section -->
+      <div class="flex items-center gap-6 pb-6 border-b border-gray-100 dark:border-gray-800">
+        <div class="relative w-20 h-20 rounded-full overflow-hidden border-2 border-brand/30 shadow-md">
+          <img id="avatar-preview" src="https://ui-avatars.com/api/?name=User&background=ff385c&color=fff&bold=true" alt="Avatar" class="w-full h-full object-cover">
+        </div>
+        <div class="flex flex-col">
+          <h3 class="font-extrabold text-base text-gray-800 dark:text-gray-200">Profile Avatar</h3>
+          <p class="text-xs text-gray-400 dark:text-gray-500 mb-2">Upload a profile picture to customize your account.</p>
+          <label for="avatar-file" class="inline-flex items-center gap-2 bg-brand/10 hover:bg-brand/20 text-brand font-bold text-xs px-4 py-2 rounded-full cursor-pointer transition-colors w-max">
+            <i class="fa-solid fa-camera"></i> Change Photo
+          </label>
+          <input type="file" id="avatar-file" accept="image/*" class="hidden">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">First Name</label>
+          <input type="text" id="firstName" name="firstName" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Last Name</label>
+          <input type="text" id="lastName" name="lastName" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Email Address (Read only)</label>
+          <input type="email" id="email" disabled class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-800 bg-gray-100 dark:bg-[#181818] rounded-xl text-gray-500 cursor-not-allowed text-sm">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Phone Number</label>
+          <input type="text" id="phone" name="phone" placeholder="+91 98765 43210" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Branch</label>
+          <select id="branch" name="branch" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm cursor-pointer">
+            <option value="CSE">Computer Science (CSE)</option>
+            <option value="IT">Information Technology (IT)</option>
+            <option value="ECE">Electronics (ECE)</option>
+            <option value="EEE">Electrical (EEE)</option>
+            <option value="MECH">Mechanical (MECH)</option>
+            <option value="CIVIL">Civil (CIVIL)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Current Semester</label>
+          <select id="semester" name="semester" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm cursor-pointer">
+            <option value="1">Semester 1</option>
+            <option value="2">Semester 2</option>
+            <option value="3">Semester 3</option>
+            <option value="4">Semester 4</option>
+            <option value="5">Semester 5</option>
+            <option value="6">Semester 6</option>
+            <option value="7">Semester 7</option>
+            <option value="8">Semester 8</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Change Password Section -->
+      <div class="pt-6 border-t border-gray-100 dark:border-gray-800 space-y-4">
+        <h3 class="font-extrabold text-base text-gray-800 dark:text-gray-200 flex items-center gap-2">
+          <i class="fa-solid fa-key text-brand"></i> Change Security Password
+        </h3>
+        <p class="text-xs text-gray-400 dark:text-gray-500">Leave blank if you do not wish to change your current password.</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">New Password</label>
+            <input type="password" id="newPassword" placeholder="•••••••• (Min 6 chars)" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Confirm New Password</label>
+            <input type="password" id="confirmNewPassword" placeholder="••••••••" class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+          </div>
+        </div>
+      </div>
+
+      <div class="pt-4 flex justify-end">
+        <button type="submit" class="bg-brand hover:bg-brand-deep text-white font-bold px-8 py-3 rounded-full transition-all shadow-md active:scale-[0.98] border-0 cursor-pointer text-sm">
+          Save Changes
+        </button>
+      </div>
+
+    </form>
   </main>
+
   <script src="/assets/js/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const alertBox = document.getElementById('alert-box');
+      const form = document.getElementById('edit-profile-form');
+      const avatarPreview = document.getElementById('avatar-preview');
+      const avatarFile = document.getElementById('avatar-file');
+      const verifiedBadge = document.getElementById('verified-badge-header');
+
+      // Load user profile
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const data = await res.json();
+
+        if (res.ok && data.success && data.data && data.data.user) {
+          const u = data.data.user;
+
+          // Fallback name from email if firstName is not set
+          let fName = u.firstName || '';
+          let lName = u.lastName || '';
+          if (!fName && u.email) {
+            const parts = u.email.split('@')[0].split(/[\._\-]/).filter(Boolean);
+            fName = parts[0] ? parts[0].charAt(0).toUpperCase() + parts[0].slice(1) : 'Student';
+            lName = parts[1] ? parts[1].charAt(0).toUpperCase() + parts[1].slice(1) : '';
+          }
+
+          document.getElementById('firstName').value = fName;
+          document.getElementById('lastName').value  = lName;
+          document.getElementById('email').value     = u.email || '';
+          document.getElementById('phone').value     = u.phoneNumber || u.phone || '';
+          document.getElementById('branch').value    = u.branch || 'CSE';
+          document.getElementById('semester').value  = u.semester || 1;
+
+          // Render Role Badge (HOST vs STUDENT vs GUEST)
+          const roleBadge = document.getElementById('verified-badge-header');
+          if (roleBadge) {
+            roleBadge.classList.remove('hidden');
+            if (u.role === 'admin') {
+              roleBadge.innerHTML = `<span class="bg-amber-500/10 text-amber-500 text-xs font-black px-3 py-1 rounded-full border border-amber-500/30 uppercase tracking-wider"><i class="fa-solid fa-crown mr-1"></i> HOST / ADMIN</span>`;
+            } else if (u.isPremium) {
+              roleBadge.innerHTML = `<span class="bg-[#ffcc4d]/20 text-[#8a6800] dark:text-[#ffcc4d] text-xs font-black px-3 py-1 rounded-full border border-[#ffcc4d]/40 uppercase tracking-wider"><i class="fa-solid fa-star mr-1"></i> PREMIUM STUDENT</span>`;
+            } else {
+              roleBadge.innerHTML = `<span class="bg-brand/10 text-brand text-xs font-bold px-3 py-1 rounded-full border border-brand/20 uppercase tracking-wider"><i class="fa-solid fa-graduation-cap mr-1"></i> STUDENT</span>`;
+            }
+          }
+
+          if (u.avatar && u.avatar !== 'default-avatar.png') {
+            avatarPreview.src = u.avatar;
+          } else {
+            const name = `${fName}+${lName}`.trim() || 'User';
+            avatarPreview.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ff385c&color=fff&bold=true`;
+          }
+        } else if (res.status === 401) {
+          alert('Please log in to access profile settings.');
+          window.location.href = '/auth/login.html';
+        }
+      } catch (err) {
+        console.error('Failed to load profile data');
+      }
+
+      // Handle Avatar Preview
+      avatarFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            avatarPreview.src = e.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+
+      // Submit Edit Profile Form
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.className = 'hidden p-4 rounded-xl mb-6 text-sm font-medium';
+
+        try {
+          // If avatar file is chosen, upload image file first
+          if (avatarFile.files && avatarFile.files[0]) {
+            const avatarFormData = new FormData();
+            avatarFormData.append('avatar', avatarFile.files[0]);
+            
+            const avatarRes = await fetch('/api/users/avatar', {
+              method: 'PUT',
+              credentials: 'include',
+              body: avatarFormData
+            });
+            const avatarData = await avatarRes.json();
+            if (!avatarRes.ok || !avatarData.success) {
+              alertBox.textContent = `❌ ${avatarData.message || 'Avatar upload failed.'}`;
+              alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+              return;
+            }
+          }
+
+          const newPassVal = document.getElementById('newPassword').value;
+          const confirmPassVal = document.getElementById('confirmNewPassword').value;
+
+          if (newPassVal) {
+            if (newPassVal.length < 6) {
+              alertBox.textContent = '❌ New password must be at least 6 characters long.';
+              alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+              return;
+            }
+            if (newPassVal !== confirmPassVal) {
+              alertBox.textContent = '❌ New passwords do not match. Please re-enter.';
+              alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+              return;
+            }
+          }
+
+          // Update text profile fields
+          const profilePayload = {
+            firstName: document.getElementById('firstName').value.trim(),
+            lastName:  document.getElementById('lastName').value.trim(),
+            phoneNumber: document.getElementById('phone').value.trim(),
+            branch:    document.getElementById('branch').value,
+            semester:  document.getElementById('semester').value
+          };
+
+          if (newPassVal) {
+            profilePayload.newPassword = newPassVal;
+          }
+
+          const res = await fetch('/api/users/profile', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(profilePayload)
+          });
+          const resData = await res.json();
+
+          if (res.ok && resData.success) {
+            alertBox.textContent = '🎉 Profile updated successfully!';
+            alertBox.className = 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+            setTimeout(() => window.location.reload(), 1200);
+          } else {
+            alertBox.textContent = `❌ ${resData.message || 'Failed to update profile.'}`;
+            alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+          }
+        } catch (err) {
+          alertBox.textContent = '❌ Server connection error while updating profile.';
+          alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
-
-

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Premium DSA Sheet — EduStack</title>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Razorpay Checkout SDK -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  <!-- Compiled Tailwind CSS -->
+  <link rel="stylesheet" href="/assets/css/output.css">
+  <script src="/assets/js/partials.js" defer></script>
+</head>
+<body class="bg-white dark:bg-[#181818] text-[#222222] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+  <!-- Nav Placeholder injected by partials.js -->
+  <div id="nav-placeholder"></div>
+
+  <!-- HERO BANNER -->
+  <section class="relative overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#241c2c] to-[#121212] text-white px-6 py-16">
+    <div class="max-w-6xl mx-auto relative z-10">
+      <div class="inline-flex items-center gap-2 bg-[#ffcc4d]/20 border border-[#ffcc4d]/40 text-[#ffcc4d] text-xs font-black px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider shadow-sm">
+        <i class="fa-solid fa-crown"></i> EduStack Premium Access Unlocked
+      </div>
+
+      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
+        🎉 Master DSA Resource Folder
+      </h1>
+      <p class="text-gray-300 max-w-3xl text-base md:text-lg leading-relaxed mb-8">
+        Welcome to your comprehensive 450+ SDE Interview Resource Drive. Curated by senior engineers from NITs, with intuitive hints, code patterns, and company tag archives.
+      </p>
+
+      <div class="flex flex-wrap items-center gap-6 text-sm">
+        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-lg">
+            <i class="fa-solid fa-code"></i>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-400 font-semibold uppercase">Total Problems</span>
+            <span class="font-extrabold text-lg text-white">450+ Curated</span>
+          </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg">
+            <i class="fa-solid fa-folder-open"></i>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-400 font-semibold uppercase">Cloud Resource</span>
+            <span class="font-extrabold text-lg text-white">Google Drive Folder</span>
+          </div>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-brand/20 text-brand-light flex items-center justify-center font-black text-lg">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <div>
+            <span class="block text-xs text-gray-400 font-semibold uppercase">Senior Hints</span>
+            <span class="font-extrabold text-lg text-white">100% Included</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAIN CONTENT AREA -->
+  <main class="flex-grow px-6 py-12 max-w-6xl mx-auto w-full">
+
+    <!-- AUTH / ACCESS CHECK CONTAINER -->
+    <div id="accessGate" class="hidden">
+      <!-- Unauthenticated State -->
+      <div id="loggedOutNotice" class="hidden bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl">
+        <div class="w-20 h-20 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-6 text-3xl">
+          <i class="fa-solid fa-lock"></i>
+        </div>
+        <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3">Authentication Required</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto">
+          Please log in to your account to view your unlocked Premium DSA Sheet and access resource materials.
+        </p>
+        <a href="/auth/login.html" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-deep text-white font-bold px-8 py-3.5 rounded-full transition-all shadow-lg shadow-brand/30 no-underline">
+          <i class="fa-solid fa-right-to-bracket"></i> Login to Access
+        </a>
+      </div>
+
+      <!-- Logged-in but Not Premium State -->
+      <div id="notPremiumNotice" class="hidden bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl">
+        <div class="w-20 h-20 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-6 text-3xl">
+          <i class="fa-solid fa-gem"></i>
+        </div>
+        <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3">Premium Membership Required</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto">
+          You are logged in, but you haven't unlocked the Ultimate DSA Sheet yet. Complete the ₹5 payment to unlock full access.
+        </p>
+        <div class="flex justify-center">
+          <button onclick="openRazorpayCheckout()" class="inline-flex items-center gap-2 bg-[#ffcc4d] hover:brightness-95 text-[#5a4400] font-extrabold px-8 py-4 rounded-full transition-all shadow-lg border-0 cursor-pointer text-sm active:scale-95">
+            <i class="fa-solid fa-credit-card"></i> Pay ₹5 with Razorpay Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- UNLOCKED PREMIUM SHEET VIEW -->
+    <div id="dsaSheetContent" class="hidden space-y-8">
+
+      <!-- MASTER EXTERNAL SHEET RESOURCE CARD -->
+      <div class="bg-gradient-to-r from-brand via-purple-600 to-indigo-600 rounded-3xl p-8 md:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="space-y-3 text-center md:text-left">
+          <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+            <i class="fa-solid fa-folder-open"></i> Master Cloud Storage Folder
+          </span>
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight">Access Premium DSA Folder</h2>
+          <p class="text-sm md:text-base text-purple-100 max-w-xl leading-relaxed">
+            Click below to open your complete Google Drive folder containing all 450+ curated DSA questions, solution patterns, company archives, and notes.
+          </p>
+        </div>
+        <a id="external-dsa-sheet-link" href="https://drive.google.com/drive/folders/1FJDMNxPh7CGTTxGT9kOI1kHjtEbYRR6J?usp=drive_link" target="_blank" rel="noopener" class="w-full md:w-auto text-center whitespace-nowrap bg-white text-gray-900 hover:bg-gray-100 font-black px-9 py-5 rounded-full transition-all shadow-2xl active:scale-95 no-underline flex items-center justify-center gap-3 text-base border-0 cursor-pointer">
+          <i class="fa-solid fa-arrow-up-right-from-square text-brand text-lg"></i> Open Master DSA Folder 🚀
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="relative text-xs text-gray-400 py-6 border-t border-gray-800 bg-[#111] px-6 mt-auto">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div>Created By <span class="text-brand font-bold">Shubham Kumar</span> &copy;2026 EduStack Hub.</div>
+      <a href="/" class="text-brand hover:underline font-bold no-underline">Back to Home</a>
+    </div>
+  </footer>
+
+  <script src="/assets/js/theme-toggle.js"></script>
+  <script src="/assets/js/subjects.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        const data = await res.json();
+
+        const gate = document.getElementById('accessGate');
+        const loggedOutNotice = document.getElementById('loggedOutNotice');
+        const notPremiumNotice = document.getElementById('notPremiumNotice');
+        const content = document.getElementById('dsaSheetContent');
+
+        if (!data.success || !data.data || !data.data.user) {
+          gate.classList.remove('hidden');
+          loggedOutNotice.classList.remove('hidden');
+          return;
+        }
+
+        const user = data.data.user;
+        if (!user.isPremium) {
+          gate.classList.remove('hidden');
+          notPremiumNotice.classList.remove('hidden');
+          return;
+        }
+
+        // Authenticated + Premium -> Show Master Sheet Card!
+        content.classList.remove('hidden');
+      } catch (err) {
+        console.error(err);
+      }
+    });
+  </script>
+</body>
+</html>

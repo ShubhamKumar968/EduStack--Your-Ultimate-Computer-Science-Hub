@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Broadcast Notification — EduStack Admin</title>
+  <script src="/assets/js/partials.js" defer></script>
+  <link rel="stylesheet" href="/assets/css/output.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+  <div id="nav-placeholder"></div>
+
+  <main class="flex-grow px-6 py-12 max-w-3xl mx-auto w-full">
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-black text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-bullhorn text-brand"></i> Broadcast Notification
+        </h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Send a global announcement or system alert to all registered EduStack students and contributors.</p>
+      </div>
+      <a href="/" class="text-sm font-bold text-brand hover:underline no-underline flex items-center gap-1.5">
+        <i class="fa-solid fa-arrow-left text-xs"></i> Back
+      </a>
+    </div>
+
+    <div id="alert-box" class="hidden p-4 rounded-xl mb-6 text-sm font-medium"></div>
+
+    <form id="broadcast-form" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 shadow-sm space-y-6">
+      
+      <div>
+        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Notification Category</label>
+        <select id="notif-type" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand text-sm cursor-pointer">
+          <option value="announcement">📢 Announcement (General Update)</option>
+          <option value="update">🚀 New Subject / Resource Update</option>
+          <option value="alert">⚠️ Important Exam Alert</option>
+          <option value="system">🔧 System Maintenance</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Notification Title</label>
+        <input type="text" id="notif-title" placeholder="e.g. 🚀 Unit-5 DSA Practice Questions Now Available!" required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Notification Message</label>
+        <textarea id="notif-message" placeholder="Type the message body that will be delivered to all user bell icons..." required class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand text-sm min-h-[120px]"></textarea>
+      </div>
+
+      <div>
+        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Target URL / Action Link (Optional)</label>
+        <input type="url" id="notif-link" placeholder="e.g. /guest/subject-list.html or https://..." class="w-full px-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand text-sm">
+      </div>
+
+      <div class="pt-4 flex justify-end">
+        <button type="submit" class="bg-brand hover:bg-brand-deep text-white font-bold px-8 py-3 rounded-full transition-all shadow-md active:scale-[0.98] border-0 cursor-pointer text-sm flex items-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i> Broadcast to All Users
+        </button>
+      </div>
+    </form>
+  </main>
+
+  <script src="/assets/js/theme-toggle.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('broadcast-form');
+      const alertBox = document.getElementById('alert-box');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        alertBox.className = 'hidden p-4 rounded-xl mb-6 text-sm font-medium';
+
+        const payload = {
+          title: document.getElementById('notif-title').value.trim(),
+          message: document.getElementById('notif-message').value.trim(),
+          type: document.getElementById('notif-type').value,
+          link: document.getElementById('notif-link').value.trim()
+        };
+
+        try {
+          const res = await fetch('/api/notifications', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include',
+            body: JSON.stringify(payload)
+          });
+          const resData = await res.json();
+
+          if (res.ok && resData.success) {
+            alertBox.textContent = '📢 Notification broadcasted successfully to all users!';
+            alertBox.className = 'bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-600 dark:text-emerald-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+            form.reset();
+          } else {
+            alertBox.textContent = `❌ ${resData.message || 'Failed to broadcast notification.'}`;
+            alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+          }
+        } catch (err) {
+          alertBox.textContent = '❌ Server connection error while broadcasting notification.';
+          alertBox.className = 'bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-4 rounded-xl mb-6 text-sm font-medium block';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

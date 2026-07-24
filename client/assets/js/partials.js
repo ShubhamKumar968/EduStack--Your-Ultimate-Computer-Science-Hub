@@ -1,4 +1,283 @@
-// /assets/js/partials.js
+// Global Toast Notification Utility (Replaces native browser alert popups with Real-World UI)
+window.showToast = function(message, type = 'info', duration = 4000) {
+  if (!message) return;
+  
+  let container = document.getElementById('edustack-toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'edustack-toast-container';
+    container.className = 'fixed top-5 right-5 z-[999999] flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4';
+    document.body.appendChild(container);
+  }
+
+  const isError = type === 'error' || message.includes('❌') || message.includes('⛔') || message.includes('failed') || message.includes('Error');
+  const isSuccess = type === 'success' || message.includes('🎉') || message.includes('✅') || message.includes('success') || message.includes('Congratulations');
+
+  const toast = document.createElement('div');
+  toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-2xl shadow-2xl border transition-all duration-300 transform translate-x-12 opacity-0 backdrop-blur-md ${
+    isError 
+      ? 'bg-red-900/90 text-white border-red-700/50 dark:bg-red-950/90 shadow-red-950/30' 
+      : isSuccess 
+      ? 'bg-emerald-900/90 text-white border-emerald-700/50 dark:bg-emerald-950/90 shadow-emerald-950/30' 
+      : 'bg-gray-900/90 text-white border-gray-700/50 dark:bg-[#222]/95 shadow-gray-950/30'
+  }`;
+
+  const iconClass = isError 
+    ? 'fa-circle-xmark text-red-400' 
+    : isSuccess 
+    ? 'fa-circle-check text-emerald-400' 
+    : 'fa-circle-info text-blue-400';
+
+  toast.innerHTML = `
+    <div class="w-8 h-8 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-white/10">
+      <i class="fa-solid ${iconClass}"></i>
+    </div>
+    <div class="flex-grow text-xs font-extrabold leading-snug tracking-wide">
+      ${message}
+    </div>
+    <button class="text-white/60 hover:text-white text-xs w-6 h-6 rounded-full flex items-center justify-center border-0 cursor-pointer bg-transparent transition" onclick="this.parentElement.remove()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  `;
+
+  container.appendChild(toast);
+
+  requestAnimationFrame(() => {
+    toast.classList.remove('translate-x-12', 'opacity-0');
+    toast.classList.add('translate-x-0', 'opacity-100');
+  });
+
+  setTimeout(() => {
+    toast.classList.remove('translate-x-0', 'opacity-100');
+    toast.classList.add('translate-x-12', 'opacity-0');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+};
+
+// Override native browser alert globally across all pages
+window.alert = function(msg) {
+  window.showToast(msg);
+};
+
+// Global Custom Modal Utility (Replaces browser alert popup with Real-World UI)
+window.showCustomModal = function(options = {}) {
+  const {
+    title = '🔒 Authentication Required',
+    message = 'Please log in to your EduStack account to access this feature.',
+    icon = 'fa-solid fa-lock',
+    iconColor = 'text-brand',
+    iconBg = 'bg-brand/10',
+    primaryText = 'Log In Now',
+    primaryLink = '/auth/login.html',
+    primaryAction = null,
+    cancelText = 'Close'
+  } = options;
+
+  let modalOverlay = document.getElementById('edustack-global-modal');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'edustack-global-modal';
+    modalOverlay.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none';
+    modalOverlay.innerHTML = `
+      <div id="edustack-modal-card" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 max-w-md w-full shadow-2xl text-center transform scale-90 transition-all duration-300 relative overflow-hidden">
+        <button id="edustack-modal-x" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 text-sm w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center border-0 cursor-pointer transition">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+        <div id="edustack-modal-icon-box" class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-sm">
+          <i id="edustack-modal-icon" class="fa-solid fa-lock"></i>
+        </div>
+        <h3 id="edustack-modal-title" class="text-xl font-extrabold text-gray-900 dark:text-white mb-2">Authentication Required</h3>
+        <p id="edustack-modal-message" class="text-xs md:text-sm text-gray-500 dark:text-gray-400 mb-6 leading-relaxed">
+          Please log in to your account.
+        </p>
+        <div class="flex items-center justify-center gap-3">
+          <button id="edustack-modal-cancel" class="px-5 py-2.5 rounded-full border border-gray-200 dark:border-gray-700 font-bold text-xs text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition cursor-pointer">Cancel</button>
+          <a id="edustack-modal-primary" href="/auth/login.html" class="px-6 py-2.5 rounded-full bg-brand text-white font-extrabold text-xs shadow-md shadow-brand/20 hover:bg-brand-deep transition no-underline flex items-center gap-2 cursor-pointer">
+            <i class="fa-solid fa-right-to-bracket"></i> <span id="edustack-modal-btn-text">Log In Now</span>
+          </a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalOverlay);
+  }
+
+  const card = document.getElementById('edustack-modal-card');
+  const iconBox = document.getElementById('edustack-modal-icon-box');
+  const iconEl = document.getElementById('edustack-modal-icon');
+  const titleEl = document.getElementById('edustack-modal-title');
+  const messageEl = document.getElementById('edustack-modal-message');
+  const cancelBtn = document.getElementById('edustack-modal-cancel');
+  const primaryBtn = document.getElementById('edustack-modal-primary');
+  const btnText = document.getElementById('edustack-modal-btn-text');
+  const closeX = document.getElementById('edustack-modal-x');
+
+  iconBox.className = `w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-5 text-2xl shadow-sm ${iconBg} ${iconColor}`;
+  iconEl.className = icon;
+  titleEl.textContent = title;
+  messageEl.textContent = message;
+  btnText.textContent = primaryText;
+  cancelBtn.textContent = cancelText;
+
+  if (primaryLink) {
+    primaryBtn.setAttribute('href', primaryLink);
+    primaryBtn.onclick = null;
+  } else if (primaryAction) {
+    primaryBtn.setAttribute('href', 'javascript:void(0)');
+    primaryBtn.onclick = (e) => {
+      e.preventDefault();
+      closeModal();
+      primaryAction();
+    };
+  }
+
+  function closeModal() {
+    modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+    card.classList.add('scale-90');
+    card.classList.remove('scale-100');
+  }
+
+  cancelBtn.onclick = closeModal;
+  closeX.onclick = closeModal;
+  modalOverlay.onclick = (e) => {
+    if (e.target === modalOverlay) closeModal();
+  };
+
+  modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+  setTimeout(() => {
+    card.classList.remove('scale-90');
+    card.classList.add('scale-100');
+  }, 10);
+};
+
+// Global Razorpay Gateway Modal Component (Fail-proof, Zero about:blank popup errors)
+window.showRazorpayModal = function() {
+  let modalOverlay = document.getElementById('edustack-rzp-modal');
+  if (!modalOverlay) {
+    modalOverlay = document.createElement('div');
+    modalOverlay.id = 'edustack-rzp-modal';
+    modalOverlay.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none';
+    modalOverlay.innerHTML = `
+      <div id="edustack-rzp-card" class="bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-800 rounded-3xl max-w-md w-full shadow-2xl overflow-hidden transform scale-90 transition-all duration-300 relative">
+        <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white p-6 relative">
+          <button id="rzp-modal-close" class="absolute top-4 right-4 text-white/70 hover:text-white text-sm w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border-0 cursor-pointer transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+          <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-xl text-blue-300 font-black">
+              <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+              <h4 class="font-extrabold text-base leading-tight">Razorpay Secure Gateway</h4>
+              <p class="text-[11px] text-blue-200 flex items-center gap-1">
+                <i class="fa-solid fa-lock text-emerald-400"></i> 256-Bit SSL Encrypted Payment
+              </p>
+            </div>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between border border-white/10">
+            <div>
+              <span class="block text-[10px] uppercase font-bold text-blue-200">Merchant</span>
+              <span class="font-extrabold text-sm text-white">EduStack Premium Access</span>
+            </div>
+            <div class="text-right">
+              <span class="block text-[10px] uppercase font-bold text-blue-200">Amount</span>
+              <span class="font-black text-xl text-emerald-300">₹5.00</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-6 space-y-4">
+          <div class="space-y-2">
+            <label class="block text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Select Payment Method</label>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" class="p-3 rounded-2xl border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/20 text-left cursor-pointer transition flex items-center gap-2">
+                <i class="fa-solid fa-qrcode text-blue-600 text-lg"></i>
+                <div>
+                  <span class="block font-bold text-xs text-gray-900 dark:text-white">UPI / QR Code</span>
+                  <span class="block text-[10px] text-gray-400">GPay, PhonePe, Paytm</span>
+                </div>
+              </button>
+              <button type="button" class="p-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] text-left cursor-pointer transition flex items-center gap-2">
+                <i class="fa-solid fa-credit-card text-emerald-500 text-lg"></i>
+                <div>
+                  <span class="block font-bold text-xs text-gray-900 dark:text-white">Cards / NetBanking</span>
+                  <span class="block text-[10px] text-gray-400">Visa, RuPay, SBI</span>
+                </div>
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Enter VPA / UPI ID or Mobile Number</label>
+            <input type="text" id="rzp-upi-id" value="success@razorpay" placeholder="e.g. 9876543210@upi" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+          </div>
+
+          <div id="rzp-msg-box" class="hidden p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-bold text-center"></div>
+
+          <button id="rzp-submit-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-3.5 rounded-2xl transition shadow-lg active:scale-98 cursor-pointer border-0 flex items-center justify-center gap-2 text-sm">
+            <i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium
+          </button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modalOverlay);
+  }
+
+  const card = document.getElementById('edustack-rzp-card');
+  const closeBtn = document.getElementById('rzp-modal-close');
+  const submitBtn = document.getElementById('rzp-submit-btn');
+  const msgBox = document.getElementById('rzp-msg-box');
+
+  function closeModal() {
+    modalOverlay.classList.add('opacity-0', 'pointer-events-none');
+    card.classList.add('scale-90');
+    card.classList.remove('scale-100');
+  }
+
+  closeBtn.onclick = closeModal;
+
+  submitBtn.onclick = async () => {
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Authorizing ₹5.00 Transaction...`;
+    msgBox.classList.remove('hidden');
+    msgBox.className = 'p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-bold text-center';
+    msgBox.textContent = 'Connecting to Razorpay Banking Gateway...';
+
+    try {
+      const res = await fetch('/api/payments/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      const data = await res.json();
+
+      if (res.ok && data.success) {
+        msgBox.className = 'p-3 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold text-center';
+        msgBox.textContent = '🎉 Payment Successful! Premium Access Granted.';
+        setTimeout(() => {
+          closeModal();
+          window.location.href = '/premium-dsa-sheet.html';
+        }, 800);
+      } else {
+        msgBox.className = 'p-3 rounded-xl bg-red-50 text-red-600 text-xs font-bold text-center';
+        msgBox.textContent = `❌ ${data.message || 'Payment processing failed.'}`;
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium`;
+      }
+    } catch (err) {
+      msgBox.className = 'p-3 rounded-xl bg-red-50 text-red-600 text-xs font-bold text-center';
+      msgBox.textContent = '❌ Network error during payment processing.';
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium`;
+    }
+  };
+
+  modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
+  setTimeout(() => {
+    card.classList.remove('scale-90');
+    card.classList.add('scale-100');
+  }, 10);
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   try {
     const path = window.location.pathname;
@@ -11,6 +290,185 @@ document.addEventListener('DOMContentLoaded', () => {
     // Inject Head
     const headHtml = `
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+      <style>
+        /* ── Uniform Subject Card Heights ── */
+        .subject-card-grid .subject-card {
+          height: 365px !important;
+          min-height: 365px !important;
+          max-height: 365px !important;
+        }
+        /* Subject list page cards are taller */
+        .subject-list-grid .subject-card {
+          height: 400px !important;
+          min-height: 400px !important;
+          max-height: 400px !important;
+        }
+        /* Card thumbnail always fixed height */
+        .subject-card .card-thumb {
+          height: 176px !important; /* h-44 = 176px */
+          min-height: 176px !important;
+          max-height: 176px !important;
+          flex-shrink: 0;
+          overflow: hidden;
+        }
+        .subject-card .card-thumb img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          object-position: center;
+        }
+
+        /* ── Navbar fix: right section never overflows ── */
+        #nav-right-section {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          flex-shrink: 0;
+          margin-left: auto;
+          min-width: 0;
+        }
+        #themeToggle {
+          flex-shrink: 0 !important;
+        }
+        #nav-auth-container {
+          flex-shrink: 0 !important;
+          min-width: 0;
+        }
+        /* Profile pill: limit max width on very small screens */
+        #nav-auth-container .profile-pill {
+          max-width: 220px;
+        }
+        @media (max-width: 480px) {
+          #nav-auth-container .profile-pill {
+            max-width: 160px;
+          }
+          #nav-auth-container .profile-name-col {
+            display: none;
+          }
+        }
+
+        /* ── Mobile Sidebar ── */
+        #sidebar-overlay {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          display: flex;
+          pointer-events: none;
+        }
+        #sidebar-overlay.open {
+          pointer-events: auto;
+        }
+        #sidebar-backdrop {
+          position: absolute;
+          inset: 0;
+          background: rgba(0,0,0,0.45);
+          backdrop-filter: blur(4px);
+          opacity: 0;
+          transition: opacity 0.32s ease;
+        }
+        #sidebar-overlay.open #sidebar-backdrop {
+          opacity: 1;
+        }
+        #sidebar-panel {
+          position: relative;
+          width: 300px;
+          max-width: 85vw;
+          height: 100%;
+          background: #fff;
+          box-shadow: 4px 0 32px rgba(0,0,0,0.18);
+          display: flex;
+          flex-direction: column;
+          transform: translateX(-100%);
+          transition: transform 0.32s cubic-bezier(0.4,0,0.2,1);
+          overflow-y: auto;
+        }
+        .dark #sidebar-panel {
+          background: #181818;
+          box-shadow: 4px 0 32px rgba(0,0,0,0.55);
+        }
+        #sidebar-overlay.open #sidebar-panel {
+          transform: translateX(0);
+        }
+
+        /* sidebar nav links */
+        .sb-link {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 13px 20px;
+          border-radius: 14px;
+          font-size: 15px;
+          font-weight: 700;
+          text-decoration: none;
+          color: #374151;
+          transition: background 0.18s, color 0.18s;
+          margin: 2px 0;
+        }
+        .dark .sb-link { color: #d1d5db; }
+        .sb-link:hover { background: #f3f4f6; color: #ff385c; }
+        .dark .sb-link:hover { background: #222222; color: #ff385c; }
+        .sb-link.active { background: #f3f4f6; color: #ff385c; }
+        .dark .sb-link.active { background: #222222; color: #ff385c; }
+        .sb-link i { width: 20px; text-align: center; font-size: 14px; color: #9ca3af; flex-shrink: 0; }
+        .sb-link:hover i, .sb-link.active i { color: #ff385c; }
+
+        /* hamburger button */
+        #hamburger-btn {
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          height: 40px;
+          border-radius: 10px;
+          border: 1.5px solid #e5e7eb;
+          background: transparent;
+          cursor: pointer;
+          transition: background 0.18s, border-color 0.18s;
+          flex-shrink: 0;
+        }
+        .dark #hamburger-btn { border-color: #374151; }
+        #hamburger-btn:hover { background: #f3f4f6; }
+        .dark #hamburger-btn:hover { background: #222222; }
+        @media (max-width: 767px) {
+          #hamburger-btn { display: flex; }
+        }
+
+        /* sidebar close button */
+        #sidebar-close-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          border: 1.5px solid #e5e7eb;
+          background: transparent;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.18s;
+          flex-shrink: 0;
+        }
+        .dark #sidebar-close-btn { border-color: #374151; }
+        #sidebar-close-btn:hover { background: #fee2e2; }
+        .dark #sidebar-close-btn:hover { background: #450a0a; }
+
+        /* sidebar divider */
+        .sb-divider {
+          height: 1px;
+          background: #f3f4f6;
+          margin: 8px 0;
+        }
+        .dark .sb-divider { background: #2d2d2d; }
+
+        /* sidebar section label */
+        .sb-section-label {
+          font-size: 10px;
+          font-weight: 900;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: #9ca3af;
+          padding: 6px 20px 4px;
+        }
+      </style>
     `;
     document.head.insertAdjacentHTML('beforeend', headHtml);
 
@@ -29,26 +487,124 @@ document.addEventListener('DOMContentLoaded', () => {
             </li>`;
     };
 
+    // Build sidebar nav links HTML
+    const buildSidebarLinks = () => {
+      if (isGuest) {
+        return `
+          <span class="sb-section-label">Navigation</span>
+          <a href="${base}guest/subject-list.html" class="sb-link ${path.includes('guest/subject-list') ? 'active' : ''}">
+            <i class="fa-solid fa-list-ul"></i> Subject-list
+          </a>
+          <a href="${base}guest/favourite-list.html" class="sb-link ${path.includes('guest/favourite-list') ? 'active' : ''}">
+            <i class="fa-solid fa-heart"></i> Favourites
+          </a>
+          <a href="${base}guest/enrollments.html" class="sb-link ${path.includes('guest/enrollments') ? 'active' : ''}">
+            <i class="fa-solid fa-calendar-check"></i> Enrollments
+          </a>`;
+      } else if (isAdmin) {
+        return `
+          <span class="sb-section-label">Navigation</span>
+          <a href="${base}admin/subject-list.html" class="sb-link ${path.includes('admin/subject-list') ? 'active' : ''}">
+            <i class="fa-solid fa-list-ul"></i> Subject-list
+          </a>
+          <a href="${base}admin/host-subjects.html" class="sb-link ${path.includes('admin/host-subjects') ? 'active' : ''}">
+            <i class="fa-solid fa-house"></i> Host Subjects
+          </a>
+          <a href="${base}admin/add-subject.html" class="sb-link ${path.includes('admin/add-subject') ? 'active' : ''}">
+            <i class="fa-solid fa-circle-plus"></i> Add Subject
+          </a>`;
+      } else {
+        return `
+          <span class="sb-section-label">Sections</span>
+          <a href="${base}index.html#resources" class="sb-link sb-hash-link" data-hash="#resources">
+            <i class="fa-solid fa-folder-open"></i> Resources
+          </a>
+          <a href="${base}index.html#ai-tools" class="sb-link sb-hash-link" data-hash="#ai-tools">
+            <i class="fa-solid fa-robot"></i> AI Tools
+          </a>
+          <a href="${base}index.html#about" class="sb-link sb-hash-link" data-hash="#about">
+            <i class="fa-solid fa-circle-info"></i> About
+          </a>
+          <div class="sb-divider"></div>
+          <span class="sb-section-label">Account</span>
+          <a href="${base}auth/login.html" class="sb-link">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i> Login
+          </a>
+          <a href="${base}auth/register.html" class="sb-link" style="color:#ff385c;">
+            <i class="fa-solid fa-user-plus" style="color:#ff385c;"></i> Sign Up
+          </a>`;
+      }
+    };
+
+    // Sidebar HTML
+    const sidebarHtml = `
+      <div id="sidebar-overlay">
+        <div id="sidebar-backdrop"></div>
+        <div id="sidebar-panel">
+          <!-- Sidebar Header -->
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid #f3f4f6;" class="dark-border-fix">
+            <a href="${base}index.html" style="display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit;" onclick="closeSidebar()">
+              <div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#ff385c,#ff6b81);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px;">
+                  <rect x="3" y="15" width="18" height="4" rx="1.5" fill="white"/>
+                  <rect x="5" y="9" width="14" height="4" rx="1.5" fill="white" opacity="0.85"/>
+                  <rect x="7" y="3" width="10" height="4" rx="1.5" fill="white" opacity="0.7"/>
+                </svg>
+              </div>
+              <div>
+                <div style="font-size:18px;font-weight:900;line-height:1;letter-spacing:-0.5px;">Edu<span style="color:#ff385c;">Stack</span></div>
+                <div style="font-size:10px;color:#9ca3af;margin-top:2px;font-weight:500;">Pushing knowledge, Popping success.</div>
+              </div>
+            </a>
+            <button id="sidebar-close-btn" onclick="closeSidebar()" aria-label="Close sidebar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:16px;height:16px;color:#6b7280;">
+                <path d="M18 6L6 18M6 6l12 12"/>
+              </svg>
+            </button>
+          </div>
+          <!-- Sidebar Nav Links -->
+          <nav style="padding:12px 12px;flex:1;">
+            ${buildSidebarLinks()}
+          </nav>
+          <!-- Sidebar Footer -->
+          <div style="padding:14px 20px;border-top:1px solid #f3f4f6;font-size:11px;color:#9ca3af;font-weight:600;">
+            © 2026 EduStack · <span style="color:#ff385c;">Shubham Kumar</span>
+          </div>
+        </div>
+      </div>
+    `;
+    document.body.insertAdjacentHTML('afterbegin', sidebarHtml);
+
     // Inject Nav
     const navPlaceholder = document.getElementById('nav-placeholder');
     if (navPlaceholder) {
       const navHtml = `
-        <nav class="flex items-center justify-between px-6 md:px-12 py-4 border-b border-gray-100 dark:border-gray-800 relative z-50">
-          <a href="${base}index.html" class="flex items-center gap-2.5 no-underline text-inherit">
-            <div class="w-9 h-9 rounded-[10px] bg-gradient-to-br from-brand to-brand-soft flex items-center justify-center flex-shrink-0">
-              <svg viewBox="0 0 24 24" fill="none" class="w-5 h-5">
-                <rect x="3" y="15" width="18" height="4" rx="1.5" fill="white"/>
-                <rect x="5" y="9" width="14" height="4" rx="1.5" fill="white" opacity="0.85"/>
-                <rect x="7" y="3" width="10" height="4" rx="1.5" fill="white" opacity="0.7"/>
+        <nav style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,0.07);position:relative;z-index:50;flex-wrap:nowrap;width:100%;box-sizing:border-box;gap:8px;" class="bg-white dark:bg-[#181818] dark-border-fix">
+
+          <!-- LEFT: Logo + hamburger -->
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;min-width:0;">
+            <button id="hamburger-btn" onclick="openSidebar()" aria-label="Open menu" style="flex-shrink:0;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="width:18px;height:18px;">
+                <path d="M4 6h16M4 12h16M4 18h16"/>
               </svg>
-            </div>
-            <div class="flex flex-col justify-center">
-              <div class="text-xl font-extrabold tracking-tight leading-none">Edu<span class="text-brand">Stack</span></div>
-              <span class="text-[10px] font-medium text-gray-500 dark:text-gray-400 mt-0.5">Pushing knowledge, Popping success.</span>
-            </div>
-          </a>
-          
-          <ul class="hidden md:flex items-center gap-2 list-none text-[15px] font-bold">
+            </button>
+            <a href="${base}index.html" style="display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;flex-shrink:0;">
+              <div style="width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#ff385c,#ff6b81);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg viewBox="0 0 24 24" fill="none" style="width:18px;height:18px;">
+                  <rect x="3" y="15" width="18" height="4" rx="1.5" fill="white"/>
+                  <rect x="5" y="9" width="14" height="4" rx="1.5" fill="white" opacity="0.85"/>
+                  <rect x="7" y="3" width="10" height="4" rx="1.5" fill="white" opacity="0.7"/>
+                </svg>
+              </div>
+              <div style="display:flex;flex-direction:column;justify-content:center;flex-shrink:0;">
+                <div style="font-size:18px;font-weight:900;line-height:1;letter-spacing:-0.5px;">Edu<span style="color:#ff385c;">Stack</span></div>
+                <span style="font-size:10px;color:#9ca3af;font-weight:500;white-space:nowrap;" class="hidden-xs">Pushing knowledge, Popping success.</span>
+              </div>
+            </a>
+          </div>
+
+          <!-- CENTER: Nav links (desktop only) -->
+          <ul style="display:none;align-items:center;gap:4px;list-style:none;margin:0;padding:0;font-size:14px;font-weight:700;flex-shrink:0;" class="desktop-nav-links">
             ${isGuest ? `
             ${getNavItem('guest/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'guest/subject-list')}
             ${getNavItem('guest/favourite-list.html', 'fa-solid fa-heart', 'Favourites', 'guest/favourite-list')}
@@ -58,79 +614,264 @@ document.addEventListener('DOMContentLoaded', () => {
             ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects')}
             ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject')}
             ` : `
-            <li>
-              <a href="${base}index.html#resources" class="nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300" data-hash="#resources">
-                <i class="fa-solid fa-folder-open text-gray-400"></i> Resources
-              </a>
-            </li>
-            <li>
-              <a href="${base}index.html#ai-tools" class="nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300" data-hash="#ai-tools">
-                <i class="fa-solid fa-robot text-gray-400"></i> AI Tools
-              </a>
-            </li>
-            <li>
-              <a href="${base}index.html#placement" class="nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300" data-hash="#placement">
-                <i class="fa-solid fa-briefcase text-gray-400"></i> Placement
-              </a>
-            </li>
-            <li>
-              <a href="${base}index.html#about" class="nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300" data-hash="#about">
-                <i class="fa-solid fa-circle-info text-gray-400"></i> About
-              </a>
-            </li>
+            <li><a href="${base}index.html#resources" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#9ca3af;"></i> Resources</a></li>
+            <li><a href="${base}index.html#ai-tools" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#9ca3af;"></i> AI Tools</a></li>
+            <li><a href="${base}index.html#about" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#9ca3af;"></i> About</a></li>
             `}
           </ul>
 
-          <div class="flex items-center gap-3 md:gap-5">
-            <button id="themeToggle" aria-label="Toggle dark mode" class="w-[52px] h-7 rounded-full bg-gray-200 dark:bg-gray-700 relative flex-shrink-0">
-              <span id="thumb" class="absolute top-[3px] left-[3px] w-[22px] h-[22px] rounded-full bg-white dark:bg-[#1a1a1a] shadow flex items-center justify-center transition-all duration-300">
-                <svg id="thumbIcon" viewBox="0 0 24 24" fill="none" class="w-3.5 h-3.5"><circle cx="12" cy="12" r="5" fill="#ffb199"/></svg>
+          <!-- RIGHT: Theme toggle + Auth (always flex, never wraps) -->
+          <div id="nav-right-section">
+            <!-- Theme Toggle -->
+            <button id="themeToggle" aria-label="Toggle dark mode"
+              style="width:46px;height:26px;border-radius:50px;background:#e5e7eb;border:none;position:relative;cursor:pointer;flex-shrink:0;display:flex;align-items:center;transition:background 0.2s;">
+              <span id="thumb"
+                style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;transition:transform 0.25s;">
+                <i id="thumbIcon" class="fa-solid fa-sun" style="color:#f59e0b;font-size:10px;"></i>
               </span>
             </button>
-            
-            ${(isGuest || isAdmin) ? `
-            <div class="relative group">
-              <div class="flex items-center gap-2.5 px-2 py-1.5 pr-3 border border-gray-200 dark:border-gray-700 rounded-full hover:shadow-md transition-all cursor-pointer bg-gray-50 dark:bg-[#1a1a1a]">
-                <div class="w-[34px] h-[34px] rounded-full overflow-hidden">
-                  <img src="https://ui-avatars.com/api/?name=${isAdmin ? 'Shubham+Kumar' : 'Aman+Kumar'}&background=14b8a6&color=fff&bold=true" alt="Avatar" class="w-full h-full object-cover">
-                </div>
-                <div class="flex flex-col justify-center">
-                  <span class="text-[13px] font-bold leading-none text-gray-900 dark:text-white mb-[3px]">${isAdmin ? 'Shubham Kumar' : 'Aman Kumar'}</span>
-                  <span class="text-[10px] font-black text-gray-400 uppercase tracking-wider leading-none">${isAdmin ? 'HOST' : 'GUEST'}</span>
-                </div>
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 ml-1"></i>
-              </div>
-              
-              <!-- Dropdown Menu -->
-              <div class="absolute right-0 top-[120%] w-60 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 origin-top-right transform scale-95 group-hover:scale-100">
-                <div class="p-4 border-b border-gray-100 dark:border-gray-800">
-                  <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Logged in as</p>
-                  <p class="text-[13px] font-bold text-gray-800 dark:text-gray-200 truncate">${isAdmin ? 'shubham.host@edustack.com' : 'aman.guest@edustack.com'}</p>
-                </div>
-                <div class="p-2 space-y-1">
-                  <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
-                    <i class="fa-solid fa-user-pen w-4 text-center"></i> Edit Profile
-                  </a>
-                  <a href="${base}index.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-black text-brand hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-colors no-underline">
-                    <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Log Out
-                  </a>
-                </div>
-              </div>
+
+            <!-- Auth Container (login+signup for guests, profile for logged-in) -->
+            <div id="nav-auth-container" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+              <a href="${base}auth/login.html"
+                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#374151;text-decoration:none;white-space:nowrap;padding:6px 4px;"
+                class="login-link-desktop">
+                <i class="fa-solid fa-arrow-right-to-bracket" style="color:#9ca3af;"></i>
+                Login
+              </a>
+              <a href="${base}auth/register.html"
+                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:#ff385c;padding:8px 18px;border-radius:50px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(255,56,92,0.25);">
+                <i class="fa-solid fa-user-plus" style="font-size:11px;"></i>
+                Sign Up
+              </a>
             </div>
-            ` : `
-            <a href="${base}auth/login.html" class="hidden sm:flex items-center gap-1.5 text-sm font-bold text-gray-700 dark:text-gray-300 hover:text-brand transition-colors no-underline">
-              <i class="fa-solid fa-arrow-right-to-bracket text-gray-400"></i>
-              Login
-            </a>
-            <a href="${base}auth/register.html" class="flex items-center gap-1.5 text-[15px] font-bold text-white bg-brand px-6 py-2.5 rounded-full hover:bg-brand-deep transition-colors shadow-sm no-underline">
-              <i class="fa-solid fa-user-plus text-sm"></i>
-              Sign Up
-            </a>
-            `}
           </div>
         </nav>
       `;
       navPlaceholder.innerHTML = navHtml;
+
+      // Apply desktop nav visibility via CSS (avoids Tailwind purge issues)
+      const navStyle = document.createElement('style');
+      navStyle.textContent = `
+        @media (min-width:1024px) {
+          .desktop-nav-links { display:flex !important; }
+          .login-link-desktop { display:flex !important; }
+        }
+        @media (max-width:1023px) {
+          .desktop-nav-links { display:none !important; }
+        }
+        @media (max-width:480px) {
+          .login-link-desktop { display:none !important; }
+          .hidden-xs { display:none !important; }
+        }
+        .dark nav { border-color:#2d2d2d; }
+        .dark-nav-link:hover { background:#222 !important; color:#ff385c !important; }
+        .dark #themeToggle { background:#374151 !important; }
+      `;
+      document.head.appendChild(navStyle);
+
+      // Dynamically fetch current logged-in user profile from REST API
+      fetch('/api/auth/me', { credentials: 'include' })
+        .then(res => res.json())
+        .then(resData => {
+          if (resData && resData.success && resData.data && resData.data.user) {
+            const u = resData.data.user;
+            // Store user info globally for easy page access
+            window.currentUser = u;
+            const container = document.getElementById('nav-auth-container');
+            if (container) {
+              let rawName = `${u.firstName || ''} ${u.lastName || ''}`.trim();
+              if (!rawName && u.email) {
+                const handle = u.email.split('@')[0];
+                rawName = handle.split(/[\._\-]/).filter(Boolean).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+              }
+              const displayName = rawName || 'Student';
+              const avatar = (u.avatar && u.avatar !== 'default-avatar.png') ? u.avatar : `https://ui-avatars.com/api/?name=${encodeURIComponent(displayName)}&background=ff385c&color=fff&bold=true`;
+              
+              const roleLabel = u.role === 'admin' ? 'HOST / ADMIN' : (u.isPremium ? '★ PREMIUM' : 'STUDENT');
+              const roleColor = u.role === 'admin' ? 'text-amber-500 font-extrabold' : (u.isPremium ? 'text-amber-400 font-bold' : 'text-brand font-bold');
+              const roleIcon  = u.role === 'admin' ? '<i class="fa-solid fa-crown text-amber-500 text-xs" title="Host Admin Account"></i>' : '<i class="fa-solid fa-circle-check text-blue-500 text-xs" title="Verified Student Account"></i>';
+
+              container.innerHTML = `
+                <div class="relative id="user-profile-menu" style="flex-shrink:0;">
+                  <div class="profile-pill" id="profile-pill-btn" onclick="const d=document.getElementById('user-profile-dropdown'); d.classList.toggle('hidden');" style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1.5px solid #e5e7eb;border-radius:50px;cursor:pointer;background:#f9fafb;transition:all 0.2s;" onmouseenter="this.style.borderColor='#ff385c'" onmouseleave="this.style.borderColor='#e5e7eb'">
+                    <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,56,92,0.3);flex-shrink:0;">
+                      <img src="${avatar}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+                    </div>
+                    <div style="display:flex;flex-direction:column;justify-content:center;" class="profile-name-col">
+                      <span style="font-size:12px;font-weight:800;line-height:1;color:#111827;display:flex;align-items:center;gap:4px;" class="dark:text-white">
+                        ${displayName}
+                        ${roleIcon}
+                      </span>
+                      <span style="font-size:9px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;line-height:1;margin-top:2px;" class="${roleColor}">
+                        ${roleLabel}
+                      </span>
+                    </div>
+                    <i class="fa-solid fa-chevron-down" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
+                  </div>
+                  
+                  <div id="user-profile-dropdown" class="hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-800">
+                      <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Logged in as (${roleLabel})</p>
+                      <p class="text-[13px] font-bold text-gray-800 dark:text-gray-200 truncate">${u.email}</p>
+                    </div>
+                    <div class="p-2 space-y-1">
+                      ${u.role === 'admin' ? `
+                      <a href="${base}admin/add-subject.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-plus-circle w-4 text-center text-indigo-500"></i> Add New Subject
+                      </a>` : ''}
+                      ${u.role === 'admin' || u.role === 'contributor' ? `
+                      <a href="${base}admin/admin-subject-list.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-list-check w-4 text-center text-purple-500"></i> Manage Subjects
+                      </a>` : ''}
+                      ${u.role === 'admin' ? `
+                      <a href="${base}admin/broadcast-notification.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-bullhorn w-4 text-center text-rose-500"></i> Broadcast Notification
+                      </a>` : ''}
+                      ${u.role === 'contributor' || u.role === 'admin' ? `
+                      <a href="/contribute.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-cloud-arrow-up w-4 text-center text-emerald-500"></i> Contribute Resources
+                      </a>` : `
+                      <a href="/contribute.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-handshake w-4 text-center text-emerald-500"></i> Become a Contributor
+                      </a>`}
+                      ${u.isPremium ? `
+                      <a href="/premium-dsa-sheet.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/10 rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-star w-4 text-center text-amber-500"></i> Premium DSA Sheet
+                      </a>` : ''}
+                      <a href="${base}guest/enrollments.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-graduation-cap w-4 text-center text-blue-500"></i> My Enrollments
+                      </a>
+                      <a href="${base}guest/favourite-list.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-heart w-4 text-center text-brand"></i> My Favourites
+                      </a>
+                      <a href="${base}auth/edit-profile.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                        <i class="fa-solid fa-user-pen w-4 text-center text-emerald-500"></i> Edit Profile
+                      </a>
+                      <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-[14px] font-black text-brand hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-colors no-underline cursor-pointer bg-transparent border-0">
+                        <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Log Out
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Notification Bell & Dropdown -->
+                <div class="relative flex items-center">
+                  <button id="notif-bell-btn" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-brand transition-all cursor-pointer relative border-0">
+                    <i class="fa-solid fa-bell text-sm"></i>
+                    <span id="notif-badge" class="hidden absolute -top-1 -right-1 bg-brand text-white text-[9px] font-black min-w-4 h-4 px-1 rounded-full flex items-center justify-center border-2 border-white dark:border-[#181818]">0</span>
+                  </button>
+                  
+                  <div id="notif-dropdown" class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-[9999] overflow-hidden">
+                    <div class="p-3 px-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                      <h4 class="font-extrabold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                        <i class="fa-solid fa-bell text-brand"></i> Notifications
+                      </h4>
+                      <button id="btn-mark-all-read" class="text-[11px] font-bold text-brand hover:underline bg-transparent border-0 cursor-pointer">Mark all read</button>
+                    </div>
+                    <div id="notif-list" class="max-h-80 overflow-y-auto p-2 space-y-1.5 text-xs">
+                      <p class="text-center text-gray-400 py-6">No new notifications.</p>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // Initialize Notification Bell Click & Fetcher
+              setTimeout(() => {
+                const bellBtn = document.getElementById('notif-bell-btn');
+                const notifDropdown = document.getElementById('notif-dropdown');
+                const notifList = document.getElementById('notif-list');
+                const notifBadge = document.getElementById('notif-badge');
+                const markAllBtn = document.getElementById('btn-mark-all-read');
+
+                if (bellBtn && notifDropdown) {
+                  bellBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    notifDropdown.classList.toggle('hidden');
+                  });
+
+                  document.addEventListener('click', (e) => {
+                    const profDropdown = document.getElementById('user-profile-dropdown');
+                    const profBtn = document.getElementById('profile-pill-btn');
+                    if (profDropdown && profBtn && !profDropdown.contains(e.target) && !profBtn.contains(e.target)) {
+                      profDropdown.classList.add('hidden');
+                    }
+                    if (!notifDropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+                      notifDropdown.classList.add('hidden');
+                    }
+                  });
+
+                  const loadNotifs = async () => {
+                    try {
+                      const nRes = await fetch('/api/notifications', { credentials: 'include' });
+                      const nData = await nRes.json();
+                      if (nRes.ok && nData.success && nData.data) {
+                        const { unreadCount, notifications } = nData.data;
+                        if (unreadCount > 0) {
+                          notifBadge.textContent = unreadCount;
+                          notifBadge.classList.remove('hidden');
+                        } else {
+                          notifBadge.classList.add('hidden');
+                        }
+
+                        if (notifications.length === 0) {
+                          notifList.innerHTML = '<p class="text-center text-gray-400 py-6">No new notifications.</p>';
+                          return;
+                        }
+
+                        notifList.innerHTML = notifications.map(n => `
+                          <div class="p-3 rounded-xl ${n.isRead ? 'bg-transparent text-gray-500' : 'bg-brand/5 dark:bg-brand/10 border border-brand/10'} transition-all flex flex-col gap-1">
+                            <div class="flex items-center justify-between">
+                              <span class="font-black text-gray-900 dark:text-white text-[12px] flex items-center gap-1.5">
+                                ${n.type === 'alert' ? '⚠️' : (n.type === 'update' ? '🚀' : '📢')} ${n.title}
+                              </span>
+                              <span class="text-[9px] text-gray-400">${new Date(n.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <p class="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">${n.message}</p>
+                            ${n.link ? `<a href="${n.link}" class="text-[10px] font-bold text-brand hover:underline mt-0.5 inline-block">View Details →</a>` : ''}
+                          </div>
+                        `).join('');
+                      }
+                    } catch (err) {}
+                  };
+
+                  loadNotifs();
+
+                  if (markAllBtn) {
+                    markAllBtn.addEventListener('click', async () => {
+                      await fetch('/api/notifications/read-all', { method: 'PUT', credentials: 'include' });
+                      loadNotifs();
+                    });
+                  }
+                }
+              }, 100);
+            }
+
+            // Real-world RBAC Client Page Guard
+            if (isAdmin) {
+              if (u.role !== 'admin') {
+                alert('⛔ Access Denied: Admin privileges required. Redirecting to home...');
+                window.location.href = '/';
+              }
+            }
+          } else {
+            if (isAdmin) {
+              alert('🔒 Access Restricted: Please log in with an Admin account.');
+              window.location.href = `${base}auth/login.html`;
+            }
+          }
+        })
+          if (isAdmin) {
+            window.showCustomModal({
+              title: '⛔ Admin Access Restricted',
+              message: 'Please log in with an Admin / Host account to access the administrative dashboard.',
+              icon: 'fa-solid fa-user-shield',
+              iconColor: 'text-amber-500',
+              iconBg: 'bg-amber-500/10',
+              primaryText: 'Log In as Admin',
+              primaryLink: `${base}auth/login.html`
+            });
+          }
       
       // Handle hash based active states for index page nav
       if (!isGuest && !isAdmin) {
@@ -161,6 +902,21 @@ document.addEventListener('DOMContentLoaded', () => {
           });
         });
         updateHashNav();
+
+        // Sidebar hash link active state
+        const updateSidebarHash = () => {
+          const currentHash = window.location.hash;
+          document.querySelectorAll('.sb-hash-link').forEach(link => {
+            const hashAttr = link.getAttribute('data-hash');
+            if (currentHash && hashAttr === currentHash) {
+              link.classList.add('active');
+            } else {
+              link.classList.remove('active');
+            }
+          });
+        };
+        window.addEventListener('hashchange', updateSidebarHash);
+        updateSidebarHash();
       }
 
       // Re-attach theme toggle listener after injecting nav
@@ -168,6 +924,41 @@ document.addEventListener('DOMContentLoaded', () => {
         window.initThemeToggle();
       }
     }
+
+    // ── Sidebar open / close logic ──
+    window.openSidebar = function () {
+      const overlay = document.getElementById('sidebar-overlay');
+      if (overlay) overlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+
+    window.closeSidebar = function () {
+      const overlay = document.getElementById('sidebar-overlay');
+      if (overlay) overlay.classList.remove('open');
+      document.body.style.overflow = '';
+    };
+
+    // Close on backdrop click
+    document.addEventListener('click', (e) => {
+      const overlay = document.getElementById('sidebar-overlay');
+      const backdrop = document.getElementById('sidebar-backdrop');
+      if (overlay && overlay.classList.contains('open') && e.target === backdrop) {
+        window.closeSidebar();
+      }
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') window.closeSidebar();
+    });
+
+    // Close sidebar when a sidebar link is clicked (smooth UX)
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('.sb-link')) {
+        window.closeSidebar();
+      }
+    });
+
   } catch (error) {
     console.error('Error loading partials:', error);
   }

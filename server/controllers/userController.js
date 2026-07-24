@@ -1,0 +1,195 @@
+// ============================================================
+// controllers/userController.js
+// ============================================================
+// PURPOSE:
+//   Handles user profile management — viewing and updating profile
+//   details and avatar. All routes are private (require isAuth).
+//
+// ROUTES HANDLED:
+//   GET    /api/users/profile          → Get own profile
+//   PUT    /api/users/profile          → Update own profile details
+//   PUT    /api/users/avatar           → Upload / update profile picture
+//   GET    /api/users                  → List all users (admin only)
+// ============================================================
+
+const asyncHandler = require('../utils/asyncHandler');
+const { sendSuccess, sendError } = require('../utils/apiResponse');
+const User = require('../models/user');
+const { cloudinary, bufferToBase64Uri } = require('../config/cloudinary');
+
+
+// ============================================================
+// @route   GET /api/users/profile
+// @desc    Get the logged-in user's own profile
+// @access  Private
+// ============================================================
+exports.getProfile = asyncHandler(async (req, res) => {
+  // req.user is already attached by isAuth — safe to use directly
+  const user = req.user;
+
+  return sendSuccess(res, 'Profile fetched successfully.', {
+    user: {
+      id:          user._id,
+      firstName:   user.firstName,
+      lastName:    user.lastName,
+      email:       user.email,
+      role:        user.role,
+      avatar:      user.avatar,
+      phoneNumber: user.phoneNumber,
+      bio:         user.bio,
+      createdAt:   user.createdAt,
+    },
+  });
+});
+
+
+// ============================================================
+// @route   PUT /api/users/profile (or /api/users/me)
+// @desc    Update own profile details (name, phone, bio, avatar)
+// @access  Private
+// ============================================================
+exports.updateProfile = asyncHandler(async (req, res) => {
+  const { firstName, lastName, phoneNumber, phone, bio, newPassword } = req.body;
+
+  const updates = {};
+  if (firstName !== undefined && firstName !== '') updates.firstName   = firstName.trim();
+  if (lastName  !== undefined && lastName !== '')  updates.lastName    = lastName.trim();
+  if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber.trim();
+  if (phone       !== undefined && phoneNumber === undefined) updates.phoneNumber = phone.trim();
+  if (bio       !== undefined) updates.bio         = bio.trim();
+
+  if (newPassword && newPassword.trim().length >= 6) {
+    const bcrypt = require('bcryptjs');
+    updates.password = await bcrypt.hash(newPassword.trim(), 12);
+  }
+
+  // If a profile picture file is uploaded with the profile form
+  if (req.file) {
+    try {
+      const base64Uri = bufferToBase64Uri(req.file);
+      const result = await cloudinary.uploader.upload(base64Uri, {
+        folder: 'edustack_profiles',
+        transformation: [{ width: 400, height: 400, crop: 'fill', gravity: 'face' }],
+        timeout: 60000,
+      });
+      updates.avatar = result.secure_url;
+    } catch (cloudErr) {
+      console.warn('⚠️ Cloudinary upload warning, using inline data URI fallback:', cloudErr.message);
+      // Fallback: convert directly to base64 Data URI so avatar upload never fails
+      const mime = req.file.mimetype || 'image/jpeg';
+      updates.avatar = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    updates,
+    { new: true, runValidators: true }
+  );
+
+  if (!updatedUser) {
+    return sendError(res, 'User not found.', 404);
+  }
+
+  return sendSuccess(res, 'Profile updated successfully.', {
+    user: {
+      id:          updatedUser._id,
+      firstName:   updatedUser.firstName,
+      lastName:    updatedUser.lastName,
+      email:       updatedUser.email,
+      role:        updatedUser.role,
+      avatar:      updatedUser.avatar,
+      phoneNumber: updatedUser.phoneNumber,
+      bio:         updatedUser.bio,
+      isPremium:   updatedUser.isPremium || false,
+    },
+  });
+});
+
+
+// ============================================================
+// @route   PUT /api/users/avatar
+// @desc    Upload or replace the user's profile picture
+// @access  Private
+// ============================================================
+exports.updateAvatar = asyncHandler(async (req, res) => {
+  if (!req.file) {
+    return sendError(res, 'No image file provided.', 400);
+  }
+
+  let avatarUrl = '';
+  try {
+    const base64Uri = bufferToBase64Uri(req.file);
+    const result = await cloudinary.uploader.upload(base64Uri, {
+      folder:         'edustack_profiles',
+      transformation: [{ width: 400, height: 400, crop: 'fill', gravity: 'face' }],
+      timeout: 60000,
+    });
+    avatarUrl = result.secure_url;
+  } catch (cloudErr) {
+    console.warn('⚠️ Cloudinary upload warning, using inline data URI fallback:', cloudErr.message);
+    const mime = req.file.mimetype || 'image/jpeg';
+    avatarUrl = `data:${mime};base64,${req.file.buffer.toString('base64')}`;
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    { avatar: avatarUrl },
+    { new: true }
+  );
+
+  return sendSuccess(res, 'Profile picture updated.', {
+    avatar: updatedUser.avatar,
+  });
+});
+
+
+// ============================================================
+// @route   GET /api/users
+// @desc    List all registered users (admin dashboard)
+// @access  Private + Admin only
+// ============================================================
+exports.getAllUsers = asyncHandler(async (req, res) => {
+  // Pagination via query params: ?page=1&limit=20
+  const page  = parseInt(req.query.page)  || 1;
+  const limit = parseInt(req.query.limit) || 20;
+  const skip  = (page - 1) * limit;
+
+  // .select('-password') is redundant (select:false in schema) but
+  // explicit is always better than implicit for security-critical fields
+  const [users, total] = await Promise.all([
+    User.find().select('-password').skip(skip).limit(limit).sort({ createdAt: -1 }),
+    User.countDocuments(),
+  ]);
+
+  return sendSuccess(res, 'Users fetched successfully.', {
+    total,
+    page,
+    totalPages: Math.ceil(total / limit),
+    users,
+  });
+});
+
+// ============================================================
+// @route   PUT /api/users/become-contributor
+// @desc    Upgrade logged-in student account to Contributor
+// @access  Private
+// ============================================================
+exports.becomeContributor = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    return sendError(res, 'User not found.', 404);
+  }
+
+  if (user.role === 'admin') {
+    return sendSuccess(res, 'You are already an Admin Host.', { role: user.role });
+  }
+
+  user.role = 'contributor';
+  await user.save();
+
+  return sendSuccess(res, '🎉 Congratulations! You are now an official EduStack Contributor.', {
+    role: user.role,
+  });
+});

@@ -2,12 +2,10 @@
 module.exports = {
   darkMode: 'class',
   content: [
-    './public/**/*.html',
-    './public/*.html',
-    './assets/js/**/*.js',
-    './**/*.html',
-    '../client/public/**/*.html',
-    '../client/assets/js/**/*.js'
+    './client/public/**/*.html',
+    './client/public/*.html',
+    './client/assets/js/**/*.js',
+    './client/**/*.html'
   ],
   theme: {
     extend: {

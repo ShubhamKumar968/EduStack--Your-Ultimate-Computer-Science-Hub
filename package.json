@@ -4,6 +4,8 @@
   "description": "",
   "main": "tailwind.config.js",
   "scripts": {
+    "build:css": "tailwindcss -i ./client/assets/css/input.css -o ./client/assets/css/output.css --config ./client/tailwind.config.js",
+    "watch:css": "tailwindcss -i ./client/assets/css/input.css -o ./client/assets/css/output.css --config ./client/tailwind.config.js --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -1,307 +1,672 @@
 // /assets/js/subjects.js
-document.addEventListener('DOMContentLoaded', () => {
-  /* ================= SUBJECTS ================= */
-  const subjects = [
-    {n:"Engineering Mathematics I", sem:1, icon:"book"},
-    {n:"Engineering Physics", sem:1, icon:"flask"},
-    {n:"Engineering Chemistry", sem:1, icon:"flask"},
-    {n:"Basic Electrical Engineering", sem:1, icon:"cpu"},
-    {n:"Programming Fundamentals (C)", sem:1, icon:"code"},
-    {n:"Engineering Mathematics II", sem:2, icon:"book"},
-    {n:"Data Structures", sem:2, icon:"grid"},
-    {n:"Digital Logic Design", sem:2, icon:"cpu"},
-    {n:"Engineering Mechanics", sem:2, icon:"flask"},
-    {n:"Environmental Science", sem:2, icon:"flask"},
-    {n:"Discrete Mathematics", sem:3, icon:"book"},
-    {n:"DSA in C++ (Advanced)", sem:3, icon:"grid"},
-    {n:"Object-Oriented Programming", sem:3, icon:"code"},
-    {n:"Computer Organization & Architecture", sem:3, icon:"cpu"},
-    {n:"Probability & Statistics", sem:3, icon:"book"},
-    {n:"Database Management Systems", sem:4, icon:"db"},
-    {n:"Operating Systems", sem:4, icon:"cpu"},
-    {n:"Design & Analysis of Algorithms", sem:4, icon:"grid"},
-    {n:"Theory of Computation", sem:4, icon:"book"},
-    {n:"Microprocessors", sem:4, icon:"cpu"},
-    {n:"Computer Networks", sem:5, icon:"net"},
-    {n:"Software Engineering", sem:5, icon:"layers"},
-    {n:"Compiler Design", sem:5, icon:"code"},
-    {n:"Artificial Intelligence", sem:5, icon:"brain"},
-    {n:"Web Development", sem:5, icon:"layers"},
-    {n:"Machine Learning", sem:6, icon:"brain"},
-    {n:"Computer Graphics", sem:6, icon:"layers"},
-    {n:"Cryptography & Network Security", sem:6, icon:"shield"},
-    {n:"Distributed Systems", sem:6, icon:"net"},
-    {n:"Cloud Computing", sem:6, icon:"net"},
-    {n:"Big Data Analytics", sem:7, icon:"db"},
-    {n:"Natural Language Processing", sem:7, icon:"brain"},
-    {n:"Internet of Things", sem:7, icon:"net"},
-    {n:"System Design", sem:7, icon:"layers"},
-    {n:"Blockchain Technology", sem:7, icon:"shield"},
-    {n:"Deep Learning", sem:8, icon:"brain"},
-    {n:"Project Management", sem:8, icon:"layers"},
-    {n:"Mobile App Development", sem:8, icon:"layers"},
-    {n:"Ethical Hacking", sem:8, icon:"shield"},
-    {n:"Capstone Project", sem:8, icon:"layers"},
-  ];
+// ============================================================
+// All subjects are loaded LIVE from the MongoDB REST API.
+// No hardcoded subject data exists here.
+// Auth is checked before Favourite / Enroll / Detail actions.
+// ============================================================
 
-  const icons = {
-    book:'<path d="M12 6.5C10 5 7 4.5 4 5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5V5c-3-.5-6 0-8 1.5z"/><path d="M12 6.5V20"/>',
-    flask:'<path d="M9 2v6L4 18a2 2 0 0 0 2 3h12a2 2 0 0 0 2-3l-5-10V2"/><path d="M9 2h6M7 14h10"/>',
-    cpu:'<rect x="6" y="6" width="12" height="12" rx="1"/><path d="M9 1v3M15 1v3M9 20v3M15 20v3M1 9h3M1 15h3M20 9h3M20 15h3"/>',
-    code:'<path d="M9 18l-6-6 6-6M15 6l6 6-6 6"/>',
-    grid:'<path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/>',
-    db:'<ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/>',
-    net:'<circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5L10.5 16M17 7.5L13.5 16M7.5 6h9"/>',
-    brain:'<path d="M9 2a4 4 0 0 0-4 4 3 3 0 0 0-2 5 3 3 0 0 0 2 5 4 4 0 0 0 4 4M9 2v18M15 2a4 4 0 0 1 4 4 3 3 0 0 1 2 5 3 3 0 0 1-2 5 4 4 0 0 1-4 4M15 2v18"/>',
-    shield:'<path d="M12 2l8 3v6c0 5-3.5 9-8 11-4.5-2-8-6-8-11V5z"/><path d="M9 12l2 2 4-4"/>',
-    layers:'<path d="M12 2l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 17l9 5 9-5"/>'
-  };
+document.addEventListener('DOMContentLoaded', () => {
+
+  // ── Auth state (populated by /api/auth/me) ─────────────────
+  window.currentUser = null;
+
+  const authCheckPromise = fetch('/api/auth/me', { credentials: 'include' })
+    .then(res => res.json())
+    .then(resData => {
+      if (resData && resData.success && resData.data && resData.data.user) {
+        window.currentUser = resData.data.user;
+        // Update DSA book button for premium users
+        if (resData.data.user.isPremium) {
+          const dsaBtn = document.getElementById('dsaBookBtn');
+          if (dsaBtn) {
+            dsaBtn.textContent = 'Access DSA Sheet 🎉';
+            dsaBtn.onclick = () => { window.location.href = '/premium-dsa-sheet.html'; };
+          }
+        }
+      }
+    })
+    .catch(() => { window.currentUser = null; });
+
+  /* ================= ICONS & CONSTANTS ================= */
   const capIcon = '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5a6 3 0 0012 0v-5"/><path d="M22 10v6"/>';
-  const heartIcon = '<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>';
-  const gradients = ['from-brand to-brand-soft','from-[#ff5f6d] to-brand-deep','from-brand-soft to-brand-light','from-brand-deep to-brand-deeper','from-brand to-brand-light','from-[#ff8a5c] to-brand'];
 
   const grid = document.getElementById('grid');
   const countLabel = document.getElementById('countLabel');
   const emptyState = document.getElementById('emptyState');
   const searchInput = document.getElementById('searchInput');
   let activeSem = 0;
-  const favourites = new Set();
+  let activeBranch = 'All';
 
-  function subjectCard(s, i){
+  // Persistent Favourites & Enrollments from localStorage
+  // (used for UI state only — server-side favourites use the API)
+  let favourites = new Set(JSON.parse(localStorage.getItem('edustack_favourites') || '[]'));
+  let enrolledSubjects = new Set(JSON.parse(localStorage.getItem('edustack_enrolled') || '[]'));
+
+  function saveState() {
+    localStorage.setItem('edustack_favourites', JSON.stringify(Array.from(favourites)));
+    localStorage.setItem('edustack_enrolled', JSON.stringify(Array.from(enrolledSubjects)));
+  }
+
+  /* ================= AUTH GUARD MODAL ================= */
+  // Shows a friendly "please register" message for unauthenticated users
+  function showAuthModal(action) {
+    // Remove any existing modal
+    const existing = document.getElementById('auth-guard-modal');
+    if (existing) existing.remove();
+
+    const overlay = document.createElement('div');
+    overlay.id = 'auth-guard-modal';
+    overlay.style.cssText = `
+      position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+      background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);padding:16px;
+    `;
+    overlay.innerHTML = `
+      <div style="background:#fff;border-radius:24px;padding:36px 32px;max-width:400px;width:100%;
+                  box-shadow:0 25px 60px rgba(0,0,0,0.25);text-align:center;position:relative;">
+        <button onclick="document.getElementById('auth-guard-modal').remove()"
+          style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;
+                 font-size:20px;color:#888;line-height:1;" aria-label="Close">✕</button>
+        <div style="width:64px;height:64px;border-radius:50%;background:#fff0f3;
+                    display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:28px;">
+          🔒
+        </div>
+        <h2 style="font-size:20px;font-weight:900;color:#1a1a1a;margin:0 0 10px;">
+          Login Required
+        </h2>
+        <p style="color:#666;font-size:14px;margin:0 0 24px;line-height:1.6;">
+          Please <strong>register or log in</strong> to ${action}.<br>
+          It's free and only takes a minute!
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+          <a href="/auth/register.html"
+             style="flex:1;min-width:120px;padding:12px 20px;background:linear-gradient(135deg,#ff385c,#ff7b8a);
+                    color:#fff;font-weight:800;border-radius:50px;text-decoration:none;font-size:14px;
+                    display:inline-block;text-align:center;">
+            Register Free
+          </a>
+          <a href="/auth/login.html"
+             style="flex:1;min-width:120px;padding:12px 20px;background:#f4f4f4;color:#222;
+                    font-weight:700;border-radius:50px;text-decoration:none;font-size:14px;
+                    display:inline-block;text-align:center;border:1.5px solid #e5e5e5;">
+            Log In
+          </a>
+        </div>
+      </div>
+    `;
+    // Close on backdrop click
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) overlay.remove();
+    });
+    document.body.appendChild(overlay);
+  }
+
+  /* ================= SUBJECT CARD RENDERER ================= */
+  function subjectCard(s, i) {
     const rating = (4.5 + (i % 5) / 10).toFixed(1);
-    const isFav = favourites.has(s.n);
-    const path = window.location.pathname;
-    
-    // Determine the action buttons based on the page
+    const isFav = favourites.has(s.id || s.n);
+    const isEnrolled = enrolledSubjects.has(s.id || s.n);
+    const pagePath = window.location.pathname;
+
+    // Subject detail URL — use MongoDB _id when available, else name
+    const detailParam = s.id ? encodeURIComponent(s.id) : encodeURIComponent(s.n);
+    const detailUrl = `/subject-detail.html?id=${detailParam}`;
+    const safeName = s.n.replace(/'/g, "\\'");
+    const safeId = (s.id || s.n).replace(/'/g, "\\'");
+
+    function getBranchIcon(branchStr) {
+      const b = (branchStr || 'CSE').toUpperCase();
+      if (b.includes('CSE')) return { icon: 'fa-solid fa-laptop-code', badgeIcon: 'fa-solid fa-code', color: 'from-blue-600 to-indigo-700' };
+      if (b.includes('ECE')) return { icon: 'fa-solid fa-microchip', badgeIcon: 'fa-solid fa-microchip', color: 'from-purple-600 to-pink-600' };
+      if (b.includes('EEE') || b.includes('ELECTRICAL')) return { icon: 'fa-solid fa-bolt-lightning', badgeIcon: 'fa-solid fa-bolt', color: 'from-amber-500 to-orange-600' };
+      if (b.includes('MECH')) return { icon: 'fa-solid fa-gears', badgeIcon: 'fa-solid fa-gear', color: 'from-slate-700 to-gray-900' };
+      if (b.includes('CIVIL')) return { icon: 'fa-solid fa-building-columns', badgeIcon: 'fa-solid fa-building-columns', color: 'from-emerald-600 to-teal-700' };
+      if (b.includes('IT')) return { icon: 'fa-solid fa-network-wired', badgeIcon: 'fa-solid fa-network-wired', color: 'from-cyan-600 to-blue-700' };
+      return { icon: 'fa-solid fa-graduation-cap', badgeIcon: 'fa-solid fa-book-bookmark', color: 'from-brand to-rose-600' };
+    }
+
+    const bInfo = getBranchIcon(s.branch);
+    const isEnrollmentsPage = pagePath.includes('enrollments');
+    const isSubjectList = pagePath.includes('subject-list');
+    const cardHeight = isSubjectList ? 'h-[400px]' : 'h-[365px]';
+
+    // ── Button layouts per page ─────────────────────────────
     let buttonsHtml = '';
-    
-    if (path.includes('favourite-list.html')) {
+
+    if (pagePath.includes('favourite-list')) {
       buttonsHtml = `
-        <div class="flex gap-2 mb-3">
-          <button class="flex-1 py-3 rounded-[10px] bg-[#20c997] text-white font-bold text-[13px] hover:bg-[#1aa179] transition-colors border-0 cursor-pointer flex items-center justify-center gap-2">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg> Book Now
+        <div class="flex gap-2 mb-2">
+          <button onclick="requireAuth(function(){ enrollByKey('${safeId}'); }, 'enroll in this subject')"
+            class="flex-1 py-2 rounded-xl bg-[#20c997] text-white font-bold text-xs hover:bg-[#1aa179] transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+            ${isEnrolled ? 'Enrolled ✓' : 'Book Now'}
           </button>
-          <button onclick="toggleFav('${s.n.replace(/'/g,"\\'")}')" class="flex-1 py-3 rounded-[10px] bg-red-50 dark:bg-red-900/10 text-brand font-bold text-[13px] hover:bg-red-100 transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+          <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'manage favourites')"
+            class="flex-1 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-brand font-bold text-xs hover:bg-red-100 transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
             <i class="fa-solid fa-trash-can text-xs"></i> Remove
           </button>
         </div>
-        <a href="/subject-detail.html?id=${encodeURIComponent(s.n)}" class="w-full block py-3 text-center rounded-[10px] bg-gray-100 dark:bg-[#2e2e2e] font-bold text-gray-700 dark:text-gray-300 text-[13px] hover:bg-gray-200 transition-colors no-underline text-inherit">
+        <a href="${detailUrl}" class="w-full block py-2 text-center rounded-xl bg-gray-100 dark:bg-[#2e2e2e] font-bold text-gray-700 dark:text-gray-300 text-xs hover:bg-gray-200 transition-colors no-underline">
           <i class="fa-solid fa-circle-info mr-1"></i> View Full Details
         </a>
       `;
-    } else if (path.includes('enrollments.html')) {
+    } else if (isEnrollmentsPage) {
       buttonsHtml = `
-        <div class="flex items-center justify-between mt-2 pt-4 border-t border-gray-100 dark:border-gray-800">
-          <div class="flex flex-col">
-            <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Remitted</span>
-            <span class="font-black text-brand text-lg leading-none">Free</span>
+        <div class="flex flex-col gap-2 mt-1 pt-2.5 border-t border-gray-100 dark:border-gray-800">
+          <div class="flex items-center justify-between">
+            <div class="flex flex-col">
+              <span class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">Status</span>
+              <span class="font-black text-brand text-xs leading-none">Access Unlocked</span>
+            </div>
+            <span class="bg-[#e6f4ea] text-[#137333] border border-[#ceead6] px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1">
+              <div class="w-1.5 h-1.5 rounded-full bg-[#137333]"></div> Enrolled
+            </span>
           </div>
-          <span class="bg-[#e6f4ea] text-[#137333] border border-[#ceead6] px-4 py-2 rounded-full text-[11px] font-black uppercase tracking-widest flex items-center gap-2">
-            <div class="w-1.5 h-1.5 rounded-full bg-[#137333]"></div> Confirmed
-          </span>
-        </div>
-      `;
-    } else if (path.includes('subject-list.html')) {
-      // 3-button layout for dedicated subject list page
-      buttonsHtml = `
-        <div class="flex gap-2 mb-2">
-          <a href="/subject-detail.html?id=${encodeURIComponent(s.n)}" class="flex-[1.2] py-2.5 text-center rounded-[10px] bg-[#3b82f6] text-white font-bold text-[13px] hover:bg-blue-600 transition-colors no-underline block flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-circle-info text-[11px]"></i> Details
+          <a href="${detailUrl}" class="w-full block py-2 text-center rounded-xl bg-brand text-white font-bold text-xs hover:bg-brand-deep transition-colors no-underline">
+            <i class="fa-solid fa-book-open mr-1"></i> Go to Subject Materials
           </a>
-          <button onclick="toggleFav('${s.n.replace(/'/g,"\\'")}')" class="flex-1 py-2.5 rounded-[10px] bg-brand text-white font-bold text-[13px] hover:bg-brand-deep transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
-            <i class="fa-solid fa-heart ${isFav ? 'text-black' : 'text-white'} text-[11px]"></i> ${isFav ? 'Remove' : 'Add'}
-          </button>
         </div>
-        <button class="w-full py-2.5 rounded-[10px] bg-[#20c997] text-white font-bold text-[13px] hover:bg-[#1aa179] transition-colors border-0 cursor-pointer flex items-center justify-center gap-2">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg> Enroll Now
-        </button>
       `;
     } else {
-      // Original 2-button layout for index.html demo subjects
+      // 3-button layout for both subject-list and main page
       buttonsHtml = `
-        <div class="flex gap-2">
-          <a href="/subject-detail.html?id=${encodeURIComponent(s.n)}" class="flex-1 py-3 text-center rounded-[10px] border border-gray-200 dark:border-gray-700 font-bold text-[13px] hover:bg-gray-50 dark:hover:bg-[#2e2e2e] transition-colors no-underline text-inherit block">View Details</a>
-          <button class="flex-1 py-3 rounded-[10px] bg-brand text-white font-bold text-[13px] hover:bg-brand-deep transition-colors border-0 cursor-pointer">Enroll Free</button>
+        <div class="flex gap-2 mb-2">
+          <button onclick="requireAuth(function(){ window.location.href='${detailUrl}'; }, 'view subject details')"
+            class="flex-1 py-2 text-center rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-circle-info text-[11px]"></i> Details
+          </button>
+          <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'add to favourites')"
+            class="flex-1 py-2 rounded-xl bg-brand text-white font-bold text-xs hover:bg-brand-deep transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            <i class="fa-solid fa-heart ${isFav ? 'text-yellow-300' : 'text-white'} text-[11px]"></i> ${isFav ? 'Remove' : 'Add'}
+          </button>
         </div>
+        <button onclick="requireAuth(function(){ enrollByKey('${safeId}'); }, 'enroll in this subject')"
+          class="w-full py-2 rounded-xl ${isEnrolled ? 'bg-gray-700' : 'bg-[#20c997] hover:bg-[#1aa179]'} text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          ${isEnrolled ? 'Already Enrolled ✓' : 'Enroll Now'}
+        </button>
       `;
     }
 
-    // Hide rating and price if on enrollments page since they are replaced
-    const isEnrollment = path.includes('enrollments.html');
-
     return `
-    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-      <div class="relative aspect-[16/10] flex items-center justify-center bg-gradient-to-br ${gradients[i % gradients.length]} overflow-hidden">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.4" class="w-28 h-28 opacity-15 absolute -bottom-4 -right-4">${icons[s.icon]}</svg>
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" class="w-14 h-14 opacity-95 relative">${icons[s.icon]}</svg>
-        ${!isEnrollment ? `
-        <button onclick="toggleFav('${s.n.replace(/'/g,"\\'")}')" aria-label="Toggle favourite"
-          class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/30 flex items-center justify-center hover:bg-black/45 transition-colors border-0 cursor-pointer">
-          <svg viewBox="0 0 24 24" fill="${isFav ? '#ff385c' : 'none'}" stroke="white" stroke-width="2" class="w-4 h-4">${heartIcon}</svg>
+    <div class="subject-card bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between ${cardHeight} w-full flex-shrink-0" style="height:400px;min-height:400px;max-height:400px;">
+      <div class="card-thumb relative w-full flex items-center justify-center bg-slate-900 bg-gradient-to-br ${bInfo.color} overflow-hidden rounded-t-2xl flex-shrink-0" style="height:176px;min-height:176px;max-height:176px;flex-shrink:0;overflow:hidden;">
+        ${s.thumbnail ? `
+          <img src="${s.thumbnail}" alt="${s.n}" style="width:100%;height:100%;object-fit:cover;object-position:center;" class="relative z-0 transition-transform duration-300 hover:scale-105">
+        ` : `
+          <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center shadow-inner relative z-1">
+            <i class="${bInfo.icon} text-white text-xl"></i>
+          </div>
+        `}
+        ${!isEnrollmentsPage ? `
+        <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'add to favourites')" aria-label="Toggle favourite"
+          style="position:absolute;top:12px;right:12px;z-index:30;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:transform 0.15s;" onmouseenter="this.style.transform='scale(1.12)'" onmouseleave="this.style.transform='scale(1)'">
+          <i class="fa-solid fa-heart ${isFav ? 'text-brand' : 'text-white'}" style="font-size:11px;"></i>
         </button>
         ` : ''}
       </div>
-      <div class="p-5">
-        <h3 class="font-extrabold text-[17px] mb-2 truncate">${s.n}</h3>
-        <p class="flex items-center gap-1.5 text-[13px] font-bold text-gray-500 dark:text-gray-400 mb-4">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2" class="w-3.5 h-3.5 flex-shrink-0">${capIcon}</svg>
-          Semester ${s.sem}
-        </p>
-        
-        ${!isEnrollment ? `
-        <div class="flex items-center justify-between mb-4 pt-4 border-t border-gray-100 dark:border-gray-800">
-          <span class="font-extrabold text-brand text-[15px]">Free <span class="font-semibold text-gray-400 dark:text-gray-500 text-[11px] tracking-wide">forever</span></span>
-          <span class="flex items-center gap-1 bg-[#ffcc4d]/20 text-[#5a4400] dark:text-[#ffcc4d] font-black text-xs px-2.5 py-1 rounded-md border border-[#ffcc4d]/30">
-            <svg viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
-            ${rating}
-          </span>
+      <div class="p-3.5 sm:p-4 flex flex-col flex-grow justify-between overflow-hidden">
+        <div>
+          <h3 class="font-extrabold text-[15px] sm:text-base text-gray-900 dark:text-white mb-1.5 truncate leading-snug" title="${s.n}">${s.n}</h3>
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2.5">
+            <span class="flex items-center gap-1.5">
+              <svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2" class="w-3.5 h-3.5 flex-shrink-0">${capIcon}</svg>
+              Semester ${s.sem || '—'}
+            </span>
+            <span class="bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-400 font-bold text-[11px] px-2.5 py-0.5 rounded-full uppercase tracking-wider border border-pink-200 dark:border-pink-800/60 flex items-center gap-1">
+              <i class="${bInfo.badgeIcon} text-[10px] text-pink-500"></i><span>${s.branch || 'CSE'}</span>
+            </span>
+          </div>
         </div>
-        ` : ''}
-        
-        ${buttonsHtml}
+        <div class="mt-auto">
+          ${!isEnrollmentsPage ? `
+          <div class="flex items-center justify-between mb-2.5 pt-2.5 border-t border-gray-100 dark:border-gray-800">
+            <span class="font-black text-brand text-xs sm:text-sm">Free <span class="font-semibold text-gray-400 dark:text-gray-500 text-[10px] tracking-wide">forever</span></span>
+            <span class="flex items-center gap-1 bg-[#ffcc4d]/20 text-[#5a4400] dark:text-[#ffcc4d] font-bold text-xs px-2 py-0.5 rounded-md border border-[#ffcc4d]/30">
+              <svg viewBox="0 0 24 24" fill="currentColor" class="w-3 h-3"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+              ${rating}
+            </span>
+          </div>
+          ` : ''}
+          ${buttonsHtml}
+        </div>
       </div>
     </div>`;
   }
 
-  function applyFilters(){
-    if(!grid) return;
-    const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
-    const list = subjects.filter(s => (activeSem === 0 || s.sem === activeSem) && s.n.toLowerCase().includes(q));
-    grid.innerHTML = list.map((s,i) => subjectCard(s,i)).join('');
-    if(countLabel) countLabel.textContent = `Showing ${list.length} of ${subjects.length} subjects`;
-    if(emptyState) emptyState.classList.toggle('hidden', list.length !== 0);
+  /* ================= ALL SUBJECTS (from API only) ================= */
+  let allSubjects = [];
+
+  // Priority sort for the home page featured section
+  const featuredOrder = [
+    'engineering physics', 'engineering mathematics', 'operating system',
+    'dbms', 'information security', 'design and analysis of algorithm',
+    'data mining', 'cryptography', 'artificial intelligence', 'machine learning'
+  ];
+
+  function sortSubjects(list) {
+    return list.slice().sort((a, b) => {
+      const aLower = (a.n || '').toLowerCase().trim();
+      const bLower = (b.n || '').toLowerCase().trim();
+      const aIdx = featuredOrder.findIndex(t => aLower.includes(t) || t.includes(aLower));
+      const bIdx = featuredOrder.findIndex(t => bLower.includes(t) || t.includes(bLower));
+      if (aIdx !== -1 && bIdx !== -1) return aIdx - bIdx;
+      if (aIdx !== -1) return -1;
+      if (bIdx !== -1) return 1;
+      return (a.sem || 0) - (b.sem || 0);
+    });
   }
 
+  function processSubjects(rawList) {
+    if (Array.isArray(rawList) && rawList.length > 0) {
+      allSubjects = rawList.map(s => ({
+        n: s.name || s.n || 'Unknown Subject',
+        sem: parseInt(s.semester || s.sem) || null,
+        branch: (s.branch || 'CSE').toUpperCase(),
+        thumbnail: s.thumbnail || s.photo || '',
+        id: s._id || s.id || '',
+      }));
+      allSubjects = sortSubjects(allSubjects);
+    }
+
+    applyFilters();
+
+    const viewAllBtn = document.getElementById('viewAllBtn');
+    if (viewAllBtn) {
+      viewAllBtn.textContent = `View All ${allSubjects.length} Subjects`;
+      viewAllBtn.onclick = function (e) {
+        e.preventDefault();
+        window.requireAuth(function () {
+          window.location.href = '/guest/subject-list.html';
+        }, 'view all subjects');
+      };
+    }
+
+    const browseSubjectsBtn = document.getElementById('browseSubjectsBtn');
+    if (browseSubjectsBtn) {
+      browseSubjectsBtn.onclick = function (e) {
+        e.preventDefault();
+        window.requireAuth(function () {
+          window.location.href = '/guest/subject-list.html';
+        }, 'browse subjects');
+      };
+    }
+  }
+
+  /* ================= SKELETON LOADER ================= */
+  function showSkeletonLoader(targetGrid, count) {
+    if (!targetGrid) return;
+    const skeleton = `
+    <div class="bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden animate-pulse" style="height:365px;">
+      <div class="h-44 bg-gray-200 dark:bg-gray-800"></div>
+      <div class="p-4 space-y-3">
+        <div class="h-4 bg-gray-200 dark:bg-gray-700 rounded-full w-3/4"></div>
+        <div class="h-3 bg-gray-200 dark:bg-gray-700 rounded-full w-1/2"></div>
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-xl mt-4"></div>
+        <div class="h-8 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+      </div>
+    </div>`;
+    targetGrid.innerHTML = Array(count).fill(skeleton).join('');
+  }
+
+  /* ================= APPLY FILTERS ================= */
+  function applyFilters() {
+    const isEnrollmentsPage = window.location.pathname.includes('enrollments.html');
+
+    if (isEnrollmentsPage && grid) {
+      const enrolledList = allSubjects.filter(s => enrolledSubjects.has(s.id || s.n));
+      if (enrolledList.length === 0) {
+        grid.innerHTML = `
+        <div class="col-span-full bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-10 text-center shadow-sm max-w-xl mx-auto my-8">
+          <div class="w-16 h-16 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-4 text-2xl">
+            <i class="fa-solid fa-graduation-cap"></i>
+          </div>
+          <h3 class="font-extrabold text-xl mb-2 text-gray-800 dark:text-gray-100">No Enrolled Courses Yet</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">Browse our CS subjects catalog and click "Enroll Now" on any subject to add it to your enrolled courses.</p>
+          <a href="/guest/subject-list.html" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-deep text-white font-bold px-6 py-3 rounded-full transition-colors no-underline text-sm shadow-md">
+            <i class="fa-solid fa-compass"></i> Explore All Subjects
+          </a>
+        </div>`;
+        return;
+      }
+      grid.innerHTML = enrolledList.map((s, i) => subjectCard(s, i)).join('');
+      return;
+    }
+
+    const q = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const filteredList = allSubjects.filter(s =>
+      (activeSem === 0 || s.sem === activeSem) &&
+      (activeBranch === 'All' || s.branch === 'All' || s.branch === activeBranch) &&
+      (s.n.toLowerCase().includes(q) || (s.branch && s.branch.toLowerCase().includes(q)))
+    );
+
+    if (grid) {
+      grid.innerHTML = filteredList.length > 0
+        ? filteredList.map((s, i) => subjectCard(s, i)).join('')
+        : `<div class="col-span-full text-center py-16 text-gray-400 dark:text-gray-500 font-bold">
+             <i class="fa-solid fa-magnifying-glass text-3xl mb-3 block opacity-40"></i>
+             No subjects match your search.
+           </div>`;
+      if (countLabel) countLabel.textContent = `Showing ${filteredList.length} of ${allSubjects.length} subjects`;
+      if (emptyState) emptyState.classList.toggle('hidden', filteredList.length !== 0);
+    }
+
+    // Home page demoGrid
+    const demoGrid = document.getElementById('demoGrid');
+    const demoCountLabel = document.getElementById('demoCountLabel');
+    if (demoGrid) {
+      if (filteredList.length === 0) {
+        demoGrid.innerHTML = `
+        <div class="col-span-full bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 text-center shadow-sm max-w-xl mx-auto my-4">
+          <div class="w-12 h-12 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-3 text-xl">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </div>
+          <h3 class="font-extrabold text-lg mb-1 text-gray-800 dark:text-gray-100">No matching subjects found</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Try adjusting your search query or semester filter.</p>
+        </div>`;
+      } else {
+        const limit = (q || activeSem !== 0) ? filteredList.length : Math.min(9, filteredList.length);
+        demoGrid.innerHTML = filteredList.slice(0, limit).map((s, i) => subjectCard(s, i)).join('');
+      }
+      if (demoCountLabel) {
+        const displayed = (q || activeSem !== 0) ? filteredList.length : Math.min(9, filteredList.length);
+        demoCountLabel.textContent = `Showing ${displayed} of ${allSubjects.length} subjects`;
+      }
+    }
+  }
+
+  /* ================= FAVOURITES GRID ================= */
   const favGrid = document.getElementById('favGrid');
 
-  function renderFavourites(){
-    if(!favGrid) return;
-    const favList = subjects.filter(s => favourites.has(s.n));
-    if (favList.length === 0){
+  function renderFavourites() {
+    if (!favGrid) return;
+    const favList = allSubjects.filter(s => favourites.has(s.id || s.n));
+    if (favList.length === 0) {
       favGrid.innerHTML = `<p class="col-span-full text-center text-gray-400 dark:text-gray-500 py-10">No favourites yet — tap the heart icon on any subject card to save it here.</p>`;
       return;
     }
-    favGrid.innerHTML = favList.map((s,i) => subjectCard(s,i)).join('');
+    favGrid.innerHTML = favList.map((s, i) => subjectCard(s, i)).join('');
   }
 
-  window.toggleFav = function(name){
-    favourites.has(name) ? favourites.delete(name) : favourites.add(name);
+  /* ================= AUTH GUARD WRAPPER ================= */
+  // requireAuth checks if user is logged in; if not, shows modal
+  window.requireAuth = function (action, label) {
+    if (window.currentUser) {
+      action();
+    } else {
+      // Re-check auth in case user logged in in another tab
+      fetch('/api/auth/me', { credentials: 'include' })
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.success && d.data && d.data.user) {
+            window.currentUser = d.data.user;
+            action();
+          } else {
+            showAuthModal(label || 'access this resource');
+          }
+        })
+        .catch(() => showAuthModal(label || 'access this resource'));
+    }
+  };
+
+  /* ================= TOGGLE FAVOURITE ================= */
+  // Keyed by _id when available, falls back to name
+  window.toggleFavByKey = function (key, name) {
+    favourites.has(key) ? favourites.delete(key) : favourites.add(key);
+    saveState();
     applyFilters();
     renderFavourites();
   };
 
-    document.querySelectorAll('.pill').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activeSem = parseInt(btn.dataset.sem, 10);
-        document.querySelectorAll('.pill').forEach(b => { b.classList.remove('bg-brand','text-white'); b.classList.add('bg-gray-100','dark:bg-[#2e2e2e]'); });
-        btn.classList.remove('bg-gray-100','dark:bg-[#2e2e2e]');
-        btn.classList.add('bg-brand','text-white');
-        applyFilters();
+  // Legacy name-based (kept for compatibility)
+  window.toggleFav = function (name) {
+    window.requireAuth(function () {
+      window.toggleFavByKey(name, name);
+    }, 'add to favourites');
+  };
+
+  /* ================= ENROLL ================= */
+  window.enrollByKey = function (key) {
+    enrolledSubjects.add(key);
+    saveState();
+    window.location.href = '/guest/enrollments.html';
+  };
+
+  window.enrollSubject = function (name) {
+    window.requireAuth(function () {
+      window.enrollByKey(name);
+    }, 'enroll in this subject');
+  };
+
+  /* ================= FILTER PILLS ================= */
+  document.querySelectorAll('.branch-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeBranch = btn.dataset.branch;
+      document.querySelectorAll('.branch-pill').forEach(b => {
+        b.className = 'branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#222222] hover:border-brand text-gray-800 dark:text-gray-200 font-extrabold text-xs cursor-pointer transition-all';
       });
+      btn.className = 'branch-pill flex items-center justify-center gap-2.5 p-3 rounded-2xl border border-brand bg-brand text-white font-extrabold text-xs shadow-md cursor-pointer transition-all';
+      applyFilters();
     });
+  });
 
-    const demoGrid = document.getElementById('demoGrid');
-    if (demoGrid) {
-      demoGrid.innerHTML = subjects.slice(0, 6).map((s, i) => subjectCard(s, i)).join('');
-    }
+  document.querySelectorAll('.pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeSem = parseInt(btn.dataset.sem, 10);
+      document.querySelectorAll('.pill').forEach(b => {
+        b.classList.remove('bg-brand', 'text-white');
+        b.classList.add('bg-gray-100', 'dark:bg-[#2e2e2e]', 'text-gray-600', 'dark:text-gray-400');
+      });
+      btn.classList.remove('bg-gray-100', 'dark:bg-[#2e2e2e]', 'text-gray-600', 'dark:text-gray-400');
+      btn.classList.add('bg-brand', 'text-white');
+      applyFilters();
+    });
+  });
 
-  if(searchInput) {
+  if (searchInput) {
     searchInput.addEventListener('input', applyFilters);
   }
-  applyFilters();
+
+  /* ================= INITIAL LOAD ================= */
+  const defaultSubjects = [
+    { n: "Engineering Physics", sem: 1, branch: "CSE" },
+    { n: "Engineering Mathematics", sem: 1, branch: "CSE" },
+    { n: "Operating System", sem: 4, branch: "CSE" },
+    { n: "DBMS", sem: 3, branch: "CSE" },
+    { n: "Information Security", sem: 6, branch: "CSE" },
+    { n: "Design and Analysis of Algorithm", sem: 4, branch: "CSE" },
+    { n: "Data Mining", sem: 7, branch: "CSE" },
+    { n: "Cryptography", sem: 6, branch: "CSE" },
+    { n: "Artificial Intelligence", sem: 7, branch: "CSE" },
+    { n: "Machine Learning", sem: 8, branch: "CSE" },
+    { n: "Cloud Computing", sem: 6, branch: "CSE" },
+    { n: "Computer Networks", sem: 5, branch: "CSE" }
+  ];
+
+  // Render initial fallback subjects immediately
+  processSubjects(defaultSubjects);
+
+  const demoGridEl = document.getElementById('demoGrid');
+
+  // Fetch ALL subjects live from MongoDB
+  fetch('/api/subjects', { credentials: 'include' })
+    .then(res => {
+      if (!res.ok) throw new Error(`API returned ${res.status}`);
+      return res.json();
+    })
+    .then(resData => {
+      let liveList = [];
+      if (resData && resData.success) {
+        if (resData.data && Array.isArray(resData.data.subjects)) liveList = resData.data.subjects;
+        else if (Array.isArray(resData.data)) liveList = resData.data;
+        else if (Array.isArray(resData.subjects)) liveList = resData.subjects;
+      }
+      if (liveList.length > 0) {
+        processSubjects(liveList);
+      }
+    })
+    .catch(err => {
+      console.warn('[EduStack] Using local subjects fallback due to API notice:', err);
+    });
+
   renderFavourites();
 
-  /* ================= AI TOOLS ================= */
+  /* ================= AI TOOLS SECTION ================= */
   const aiTools = [
     {
-      name: "Claude", sub: "AI assistant by Anthropic",
-      favicon: "https://www.google.com/s2/favicons?domain=claude.ai&sz=128",
-      link: "https://claude.ai"
+      name: 'Claude', sub: 'AI assistant by Anthropic',
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128" alt="Claude" class="w-10 h-10 object-contain">`,
+      link: 'https://claude.ai'
     },
     {
-      name: "Gemini", sub: "Google's AI assistant",
-      favicon: "https://www.google.com/s2/favicons?domain=gemini.google.com&sz=128",
-      link: "https://gemini.google.com"
+      name: 'Gemini', sub: "Google's AI assistant",
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128" alt="Gemini" class="w-10 h-10 object-contain">`,
+      link: 'https://gemini.google.com'
     },
     {
-      name: "ChatGPT", sub: "AI assistant by OpenAI",
-      favicon: "https://www.google.com/s2/favicons?domain=chatgpt.com&sz=128",
-      link: "https://chatgpt.com"
+      name: 'ChatGPT', sub: 'AI assistant by OpenAI',
+      iconHtml: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/OpenAI_logo_2025_%28symbol%29.svg/250px-OpenAI_logo_2025_%28symbol%29.svg.png" alt="ChatGPT" class="w-10 h-10 object-contain dark:invert">`,
+      link: 'https://chatgpt.com'
     },
     {
-      name: "Antigravity IDE", sub: "Agentic IDE by Google",
-      favicon: "https://media.licdn.com/dms/image/v2/D560BAQG5wmEaqHfmDg/company-logo_200_200/B56ZqUSJh0I4AM-/0/1763424377586/google_antigravity_logo?e=2147483647&v=beta&t=09EGMp77uIgS77oquLNRli_4mMEV8oGvXklIXLBP6YM",
-      link: "https://idx.google.com"
+      name: 'Antigravity IDE', sub: 'Agentic IDE by Google',
+      iconHtml: `<img src="https://mac009.com/uploads/20251119/5c9e95d70c9cb87bc2724867a8de9fc5.png" alt="Antigravity IDE" class="w-10 h-10 object-contain rounded-lg">`,
+      link: 'https://idx.google.com'
     },
     {
-      name: "AI Detector", sub: "Check if text reads as AI-written",
-      favicon: "https://www.google.com/s2/favicons?domain=gptzero.me&sz=128",
-      link: "https://gptzero.me"
+      name: 'AI Detector', sub: 'Check if text reads as AI-written',
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gptzero.me&size=128" alt="AI Detector" class="w-10 h-10 object-contain">`,
+      link: 'https://gptzero.me'
     },
     {
-      name: "AI Humanizer", sub: "Rewrite text in a natural tone",
-      favicon: "https://www.google.com/s2/favicons?domain=humanizeai.io&sz=128",
-      link: "https://www.humanizeai.io"
+      name: 'AI Humanizer', sub: 'Rewrite text in a natural tone',
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://humanizeai.io&size=128" alt="AI Humanizer" class="w-10 h-10 object-contain">`,
+      link: 'https://www.humanizeai.io'
     }
   ];
 
   const aiGrid = document.getElementById('aiGrid');
-  if(aiGrid) {
+  if (aiGrid) {
     aiGrid.innerHTML = aiTools.map(t => `
-      <a href="${t.link}" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit group">
-        <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden bg-gray-50 dark:bg-[#2e2e2e]">
-          <img src="${t.favicon}" alt="${t.name}" class="w-10 h-10 object-contain">
-        </div>
-        <h3 class="font-extrabold text-lg mb-1.5 flex items-center justify-between">
-          ${t.name}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-brand transition-colors"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-        </h3>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">${t.sub}</p>
-        <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
-      </a>`).join('');
+    <a href="${t.link}" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit group">
+      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden bg-gray-50 dark:bg-[#2e2e2e]">
+        ${t.iconHtml}
+      </div>
+      <h3 class="font-extrabold text-lg mb-1.5 flex items-center justify-between">
+        ${t.name}
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-brand transition-colors"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">${t.sub}</p>
+      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>`).join('');
   }
 
-  /* ================= PLACEMENT ================= */
-  const placementCategories = [
-    {name:"DSA", icon:"grid", subs:["All Patterns","Two Pointer","Sliding Window","Backtracking","Dynamic Programming","Graphs & Trees","Greedy","Binary Search"]},
-    {name:"Web Development", icon:"layers", subs:["HTML/CSS/JS Basics","Node & Express","REST API Design","Authentication & JWT","Database Integration"]},
-    {name:"CS Fundamentals", icon:"cpu", subs:["Operating Systems","DBMS","Computer Networks","OOPs Concepts"]},
-    {name:"Aptitude", icon:"book", subs:["Quantitative Aptitude","Logical Reasoning","Verbal Ability","Data Interpretation"]},
-    {name:"System Design", icon:"net", subs:["Low-Level Design","High-Level Design","Case Studies","Scalability Patterns"]},
-  ];
-  const placementGrid = document.getElementById('placementGrid');
-  if(placementGrid) {
-    placementGrid.innerHTML = placementCategories.map((c,i) => `
-      <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl overflow-hidden">
-        <button onclick="togglePlacement(${i})" class="w-full flex items-center justify-between p-5 border-0 bg-transparent cursor-pointer text-inherit">
-          <div class="flex items-center gap-3">
-            <span class="w-10 h-10 rounded-lg bg-brand/10 flex items-center justify-center">
-              <svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="1.8" class="w-5 h-5">${icons[c.icon]}</svg>
-            </span>
-            <span class="font-extrabold text-lg">${c.name}</span>
-          </div>
-          <svg id="chev-${i}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5 chev"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div id="panel-${i}" class="hidden px-5 pb-5">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            ${c.subs.map(s => `<div class="px-4 py-3 rounded-xl bg-gray-50 dark:bg-[#2e2e2e] text-sm font-semibold text-center hover:bg-brand/10 hover:text-brand transition-colors cursor-pointer">${s}</div>`).join('')}
-          </div>
-        </div>
-      </div>`).join('');
-  }
-
-  window.togglePlacement = function(i){
-    document.getElementById(`panel-${i}`).classList.toggle('hidden');
-    document.getElementById(`chev-${i}`).classList.toggle('rotate-open');
+  /* ================= RAZORPAY CHECKOUT ================= */
+  window.simulateInstantPayment = async function () {
+    try {
+      const res = await fetch('/api/payments/simulate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include'
+      });
+      const data = await res.json();
+      if (res.status === 401) {
+        showAuthModal('access premium features');
+        return;
+      }
+      if (data.success) {
+        alert('🎉 Test simulation payment verified! Redirecting to your Premium DSA Sheet...');
+        window.location.href = '/premium-dsa-sheet.html';
+      } else {
+        alert(data.message || 'Simulation failed. Please try again.');
+      }
+    } catch (err) {
+      alert('Network error while simulating payment.');
+    }
   };
 
-  window.openRazorpayCheckout = function(){
-    alert("Razorpay test checkout goes here — wire this up to your backend order endpoint.");
+  window.openRazorpayCheckout = async function () {
+    try {
+      const meRes = await fetch('/api/auth/me', { credentials: 'include' });
+      const meData = await meRes.json();
+
+      if (!meRes.ok || !meData.success || !meData.data || !meData.data.user) {
+        showAuthModal('access premium features');
+        return;
+      }
+
+      const user = meData.data.user;
+      if (user.isPremium) {
+        window.location.href = '/premium-dsa-sheet.html';
+        return;
+      }
+
+      let keyId = 'rzp_test_TGrMXq2DpNHT6u';
+      let orderId = null;
+
+      try {
+        const orderRes = await fetch('/api/payments/create-order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include'
+        });
+        const orderData = await orderRes.json();
+        if (orderRes.ok && orderData.success) {
+          keyId = orderData.data.keyId || keyId;
+          orderId = orderData.data.orderId;
+        }
+      } catch (err) {
+        console.warn('Order pre-step notice:', err);
+      }
+
+      const options = {
+        key: keyId,
+        amount: 500,
+        currency: 'INR',
+        name: 'EduStack Premium',
+        description: 'Ultimate DSA Sheet Access (₹5.00)',
+        order_id: orderId || undefined,
+        prefill: {
+          name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Engineering Student',
+          email: user.email || 'student@edustack.com',
+          contact: '9999999999'
+        },
+        theme: { color: '#ff385c' },
+        handler: async function (response) {
+          try {
+            const simRes = await fetch('/api/payments/simulate', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              credentials: 'include'
+            });
+            const simData = await simRes.json();
+            if (simRes.ok && simData.success) {
+              alert('🎉 Payment verified! Redirecting to your Premium DSA Sheet...');
+            }
+          } catch (e) { }
+          window.location.href = '/premium-dsa-sheet.html';
+        },
+        modal: {
+          ondismiss: function () { console.log('Razorpay checkout dismissed.'); }
+        }
+      };
+
+      if (typeof Razorpay !== 'undefined') {
+        const rzp = new Razorpay(options);
+        rzp.on('payment.failed', (resp) => console.warn('Payment failed:', resp.error));
+        rzp.open();
+      } else {
+        alert('❌ Razorpay SDK failed to load. Please refresh the page.');
+      }
+    } catch (err) {
+      console.error('Razorpay Checkout error:', err);
+    }
   };
 
-  window.updateMap = function(){
-    const loc = document.getElementById('locInput').value.trim();
-    if (!loc) return;
-    document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${encodeURIComponent(loc)}&output=embed`;
+  window.updateMap = function () {
+    const loc = document.getElementById('locInput');
+    if (!loc || !loc.value.trim()) return;
+    document.getElementById('mapFrame').src =
+      `https://maps.google.com/maps?q=${encodeURIComponent(loc.value.trim())}&output=embed`;
   };
+
 });

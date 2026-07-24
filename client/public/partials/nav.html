@@ -18,20 +18,20 @@
     <li><a href="/index.html#about" class="hover:text-brand transition-colors no-underline">About</a></li>
     <li><a href="/index.html#contact" class="hover:text-brand transition-colors no-underline">Contact</a></li>
   </ul>
-  <div class="flex items-center gap-3 md:gap-4">
-    <a href="/guest/favourite-list.html" aria-label="Favourites" class="text-brand">
+  <div class="flex items-center gap-3 sm:gap-4 md:gap-5 flex-shrink-0">
+    <a href="/guest/favourite-list.html" aria-label="Favourites" class="text-brand flex-shrink-0">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
     </a>
-    <button id="themeToggle" aria-label="Toggle dark mode" class="w-[52px] h-7 rounded-full bg-gray-200 dark:bg-gray-700 relative flex-shrink-0">
+    <button id="themeToggle" aria-label="Toggle dark mode" class="w-[52px] h-7 rounded-full bg-gray-200 dark:bg-gray-700 relative flex-shrink-0 border-0 my-auto cursor-pointer">
       <span id="thumb" class="absolute top-[3px] left-[3px] w-[22px] h-[22px] rounded-full bg-white dark:bg-[#1a1a1a] shadow flex items-center justify-center transition-all duration-300">
         <svg id="thumbIcon" viewBox="0 0 24 24" fill="none" class="w-3.5 h-3.5"><circle cx="12" cy="12" r="5" fill="#ffb199"/></svg>
       </span>
     </button>
-    <a href="/auth/login.html" class="hidden sm:flex items-center gap-1.5 text-sm font-semibold no-underline text-inherit hover:text-brand transition-colors">
+    <a href="/auth/login.html" class="hidden sm:flex items-center gap-1.5 text-sm font-semibold no-underline text-inherit hover:text-brand transition-colors whitespace-nowrap flex-shrink-0">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
       Login
     </a>
-    <a href="/auth/register.html" class="flex items-center gap-1.5 text-sm font-bold text-white bg-brand px-5 py-2.5 rounded-[10px] hover:bg-brand-deep transition-colors no-underline">
+    <a href="/auth/register.html" class="flex items-center gap-1.5 text-sm font-bold text-white bg-brand px-5 py-2.5 rounded-[10px] hover:bg-brand-deep transition-colors no-underline whitespace-nowrap flex-shrink-0">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-4 h-4"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
       Register
     </a>

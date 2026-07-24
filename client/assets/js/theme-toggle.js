@@ -3,11 +3,12 @@ window.initThemeToggle = function() {
   const toggle = document.getElementById('themeToggle');
   if (!toggle) return;
   const html = document.documentElement;
-  const sunSVG = '<svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" fill="#ffb199"/></svg>';
-  const moonSVG = '<svg viewBox="0 0 24 24" fill="none"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="#cfd3ff"/></svg>';
-  
-  // Initialize state from local storage or class
-  if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+
+  // Initialize state from localStorage or OS preference
+  const isDarkSaved = localStorage.getItem('theme') === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+
+  if (isDarkSaved) {
     html.classList.add('dark');
     updateToggleUI(true);
   } else {
@@ -30,17 +31,42 @@ window.initThemeToggle = function() {
 
   function updateToggleUI(isDark) {
     const thumb = document.getElementById('thumb');
-    const thumbIcon = document.getElementById('thumbIcon');
-    if (thumb && thumbIcon) {
-      thumb.style.transform = isDark ? 'translateX(0px)' : 'translateX(24px)';
-      thumbIcon.outerHTML = (isDark ? sunSVG : moonSVG).replace('<svg', '<svg id="thumbIcon" class="w-3.5 h-3.5"');
+    let thumbIcon = document.getElementById('thumbIcon');
+
+    // Update toggle track background (works for both Tailwind-class and inline-style navs)
+    if (toggle) {
+      toggle.style.background = isDark ? '#374151' : '#e5e7eb';
+    }
+
+    if (thumb) {
+      // Calculate translate: toggle width (46px) - thumb width (20px) - offset (3px*2) = 20px
+      thumb.style.transform = isDark ? 'translateX(20px)' : 'translateX(0px)';
+      // Also handle Tailwind-class based toggles (larger)
+      const toggleW = toggle.offsetWidth || 46;
+      const thumbW  = thumb.offsetWidth  || 20;
+      const offset  = 3;
+      const tx = isDark ? (toggleW - thumbW - offset * 2) : 0;
+      thumb.style.transform = `translateX(${tx}px)`;
+
+      const iconHtml = isDark
+        ? '<i id="thumbIcon" class="fa-solid fa-moon" style="color:#93c5fd;font-size:10px;"></i>'
+        : '<i id="thumbIcon" class="fa-solid fa-sun" style="color:#f59e0b;font-size:10px;"></i>';
+      if (thumbIcon) {
+        thumbIcon.outerHTML = iconHtml;
+      } else {
+        thumb.innerHTML = iconHtml;
+      }
     }
   }
 };
 
-// Check theme as early as possible to avoid FOUC
-if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-  document.documentElement.classList.add('dark');
-} else {
-  document.documentElement.classList.remove('dark');
-}
+// Apply theme ASAP to prevent flash of wrong theme (FOUC)
+(function() {
+  const isDark = localStorage.getItem('theme') === 'dark' ||
+    (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
+})();

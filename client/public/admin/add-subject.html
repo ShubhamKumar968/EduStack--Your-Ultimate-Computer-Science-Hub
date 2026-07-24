@@ -43,6 +43,17 @@
       </div>
 
       <div>
+        <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5 pl-1">Branch (e.g. CSE)</label>
+        <input
+          type="text"
+          name="branch"
+          placeholder="Enter Branch (e.g. CSE, IT, ECE, MECH)"
+          class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-700 rounded-xl bg-white dark:bg-[#181818] text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand transition-colors duration-300 shadow-sm"
+          required
+        />
+      </div>
+
+      <div>
         <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5 pl-1">Rating (e.g. 4.5)</label>
         <input
           type="text"
@@ -229,6 +240,58 @@
           const uploadedChunksInMB = ((activeProgressProgress / 100) * sizeInMB).toFixed(2);
           metricsLabel.textContent = `${uploadedChunksInMB}MB of ${sizeInMB}MB Processed`;
         }, 80);
+      }
+
+      // Handle Subject Form Submission (AJAX REST API)
+      const form = document.getElementById("subject-listing-form");
+      if (form) {
+        form.addEventListener("submit", async (e) => {
+          e.preventDefault();
+
+          const formData = new FormData();
+          const subjectName = form.querySelector('[name="subjectName"]').value.trim();
+          formData.append('name', subjectName);
+          formData.append('code', subjectName.replace(/[^a-zA-Z0-9]/g, '').substring(0, 8).toUpperCase());
+          formData.append('semester', form.querySelector('[name="semester"]').value);
+          formData.append('branch', form.querySelector('[name="branch"]').value);
+          formData.append('description', form.querySelector('[name="description"]').value.trim());
+
+          const notesInput = form.querySelector('[name="notesLink"]');
+          const ytInput = form.querySelector('[name="youtubeLink"]');
+          const pyqInput = form.querySelector('[name="pyqLink"]');
+          const ratingInput = form.querySelector('[name="rating"]');
+
+          if (notesInput && notesInput.value) formData.append('notesLink', notesInput.value.trim());
+          if (ytInput && ytInput.value) formData.append('youtubeLink', ytInput.value.trim());
+          if (pyqInput && pyqInput.value) formData.append('pyqLink', pyqInput.value.trim());
+          if (ratingInput && ratingInput.value) formData.append('rating', ratingInput.value.trim());
+
+          if (fileInput.files && fileInput.files[0]) {
+            formData.append('thumbnail', fileInput.files[0]);
+          }
+
+          try {
+            const res = await fetch('/api/subjects', {
+              method: 'POST',
+              credentials: 'include',
+              body: formData
+            });
+
+            const resData = await res.json();
+            if (res.ok && resData.success) {
+              alert('🎉 Subject created successfully!');
+              window.location.href = '/admin/subject-added.html';
+            } else {
+              if (res.status === 403) {
+                alert('⛔ Access Denied: Admin role is required to publish subjects.');
+              } else {
+                alert(`❌ ${resData.message || 'Failed to publish subject.'}`);
+              }
+            }
+          } catch (err) {
+            alert('❌ Network error while publishing subject.');
+          }
+        });
       }
     });
   </script>
