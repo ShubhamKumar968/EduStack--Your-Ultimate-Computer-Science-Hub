@@ -148,17 +148,26 @@
           <select id="sidebarSubjectSelect" onchange="syncSubject(this.value)" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
             <option value="Data Structures & Algorithms">Data Structures & Algorithms (DSA)</option>
             <option value="Database Management Systems">Database Management Systems (DBMS)</option>
-            <option value="Computer Networks">Computer Networks (CN)</option>
             <option value="Operating Systems">Operating Systems (OS)</option>
+            <option value="Computer Networks">Computer Networks (CN)</option>
+            <option value="Engineering Physics">Engineering Physics</option>
+            <option value="Engineering Mathematics">Engineering Mathematics (I, II, III)</option>
             <option value="Object Oriented Programming">Object Oriented Programming (OOPs / C++)</option>
             <option value="Theory of Computation">Theory of Computation (TOC)</option>
             <option value="Compiler Design">Compiler Design</option>
+            <option value="Design and Analysis of Algorithms">Design & Analysis of Algorithms (DAA)</option>
             <option value="Software Engineering">Software Engineering</option>
             <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
             <option value="Machine Learning">Machine Learning (ML)</option>
-            <option value="Computer Organization & Architecture">COA</option>
+            <option value="Data Mining & Data Warehousing">Data Mining & Data Warehousing</option>
+
+            <option value="Computer Organization & Architecture">Computer Organization & Architecture (COA)</option>
             <option value="Discrete Mathematics">Discrete Mathematics</option>
             <option value="Cyber Security & Cryptography">Cyber Security & Cryptography</option>
+            <option value="Cloud Computing & DevOps">Cloud Computing & DevOps</option>
+            <option value="Full Stack Web Development">Full Stack Web Development</option>
+            <option value="Basic Electrical Engineering">Basic Electrical Engineering</option>
+            <option value="Environmental Science">Environmental Science</option>
           </select>
         </div>
 
@@ -191,30 +200,39 @@
             </div>
 
             <!-- Chat Scroll Area -->
-            <div id="chatBox" class="h-[400px] overflow-y-auto p-4 md:p-5 rounded-2xl bg-gray-50/70 dark:bg-[#14141c] border border-gray-200 dark:border-gray-800/80 space-y-4 text-xs md:text-sm overflow-x-hidden custom-scrollbar">
-              <div class="flex items-start gap-3 max-w-full">
-                <div class="w-9 h-9 rounded-2xl bg-brand flex items-center justify-center text-white text-xs font-bold shadow-md shadow-brand/20 flex-shrink-0">
+            <div id="chatBox" class="h-[420px] overflow-y-auto p-4 md:p-6 rounded-3xl bg-slate-100/80 dark:bg-[#12111a] border border-gray-200 dark:border-gray-800/80 space-y-5 text-xs md:text-sm overflow-x-hidden custom-scrollbar">
+              <div class="flex items-start gap-3.5 max-w-full">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand via-rose-500 to-pink-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-brand/25 flex-shrink-0">
                   <i class="fa-solid fa-robot"></i>
                 </div>
-                <div class="chat-bubble-ai p-4.5 rounded-2xl max-w-[85%] md:max-w-xl shadow-sm space-y-3 min-w-0 overflow-hidden">
-                  <div class="flex items-center justify-between text-[11px] font-black text-brand uppercase tracking-wider border-b border-gray-100 dark:border-gray-800 pb-2">
-                    <span>EduStack AI Subject Assistant</span>
-                    <span class="text-emerald-500">Ready</span>
+                <div class="bg-white dark:bg-[#1c1a29] border border-gray-200/90 dark:border-purple-500/30 p-5 md:p-6 rounded-3xl rounded-tl-sm max-w-[90%] md:max-w-xl shadow-md space-y-4 min-w-0 overflow-hidden">
+                  <div class="flex items-center justify-between border-b border-gray-100 dark:border-purple-500/20 pb-3">
+                    <div class="flex items-center gap-2">
+                      <span class="text-xs font-black text-gray-900 dark:text-purple-300 tracking-wide uppercase">EduStack AI Assistant</span>
+                      <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-brand/10 text-brand">v2.0</span>
+                    </div>
+                    <span class="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> ONLINE
+                    </span>
                   </div>
-                  <p class="text-gray-800 dark:text-gray-200 font-semibold leading-relaxed break-words">
-                    Hello! I'm your dedicated CS AI Tutor. Ask me any technical question, code implementation, or exam concept!
+                  <p class="text-gray-800 dark:text-gray-200 font-semibold leading-relaxed text-xs md:text-sm">
+                    👋 Hello! I'm your dedicated Computer Science AI Tutor. I can answer technical questions, explain algorithms in <strong class="text-brand dark:text-purple-400 font-extrabold">C++</strong>, or generate practice exam questions!
                   </p>
-                  <!-- Sample Chips -->
-                  <div class="flex flex-wrap gap-2 pt-1">
-                    <button onclick="fillSampleQuestion('Explain Kahn\'s Algorithm for Topological Sort with C++ code.')" class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-[#252533] text-gray-800 dark:text-gray-200 text-xs font-extrabold hover:border-brand border border-transparent transition-all cursor-pointer">
-                      💡 Kahn's Algo (C++)
-                    </button>
-                    <button onclick="fillSampleQuestion('What is a B-Tree and where is it used?')" class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-[#252533] text-gray-800 dark:text-gray-200 text-xs font-extrabold hover:border-brand border border-transparent transition-all cursor-pointer">
-                      💡 B-Tree Concept
-                    </button>
-                    <button onclick="fillSampleQuestion('Explain TCP vs UDP with key differences.')" class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-[#252533] text-gray-800 dark:text-gray-200 text-xs font-extrabold hover:border-brand border border-transparent transition-all cursor-pointer">
-                      💡 TCP vs UDP
-                    </button>
+                  
+                  <!-- Sample Prompt Chips -->
+                  <div class="pt-2 space-y-2">
+                    <div class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Try Asking:</div>
+                    <div class="flex flex-wrap gap-2">
+                      <button onclick="fillSampleQuestion('Explain Kahn\'s Algorithm for Topological Sort with C++ code.')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                        <span>💡 Kahn's Algo (C++)</span>
+                      </button>
+                      <button onclick="fillSampleQuestion('What is a B-Tree and where is it used?')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                        <span>💡 B-Tree Concept</span>
+                      </button>
+                      <button onclick="fillSampleQuestion('Explain TCP vs UDP with key differences.')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                        <span>💡 TCP vs UDP</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -410,16 +428,16 @@
         const formattedAnswer = typeof marked !== 'undefined' ? marked.parse(answer) : answer;
 
         chatBox.innerHTML += `
-          <div class="flex items-start gap-3">
+          <div class="flex items-start gap-3 max-w-full">
             <div class="w-9 h-9 rounded-2xl bg-brand flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-md shadow-brand/20">
               <i class="fa-solid fa-robot"></i>
             </div>
-            <div class="chat-bubble-ai p-5 rounded-2xl max-w-2xl shadow-md space-y-2">
+            <div class="chat-bubble-ai p-5 rounded-2xl max-w-[85%] md:max-w-2xl shadow-md space-y-2 min-w-0 overflow-hidden break-words">
               <div class="flex items-center justify-between text-[10px] font-black text-brand uppercase tracking-wider border-b border-gray-100 dark:border-gray-800 pb-2">
                 <span>${modelUsed}</span>
                 <span class="text-emerald-500">Verified Answer</span>
               </div>
-              <div class="text-gray-800 dark:text-gray-100 leading-relaxed font-medium prose dark:prose-invert max-w-none text-xs md:text-sm">${formattedAnswer}</div>
+              <div class="text-gray-800 dark:text-gray-100 leading-relaxed font-medium prose dark:prose-invert max-w-none text-xs md:text-sm overflow-x-auto">${formattedAnswer}</div>
             </div>
           </div>
         `;

@@ -148,17 +148,22 @@ def ask_ai_tutor(req: RAGQueryRequest):
             
             models_to_try = get_available_gemini_models(genai)
             
-            prompt = f"""You are EduStack AI, an expert Computer Science tutor.
+            prompt = f"""You are EduStack AI, an expert Computer Science academic tutor for university engineering students.
 
-STRICT FORMATTING & LANGUAGE RULES:
-1. All programming code snippets and algorithm implementations MUST be written in **C++** (using ` ```cpp ` code blocks). Do NOT output Python, Java, or pseudocode unless requested.
-2. Do NOT output raw LaTeX math symbols like `$\\mathcal{{O}}(V + E)$` or `$\\text{{deg}}(u)$`. Use plain, readable text instead, like `O(V + E)` and `deg(u)`.
-3. Use clear Markdown headings (`###`) and bold text for high readability.
+SUBJECT: {req.subject}
+QUESTION: {req.question}
+
+INSTRUCTIONS FOR RESPONSE CONTENT & CODE:
+1. Provide a clear, intuitive, and conceptual explanation appropriate for university exams.
+2. ONLY include C++ code snippets if the subject is explicitly a programming subject (like DSA, C++, OOPs) OR if the user specifically asked for code/implementation (e.g. "write code for...", "implement...", "C++"). For theoretical concepts (like Operating Systems paging, Database concepts, Networks), focus on text, formulas, diagrams, and numerical examples rather than full C++ code unless asked.
+3. If C++ code IS provided:
+   - Always include `using namespace std;` at the top so you DO NOT use `std::` prefixes (e.g., use `cout`, `vector`, `string`, `endl`).
+   - Wrap in ` ```cpp ` code blocks.
+4. DO NOT output raw LaTeX math symbols like `$\\mathcal{{O}}(V)$` or `$\\text{{page}}$`. Write clear plain text like `O(V)` and `page_number = logical_address / page_size`.
+5. Format with clean Markdown headers (`###`) and bold bullet points.
 
 Context Notes from Course Material:
-{context_text if context_text else 'General Computer Science Subject Knowledge'}
-
-Question: {req.question}
+{context_text if context_text else 'General Computer Science Academic Knowledge'}
 
 Answer:"""
 
@@ -214,7 +219,7 @@ Difficulty: {req.difficulty}
 
 Formatting Rules:
 1. Use clear, beautifully structured Markdown headers (`### Question 1: ...`).
-2. Provide code/pseudocode solutions in **C++** syntax inside standard Markdown code blocks (` ```cpp `).
+2. If code solutions are included, provide them in **C++** syntax inside standard Markdown code blocks (` ```cpp `) and ALWAYS use `using namespace std;` to avoid `std::` prefixes.
 3. Do NOT output raw LaTeX math formulas (like $V$ or $|E|$); use clean readable text (like V, E, O(V + E)).
 4. Include detailed marking schemes for each sub-question.
 """
