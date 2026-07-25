@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ================= SUBJECT CARD RENDERER ================= */
   function subjectCard(s, i) {
     const rating = (4.5 + (i % 5) / 10).toFixed(1);
-    const isFav = favourites.has(s.id || s.n);
-    const isEnrolled = enrolledSubjects.has(s.id || s.n);
+    const isFav = favourites.has(s.id) || favourites.has(s.n);
+    const isEnrolled = enrolledSubjects.has(s.id) || enrolledSubjects.has(s.n);
     const pagePath = window.location.pathname;
 
     // Subject detail URL — use MongoDB _id when available, else name
@@ -270,6 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     applyFilters();
+    renderFavourites();
 
     const viewAllBtn = document.getElementById('viewAllBtn');
     if (viewAllBtn) {
@@ -380,7 +381,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function renderFavourites() {
     if (!favGrid) return;
-    const favList = allSubjects.filter(s => favourites.has(s.id || s.n));
+    const favList = allSubjects.filter(s => 
+      favourites.has(s.id) || favourites.has(s.n) || (s.id && favourites.has(s.id.toString()))
+    );
     if (favList.length === 0) {
       favGrid.innerHTML = `<p class="col-span-full text-center text-gray-400 dark:text-gray-500 py-10">No favourites yet — tap the heart icon on any subject card to save it here.</p>`;
       return;
@@ -412,7 +415,14 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ================= TOGGLE FAVOURITE ================= */
   // Keyed by _id when available, falls back to name
   window.toggleFavByKey = function (key, name) {
-    favourites.has(key) ? favourites.delete(key) : favourites.add(key);
+    const isFav = favourites.has(key) || (name && favourites.has(name));
+    if (isFav) {
+      favourites.delete(key);
+      if (name) favourites.delete(name);
+    } else {
+      favourites.add(key);
+      if (name) favourites.add(name);
+    }
     saveState();
     applyFilters();
     renderFavourites();
