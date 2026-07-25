@@ -248,6 +248,7 @@ app.use('/api/resources',  resourceRoutes);
 app.use('/api/favourites', favouriteRoutes);
 app.use('/api/payments',   paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/ai',            aiRoutes);
 
 // Catch-all 404 handler — must be after all routes
 app.use((req, res) => {
