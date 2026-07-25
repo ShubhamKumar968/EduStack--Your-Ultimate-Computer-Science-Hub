@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DSA Sheet Coming Soon — EduStack</title>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Tailwind CSS -->
+  <link rel="stylesheet" href="/assets/css/output.css">
+  <script src="/assets/js/partials.js" defer></script>
+</head>
+<body class="bg-white dark:bg-[#181818] text-[#222222] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+  <!-- Nav Placeholder injected by partials.js -->
+  <div id="nav-placeholder"></div>
+
+  <!-- HERO SECTION -->
+  <main class="flex-grow flex items-center justify-center px-6 py-16 md:py-24 relative overflow-hidden">
+    <!-- Ambient Background Blur Orbs -->
+    <div class="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full bg-brand/15 blur-3xl pointer-events-none"></div>
+    <div class="absolute w-[450px] h-[450px] -bottom-32 -right-32 rounded-full bg-amber-500/15 blur-3xl pointer-events-none"></div>
+    
+    <div class="max-w-3xl mx-auto text-center relative z-10">
+      
+      <!-- Animated Status Pill -->
+      <div class="inline-flex items-center gap-2.5 bg-amber-500/10 dark:bg-amber-500/20 border border-amber-400/40 text-amber-600 dark:text-amber-300 text-xs font-black px-4 py-2 rounded-full mb-8 uppercase tracking-widest shadow-sm">
+        <span class="w-2.5 h-2.5 rounded-full bg-amber-500 animate-ping"></span>
+        <i class="fa-solid fa-clock-rotate-left"></i> Coming Soon
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight leading-[1.1] mb-6">
+        The Ultimate <span class="bg-gradient-to-r from-amber-400 via-brand to-rose-500 bg-clip-text text-transparent">DSA Sheet</span>
+        <span class="block text-gray-900 dark:text-white mt-1">Will Be Available Soon!</span>
+      </h1>
+
+      <!-- Description -->
+      <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed mb-10 max-w-2xl mx-auto">
+        We are hand-curating 450+ top SDE interview problems with direct Problem Links, GitHub Code Solutions, Senior Hints, and Video Solution Links specifically for NIT Patna students. Stay tuned — access will open shortly! 🚀
+      </p>
+
+      <!-- Preview Cards Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12 text-left">
+        <div class="bg-white/80 dark:bg-[#222222]/80 backdrop-blur-md border border-gray-100 dark:border-gray-800 p-5 rounded-2xl shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-500 mb-3 text-lg font-bold">
+            <i class="fa-solid fa-link"></i>
+          </div>
+          <h3 class="font-extrabold text-base mb-1 text-gray-900 dark:text-white">Problem Links</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Direct links to curated LeetCode & GFG questions.</p>
+        </div>
+
+        <div class="bg-white/80 dark:bg-[#222222]/80 backdrop-blur-md border border-gray-100 dark:border-gray-800 p-5 rounded-2xl shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 border border-emerald-400/30 flex items-center justify-center text-emerald-500 mb-3 text-lg font-bold">
+            <i class="fa-brands fa-github"></i>
+          </div>
+          <h3 class="font-extrabold text-base mb-1 text-gray-900 dark:text-white">GitHub Solutions</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">C++, Java & Python source code on GitHub.</p>
+        </div>
+
+        <div class="bg-white/80 dark:bg-[#222222]/80 backdrop-blur-md border border-gray-100 dark:border-gray-800 p-5 rounded-2xl shadow-md">
+          <div class="w-10 h-10 rounded-xl bg-brand/10 border border-brand/30 flex items-center justify-center text-brand mb-3 text-lg font-bold">
+            <i class="fa-solid fa-lightbulb"></i>
+          </div>
+          <h3 class="font-extrabold text-base mb-1 text-gray-900 dark:text-white">Hints & Solution Links</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Senior intuition hints & step-by-step video links.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap justify-center gap-4">
+        <button onclick="window.showToast('🎉 You will be notified as soon as the DSA Sheet releases!', 'success')" class="bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 font-extrabold px-8 py-4 rounded-full shadow-lg shadow-amber-500/20 hover:brightness-105 hover:scale-105 transition-all text-sm border-0 cursor-pointer flex items-center gap-2">
+          <i class="fa-solid fa-bell"></i> Notify Me On Release
+        </button>
+
+        <a href="/index.html#demo-subjects" class="bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 font-extrabold px-8 py-4 rounded-full shadow-sm hover:border-brand transition-all text-sm no-underline flex items-center gap-2">
+          <i class="fa-solid fa-book-open text-brand"></i> Explore Free Subjects
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Script for theme toggle & partials -->
+  <script src="/assets/js/theme-toggle.js"></script>
+</body>
+</html>

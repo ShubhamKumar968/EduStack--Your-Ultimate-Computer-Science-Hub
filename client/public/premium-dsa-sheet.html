@@ -17,48 +17,80 @@
   <!-- Nav Placeholder injected by partials.js -->
   <div id="nav-placeholder"></div>
 
+  <style>
+    @keyframes floatBadge {
+      0%, 100% { transform: translateY(0px) rotate(var(--rot, 0deg)); }
+      50% { transform: translateY(-10px) rotate(var(--rot, 0deg)); }
+    }
+    .float-badge {
+      animation: floatBadge 4s ease-in-out infinite;
+    }
+  </style>
+
   <!-- HERO BANNER -->
-  <section class="relative overflow-hidden bg-gradient-to-br from-[#1a1a1a] via-[#241c2c] to-[#121212] text-white px-6 py-16">
+  <section class="relative overflow-hidden bg-gradient-to-br from-[#0b1329] via-[#1a1438] to-[#1a0826] text-white px-6 py-24">
+    <!-- Ambient Background Blurs -->
+    <div class="absolute w-[500px] h-[500px] -top-32 -left-32 rounded-full bg-brand/25 blur-3xl pointer-events-none"></div>
+    <div class="absolute w-[450px] h-[450px] -bottom-32 -right-32 rounded-full bg-amber-400/25 blur-3xl pointer-events-none"></div>
+    <div class="absolute w-[400px] h-[400px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-indigo-500/20 blur-3xl pointer-events-none"></div>
+
+    <!-- FLOATING ITEMS -->
+    <div class="hidden xl:flex items-center gap-2.5 absolute top-[14%] right-[5%] float-badge bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-2.5 shadow-2xl text-xs font-black text-amber-300 z-20 pointer-events-none" style="--rot: 4deg; animation-delay: 0.2s;">
+      <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-4 h-4 object-contain"> LeetCode Top 150
+    </div>
+    <div class="hidden xl:flex items-center gap-2.5 absolute top-[18%] left-[4%] float-badge bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-2.5 shadow-2xl text-xs font-black text-emerald-400 z-20 pointer-events-none" style="--rot: -4deg; animation-delay: 0.8s;">
+      <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-4 h-4 object-contain"> GFG Must-Do 200
+    </div>
+    <div class="hidden xl:flex items-center gap-2.5 absolute bottom-[18%] right-[6%] float-badge bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-2.5 shadow-2xl text-xs font-black text-rose-300 z-20 pointer-events-none" style="--rot: -3deg; animation-delay: 1.4s;">
+      <i class="fa-brands fa-github text-white text-sm"></i> GitHub Source Code
+    </div>
+    <div class="hidden xl:flex items-center gap-2.5 absolute bottom-[16%] left-[5%] float-badge bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-4 py-2.5 shadow-2xl text-xs font-black text-cyan-300 z-20 pointer-events-none" style="--rot: 3deg; animation-delay: 2s;">
+      <i class="fa-solid fa-lightbulb text-amber-400 text-sm"></i> Senior Hints & Notes
+    </div>
+
     <div class="max-w-6xl mx-auto relative z-10">
-      <div class="inline-flex items-center gap-2 bg-[#ffcc4d]/20 border border-[#ffcc4d]/40 text-[#ffcc4d] text-xs font-black px-4 py-1.5 rounded-full mb-6 uppercase tracking-wider shadow-sm">
-        <i class="fa-solid fa-crown"></i> EduStack Premium Access Unlocked
+      <div class="inline-flex items-center gap-2.5 bg-gradient-to-r from-amber-400/20 to-brand/20 border border-amber-400/40 text-amber-300 text-[11px] sm:text-xs font-black px-6 py-2.5 rounded-full mb-6 uppercase tracking-wider shadow-xl backdrop-blur-md max-w-full leading-normal">
+        <i class="fa-solid fa-crown text-amber-400 animate-bounce"></i> EduStack Premium Access Unlocked
       </div>
 
-      <h1 class="text-3xl md:text-5xl font-extrabold tracking-tight mb-4">
-        🎉 Master DSA Resource Folder
+      <h1 class="text-3xl sm:text-5xl md:text-6xl font-black tracking-tight mb-4 leading-[1.1]">
+        🎉 Ultimate SDE <span class="bg-gradient-to-r from-amber-300 via-rose-400 to-brand bg-clip-text text-transparent">DSA Sheet & Solutions</span>
       </h1>
-      <p class="text-gray-300 max-w-3xl text-base md:text-lg leading-relaxed mb-8">
-        Welcome to your comprehensive 450+ SDE Interview Resource Drive. Curated by senior engineers from NITs, with intuitive hints, code patterns, and company tag archives.
+      <p class="text-gray-300 max-w-3xl text-base md:text-lg leading-relaxed mb-10">
+        Direct practice links for top 450+ interview problems on LeetCode & GeeksforGeeks, paired with GitHub source code repositories and senior hints.
       </p>
 
-      <div class="flex flex-wrap items-center gap-6 text-sm">
-        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center font-black text-lg">
-            <i class="fa-solid fa-code"></i>
+      <div class="flex flex-wrap items-center gap-5 text-sm">
+        <!-- Stat Card 1 -->
+        <div class="bg-white/10 backdrop-blur-xl px-6 py-4.5 rounded-2xl border border-white/15 hover:border-amber-400/60 shadow-2xl shadow-amber-500/10 transition-all hover:-translate-y-1.5 flex items-center gap-4 group">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-400 flex items-center justify-center font-black text-xl shadow-inner group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-link"></i>
           </div>
           <div>
-            <span class="block text-xs text-gray-400 font-semibold uppercase">Total Problems</span>
-            <span class="font-extrabold text-lg text-white">450+ Curated</span>
+            <span class="block text-[11px] text-gray-400 font-bold uppercase tracking-wider">Problem Links</span>
+            <span class="font-extrabold text-xl text-white">450+ Curated</span>
           </div>
         </div>
 
-        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-black text-lg">
-            <i class="fa-solid fa-folder-open"></i>
+        <!-- Stat Card 2 -->
+        <div class="bg-white/10 backdrop-blur-xl px-6 py-4.5 rounded-2xl border border-white/15 hover:border-emerald-400/60 shadow-2xl shadow-emerald-500/10 transition-all hover:-translate-y-1.5 flex items-center gap-4 group">
+          <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 border border-emerald-400/40 text-emerald-400 flex items-center justify-center font-black text-xl shadow-inner group-hover:scale-110 transition-transform">
+            <i class="fa-brands fa-github"></i>
           </div>
           <div>
-            <span class="block text-xs text-gray-400 font-semibold uppercase">Cloud Resource</span>
-            <span class="font-extrabold text-lg text-white">Google Drive Folder</span>
+            <span class="block text-[11px] text-gray-400 font-bold uppercase tracking-wider">GitHub Code</span>
+            <span class="font-extrabold text-xl text-white">Full Repositories</span>
           </div>
         </div>
 
-        <div class="bg-white/10 backdrop-blur-md px-5 py-3 rounded-2xl border border-white/10 flex items-center gap-3">
-          <div class="w-10 h-10 rounded-xl bg-brand/20 text-brand-light flex items-center justify-center font-black text-lg">
+        <!-- Stat Card 3 -->
+        <div class="bg-white/10 backdrop-blur-xl px-6 py-4.5 rounded-2xl border border-white/15 hover:border-brand/60 shadow-2xl shadow-brand/10 transition-all hover:-translate-y-1.5 flex items-center gap-4 group">
+          <div class="w-12 h-12 rounded-2xl bg-brand/20 border border-brand/40 text-brand-light flex items-center justify-center font-black text-xl shadow-inner group-hover:scale-110 transition-transform">
             <i class="fa-solid fa-lightbulb"></i>
           </div>
           <div>
-            <span class="block text-xs text-gray-400 font-semibold uppercase">Senior Hints</span>
-            <span class="font-extrabold text-lg text-white">100% Included</span>
+            <span class="block text-[11px] text-gray-400 font-bold uppercase tracking-wider">Hints & Solutions</span>
+            <span class="font-extrabold text-xl text-white">Video & Text Links</span>
           </div>
         </div>
       </div>
@@ -71,32 +103,34 @@
     <!-- AUTH / ACCESS CHECK CONTAINER -->
     <div id="accessGate" class="hidden">
       <!-- Unauthenticated State -->
-      <div id="loggedOutNotice" class="hidden bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl">
-        <div class="w-20 h-20 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-6 text-3xl">
+      <div id="loggedOutNotice" class="hidden bg-gradient-to-b from-white to-gray-50 dark:from-[#222222] dark:to-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-2xl relative overflow-hidden">
+        <div class="h-1.5 w-full bg-gradient-to-r from-brand via-rose-500 to-amber-400 absolute top-0 left-0"></div>
+        <div class="w-20 h-20 rounded-2xl bg-brand/10 border border-brand/30 text-brand flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
           <i class="fa-solid fa-lock"></i>
         </div>
-        <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3">Authentication Required</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto">
+        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-3">Authentication Required</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed">
           Please log in to your account to view your unlocked Premium DSA Sheet and access resource materials.
         </p>
-        <a href="/auth/login.html" class="inline-flex items-center gap-2 bg-brand hover:bg-brand-deep text-white font-bold px-8 py-3.5 rounded-full transition-all shadow-lg shadow-brand/30 no-underline">
+        <a href="/auth/login.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand to-rose-600 hover:brightness-110 text-white font-extrabold px-9 py-4 rounded-full transition-all shadow-xl shadow-brand/25 no-underline">
           <i class="fa-solid fa-right-to-bracket"></i> Login to Access
         </a>
       </div>
 
       <!-- Logged-in but Not Premium State -->
-      <div id="notPremiumNotice" class="hidden bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl">
-        <div class="w-20 h-20 rounded-full bg-amber-500/10 text-amber-500 flex items-center justify-center mx-auto mb-6 text-3xl">
-          <i class="fa-solid fa-gem"></i>
+      <div id="notPremiumNotice" class="hidden bg-gradient-to-b from-white to-gray-50 dark:from-[#222222] dark:to-[#1a1a1a] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-2xl relative overflow-hidden">
+        <div class="h-1.5 w-full bg-gradient-to-r from-amber-400 via-brand to-rose-500 absolute top-0 left-0"></div>
+        <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-500 flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
+          <i class="fa-solid fa-gem text-amber-400"></i>
         </div>
-        <h2 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3">Premium Membership Required</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto">
-          You are logged in, but you haven't unlocked the Ultimate DSA Sheet yet. Complete the ₹5 payment to unlock full access.
+        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-3">Ultimate DSA Sheet Status</h2>
+        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed">
+          We are hand-curating 450+ top SDE interview problems with direct problem links, GitHub code solutions, senior hints, and video solution links specifically for NIT Patna students.
         </p>
         <div class="flex justify-center">
-          <button onclick="openRazorpayCheckout()" class="inline-flex items-center gap-2 bg-[#ffcc4d] hover:brightness-95 text-[#5a4400] font-extrabold px-8 py-4 rounded-full transition-all shadow-lg border-0 cursor-pointer text-sm active:scale-95">
-            <i class="fa-solid fa-credit-card"></i> Pay ₹5 with Razorpay Checkout
-          </button>
+          <a href="/dsa-sheet-coming-soon.html" class="inline-flex items-center gap-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-105 hover:scale-105 text-amber-950 font-black px-9 py-4 rounded-full transition-all shadow-xl shadow-amber-500/25 border-0 cursor-pointer text-sm active:scale-95 no-underline">
+            <i class="fa-solid fa-clock-rotate-left"></i> Check Release Details & Status
+          </a>
         </div>
       </div>
     </div>
@@ -108,16 +142,139 @@
       <div class="bg-gradient-to-r from-brand via-purple-600 to-indigo-600 rounded-3xl p-8 md:p-10 text-white shadow-xl flex flex-col md:flex-row items-center justify-between gap-8">
         <div class="space-y-3 text-center md:text-left">
           <span class="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-md px-3.5 py-1 rounded-full text-xs font-black uppercase tracking-wider">
-            <i class="fa-solid fa-folder-open"></i> Master Cloud Storage Folder
+            <i class="fa-brands fa-github"></i> GitHub Code & Solution Repositories
           </span>
-          <h2 class="text-3xl md:text-4xl font-black tracking-tight">Access Premium DSA Folder</h2>
+          <h2 class="text-3xl md:text-4xl font-black tracking-tight">Curated SDE Problem Bank</h2>
           <p class="text-sm md:text-base text-purple-100 max-w-xl leading-relaxed">
-            Click below to open your complete Google Drive folder containing all 450+ curated DSA questions, solution patterns, company archives, and notes.
+            Direct practice links for top interview problems on LeetCode & GeeksforGeeks, paired with senior hints and GitHub source code.
           </p>
         </div>
-        <a id="external-dsa-sheet-link" href="https://drive.google.com/drive/folders/1FJDMNxPh7CGTTxGT9kOI1kHjtEbYRR6J?usp=drive_link" target="_blank" rel="noopener" class="w-full md:w-auto text-center whitespace-nowrap bg-white text-gray-900 hover:bg-gray-100 font-black px-9 py-5 rounded-full transition-all shadow-2xl active:scale-95 no-underline flex items-center justify-center gap-3 text-base border-0 cursor-pointer">
-          <i class="fa-solid fa-arrow-up-right-from-square text-brand text-lg"></i> Open Master DSA Folder 🚀
+        <a id="external-dsa-sheet-link" href="https://github.com/ShubhamKumar968" target="_blank" rel="noopener" class="w-full md:w-auto text-center whitespace-nowrap bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600 text-amber-950 hover:brightness-110 hover:scale-105 font-black px-9 py-5 rounded-full transition-all shadow-2xl shadow-amber-500/40 active:scale-95 no-underline flex items-center justify-center gap-3 text-base border-0 cursor-pointer">
+          <i class="fa-brands fa-github text-amber-950 text-xl"></i> Open GitHub Code Repo 🚀
         </a>
+      </div>
+
+      <!-- INTERACTIVE LEETCODE & GFG PROBLEM TABLE -->
+      <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 md:p-8 shadow-xl overflow-hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-gray-100 dark:border-gray-800">
+          <div>
+            <h3 class="text-xl font-extrabold text-gray-900 dark:text-white flex items-center gap-2">
+              <i class="fa-solid fa-fire text-amber-500"></i> Top SDE Interview Problems
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Directly practice each problem on LeetCode and GeeksforGeeks.</p>
+          </div>
+          <span class="bg-brand/10 text-brand font-extrabold text-xs px-3.5 py-1.5 rounded-full border border-brand/20 self-start sm:self-auto">
+            10/450+ Essential Problems
+          </span>
+        </div>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse text-xs md:text-sm">
+            <thead>
+              <tr class="border-b border-gray-100 dark:border-gray-800 text-gray-400 font-bold uppercase text-[11px] tracking-wider">
+                <th class="py-3 px-4">#</th>
+                <th class="py-3 px-4">Problem Name</th>
+                <th class="py-3 px-4">Category</th>
+                <th class="py-3 px-4">Difficulty</th>
+                <th class="py-3 px-4 text-center">LeetCode Link</th>
+                <th class="py-3 px-4 text-center">GFG Link</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-800/60 font-semibold text-gray-800 dark:text-gray-200">
+              
+              <!-- Problem 1 -->
+              <tr class="hover:bg-gray-50/80 dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-400">01</td>
+                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white">Two Sum</td>
+                <td class="py-4 px-4"><span class="bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 px-2.5 py-1 rounded-md text-[11px]">Arrays & Hashing</span></td>
+                <td class="py-4 px-4"><span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-extrabold px-2.5 py-1 rounded-full text-[11px]">Easy</span></td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://leetcode.com/problems/two-sum/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-400/30 transition-all no-underline text-xs">
+                    <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-3.5 h-3.5"> LeetCode
+                  </a>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://www.geeksforgeeks.org/problems/key-pair5625/1" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-400/30 transition-all no-underline text-xs">
+                    <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-3.5 h-3.5"> GFG
+                  </a>
+                </td>
+              </tr>
+
+              <!-- Problem 2 -->
+              <tr class="hover:bg-gray-50/80 dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-400">02</td>
+                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white">Reverse Linked List</td>
+                <td class="py-4 px-4"><span class="bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 px-2.5 py-1 rounded-md text-[11px]">Linked List</span></td>
+                <td class="py-4 px-4"><span class="bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400 font-extrabold px-2.5 py-1 rounded-full text-[11px]">Easy</span></td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://leetcode.com/problems/reverse-linked-list/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-400/30 transition-all no-underline text-xs">
+                    <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-3.5 h-3.5"> LeetCode
+                  </a>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://www.geeksforgeeks.org/problems/reverse-a-linked-list/1" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-400/30 transition-all no-underline text-xs">
+                    <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-3.5 h-3.5"> GFG
+                  </a>
+                </td>
+              </tr>
+
+              <!-- Problem 3 -->
+              <tr class="hover:bg-gray-50/80 dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-400">03</td>
+                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white">3Sum</td>
+                <td class="py-4 px-4"><span class="bg-cyan-50 dark:bg-cyan-950/40 text-cyan-600 dark:text-cyan-400 px-2.5 py-1 rounded-md text-[11px]">Two Pointers</span></td>
+                <td class="py-4 px-4"><span class="bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold px-2.5 py-1 rounded-full text-[11px]">Medium</span></td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://leetcode.com/problems/3sum/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-400/30 transition-all no-underline text-xs">
+                    <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-3.5 h-3.5"> LeetCode
+                  </a>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://www.geeksforgeeks.org/problems/find-triplets-with-zero-sum/1" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-400/30 transition-all no-underline text-xs">
+                    <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-3.5 h-3.5"> GFG
+                  </a>
+                </td>
+              </tr>
+
+              <!-- Problem 4 -->
+              <tr class="hover:bg-gray-50/80 dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-400">04</td>
+                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white">Binary Tree Level Order Traversal</td>
+                <td class="py-4 px-4"><span class="bg-indigo-50 dark:bg-indigo-950/40 text-indigo-600 dark:text-indigo-400 px-2.5 py-1 rounded-md text-[11px]">Trees & BFS</span></td>
+                <td class="py-4 px-4"><span class="bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 font-extrabold px-2.5 py-1 rounded-full text-[11px]">Medium</span></td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://leetcode.com/problems/binary-tree-level-order-traversal/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-400/30 transition-all no-underline text-xs">
+                    <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-3.5 h-3.5"> LeetCode
+                  </a>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://www.geeksforgeeks.org/problems/level-order-traversal/1" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-400/30 transition-all no-underline text-xs">
+                    <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-3.5 h-3.5"> GFG
+                  </a>
+                </td>
+              </tr>
+
+              <!-- Problem 5 -->
+              <tr class="hover:bg-gray-50/80 dark:hover:bg-[#1a1a1a] transition-colors">
+                <td class="py-4 px-4 font-bold text-gray-400">05</td>
+                <td class="py-4 px-4 font-bold text-gray-900 dark:text-white">Trapping Rain Water</td>
+                <td class="py-4 px-4"><span class="bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 px-2.5 py-1 rounded-md text-[11px]">Dynamic Programming</span></td>
+                <td class="py-4 px-4"><span class="bg-red-50 dark:bg-red-950/40 text-red-600 dark:text-red-400 font-extrabold px-2.5 py-1 rounded-full text-[11px]">Hard</span></td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://leetcode.com/problems/trapping-rain-water/" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold px-3 py-1.5 rounded-xl border border-amber-400/30 transition-all no-underline text-xs">
+                    <img src="https://leetcode.com/favicon.ico" alt="LeetCode" class="w-3.5 h-3.5"> LeetCode
+                  </a>
+                </td>
+                <td class="py-4 px-4 text-center">
+                  <a href="https://www.geeksforgeeks.org/problems/trapping-rain-water-1587115621/1" target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-bold px-3 py-1.5 rounded-xl border border-emerald-400/30 transition-all no-underline text-xs">
+                    <img src="https://www.geeksforgeeks.org/favicon.ico" alt="GFG" class="w-3.5 h-3.5"> GFG
+                  </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+        </div>
       </div>
 
     </div>

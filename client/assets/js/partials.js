@@ -1,4 +1,64 @@
-// Global Toast Notification Utility (Replaces native browser alert popups with Real-World UI)
+window.showAuthModal = function(action) {
+  const existing = document.getElementById('auth-guard-modal');
+  if (existing) existing.remove();
+
+  const overlay = document.createElement('div');
+  overlay.id = 'auth-guard-modal';
+  overlay.style.cssText = `
+    position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);padding:16px;
+  `;
+  overlay.innerHTML = `
+    <div style="background:linear-gradient(to bottom, #ffffff, #f9fafb);border-radius:28px;padding:36px 32px;max-width:400px;width:100%;
+                box-shadow:0 25px 60px rgba(0,0,0,0.3);text-align:center;position:relative;border:1px solid #f3f4f6;" class="dark:bg-[#222222] dark:border-gray-800">
+      <button onclick="document.getElementById('auth-guard-modal').remove()"
+        style="position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;
+               font-size:20px;color:#888;line-height:1;" aria-label="Close">✕</button>
+      <div style="width:68px;height:68px;border-radius:50%;background:#fff0f3;
+                  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:30px;box-shadow:0 4px 12px rgba(255,56,92,0.15);">
+        🔒
+      </div>
+      <h2 style="font-size:22px;font-weight:900;color:#111;margin:0 0 10px;" class="dark:text-white">
+        Login Required
+      </h2>
+      <p style="color:#666;font-size:13.5px;margin:0 0 24px;line-height:1.6;" class="dark:text-gray-300">
+        Please <strong>log in or sign up</strong> to ${action || 'access this feature'}.<br>
+        It's 100% free for all students!
+      </p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <a href="/auth/login.html"
+          style="background:#ff385c;color:#fff;font-weight:800;padding:12px 24px;border-radius:50px;
+                 text-decoration:none;font-size:13px;box-shadow:0 4px 15px rgba(255,56,92,0.35);">
+          Login Now
+        </a>
+        <a href="/auth/register.html"
+          style="background:#111;color:#fff;font-weight:800;padding:12px 24px;border-radius:50px;
+                 text-decoration:none;font-size:13px;" class="dark:bg-gray-800">
+          Sign Up Free
+        </a>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+};
+
+window.requireAuth = function(action, label) {
+  if (window.currentUser) {
+    action();
+  } else {
+    fetch('/api/auth/me', { credentials: 'include' })
+      .then(r => r.json())
+      .then(d => {
+        if (d && d.success && d.data && d.data.user) {
+          window.currentUser = d.data.user;
+          action();
+        } else {
+          window.showAuthModal(label || 'access this feature');
+        }
+      })
+      .catch(() => window.showAuthModal(label || 'access this feature'));
+  }
+};
 window.showToast = function(message, type = 'info', duration = 4000) {
   if (!message) return;
   
@@ -516,14 +576,29 @@ document.addEventListener('DOMContentLoaded', () => {
       } else {
         return `
           <span class="sb-section-label">Sections</span>
+          <a href="${base}index.html#demo-subjects" class="sb-link sb-hash-link" data-hash="#demo-subjects">
+            <i class="fa-solid fa-book-open" style="color:#ff385c;"></i> Explore Subjects
+          </a>
+          <a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="sb-link sb-hash-link" data-hash="#college-websites">
+            <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:18px;height:18px;object-fit:contain;display:inline-block;"> College Useful Links
+          </a>
           <a href="${base}index.html#resources" class="sb-link sb-hash-link" data-hash="#resources">
-            <i class="fa-solid fa-folder-open"></i> Resources
+            <i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources
           </a>
           <a href="${base}index.html#ai-tools" class="sb-link sb-hash-link" data-hash="#ai-tools">
-            <i class="fa-solid fa-robot"></i> AI Tools
+            <i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools
+          </a>
+          <a href="${base}dsa-sheet-coming-soon.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}dsa-sheet-coming-soon.html'; }, 'access Ultimate DSA Sheet')" class="sb-link">
+            <i class="fa-solid fa-star" style="color:#eab308;"></i> Ultimate DSA Sheet
+          </a>
+          <a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" class="sb-link">
+            <i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute Notes
           </a>
           <a href="${base}index.html#about" class="sb-link sb-hash-link" data-hash="#about">
-            <i class="fa-solid fa-circle-info"></i> About
+            <i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About Me
+          </a>
+          <a href="${base}index.html#contact" class="sb-link sb-hash-link" data-hash="#contact">
+            <i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact
           </a>
           <div class="sb-divider"></div>
           <span class="sb-section-label">Account</span>
@@ -604,7 +679,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- CENTER: Nav links (desktop only) -->
-          <ul style="display:none;align-items:center;gap:4px;list-style:none;margin:0;padding:0;font-size:14px;font-weight:700;flex-shrink:0;" class="desktop-nav-links">
+          <ul style="display:none;align-items:center;gap:2px;list-style:none;margin:0;padding:0;font-size:13px;font-weight:700;flex-shrink:0;" class="desktop-nav-links">
             ${isGuest ? `
             ${getNavItem('guest/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'guest/subject-list')}
             ${getNavItem('guest/favourite-list.html', 'fa-solid fa-heart', 'Favourites', 'guest/favourite-list')}
@@ -614,9 +689,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects')}
             ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject')}
             ` : `
-            <li><a href="${base}index.html#resources" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#9ca3af;"></i> Resources</a></li>
-            <li><a href="${base}index.html#ai-tools" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#9ca3af;"></i> AI Tools</a></li>
-            <li><a href="${base}index.html#about" class="nav-link-hash" style="display:flex;align-items:center;gap:6px;padding:8px 14px;border-radius:50px;text-decoration:none;color:#374151;font-weight:700;font-size:14px;transition:background 0.15s;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#9ca3af;"></i> About</a></li>
+            <li><a href="${base}index.html#demo-subjects" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#demo-subjects"><i class="fa-solid fa-book-open" style="color:#ff385c;"></i> Explore Subjects</a></li>
+            <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:16px;height:16px;object-fit:contain;display:inline-block;"> College Links</a></li>
+            <li><a href="${base}index.html#resources" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources</a></li>
+            <li><a href="${base}index.html#ai-tools" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools</a></li>
+            <li><a href="${base}dsa-sheet-coming-soon.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}dsa-sheet-coming-soon.html'; }, 'access Ultimate DSA Sheet')" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;"><i class="fa-solid fa-star" style="color:#eab308;"></i> DSA Sheet</a></li>
+            <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute</a></li>
+            <li><a href="${base}index.html#about" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About</a></li>
+            <li><a href="${base}index.html#contact" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact</a></li>
             `}
           </ul>
 

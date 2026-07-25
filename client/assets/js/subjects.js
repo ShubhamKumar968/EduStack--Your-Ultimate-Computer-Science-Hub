@@ -188,25 +188,26 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     return `
-    <div class="subject-card bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl overflow-hidden hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex flex-col justify-between ${cardHeight} w-full flex-shrink-0" style="height:400px;min-height:400px;max-height:400px;">
-      <div class="card-thumb relative w-full flex items-center justify-center bg-slate-900 bg-gradient-to-br ${bInfo.color} overflow-hidden rounded-t-2xl flex-shrink-0" style="height:176px;min-height:176px;max-height:176px;flex-shrink:0;overflow:hidden;">
+    <div class="subject-card group relative bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-3xl overflow-hidden hover:-translate-y-2 hover:shadow-2xl hover:shadow-brand/15 hover:border-brand/40 dark:hover:border-brand/40 transition-all duration-300 flex flex-col justify-between ${cardHeight} w-full flex-shrink-0" style="height:400px;min-height:400px;max-height:400px;">
+      <div class="card-thumb relative w-full flex items-center justify-center bg-slate-900 bg-gradient-to-br ${bInfo.color} overflow-hidden rounded-t-3xl flex-shrink-0" style="height:176px;min-height:176px;max-height:176px;flex-shrink:0;overflow:hidden;">
         ${s.thumbnail ? `
-          <img src="${s.thumbnail}" alt="${s.n}" style="width:100%;height:100%;object-fit:cover;object-position:center;" class="relative z-0 transition-transform duration-300 hover:scale-105">
+          <img src="${s.thumbnail}" alt="${s.n}" style="width:100%;height:100%;object-fit:cover;object-position:center;" class="relative z-0 transition-transform duration-500 group-hover:scale-110">
         ` : `
-          <div class="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center shadow-inner relative z-1">
-            <i class="${bInfo.icon} text-white text-xl"></i>
+          <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md flex items-center justify-center shadow-inner relative z-1 group-hover:scale-110 transition-transform duration-300">
+            <i class="${bInfo.icon} text-white text-2xl drop-shadow"></i>
           </div>
         `}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 pointer-events-none"></div>
         ${!isEnrollmentsPage ? `
         <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'add to favourites')" aria-label="Toggle favourite"
-          style="position:absolute;top:12px;right:12px;z-index:30;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.65);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:transform 0.15s;" onmouseenter="this.style.transform='scale(1.12)'" onmouseleave="this.style.transform='scale(1)'">
-          <i class="fa-solid fa-heart ${isFav ? 'text-brand' : 'text-white'}" style="font-size:11px;"></i>
+          style="position:absolute;top:12px;right:12px;z-index:30;width:34px;height:34px;border-radius:50%;background:rgba(0,0,0,0.65);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,0.25);cursor:pointer;box-shadow:0 4px 12px rgba(0,0,0,0.3);transition:all 0.2s;" onmouseenter="this.style.transform='scale(1.15)'" onmouseleave="this.style.transform='scale(1)'">
+          <i class="fa-solid fa-heart ${isFav ? 'text-brand' : 'text-white'}" style="font-size:12px;"></i>
         </button>
         ` : ''}
       </div>
-      <div class="p-3.5 sm:p-4 flex flex-col flex-grow justify-between overflow-hidden">
+      <div class="p-4 flex flex-col flex-grow justify-between overflow-hidden">
         <div>
-          <h3 class="font-extrabold text-[15px] sm:text-base text-gray-900 dark:text-white mb-1.5 truncate leading-snug" title="${s.n}">${s.n}</h3>
+          <h3 class="font-extrabold text-[15px] sm:text-base text-gray-900 dark:text-white mb-1.5 truncate leading-snug group-hover:text-brand transition-colors" title="${s.n}">${s.n}</h3>
           <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2.5">
             <span class="flex items-center gap-1.5">
               <svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2" class="w-3.5 h-3.5 flex-shrink-0">${capIcon}</svg>
@@ -514,49 +515,80 @@ document.addEventListener('DOMContentLoaded', () => {
   const aiTools = [
     {
       name: 'Claude', sub: 'AI assistant by Anthropic',
-      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128" alt="Claude" class="w-10 h-10 object-contain">`,
-      link: 'https://claude.ai'
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://claude.ai&size=128" alt="Claude" class="w-9 h-9 object-contain drop-shadow-sm">`,
+      link: 'https://claude.ai',
+      glow: 'bg-orange-500/10 group-hover:bg-orange-500/20',
+      borderHover: 'hover:border-orange-400/40 dark:hover:border-orange-500/40 hover:shadow-orange-500/10',
+      textAccent: 'text-orange-600 dark:text-orange-400',
+      iconBg: 'bg-orange-50 dark:bg-orange-950/40 border-orange-200/70 dark:border-orange-700/50'
     },
     {
       name: 'Gemini', sub: "Google's AI assistant",
-      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128" alt="Gemini" class="w-10 h-10 object-contain">`,
-      link: 'https://gemini.google.com'
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gemini.google.com&size=128" alt="Gemini" class="w-9 h-9 object-contain drop-shadow-sm">`,
+      link: 'https://gemini.google.com',
+      glow: 'bg-blue-500/10 group-hover:bg-blue-500/20',
+      borderHover: 'hover:border-blue-400/40 dark:hover:border-blue-500/40 hover:shadow-blue-500/10',
+      textAccent: 'text-blue-600 dark:text-blue-400',
+      iconBg: 'bg-blue-50 dark:bg-blue-950/40 border-blue-200/70 dark:border-blue-700/50'
     },
     {
       name: 'ChatGPT', sub: 'AI assistant by OpenAI',
-      iconHtml: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/OpenAI_logo_2025_%28symbol%29.svg/250px-OpenAI_logo_2025_%28symbol%29.svg.png" alt="ChatGPT" class="w-10 h-10 object-contain dark:invert">`,
-      link: 'https://chatgpt.com'
+      iconHtml: `<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/OpenAI_logo_2025_%28symbol%29.svg/250px-OpenAI_logo_2025_%28symbol%29.svg.png" alt="ChatGPT" class="w-9 h-9 object-contain dark:invert drop-shadow-sm">`,
+      link: 'https://chatgpt.com',
+      glow: 'bg-emerald-500/10 group-hover:bg-emerald-500/20',
+      borderHover: 'hover:border-emerald-400/40 dark:hover:border-emerald-500/40 hover:shadow-emerald-500/10',
+      textAccent: 'text-emerald-600 dark:text-emerald-400',
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/40 border-emerald-200/70 dark:border-emerald-700/50'
     },
     {
       name: 'Antigravity IDE', sub: 'Agentic IDE by Google',
-      iconHtml: `<img src="https://mac009.com/uploads/20251119/5c9e95d70c9cb87bc2724867a8de9fc5.png" alt="Antigravity IDE" class="w-10 h-10 object-contain rounded-lg">`,
-      link: 'https://idx.google.com'
+      iconHtml: `<img src="https://mac009.com/uploads/20251119/5c9e95d70c9cb87bc2724867a8de9fc5.png" alt="Antigravity IDE" class="w-9 h-9 object-contain rounded-lg drop-shadow-sm">`,
+      link: 'https://idx.google.com',
+      glow: 'bg-purple-500/10 group-hover:bg-purple-500/20',
+      borderHover: 'hover:border-purple-400/40 dark:hover:border-purple-500/40 hover:shadow-purple-500/10',
+      textAccent: 'text-purple-600 dark:text-purple-400',
+      iconBg: 'bg-purple-50 dark:bg-purple-950/40 border-purple-200/70 dark:border-purple-700/50'
     },
     {
       name: 'AI Detector', sub: 'Check if text reads as AI-written',
-      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gptzero.me&size=128" alt="AI Detector" class="w-10 h-10 object-contain">`,
-      link: 'https://gptzero.me'
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://gptzero.me&size=128" alt="AI Detector" class="w-9 h-9 object-contain drop-shadow-sm">`,
+      link: 'https://gptzero.me',
+      glow: 'bg-rose-500/10 group-hover:bg-rose-500/20',
+      borderHover: 'hover:border-rose-400/40 dark:hover:border-rose-500/40 hover:shadow-rose-500/10',
+      textAccent: 'text-rose-600 dark:text-rose-400',
+      iconBg: 'bg-rose-50 dark:bg-rose-950/40 border-rose-200/70 dark:border-rose-700/50'
     },
     {
       name: 'AI Humanizer', sub: 'Rewrite text in a natural tone',
-      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://humanizeai.io&size=128" alt="AI Humanizer" class="w-10 h-10 object-contain">`,
-      link: 'https://www.humanizeai.io'
+      iconHtml: `<img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://humanizeai.io&size=128" alt="AI Humanizer" class="w-9 h-9 object-contain drop-shadow-sm">`,
+      link: 'https://www.humanizeai.io',
+      glow: 'bg-cyan-500/10 group-hover:bg-cyan-500/20',
+      borderHover: 'hover:border-cyan-400/40 dark:hover:border-cyan-500/40 hover:shadow-cyan-500/10',
+      textAccent: 'text-cyan-600 dark:text-cyan-400',
+      iconBg: 'bg-cyan-50 dark:bg-cyan-950/40 border-cyan-200/70 dark:border-cyan-700/50'
     }
   ];
 
   const aiGrid = document.getElementById('aiGrid');
   if (aiGrid) {
     aiGrid.innerHTML = aiTools.map(t => `
-    <a href="${t.link}" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit group">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden bg-gray-50 dark:bg-[#2e2e2e]">
+    <a href="${t.link}" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl ${t.borderHover} transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 ${t.glow} rounded-full blur-2xl transition-all"></div>
+      
+      <div class="w-14 h-14 rounded-2xl ${t.iconBg} border p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 mb-5">
         ${t.iconHtml}
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5 flex items-center justify-between">
+
+      <h3 class="font-extrabold text-xl mb-2 flex items-center justify-between group-hover:${t.textAccent} transition-colors">
         ${t.name}
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:text-brand transition-colors"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4 text-gray-300 dark:text-gray-600 group-hover:${t.textAccent} group-hover:translate-x-0.5 transition-all"><path d="M7 17L17 7M7 7h10v10"/></svg>
       </h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">${t.sub}</p>
-      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">${t.sub}</p>
+      
+      <span class="mt-auto text-sm font-bold ${t.textAccent} flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+        Open Tool <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
     </a>`).join('');
   }
 
@@ -584,82 +616,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  window.openRazorpayCheckout = async function () {
-    try {
-      const meRes = await fetch('/api/auth/me', { credentials: 'include' });
-      const meData = await meRes.json();
-
-      if (!meRes.ok || !meData.success || !meData.data || !meData.data.user) {
-        showAuthModal('access premium features');
-        return;
-      }
-
-      const user = meData.data.user;
-      if (user.isPremium) {
-        window.location.href = '/premium-dsa-sheet.html';
-        return;
-      }
-
-      let keyId = 'rzp_test_TGrMXq2DpNHT6u';
-      let orderId = null;
-
-      try {
-        const orderRes = await fetch('/api/payments/create-order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          credentials: 'include'
-        });
-        const orderData = await orderRes.json();
-        if (orderRes.ok && orderData.success) {
-          keyId = orderData.data.keyId || keyId;
-          orderId = orderData.data.orderId;
-        }
-      } catch (err) {
-        console.warn('Order pre-step notice:', err);
-      }
-
-      const options = {
-        key: keyId,
-        amount: 500,
-        currency: 'INR',
-        name: 'EduStack Premium',
-        description: 'Ultimate DSA Sheet Access (₹5.00)',
-        order_id: orderId || undefined,
-        prefill: {
-          name: `${user.firstName || ''} ${user.lastName || ''}`.trim() || 'Engineering Student',
-          email: user.email || 'student@edustack.com',
-          contact: '9999999999'
-        },
-        theme: { color: '#ff385c' },
-        handler: async function (response) {
-          try {
-            const simRes = await fetch('/api/payments/simulate', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              credentials: 'include'
-            });
-            const simData = await simRes.json();
-            if (simRes.ok && simData.success) {
-              alert('🎉 Payment verified! Redirecting to your Premium DSA Sheet...');
-            }
-          } catch (e) { }
-          window.location.href = '/premium-dsa-sheet.html';
-        },
-        modal: {
-          ondismiss: function () { console.log('Razorpay checkout dismissed.'); }
-        }
-      };
-
-      if (typeof Razorpay !== 'undefined') {
-        const rzp = new Razorpay(options);
-        rzp.on('payment.failed', (resp) => console.warn('Payment failed:', resp.error));
-        rzp.open();
-      } else {
-        alert('❌ Razorpay SDK failed to load. Please refresh the page.');
-      }
-    } catch (err) {
-      console.error('Razorpay Checkout error:', err);
-    }
+  window.openRazorpayCheckout = function () {
+    window.location.href = '/dsa-sheet-coming-soon.html';
   };
 
   window.updateMap = function () {

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,48 +17,61 @@
 <div id="nav-placeholder"></div>
 <!-- HERO -->
 <section class="relative overflow-hidden px-6 py-24 md:py-32 text-center">
-  <div class="absolute w-[420px] h-[420px] -top-40 -left-32 rounded-full bg-brand opacity-25 blur-3xl"></div>
-  <div class="absolute w-[380px] h-[380px] -bottom-40 -right-24 rounded-full bg-brand-deep opacity-25 blur-3xl"></div>
-  <div class="hidden lg:flex items-center gap-2 absolute top-[14%] left-[6%] -rotate-6 animate-float bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-full pl-2.5 pr-4 py-2 shadow-lg text-[13px] font-bold z-10">
-    <span class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2.2" class="w-3.5 h-3.5"><path d="M12 2a4 4 0 0 0-4 4 3 3 0 0 0-2 5 3 3 0 0 0 2 5 4 4 0 0 0 4 4M9 2v18M15 2a4 4 0 0 1 4 4 3 3 0 0 1 2 5 3 3 0 0 1-2 5 4 4 0 0 1-4 4M15 2v18"/></svg></span>
-    Artificial Intelligence
+  <div class="absolute w-[450px] h-[450px] -top-40 -left-32 rounded-full bg-brand opacity-25 blur-3xl pointer-events-none"></div>
+  <div class="absolute w-[420px] h-[420px] -bottom-40 -right-24 rounded-full bg-brand-deep opacity-25 blur-3xl pointer-events-none"></div>
+  
+  <!-- FLOATING SUBJECT BADGES -->
+  <div class="hidden lg:flex items-center gap-2.5 absolute top-[14%] left-[5%] -rotate-6 animate-float bg-white/80 dark:bg-[#222222]/80 backdrop-blur-xl border border-purple-200 dark:border-purple-800/60 rounded-2xl px-4 py-2.5 shadow-xl text-xs font-black z-10 hover:scale-105 transition-transform">
+    <span class="w-7 h-7 rounded-xl bg-purple-500/15 border border-purple-400/40 flex items-center justify-center text-purple-500 font-bold"><i class="fa-solid fa-brain"></i></span>
+    <span class="text-gray-900 dark:text-white">Artificial Intelligence</span>
   </div>
-  <div class="hidden lg:flex items-center gap-2 absolute top-[10%] right-[8%] rotate-6 animate-float bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-full pl-2.5 pr-4 py-2 shadow-lg text-[13px] font-bold z-10" style="animation-delay:.6s">
-    <span class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2.2" class="w-3.5 h-3.5"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg></span>
-    DBMS
+  
+  <div class="hidden lg:flex items-center gap-2.5 absolute top-[10%] right-[7%] rotate-6 animate-float bg-white/80 dark:bg-[#222222]/80 backdrop-blur-xl border border-emerald-200 dark:border-emerald-800/60 rounded-2xl px-4 py-2.5 shadow-xl text-xs font-black z-10 hover:scale-105 transition-transform" style="animation-delay:.6s">
+    <span class="w-7 h-7 rounded-xl bg-emerald-500/15 border border-emerald-400/40 flex items-center justify-center text-emerald-500 font-bold"><i class="fa-solid fa-database"></i></span>
+    <span class="text-gray-900 dark:text-white">DBMS</span>
   </div>
-  <div class="hidden lg:flex items-center gap-2 absolute bottom-[20%] left-[9%] rotate-3 animate-float bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-full pl-2.5 pr-4 py-2 shadow-lg text-[13px] font-bold z-10" style="animation-delay:1.1s">
-    <span class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2.2" class="w-3.5 h-3.5"><circle cx="5" cy="6" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="12" cy="18" r="2.5"/><path d="M7 7.5L10.5 16M17 7.5L13.5 16M7.5 6h9"/></svg></span>
-    Computer Networks
+
+  <div class="hidden lg:flex items-center gap-2.5 absolute bottom-[20%] left-[7%] rotate-3 animate-float bg-white/80 dark:bg-[#222222]/80 backdrop-blur-xl border border-blue-200 dark:border-blue-800/60 rounded-2xl px-4 py-2.5 shadow-xl text-xs font-black z-10 hover:scale-105 transition-transform" style="animation-delay:1.1s">
+    <span class="w-7 h-7 rounded-xl bg-blue-500/15 border border-blue-400/40 flex items-center justify-center text-blue-500 font-bold"><i class="fa-solid fa-network-wired"></i></span>
+    <span class="text-gray-900 dark:text-white">Computer Networks</span>
   </div>
-  <div class="hidden lg:flex items-center gap-2 absolute bottom-[14%] right-[7%] -rotate-3 animate-float bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-full pl-2.5 pr-4 py-2 shadow-lg text-[13px] font-bold z-10" style="animation-delay:1.7s">
-    <span class="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="none" stroke="#ff385c" stroke-width="2.2" class="w-3.5 h-3.5"><path d="M12 2l9 5-9 5-9-5z"/><path d="M3 12l9 5 9-5M3 17l9 5 9-5"/></svg></span>
-    Machine Learning
+
+  <div class="hidden lg:flex items-center gap-2.5 absolute bottom-[14%] right-[6%] -rotate-3 animate-float bg-white/80 dark:bg-[#222222]/80 backdrop-blur-xl border border-pink-200 dark:border-pink-800/60 rounded-2xl px-4 py-2.5 shadow-xl text-xs font-black z-10 hover:scale-105 transition-transform" style="animation-delay:1.7s">
+    <span class="w-7 h-7 rounded-xl bg-pink-500/15 border border-pink-400/40 flex items-center justify-center text-pink-500 font-bold"><i class="fa-solid fa-robot"></i></span>
+    <span class="text-gray-900 dark:text-white">Machine Learning</span>
   </div>
-  <div class="hidden lg:flex items-center gap-2 absolute top-1/2 -translate-y-1/2 left-[2%] -rotate-2 animate-float bg-[#ffcc4d] border border-[#f0b93a] rounded-full pl-2.5 pr-4 py-2 shadow-lg text-[13px] font-bold text-[#5a4400] z-10" style="animation-delay:2.2s">
-    <span class="w-6 h-6 rounded-full bg-white/40 flex items-center justify-center"><svg viewBox="0 0 24 24" fill="#5a4400" class="w-3.5 h-3.5"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg></span>
+
+  <div class="hidden lg:flex items-center gap-2.5 absolute top-1/2 -translate-y-1/2 right-[2%] rotate-2 animate-float bg-white/80 dark:bg-[#222222]/80 backdrop-blur-xl border border-orange-200 dark:border-orange-800/60 rounded-2xl px-4 py-2.5 shadow-xl text-xs font-black z-10 hover:scale-105 transition-transform" style="animation-delay:2.5s">
+    <span class="w-7 h-7 rounded-xl bg-orange-500/15 border border-orange-400/40 flex items-center justify-center text-orange-500 font-bold"><i class="fa-solid fa-desktop"></i></span>
+    <span class="text-gray-900 dark:text-white">Operating System</span>
+  </div>
+
+  <a href="/dsa-sheet-coming-soon.html" class="hidden lg:flex items-center gap-2.5 absolute top-1/2 -translate-y-1/2 left-[2%] -rotate-2 animate-float bg-gradient-to-r from-amber-400 to-amber-500 border border-amber-300 rounded-2xl px-4 py-2.5 shadow-2xl shadow-amber-500/30 text-xs font-black text-amber-950 z-10 hover:scale-105 transition-transform no-underline" style="animation-delay:2.2s">
+    <span class="w-7 h-7 rounded-xl bg-white/40 flex items-center justify-center text-amber-950 font-black"><i class="fa-solid fa-star"></i></span>
     Best DSA Sheet
-  </div>
+  </a>
+
   <div class="relative z-[1] max-w-3xl mx-auto">
-    <span class="inline-block text-xs font-bold tracking-wider uppercase text-brand bg-brand/10 px-4 py-1.5 rounded-full mb-6">Built by a CSE student, for CSE students</span>
-    <h1 class="text-[2.4rem] md:text-6xl font-extrabold leading-[1.08] tracking-tight">
+    <span class="inline-block text-[11px] sm:text-xs font-black tracking-wider uppercase text-brand bg-brand/10 border border-brand/20 px-6 py-2.5 rounded-full mb-6 shadow-sm max-w-full leading-normal">Built by a CSE student, for CSE students</span>
+    <h1 class="text-[2.4rem] md:text-6xl font-black leading-[1.08] tracking-tight">
       <span class="block bg-gradient-to-r from-brand via-brand-soft to-brand-light bg-clip-text text-transparent">Your Campus's Smartest</span>
-      <span class="block">Subject Library</span>
+      <span class="block text-gray-900 dark:text-white">Subject Library</span>
     </h1>
-    <p class="mt-6 max-w-xl mx-auto text-base md:text-lg leading-relaxed text-gray-500 dark:text-gray-400">
+    <p class="mt-6 max-w-xl mx-auto text-base md:text-lg leading-relaxed text-gray-500 dark:text-gray-400 font-semibold">
       Notes, previous year papers, and curated resources for every CSE subject — organized, searchable, and maintained by students who've sat the same exams.
     </p>
-    <div class="flex flex-wrap justify-center gap-4 mt-10">
-      <a id="browseSubjectsBtn" href="/guest/subject-list.html" class="flex items-center gap-2 bg-gradient-to-r from-brand to-brand-soft text-white font-bold px-8 py-4 rounded-full shadow-lg shadow-brand/30 hover:shadow-xl transition-shadow no-underline">
-        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" class="w-[18px] h-[18px]"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+
+    <!-- HERO ACTION BUTTONS -->
+    <div class="flex flex-wrap justify-center gap-3.5 mt-10">
+      <a id="browseSubjectsBtn" href="/guest/subject-list.html" class="flex items-center gap-2 bg-gradient-to-r from-brand via-brand-soft to-brand-light text-white font-extrabold px-8 py-3.5 rounded-full shadow-md shadow-brand/20 hover:scale-105 hover:shadow-lg transition-all text-sm no-underline border-0 cursor-pointer">
+        <i class="fa-solid fa-book-open text-sm"></i>
         Browse Subjects
       </a>
-      <a href="/auth/register.html" class="flex items-center gap-2 bg-white dark:bg-[#181818] font-bold px-8 py-4 rounded-full border-[1.5px] border-gray-200 dark:border-gray-700 text-inherit no-underline">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-[18px] h-[18px]"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+      <a href="/auth/register.html" class="flex items-center gap-2 bg-white dark:bg-[#222222] border border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white font-extrabold px-8 py-3.5 rounded-full shadow-sm hover:border-brand hover:scale-105 transition-all text-sm no-underline">
+        <i class="fa-solid fa-user-plus text-brand text-sm"></i>
         Login / Register
       </a>
     </div>
-  </div>
   </div>
 </section>
 
@@ -97,95 +110,215 @@
       View All Subjects
     </a>
   </div>
+<!-- OUR COLLEGE USEFUL WEBSITES -->
+<section id="college-websites" class="px-6 max-w-6xl mx-auto pb-16 pt-6">
+  <div class="text-center mb-10">
+    <span class="inline-block text-xs font-extrabold tracking-wider uppercase text-brand bg-brand/10 px-4 py-1.5 rounded-full mb-3">NIT Patna Quick Links</span>
+    <h2 class="text-2xl md:text-3xl font-extrabold text-brand mb-2">Our College Useful Websites</h2>
+    <p class="text-sm text-gray-400 dark:text-gray-500 max-w-xl mx-auto">Instant access to official NIT Patna portals for academic tracking, attendance, and campus updates.</p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+    <!-- Card 1: NITP Website -->
+    <a href="https://www.nitp.ac.in/" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-amber-500/10 hover:border-amber-400/40 dark:hover:border-amber-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-amber-400/10 rounded-full blur-2xl group-hover:bg-amber-400/20 transition-all"></div>
+      
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200/70 dark:border-amber-700/50 p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NIT Patna Logo" class="w-full h-full object-contain drop-shadow-sm">
+        </div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300">Official Portal</span>
+      </div>
+
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-amber-600 dark:group-hover:text-amber-400 transition-colors flex items-center gap-2">
+        NITP Website
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+        Official institute portal for administrative notifications, circulars, department events, and campus updates.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Notices</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Circulars</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Departments</span>
+      </div>
+
+      <span class="mt-auto text-sm font-bold text-amber-600 dark:text-amber-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+        Visit Website 
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <!-- Card 2: MIS Portal -->
+    <a href="https://mis.nitp.ac.in/" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-blue-500/10 hover:border-blue-400/40 dark:hover:border-blue-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-blue-400/10 rounded-full blur-2xl group-hover:bg-blue-400/20 transition-all"></div>
+
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200/70 dark:border-blue-700/50 flex items-center justify-center text-blue-600 dark:text-blue-400 text-2xl shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">Academic & Profile</span>
+      </div>
+
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+        MIS Portal
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+        Management Information System to track semester course registrations, SGPA/CGPA grade cards, and fee details.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Course Reg</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Grade Cards</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Fees Record</span>
+      </div>
+
+      <span class="mt-auto text-sm font-bold text-blue-600 dark:text-blue-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+        Open MIS Portal 
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+
+    <!-- Card 3: Intranet Portal -->
+    <a href="https://intranet.nitp.ac.in/api/auth/signin?callbackUrl=%2Fstudent%2Fdashboard" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-400/40 dark:hover:border-emerald-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden sm:col-span-2 lg:col-span-1">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-emerald-400/10 rounded-full blur-2xl group-hover:bg-emerald-400/20 transition-all"></div>
+
+      <div class="flex items-center justify-between mb-5">
+        <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-700/50 p-2.5 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-8 h-8 text-emerald-600 dark:text-emerald-400">
+            <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+            <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+            <path d="M9 14l2 2 4-4"></path>
+          </svg>
+        </div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-900/40 dark:text-emerald-300">Attendance & Marks</span>
+      </div>
+
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+        Intranet Portal
+      </h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+        Access campus intranet to monitor real-time subject attendance percentages, internal assessments, and semester marks.
+      </p>
+
+      <div class="flex flex-wrap gap-2 mb-6">
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Attendance</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Semester Marks</span>
+        <span class="text-[11px] font-bold px-2.5 py-1 rounded-md bg-gray-100 dark:bg-[#2e2e2e] text-gray-600 dark:text-gray-400">Internal Score</span>
+      </div>
+
+      <span class="mt-auto text-sm font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">
+        Open Intranet Portal 
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </span>
+    </a>
+  </div>
 </section>
-    
+
 <!-- RESOURCES -->
 <section id="resources" class="px-6 max-w-6xl mx-auto pb-8">
   <h2 class="text-center text-2xl md:text-3xl font-extrabold text-brand mb-2">Resources</h2>
   <p class="text-center text-sm text-gray-400 dark:text-gray-500 mb-10">Everything you need outside the syllabus, in one place.</p>
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
-    <a href="https://youtube.com/@codingjourney-e1o?si=oGQUnXGl4ieFvW3N" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden">
-        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://youtube.com&size=128" alt="YouTube" class="w-10 h-10 object-contain">
+    <!-- YouTube Resources -->
+    <a href="https://youtube.com/@codingjourney-e1o?si=oGQUnXGl4ieFvW3N" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-red-500/10 hover:border-red-400/40 dark:hover:border-red-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-red-500/10 rounded-full blur-2xl group-hover:bg-red-500/20 transition-all"></div>
+      <div class="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-200/70 dark:border-red-700/50 p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 mb-5">
+        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://youtube.com&size=128" alt="YouTube" class="w-9 h-9 object-contain drop-shadow-sm">
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5">YouTube Resources</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Curated playlists and full courses — one for every subject above.</p>
-      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors">YouTube Resources</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">Curated playlists and full courses — one for every subject in your curriculum.</p>
+      <span class="mt-auto text-sm font-bold text-red-600 dark:text-red-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">Explore <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
+
     <!-- Coding Platforms -->
-    <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 sm:col-span-2 lg:col-span-1">
-      <h3 class="font-extrabold text-lg mb-1.5">Coding Platforms</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Practice on the platforms that actually show up in interviews.</p>
-      <div class="space-y-2.5">
-        <a href="https://leetcode.com/problemset/" target="_blank" rel="noopener" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-[#2e2e2e] transition-colors no-underline text-inherit">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://leetcode.com&size=128" alt="LeetCode" class="w-6 h-6 object-contain">
+    <div class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:border-indigo-400/40 dark:hover:border-indigo-500/40 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300 sm:col-span-2 lg:col-span-1 overflow-hidden flex flex-col">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-indigo-500/10 rounded-full blur-2xl group-hover:bg-indigo-500/20 transition-all"></div>
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-10 h-10 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/70 dark:border-indigo-700/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 font-extrabold text-lg">
+          <i class="fa-solid fa-code"></i>
+        </div>
+        <h3 class="font-extrabold text-xl group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">Coding Platforms</h3>
+      </div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">Practice on platforms that actually show up in SDE interviews.</p>
+      <div class="space-y-2 mt-auto">
+        <a href="https://leetcode.com/problemset/" target="_blank" rel="noopener" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 transition-colors no-underline text-inherit group/item">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gray-50 dark:bg-gray-800">
+            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://leetcode.com&size=128" alt="LeetCode" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-sm font-semibold flex-1">LeetCode</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          <span class="text-sm font-semibold flex-1 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">LeetCode</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400 group-hover/item:translate-x-0.5 transition-transform"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
-        <a href="https://www.geeksforgeeks.org/explore?page=1&sortBy=submissions" target="_blank" rel="noopener" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-[#2e2e2e] transition-colors no-underline text-inherit">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://geeksforgeeks.org&size=128" alt="GeeksforGeeks" class="w-6 h-6 object-contain">
+        <a href="https://www.geeksforgeeks.org/explore?page=1&sortBy=submissions" target="_blank" rel="noopener" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 transition-colors no-underline text-inherit group/item">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gray-50 dark:bg-gray-800">
+            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://geeksforgeeks.org&size=128" alt="GeeksforGeeks" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-sm font-semibold flex-1">GeeksforGeeks</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          <span class="text-sm font-semibold flex-1 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">GeeksforGeeks</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400 group-hover/item:translate-x-0.5 transition-transform"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
-        <a href="https://www.interviewbit.com/courses/programming/" target="_blank" rel="noopener" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-[#2e2e2e] transition-colors no-underline text-inherit">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://interviewbit.com&size=128" alt="InterviewBit" class="w-6 h-6 object-contain">
+        <a href="https://www.interviewbit.com/courses/programming/" target="_blank" rel="noopener" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 transition-colors no-underline text-inherit group/item">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gray-50 dark:bg-gray-800">
+            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://interviewbit.com&size=128" alt="InterviewBit" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-sm font-semibold flex-1">InterviewBit</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          <span class="text-sm font-semibold flex-1 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">InterviewBit</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400 group-hover/item:translate-x-0.5 transition-transform"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
-        <a href="https://codeforces.com" target="_blank" rel="noopener" class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-[#2e2e2e] transition-colors no-underline text-inherit">
-          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://codeforces.com&size=128" alt="Codeforces" class="w-6 h-6 object-contain">
+        <a href="https://codeforces.com" target="_blank" rel="noopener" class="flex items-center gap-3 p-2.5 rounded-xl hover:bg-indigo-50/60 dark:hover:bg-indigo-950/40 transition-colors no-underline text-inherit group/item">
+          <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gray-50 dark:bg-gray-800">
+            <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://codeforces.com&size=128" alt="Codeforces" class="w-5 h-5 object-contain">
           </div>
-          <span class="text-sm font-semibold flex-1">Codeforces</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400"><path d="M7 17L17 7M7 7h10v10"/></svg>
+          <span class="text-sm font-semibold flex-1 group-hover/item:text-indigo-600 dark:group-hover/item:text-indigo-400 transition-colors">Codeforces</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5 text-gray-400 group-hover/item:translate-x-0.5 transition-transform"><path d="M7 17L17 7M7 7h10v10"/></svg>
         </a>
       </div>
     </div>
+
     <!-- DSA Sheet (Premium) -->
-    <div class="rounded-2xl p-6 flex flex-col bg-gradient-to-br from-[#1a1a1a] to-brand-deeper text-white relative overflow-hidden">
-      <span class="absolute top-4 right-4 bg-[#ffcc4d] text-[#5a4400] text-[10px] font-extrabold px-2.5 py-1 rounded-full tracking-wide">PREMIUM</span>
-      <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc4d" stroke-width="2" class="w-6 h-6"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
+    <div class="group relative rounded-3xl p-7 flex flex-col bg-gradient-to-br from-[#1c1917] via-[#18181b] to-brand-deeper text-white overflow-hidden shadow-xl hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-brand/20 transition-all duration-300 border border-brand/30">
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-amber-400/20 rounded-full blur-2xl group-hover:bg-amber-400/30 transition-all"></div>
+      <span class="absolute top-5 right-5 bg-gradient-to-r from-amber-300 to-amber-500 text-amber-950 text-[10px] font-extrabold px-3 py-1 rounded-full tracking-wider shadow-sm">PREMIUM</span>
+      <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center mb-5 shadow-sm group-hover:scale-110 transition-transform duration-300">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc4d" stroke-width="2" class="w-7 h-7"><path d="M12 2l3.1 6.3 6.9 1-5 4.9 1.2 6.8L12 17.8 5.8 21l1.2-6.8-5-4.9 6.9-1z"/></svg>
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5">The Ultimate DSA Sheet</h3>
-      <p class="text-sm text-gray-300 mb-4">450+ hand-picked problems, sorted by pattern, with hints written the way a senior would explain them to you. Stop hopping between five different sheets — this is the one your seniors at NIT actually used to crack SDE interviews.</p>
-      <div class="flex items-center justify-between mt-auto">
-        <span class="font-extrabold text-xl">₹5 <span class="text-xs font-medium text-gray-400">only for simulation purpose.</span></span>
-        <button id="dsaBookBtn" onclick="openRazorpayCheckout()" class="bg-[#ffcc4d] text-[#5a4400] font-bold text-sm px-5 py-2.5 rounded-full hover:brightness-95 transition cursor-pointer border-0">Book Now</button>
+      <h3 class="font-extrabold text-xl mb-2 text-white">The Ultimate DSA Sheet</h3>
+      <p class="text-sm text-gray-300 mb-5 leading-relaxed">450+ hand-picked problems, sorted by pattern, with hints written the way a senior explains them to crack SDE interviews.</p>
+      <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/10">
+        <span class="font-extrabold text-xl text-amber-300">₹5 <span class="text-[11px] font-medium text-gray-400">simulation</span></span>
+        <button id="dsaBookBtn" onclick="openRazorpayCheckout()" class="bg-gradient-to-r from-amber-400 to-amber-500 text-amber-950 font-extrabold text-xs px-5 py-2.5 rounded-full hover:brightness-110 shadow-lg shadow-amber-500/20 transition cursor-pointer border-0">Book Now</button>
       </div>
     </div>
+
     <!-- Render.com -->
-    <a href="https://dashboard.render.com/login" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden">
-        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://render.com&size=128" alt="Render" class="w-10 h-10 object-contain">
+    <a href="https://dashboard.render.com/login" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-cyan-500/10 hover:border-cyan-400/40 dark:hover:border-cyan-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-cyan-500/10 rounded-full blur-2xl group-hover:bg-cyan-500/20 transition-all"></div>
+      <div class="w-14 h-14 rounded-2xl bg-cyan-50 dark:bg-cyan-950/40 border border-cyan-200/70 dark:border-cyan-700/50 p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 mb-5">
+        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://render.com&size=128" alt="Render" class="w-9 h-9 object-contain drop-shadow-sm">
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5">Render.com</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Deploy your Node/Express backend and MongoDB-connected projects for free.</p>
-      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Deploy now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-cyan-600 dark:group-hover:text-cyan-400 transition-colors">Render.com</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">Deploy your Node/Express backend and MongoDB-connected projects for free.</p>
+      <span class="mt-auto text-sm font-bold text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">Deploy now <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
+
     <!-- Overleaf -->
-    <a href="https://www.overleaf.com" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden">
-        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://overleaf.com&size=128" alt="Overleaf" class="w-10 h-10 object-contain">
+    <a href="https://www.overleaf.com/latex/templates/nit-patna-resume-template-v2-dot-1/hkwrzcwrfgqj" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-emerald-500/10 hover:border-emerald-400/40 dark:hover:border-emerald-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-emerald-500/10 rounded-full blur-2xl group-hover:bg-emerald-500/20 transition-all"></div>
+      <div class="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200/70 dark:border-emerald-700/50 p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 mb-5">
+        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://overleaf.com&size=128" alt="Overleaf" class="w-9 h-9 object-contain drop-shadow-sm">
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5">Overleaf</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Build a clean, ATS-friendly LaTeX resume — completely free.</p>
-      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Build resume <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">Overleaf</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">Build a clean, ATS-friendly LaTeX resume using the official NIT Patna template.</p>
+      <span class="mt-auto text-sm font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">Build resume <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
+
     <!-- Codolio -->
-    <a href="https://codolio.com" target="_blank" rel="noopener" class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-700 rounded-2xl p-6 hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300 flex flex-col no-underline text-inherit">
-      <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 mb-4 overflow-hidden">
-        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://codolio.com&size=128" alt="Codolio" class="w-10 h-10 object-contain">
+    <a href="https://codolio.com" target="_blank" rel="noopener" class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-7 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-purple-500/10 hover:border-purple-400/40 dark:hover:border-purple-500/40 transition-all duration-300 flex flex-col no-underline text-inherit overflow-hidden">
+      <div class="absolute -top-12 -right-12 w-28 h-28 bg-purple-500/10 rounded-full blur-2xl group-hover:bg-purple-500/20 transition-all"></div>
+      <div class="w-14 h-14 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-200/70 dark:border-purple-700/50 p-2 flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform duration-300 mb-5">
+        <img src="https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://codolio.com&size=128" alt="Codolio" class="w-9 h-9 object-contain drop-shadow-sm">
       </div>
-      <h3 class="font-extrabold text-lg mb-1.5">Codolio</h3>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Track your entire coding journey — LeetCode, Codeforces, GitHub — in one dashboard.</p>
-      <span class="mt-auto text-sm font-bold text-brand flex items-center gap-1">Track progress <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-3.5 h-3.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <h3 class="font-extrabold text-xl mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">Codolio</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">Track your entire coding journey — LeetCode, Codeforces, GitHub — in one dashboard.</p>
+      <span class="mt-auto text-sm font-bold text-purple-600 dark:text-purple-400 flex items-center gap-1.5 group-hover:translate-x-1 transition-transform">Track progress <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" class="w-4 h-4"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </a>
   </div>
 </section>
@@ -199,10 +332,11 @@
 <!-- Favourites moved to dedicated page -->
 <!-- ABOUT -->
 <section id="about" class="px-6 max-w-4xl mx-auto pb-20">
-  <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-8 md:p-12 shadow-sm text-center relative overflow-hidden">
-    <div class="absolute w-64 h-64 -top-32 -right-32 rounded-full bg-brand opacity-5 blur-3xl pointer-events-none"></div>
-    <div class="absolute w-64 h-64 -bottom-32 -left-32 rounded-full bg-brand-deep opacity-5 blur-3xl pointer-events-none"></div>
+  <div class="group relative bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-8 md:p-12 shadow-xl hover:shadow-2xl hover:border-brand/40 transition-all duration-300 text-center overflow-hidden">
+    <div class="absolute -top-20 -right-20 w-64 h-64 bg-brand/15 rounded-full blur-3xl group-hover:bg-brand/25 transition-all duration-500 pointer-events-none"></div>
+    <div class="absolute -bottom-20 -left-20 w-64 h-64 bg-amber-500/15 rounded-full blur-3xl group-hover:bg-amber-500/25 transition-all duration-500 pointer-events-none"></div>
     
+    <span class="inline-block text-xs font-extrabold tracking-wider uppercase text-brand bg-brand/10 px-4 py-1.5 rounded-full mb-4">Behind EduStack</span>
     <h2 class="text-2xl md:text-3xl font-extrabold text-brand mb-8">About Me</h2>
     
     <div class="space-y-6 text-gray-500 dark:text-gray-400 leading-relaxed text-sm md:text-base max-w-3xl mx-auto relative z-10">
@@ -224,32 +358,35 @@
     </div>
   </div>
 </section>
+
+<!-- CONTACT -->
 <section id="contact" class="px-6 max-w-5xl mx-auto pb-24">
-  <div class="bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-[2rem] p-8 md:p-12 shadow-sm relative overflow-hidden">
-    <div class="absolute w-72 h-72 -top-32 -left-32 rounded-full bg-brand opacity-5 blur-3xl pointer-events-none"></div>
-    <div class="absolute w-72 h-72 -bottom-32 -right-32 rounded-full bg-brand opacity-5 blur-3xl pointer-events-none"></div>
+  <div class="group relative bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-[2.5rem] p-8 md:p-12 shadow-xl hover:shadow-2xl hover:border-brand/40 transition-all duration-300 overflow-hidden">
+    <div class="absolute -top-24 -left-24 w-72 h-72 bg-brand/15 rounded-full blur-3xl group-hover:bg-brand/25 transition-all duration-500 pointer-events-none"></div>
+    <div class="absolute -bottom-24 -right-24 w-72 h-72 bg-indigo-500/15 rounded-full blur-3xl group-hover:bg-indigo-500/25 transition-all duration-500 pointer-events-none"></div>
     
     <div class="grid grid-cols-1 md:grid-cols-2 gap-12 relative z-10">
       <!-- Left: Contact Details & Socials -->
       <div class="flex flex-col justify-center">
+        <span class="inline-block text-xs font-extrabold tracking-wider uppercase text-brand bg-brand/10 px-4 py-1.5 rounded-full mb-3 self-start">Get In Touch</span>
         <h2 class="text-3xl md:text-4xl font-extrabold text-brand mb-4">Let's Connect</h2>
         <p class="text-gray-500 dark:text-gray-400 text-[15px] mb-8 leading-relaxed">
           I'm always open to discussing new projects, creative ideas or opportunities to be part of your visions. Feel free to reach out to me!
         </p>
 
         <div class="flex flex-col gap-6 mb-10">
-          <div class="flex items-center gap-5">
-            <div class="flex items-center justify-center w-8">
-              <i class="fa-solid fa-user text-brand text-[28px]"></i>
+          <div class="flex items-center gap-5 group/item">
+            <div class="w-12 h-12 rounded-2xl bg-brand/10 dark:bg-brand/20 border border-brand/20 flex items-center justify-center text-brand text-xl shadow-sm group-hover/item:scale-110 transition-transform">
+              <i class="fa-solid fa-user"></i>
             </div>
             <div>
               <p class="text-[17px] text-gray-900 dark:text-white font-bold leading-tight mb-1">Name</p>
               <p class="text-[15px] text-gray-600 dark:text-gray-400 leading-tight">Shubham Kumar</p>
             </div>
           </div>
-          <div class="flex items-center gap-5">
-            <div class="flex items-center justify-center w-8">
-              <i class="fa-solid fa-location-dot text-brand text-[28px]"></i>
+          <div class="flex items-center gap-5 group/item">
+            <div class="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-950/40 border border-indigo-200/60 dark:border-indigo-700/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 text-xl shadow-sm group-hover/item:scale-110 transition-transform">
+              <i class="fa-solid fa-location-dot"></i>
             </div>
             <div>
               <p class="text-[17px] text-gray-900 dark:text-white font-bold leading-tight mb-1">Address</p>
@@ -258,52 +395,132 @@
           </div>
         </div>
         
-        <div class="flex flex-wrap gap-4 mb-2">
+        <div class="flex flex-wrap gap-3.5 mb-2">
           <!-- GitHub -->
-          <a href="https://github.com/ShubhamKumar968" target="_blank" rel="noopener" class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group">
-            <img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" class="w-6 h-6 group-hover:scale-110 transition-transform dark:invert">
+          <a href="https://github.com/ShubhamKumar968" target="_blank" rel="noopener" class="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:border-gray-400 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group/soc">
+            <img src="https://cdn.simpleicons.org/github/181717" alt="GitHub" class="w-6 h-6 group-hover/soc:scale-110 transition-transform dark:invert">
           </a>
           <!-- LinkedIn -->
-          <a href="https://www.linkedin.com/in/shubham-kumar-40518828a/" target="_blank" rel="noopener" class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group">
-            <i class="fa-brands fa-linkedin-in text-[#0A66C2] text-2xl group-hover:scale-110 transition-transform"></i>
+          <a href="https://www.linkedin.com/in/shubham-kumar-40518828a/" target="_blank" rel="noopener" class="w-12 h-12 rounded-2xl bg-blue-50/50 dark:bg-blue-950/30 border border-blue-100 dark:border-blue-900/40 flex items-center justify-center hover:-translate-y-1 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-500/10 transition-all duration-300 no-underline shadow-sm group/soc">
+            <i class="fa-brands fa-linkedin-in text-[#0A66C2] text-2xl group-hover/soc:scale-110 transition-transform"></i>
           </a>
           <!-- X (Twitter) -->
-          <a href="https://twitter.com/yourusername" target="_blank" rel="noopener" class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group">
-            <img src="https://cdn.simpleicons.org/x/000000" alt="X" class="w-5 h-5 group-hover:scale-110 transition-transform dark:invert">
+          <a href="https://x.com/shubhamkgr06" target="_blank" rel="noopener" class="w-12 h-12 rounded-2xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:border-gray-400 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group/soc">
+            <img src="https://cdn.simpleicons.org/x/000000" alt="X" class="w-5 h-5 group-hover/soc:scale-110 transition-transform dark:invert">
           </a>
           <!-- Coding Profile -->
-          <a href="https://codolio.com/profile/shubham@9" target="_blank" rel="noopener" class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group">
-            <i class="fa-solid fa-laptop-code text-[#4CAF50] text-xl group-hover:scale-110 transition-transform"></i>
+          <a href="https://codolio.com/profile/shubham@9" target="_blank" rel="noopener" class="w-12 h-12 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 flex items-center justify-center hover:-translate-y-1 hover:border-emerald-400 hover:shadow-lg hover:shadow-emerald-500/10 transition-all duration-300 no-underline shadow-sm group/soc">
+            <i class="fa-solid fa-laptop-code text-[#4CAF50] text-xl group-hover/soc:scale-110 transition-transform"></i>
           </a>
           <!-- Gmail -->
-          <a href="mailto:g.image1234@gmail.com" class="w-12 h-12 rounded-xl bg-gray-50 dark:bg-[#222] border border-gray-100 dark:border-gray-800 flex items-center justify-center hover:-translate-y-1 hover:shadow-lg transition-all duration-300 no-underline shadow-sm group">
-            <img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Gmail" class="w-6 h-6 group-hover:scale-110 transition-transform">
+          <a href="mailto:g.image1234@gmail.com" class="w-12 h-12 rounded-2xl bg-red-50/50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 flex items-center justify-center hover:-translate-y-1 hover:border-red-400 hover:shadow-lg hover:shadow-red-500/10 transition-all duration-300 no-underline shadow-sm group/soc">
+            <img src="https://cdn.simpleicons.org/gmail/EA4335" alt="Gmail" class="w-6 h-6 group-hover/soc:scale-110 transition-transform">
           </a>
         </div>
       </div>
       
       <!-- Right: Map feature -->
-      <div class="bg-gray-50 dark:bg-[#222] rounded-2xl p-6 border border-gray-100 dark:border-gray-800 shadow-sm">
-        <h3 class="font-extrabold text-lg mb-4 text-gray-900 dark:text-white">Find My Location</h3>
+      <div class="bg-gray-50/80 dark:bg-[#222]/80 backdrop-blur-sm rounded-3xl p-7 border border-gray-100 dark:border-gray-800 shadow-sm">
+        <h3 class="font-extrabold text-lg mb-4 text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-map-location-dot text-brand"></i> Find My Location
+        </h3>
         <div class="flex flex-col sm:flex-row gap-3 mb-4">
           <input id="locInput" type="text" placeholder="e.g. NIT Patna, Bihar" class="flex-1 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#1a1a1a] text-[15px] focus:outline-none focus:ring-2 focus:ring-brand/40 transition-shadow text-gray-900 dark:text-white">
           <button onclick="updateMap()" class="bg-brand text-white font-bold px-6 py-3 rounded-xl text-[14px] hover:bg-brand-deep transition-colors flex-shrink-0 border-0 cursor-pointer shadow-md shadow-brand/20">Show on Map</button>
         </div>
-        <div class="rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 h-52 bg-white dark:bg-[#1a1a1a]">
+        <div class="rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 h-52 bg-white dark:bg-[#1a1a1a] shadow-inner">
           <iframe id="mapFrame" class="w-full h-full border-0" src="https://maps.google.com/maps?q=NIT%20Patna%2C%20Bihar&output=embed" loading="lazy"></iframe>
         </div>
       </div>
     </div>
   </div>
 </section>
-<footer class="relative text-xs text-gray-400 py-6 border-t border-gray-800 bg-[#111] px-6 mt-8">
-  <div class="max-w-6xl mx-auto flex items-center relative">
-    <div class="text-left text-white text-[14px]">
-      Created By <span class="text-brand font-bold">Shubham Kumar</span> &copy;2026 All rights reserved.
+<!-- BEAUTIFUL FOOTER -->
+<footer class="relative bg-[#0d0d0f] text-gray-400 border-t border-gray-800/80 pt-16 pb-8 px-6 overflow-hidden">
+  <div class="absolute -top-32 -left-32 w-80 h-80 bg-brand/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-32 -right-32 w-80 h-80 bg-brand-deep/10 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="max-w-6xl mx-auto relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 pb-12 border-b border-gray-800/80">
+      <!-- Col 1: Brand Info -->
+      <div class="flex flex-col gap-4">
+        <a href="/index.html" class="flex items-center gap-3 no-underline">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand via-brand-soft to-brand-light flex items-center justify-center shadow-md shadow-brand/20">
+            <svg viewBox="0 0 24 24" fill="none" class="w-5.5 h-5.5">
+              <rect x="3" y="15" width="18" height="4" rx="1.5" fill="white"/>
+              <rect x="5" y="9" width="14" height="4" rx="1.5" fill="white" opacity="0.88"/>
+              <rect x="7" y="3" width="10" height="4" rx="1.5" fill="white" opacity="0.75"/>
+            </svg>
+          </div>
+          <div class="text-2xl font-black text-white">Edu<span class="text-brand">Stack</span></div>
+        </a>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Your Ultimate Computer Science Hub — built by a CSE student at NIT Patna to simplify learning, placement prep, and campus utility tracking.
+        </p>
+        <div class="flex items-center gap-3 mt-2">
+          <!-- GitHub -->
+          <a href="https://github.com/ShubhamKumar968" target="_blank" rel="noopener" aria-label="GitHub" class="w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-gray-300 hover:text-white hover:border-gray-500 hover:bg-gray-700 transition-all no-underline shadow-sm">
+            <i class="fa-brands fa-github text-base"></i>
+          </a>
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/in/shubham-kumar-40518828a/" target="_blank" rel="noopener" aria-label="LinkedIn" class="w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-[#0A66C2] hover:border-blue-400 hover:bg-gray-700 transition-all no-underline shadow-sm">
+            <i class="fa-brands fa-linkedin-in text-base"></i>
+          </a>
+          <!-- X (Twitter) -->
+          <a href="https://x.com/shubhamkgr06" target="_blank" rel="noopener" aria-label="X (Twitter)" class="w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-gray-200 hover:text-white hover:border-gray-500 hover:bg-gray-700 transition-all no-underline shadow-sm">
+            <svg viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4">
+              <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+            </svg>
+          </a>
+          <!-- Gmail -->
+          <a href="mailto:g.image1234@gmail.com" aria-label="Gmail" class="w-9 h-9 rounded-xl bg-gray-800/80 border border-gray-700/60 flex items-center justify-center text-[#EA4335] hover:border-red-400 hover:bg-gray-700 transition-all no-underline shadow-sm">
+            <i class="fa-solid fa-envelope text-base"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- Col 2: Quick Links -->
+      <div>
+        <h4 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4">Quick Navigation</h4>
+        <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
+          <li><a href="/index.html#demo-subjects" class="hover:text-brand transition-colors no-underline text-gray-400">Explore Subjects</a></li>
+          <li><a href="/index.html#college-websites" class="hover:text-brand transition-colors no-underline text-gray-400">College Useful Links</a></li>
+          <li><a href="/index.html#resources" class="hover:text-brand transition-colors no-underline text-gray-400">Curated Resources</a></li>
+          <li><a href="/index.html#ai-tools" class="hover:text-brand transition-colors no-underline text-gray-400">AI Study Assistants</a></li>
+          <li><a href="/guest/favourite-list.html" class="hover:text-brand transition-colors no-underline text-gray-400">Saved Favourites</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: College Portals -->
+      <div>
+        <h4 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4">NIT Patna Portals</h4>
+        <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
+          <li><a href="https://www.nitp.ac.in/" target="_blank" rel="noopener" class="hover:text-amber-400 transition-colors no-underline text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-globe text-[10px]"></i> NITP Main Website</a></li>
+          <li><a href="https://mis.nitp.ac.in/" target="_blank" rel="noopener" class="hover:text-blue-400 transition-colors no-underline text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-graduation-cap text-[10px]"></i> MIS Academic Portal</a></li>
+          <li><a href="https://intranet.nitp.ac.in/api/auth/signin?callbackUrl=%2Fstudent%2Fdashboard" target="_blank" rel="noopener" class="hover:text-emerald-400 transition-colors no-underline text-gray-400 flex items-center gap-1.5"><i class="fa-solid fa-network-wired text-[10px]"></i> Intranet Portal</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Placement & Student Corner -->
+      <div>
+        <h4 class="text-sm font-extrabold text-white uppercase tracking-wider mb-4">Student Corner</h4>
+        <ul class="space-y-2.5 text-xs font-semibold list-none p-0 m-0">
+          <li><a href="/public/premium-dsa-sheet.html" class="hover:text-brand transition-colors no-underline text-gray-400">Ultimate DSA Sheet (450+)</a></li>
+          <li><a href="/public/contribute.html" class="hover:text-brand transition-colors no-underline text-gray-400">Contribute Notes & PYQs</a></li>
+          <li><a href="/index.html#contact" class="hover:text-brand transition-colors no-underline text-gray-400">Contact & Feedback</a></li>
+        </ul>
+      </div>
     </div>
-    <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="absolute right-0 -top-11 w-10 h-10 bg-brand text-white rounded-md flex items-center justify-center hover:bg-brand-deep transition-colors shadow-lg border-0 cursor-pointer">
-      <i class="fa-solid fa-chevron-up"></i>
-    </button>
+
+    <!-- Bottom Bar -->
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 text-xs text-gray-500 relative">
+      <div>
+        Created with ❤️ by <span class="text-brand font-bold">Shubham Kumar</span> (NIT Patna) &copy; 2026 EduStack.
+      </div>
+      <button onclick="window.scrollTo({top: 0, behavior: 'smooth'})" class="w-10 h-10 rounded-2xl bg-brand text-white flex items-center justify-center hover:bg-brand-deep transition-transform hover:scale-110 shadow-lg shadow-brand/20 border-0 cursor-pointer" title="Back to Top">
+        <i class="fa-solid fa-chevron-up"></i>
+      </button>
+    </div>
   </div>
 </footer>
 <script src="../assets/js/theme-toggle.js"></script>

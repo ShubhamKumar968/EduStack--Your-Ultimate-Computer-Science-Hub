@@ -205,6 +205,7 @@ app.use((req, res, next) => {
 // 📁 STATIC ASSETS & WEBSITE SERVING
 // ============================================================
 app.use('/assets', express.static(path.join(__dirname, '../client/assets')));
+app.use('/public', express.static(path.join(__dirname, '../client/public')));
 app.use(express.static(path.join(__dirname, '../client/public')));
 
 // Root Route: Serves index.html directly
@@ -219,6 +220,11 @@ app.get('/', (req, res) => {
       });
     }
   });
+});
+
+// Explicit routes for DSA Sheet Coming Soon page
+app.get(['/dsa-sheet-coming-soon.html', '/public/dsa-sheet-coming-soon.html'], (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/public/dsa-sheet-coming-soon.html'));
 });
 
 app.get('/api/health', (req, res) => {
@@ -257,15 +263,69 @@ app.use(errorHandler);
 // ============================================================
 // 🚀 SERVER BOOTSTRAP PIPELINE
 // ============================================================
+// Connects to MongoDB first, then starts the HTTP server.
+// All graceful shutdown and unhandled error logic lives here
+// so that `server` is in scope for clean close().
+// ============================================================
+
 mongoose.connect(DB_PATH)
   .then(() => {
     console.log('✅ Connected Successfully to MongoDB Atlas Cluster!');
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT} — http://localhost:${PORT}`);
-      if (IS_PRODUCTION) {
-        console.log('🌐 Running in PRODUCTION mode');
-      }
+
+    // ── Start HTTP Server ───────────────────────────────────
+    const server = app.listen(PORT, () => {
+      console.log(`
+  ╔═══════════════════════════════════════════════╗
+  ║        🚀  EduStack API Server Started         ║
+  ╠═══════════════════════════════════════════════╣
+  ║  Port : ${PORT}
+  ║  Mode : ${process.env.NODE_ENV || 'development'}
+  ║  URL  : http://localhost:${PORT}
+  ║  Health: http://localhost:${PORT}/api/health
+  ╚═══════════════════════════════════════════════╝
+      `);
     });
+
+    // ============================================================
+    // UNHANDLED PROMISE REJECTIONS
+    // ============================================================
+    // Catches any unhandled .catch()-less Promise rejections.
+    // We shut down gracefully so in-flight requests aren't dropped.
+    process.on('unhandledRejection', (reason) => {
+      console.error('🔥 [Unhandled Promise Rejection]:', reason);
+      server.close(() => process.exit(1));
+    });
+
+    // ============================================================
+    // UNCAUGHT EXCEPTIONS
+    // ============================================================
+    // Synchronous errors thrown outside any try/catch.
+    // The process MUST exit — the app is in an unknown state.
+    process.on('uncaughtException', (error) => {
+      console.error('💥 [Uncaught Exception]:', error.message);
+      process.exit(1);
+    });
+
+    // ============================================================
+    // GRACEFUL SHUTDOWN (SIGTERM / SIGINT)
+    // ============================================================
+    // SIGTERM → PM2, Docker, Kubernetes, Render, Railway
+    // SIGINT  → Ctrl+C in local terminal
+    const gracefulShutdown = (signal) => {
+      console.log(`\n⚠️  [${signal}] received. Closing server gracefully...`);
+      server.close(() => {
+        console.log('✅ HTTP server closed. Goodbye!');
+        process.exit(0);
+      });
+      // Force-exit if server does not close within 10 seconds
+      setTimeout(() => {
+        console.error('❌ Server did not close in time. Forcing exit.');
+        process.exit(1);
+      }, 10000);
+    };
+
+    process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+    process.on('SIGINT',  () => gracefulShutdown('SIGINT'));
   })
   .catch(err => {
     console.error('❌ Error while connecting to MongoDB:', err.message);
@@ -273,3 +333,4 @@ mongoose.connect(DB_PATH)
   });
 
 module.exports = app;
+
