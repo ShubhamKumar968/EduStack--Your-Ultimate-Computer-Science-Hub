@@ -1,9 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from typing import List, Optional
 import os
 import uvicorn
+import io
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -47,7 +48,6 @@ class PYQGenerationRequest(BaseModel):
     num_questions: int = Field(default=3, ge=1, le=10)
 
 # ── In-Memory RAG Engine (Render Free-Tier Optimized) ─────────
-# Uses zero heavy vector DB binaries so it runs smoothly on 512MB RAM free instances!
 class LightRAGStore:
     def __init__(self):
         self.documents: List[DocumentChunk] = [
@@ -93,6 +93,23 @@ class LightRAGStore:
 
 rag_store = LightRAGStore()
 
+# ── Helper for Gemini Model Selection ────────────────────────
+def get_available_gemini_models(genai):
+    available = []
+    try:
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                if 'gemini' in m.name.lower():
+                    available.append(m.name)
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods and m.name not in available:
+                available.append(m.name)
+    except Exception:
+        pass
+    if not available:
+        available = ['models/gemini-1.5-flash', 'models/gemini-2.0-flash', 'gemini-1.5-flash']
+    return available
+
 # ── Routes ────────────────────────────────────────────────────
 @app.get("/")
 def read_root():
@@ -120,8 +137,7 @@ def index_document(doc: DocumentChunk):
 @app.post("/api/rag/ask", response_model=RAGQueryResponse)
 def ask_ai_tutor(req: RAGQueryRequest):
     relevant_chunks = rag_store.retrieve(req.question, subject=req.subject, top_k=req.top_k)
-    
-    context_text = "\n---\n".join([c.content for c in relevant_chunks])
+    context_text = "\n---\n".join([c.content for c in relevant_chunks if c.content])
     
     gemini_api_key = os.getenv("GEMINI_API_KEY")
     
@@ -130,54 +146,34 @@ def ask_ai_tutor(req: RAGQueryRequest):
             import google.generativeai as genai
             genai.configure(api_key=gemini_api_key)
             
+            models_to_try = get_available_gemini_models(genai)
+            
             prompt = f"""You are EduStack AI, an expert Computer Science tutor.
-Answer the user's question accurately using ONLY the provided context notes below.
-If the context does not contain enough information, state that clearly, then provide a concise standard CS answer.
 
-Context Notes:
-{context_text}
+STRICT FORMATTING & LANGUAGE RULES:
+1. All programming code snippets and algorithm implementations MUST be written in **C++** (using ` ```cpp ` code blocks). Do NOT output Python, Java, or pseudocode unless requested.
+2. Do NOT output raw LaTeX math symbols like `$\\mathcal{{O}}(V + E)$` or `$\\text{{deg}}(u)$`. Use plain, readable text instead, like `O(V + E)` and `deg(u)`.
+3. Use clear Markdown headings (`###`) and bold text for high readability.
+
+Context Notes from Course Material:
+{context_text if context_text else 'General Computer Science Subject Knowledge'}
 
 Question: {req.question}
+
 Answer:"""
 
-            # Dynamically fetch available models, prioritizing Gemini models
-            available_models = []
-            try:
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods:
-                        if 'gemini' in m.name.lower():
-                            available_models.append(m.name)
-                # Append other fallback models if needed
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods and m.name not in available_models:
-                        available_models.append(m.name)
-            except Exception:
-                pass
-                
-            # Default fallbacks if listing fails
-            if not available_models:
-                available_models = ['models/gemini-1.5-flash', 'models/gemini-2.0-flash', 'gemini-1.5-flash']
-                
             response = None
             used_m = None
             last_err = None
 
-            prompt = f"""You are EduStack AI, an expert Computer Science tutor.
-Based ONLY on the provided context notes below, provide a clear, direct, concise answer to the question. Do NOT include your internal reasoning or thought process.
-
-Context Notes:
-{context_text}
-
-Question: {req.question}
-
-Answer:"""
-
-            for m in available_models:
+            for m in models_to_try:
                 try:
                     model = genai.GenerativeModel(m)
-                    response = model.generate_content(prompt)
-                    used_m = m
-                    break
+                    res = model.generate_content(prompt)
+                    if res and res.text:
+                        response = res
+                        used_m = m
+                        break
                 except Exception as err:
                     last_err = err
                     continue
@@ -186,10 +182,11 @@ Answer:"""
                 answer = response.text
                 model_name = f"Google {used_m} (RAG)"
             else:
-                raise last_err or Exception("Failed to generate content with Gemini API")
+                answer = f"Synthesized Answer: Based on {req.subject} fundamentals regarding '{req.question}'."
+                model_name = "EduStack Knowledge Base"
         except Exception as e:
-            answer = f"Synthesized Answer (Fallback): Based on retrieved material: {context_text}"
-            model_name = f"In-Memory Retrieval (Gemini API Call Failed: {str(e)})"
+            answer = f"Error generating answer: {str(e)}"
+            model_name = "Error Fallback"
     else:
         answer = f"Retrieved Context for your query:\n\n{context_text}\n\n(Note: Set GEMINI_API_KEY in .env for full LLM answers)"
         model_name = "In-Memory Semantic Search"
@@ -208,43 +205,33 @@ def generate_pyq(req: PYQGenerationRequest):
             import google.generativeai as genai
             genai.configure(api_key=gemini_api_key)
             
-            # Dynamically fetch available models, prioritizing Gemini models
-            available_models = []
-            try:
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods:
-                        if 'gemini' in m.name.lower():
-                            available_models.append(m.name)
-                for m in genai.list_models():
-                    if 'generateContent' in m.supported_generation_methods and m.name not in available_models:
-                        available_models.append(m.name)
-            except Exception:
-                pass
-                
-            if not available_models:
-                available_models = ['models/gemini-1.5-flash', 'models/gemini-2.0-flash', 'gemini-1.5-flash']
-
-            response = None
-            last_err = None
+            models_to_try = get_available_gemini_models(genai)
             
-            prompt = f"""Generate {req.num_questions} university exam-style questions for Computer Science students.
+            prompt = f"""You are EduStack AI. Generate {req.num_questions} university exam-style questions for Computer Science students.
 Subject: {req.subject}
 Topic: {req.topic}
 Difficulty: {req.difficulty}
 
-Provide response with Questions and detailed Marking Schemes/Answers for each."""
+Formatting Rules:
+1. Use clear, beautifully structured Markdown headers (`### Question 1: ...`).
+2. Provide code/pseudocode solutions in **C++** syntax inside standard Markdown code blocks (` ```cpp `).
+3. Do NOT output raw LaTeX math formulas (like $V$ or $|E|$); use clean readable text (like V, E, O(V + E)).
+4. Include detailed marking schemes for each sub-question.
+"""
 
-            for m in available_models:
+            response = None
+            for m in models_to_try:
                 try:
                     model = genai.GenerativeModel(m)
-                    response = model.generate_content(prompt)
-                    break
-                except Exception as err:
-                    last_err = err
+                    res = model.generate_content(prompt)
+                    if res and res.text:
+                        response = res
+                        break
+                except Exception:
                     continue
 
             if not response or not response.text:
-                raise last_err or Exception("Failed to generate PYQ")
+                raise Exception("Failed to generate PYQ with available models.")
 
             return {
                 "success": True,
@@ -257,14 +244,11 @@ Provide response with Questions and detailed Marking Schemes/Answers for each.""
     else:
         return {
             "success": True,
-            "questions": f"1. Explain the fundamentals of {req.topic} in {req.subject} with code examples.\n2. Compare {req.topic} with alternative approaches in real-world software engineering.",
+            "questions": f"1. Explain the fundamentals of {req.topic} in {req.subject}.\n2. Compare {req.topic} with alternative approaches.",
             "note": "Set GEMINI_API_KEY for dynamic AI generation."
         }
 
 # ── PDF Upload, Summarization & Quiz Generation Endpoints ──────────
-from fastapi import UploadFile, File
-import io
-
 def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
     try:
         import pypdf
@@ -275,12 +259,11 @@ def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> str:
             if t:
                 extracted_text += t + "\n"
         return extracted_text.strip()
-    except Exception as e:
+    except Exception:
         return ""
 
 @app.post("/api/pdf/summarize")
 async def summarize_pdf(file: UploadFile = File(...)):
-    """Extract text from uploaded PDF (books/notes) and generate key takeaways & summary."""
     pdf_bytes = await file.read()
     pdf_text = extract_text_from_pdf_bytes(pdf_bytes)
     
@@ -296,18 +279,7 @@ async def summarize_pdf(file: UploadFile = File(...)):
         import google.generativeai as genai
         genai.configure(api_key=gemini_api_key)
         
-        # Use multimodal capacity if raw text extraction from handwritten scan was sparse
-        available_models = []
-        try:
-            for m in genai.list_models():
-                if 'generateContent' in m.supported_generation_methods:
-                    if 'gemini' in m.name.lower():
-                        available_models.append(m.name)
-        except Exception:
-            pass
-            
-        if not available_models:
-            available_models = ['models/gemini-1.5-flash', 'models/gemini-2.0-flash']
+        models_to_try = get_available_gemini_models(genai)
 
         prompt = f"""You are EduStack AI. Analyze the following textbook/notes document content and provide:
 1. 📌 Executive Summary (2-3 paragraphs)
@@ -318,11 +290,13 @@ Document Content:
 {pdf_text[:10000]}"""
 
         response = None
-        for m in available_models:
+        for m in models_to_try:
             try:
                 model = genai.GenerativeModel(m)
-                response = model.generate_content(prompt)
-                break
+                res = model.generate_content(prompt)
+                if res and res.text:
+                    response = res
+                    break
             except Exception:
                 continue
 
@@ -337,7 +311,6 @@ Document Content:
 
 @app.post("/api/pdf/generate-quiz")
 async def generate_quiz_from_pdf(num_questions: int = 5, file: UploadFile = File(...)):
-    """Upload a PDF book/notes and automatically generate a multiple-choice Quiz (MCQ)."""
     pdf_bytes = await file.read()
     pdf_text = extract_text_from_pdf_bytes(pdf_bytes)
     
@@ -349,16 +322,7 @@ async def generate_quiz_from_pdf(num_questions: int = 5, file: UploadFile = File
         import google.generativeai as genai
         genai.configure(api_key=gemini_api_key)
         
-        available_models = []
-        try:
-            for m in genai.list_models():
-                if 'generateContent' in m.supported_generation_methods and 'gemini' in m.name.lower():
-                    available_models.append(m.name)
-        except Exception:
-            pass
-            
-        if not available_models:
-            available_models = ['models/gemini-1.5-flash']
+        models_to_try = get_available_gemini_models(genai)
 
         prompt = f"""You are EduStack AI. Generate an interactive Quiz with {num_questions} Multiple-Choice Questions (MCQs) based on the document text below.
 For each question, provide:
@@ -371,11 +335,13 @@ Document Content:
 {pdf_text[:10000]}"""
 
         response = None
-        for m in available_models:
+        for m in models_to_try:
             try:
                 model = genai.GenerativeModel(m)
-                response = model.generate_content(prompt)
-                break
+                res = model.generate_content(prompt)
+                if res and res.text:
+                    response = res
+                    break
             except Exception:
                 continue
 

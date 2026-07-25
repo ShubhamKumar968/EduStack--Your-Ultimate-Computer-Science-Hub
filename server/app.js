@@ -44,6 +44,7 @@ const resourceRoutes  = require('./routes/resourceRoutes');
 const favouriteRoutes = require('./routes/favouriteRoutes');
 const paymentRoutes   = require('./routes/paymentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const aiRoutes           = require('./routes/aiRoutes');
 
 // ── Create Express App ────────────────────────────────────────
 const app = express();
@@ -239,16 +240,16 @@ app.get('/api/health', (req, res) => {
 // ============================================================
 // 🛣️ API ROUTE PIPELINES
 // ============================================================
-app.use('/api/auth',       authRoutes);
-app.use('/',               authRoutes);
-app.use('/api/users',      userRoutes);
-app.use('/api/user',       userRoutes);
-app.use('/api/subjects',   subjectRoutes);
-app.use('/api/resources',  resourceRoutes);
-app.use('/api/favourites', favouriteRoutes);
-app.use('/api/payments',   paymentRoutes);
-app.use('/api/notifications', notificationRoutes);
 app.use('/api/ai',            aiRoutes);
+app.use('/api/auth',          authRoutes);
+app.use('/api/users',         userRoutes);
+app.use('/api/user',          userRoutes);
+app.use('/api/subjects',      subjectRoutes);
+app.use('/api/resources',     resourceRoutes);
+app.use('/api/favourites',    favouriteRoutes);
+app.use('/api/payments',      paymentRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/',                  authRoutes);
 
 // Catch-all 404 handler — must be after all routes
 app.use((req, res) => {
