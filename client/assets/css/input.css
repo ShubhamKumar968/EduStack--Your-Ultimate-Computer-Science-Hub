@@ -92,3 +92,11 @@
   color: #ffffff !important;
   border-color: #ff385c !important;
 }
+
+/* Notification Badge Top-Right Corner Placement */
+#notif-badge {
+  position: absolute !important;
+  top: -4px !important;
+  right: -4px !important;
+  z-index: 20 !important;
+}

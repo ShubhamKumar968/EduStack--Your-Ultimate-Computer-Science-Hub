@@ -850,45 +850,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     <i class="fa-solid fa-chevron-down" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
                   </div>
                   
-                  <div id="user-profile-dropdown" class="hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800">
-                      <p class="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Logged in as (${roleLabel})</p>
-                      <p class="text-[13px] font-bold text-gray-800 dark:text-gray-200 truncate">${u.email}</p>
+                  <div id="user-profile-dropdown" class="hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#222222]/50">
+                      <p class="text-[10px] font-black text-gray-400 dark:text-gray-400 uppercase tracking-widest mb-1">Logged in as (${roleLabel})</p>
+                      <p class="text-[13px] font-bold text-gray-900 dark:text-white truncate">${u.email}</p>
                     </div>
                     <div class="p-2 space-y-1">
                       ${u.role === 'admin' ? `
-                      <a href="${base}admin/add-subject.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/10 rounded-xl transition-colors no-underline">
+                      <a href="${base}admin/add-subject.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-plus-circle w-4 text-center text-indigo-500"></i> Add New Subject
                       </a>` : ''}
                       ${u.role === 'admin' || u.role === 'contributor' ? `
-                      <a href="${base}admin/admin-subject-list.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/10 rounded-xl transition-colors no-underline">
+                      <a href="${base}admin/admin-subject-list.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-list-check w-4 text-center text-purple-500"></i> Manage Subjects
                       </a>` : ''}
                       ${u.role === 'admin' ? `
-                      <a href="${base}admin/broadcast-notification.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/10 rounded-xl transition-colors no-underline">
+                      <a href="${base}admin/broadcast-notification.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-bullhorn w-4 text-center text-rose-500"></i> Broadcast Notification
                       </a>` : ''}
                       ${u.role === 'contributor' || u.role === 'admin' ? `
-                      <a href="/contribute.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl transition-colors no-underline">
+                      <a href="/contribute.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-cloud-arrow-up w-4 text-center text-emerald-500"></i> Contribute Resources
                       </a>` : `
-                      <a href="/contribute.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/10 rounded-xl transition-colors no-underline">
+                      <a href="/contribute.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-handshake w-4 text-center text-emerald-500"></i> Become a Contributor
                       </a>`}
                       ${u.isPremium ? `
-                      <a href="/premium-dsa-sheet.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/10 rounded-xl transition-colors no-underline">
+                      <a href="/premium-dsa-sheet.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-star w-4 text-center text-amber-500"></i> Premium DSA Sheet
                       </a>` : ''}
-                      <a href="${base}guest/enrollments.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                      <a href="${base}guest/enrollments.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-graduation-cap w-4 text-center text-blue-500"></i> My Enrollments
                       </a>
-                      <a href="${base}guest/favourite-list.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                      <a href="${base}guest/favourite-list.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-heart w-4 text-center text-brand"></i> My Favourites
                       </a>
-                      <a href="${base}auth/edit-profile.html" class="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-[#2a2a2a] rounded-xl transition-colors no-underline">
+                      <a href="${base}auth/edit-profile.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-user-pen w-4 text-center text-emerald-500"></i> Edit Profile
                       </a>
-                      <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-[14px] font-black text-brand hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-colors no-underline cursor-pointer bg-transparent border-0">
+                      <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="w-full text-left flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-extrabold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all cursor-pointer bg-transparent border-0">
                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Log Out
                       </button>
                     </div>
