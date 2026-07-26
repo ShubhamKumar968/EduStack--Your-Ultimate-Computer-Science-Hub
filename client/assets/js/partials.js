@@ -760,9 +760,9 @@ document.addEventListener('DOMContentLoaded', () => {
             <!-- Auth Container (login+signup for guests, profile for logged-in) -->
             <div id="nav-auth-container" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <a href="${base}auth/login.html"
-                style="align-items:center;gap:6px;font-size:13px;font-weight:700;color:#374151;text-decoration:none;white-space:nowrap;padding:6px 4px;"
+                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:50px;"
                 class="login-link-desktop">
-                <i class="fa-solid fa-arrow-right-to-bracket" style="color:#9ca3af;"></i>
+                <i class="fa-solid fa-arrow-right-to-bracket text-brand" style="font-size:12px;"></i>
                 Login
               </a>
               <a href="${base}auth/register.html"

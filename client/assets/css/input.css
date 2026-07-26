@@ -164,3 +164,18 @@
   background-color: rgba(255, 56, 92, 0.22) !important;
   color: #ff6b81 !important;
 }
+
+/* Navbar Login Link High Visibility (Light & Dark Mode) */
+.login-link-desktop {
+  color: #374151 !important;
+  transition: color 0.15s ease !important;
+}
+.login-link-desktop:hover {
+  color: #ff385c !important;
+}
+.dark .login-link-desktop {
+  color: #f3f4f6 !important;
+}
+.dark .login-link-desktop:hover {
+  color: #ff385c !important;
+}
