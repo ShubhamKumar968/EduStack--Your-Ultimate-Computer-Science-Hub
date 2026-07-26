@@ -720,7 +720,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <!-- EduStack AI Assistant Button in Header -->
             <button onclick="window.triggerEduStackAIAssistant()"
               title="EduStack AI Assistant"
-              style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:6px 13px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;"
+              class="nav-ai-btn"
+              style="align-items:center;gap:6px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:6px 13px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;"
               onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;color:#fef08a;"></i>
               <span class="hidden-xs">AI Assistant</span>
@@ -739,13 +740,14 @@ document.addEventListener('DOMContentLoaded', () => {
             <!-- Auth Container (login+signup for guests, profile for logged-in) -->
             <div id="nav-auth-container" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <a href="${base}auth/login.html"
-                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#374151;text-decoration:none;white-space:nowrap;padding:6px 4px;"
+                style="align-items:center;gap:6px;font-size:13px;font-weight:700;color:#374151;text-decoration:none;white-space:nowrap;padding:6px 4px;"
                 class="login-link-desktop">
                 <i class="fa-solid fa-arrow-right-to-bracket" style="color:#9ca3af;"></i>
                 Login
               </a>
               <a href="${base}auth/register.html"
-                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:#ff385c;padding:8px 18px;border-radius:50px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(255,56,92,0.25);">
+                class="nav-signup-btn"
+                style="align-items:center;gap:6px;font-size:13px;font-weight:700;color:#fff;background:#ff385c;padding:8px 18px;border-radius:50px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 8px rgba(255,56,92,0.25);">
                 <i class="fa-solid fa-user-plus" style="font-size:11px;"></i>
                 Sign Up
               </a>
@@ -755,19 +757,32 @@ document.addEventListener('DOMContentLoaded', () => {
       `;
       navPlaceholder.innerHTML = navHtml;
 
-      // Apply desktop nav visibility via CSS (avoids Tailwind purge issues)
+      // Apply responsive nav visibility via CSS
       const navStyle = document.createElement('style');
       navStyle.textContent = `
-        @media (min-width:1024px) {
-          .desktop-nav-links { display:flex !important; }
-          .login-link-desktop { display:flex !important; }
+        html, body {
+          max-width: 100% !important;
+          overflow-x: hidden !important;
         }
-        @media (max-width:1023px) {
-          .desktop-nav-links { display:none !important; }
+        .hidden-xs { display: none !important; }
+        @media (min-width: 768px) {
+          .hidden-xs { display: inline-block !important; }
         }
-        @media (max-width:480px) {
-          .login-link-desktop { display:none !important; }
-          .hidden-xs { display:none !important; }
+        .desktop-nav-links { display: none !important; }
+        @media (min-width: 1024px) {
+          .desktop-nav-links { display: flex !important; }
+        }
+        .login-link-desktop { display: none !important; }
+        @media (min-width: 1024px) {
+          .login-link-desktop { display: flex !important; }
+        }
+        .nav-ai-btn { display: none !important; }
+        @media (min-width: 640px) {
+          .nav-ai-btn { display: flex !important; }
+        }
+        .nav-signup-btn { display: none !important; }
+        @media (min-width: 480px) {
+          .nav-signup-btn { display: flex !important; }
         }
         .dark nav { border-color:#2d2d2d; }
         .dark-nav-link:hover { background:#222 !important; color:#ff385c !important; }
