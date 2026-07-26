@@ -138,6 +138,8 @@ const getGoogleCallbackURL = () => {
   return envUrl || 'http://localhost:3000/auth/google/callback';
 };
 
+const GoogleStrategy = passportGoogle.Strategy;
+
 passport.use(
   new GoogleStrategy(
     {
