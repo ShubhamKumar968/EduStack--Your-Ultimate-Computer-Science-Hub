@@ -737,6 +737,26 @@ document.addEventListener('DOMContentLoaded', () => {
               </span>
             </button>
 
+            <!-- Notification Bell & Dropdown (Always Visible) -->
+            <div class="relative flex items-center" style="flex-shrink:0;">
+              <button id="notif-bell-btn" aria-label="Notifications" title="Notifications" class="btn-notif-bell">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="width:17px;height:17px;display:block;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                <span id="notif-badge" class="hidden absolute -top-1 -right-1 bg-brand text-white text-[9px] font-black min-w-4 h-4 px-1 rounded-full flex items-center justify-center border-2 border-white dark:border-[#181818] shadow-sm">0</span>
+              </button>
+              
+              <div id="notif-dropdown" class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-[99999] overflow-hidden">
+                <div class="p-3 px-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
+                  <h4 class="font-extrabold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-2">
+                    <i class="fa-solid fa-bell text-brand"></i> Notifications
+                  </h4>
+                  <button id="btn-mark-all-read" class="text-[11px] font-bold text-brand hover:underline bg-transparent border-0 cursor-pointer">Mark all read</button>
+                </div>
+                <div id="notif-list" class="max-h-80 overflow-y-auto p-2 space-y-1.5 text-xs">
+                  <p class="text-center text-gray-400 py-6">No new notifications.</p>
+                </div>
+              </div>
+            </div>
+
             <!-- Auth Container (login+signup for guests, profile for logged-in) -->
             <div id="nav-auth-container" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
               <a href="${base}auth/login.html"
@@ -813,7 +833,7 @@ document.addEventListener('DOMContentLoaded', () => {
               const roleIcon  = u.role === 'admin' ? '<i class="fa-solid fa-crown text-amber-500 text-xs" title="Host Admin Account"></i>' : '<i class="fa-solid fa-circle-check text-blue-500 text-xs" title="Verified Student Account"></i>';
 
               container.innerHTML = `
-                <div class="relative id="user-profile-menu" style="flex-shrink:0;">
+                <div class="relative" id="user-profile-menu" style="flex-shrink:0;">
                   <div class="profile-pill" id="profile-pill-btn" onclick="const d=document.getElementById('user-profile-dropdown'); d.classList.toggle('hidden');" style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1.5px solid #e5e7eb;border-radius:50px;cursor:pointer;background:#f9fafb;transition:all 0.2s;" onmouseenter="this.style.borderColor='#ff385c'" onmouseleave="this.style.borderColor='#e5e7eb'">
                     <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,56,92,0.3);flex-shrink:0;">
                       <img src="${avatar}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
@@ -871,26 +891,6 @@ document.addEventListener('DOMContentLoaded', () => {
                       <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="w-full text-left flex items-center gap-3 px-4 py-2.5 text-[14px] font-black text-brand hover:bg-red-50 dark:hover:bg-red-900/10 rounded-xl transition-colors no-underline cursor-pointer bg-transparent border-0">
                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Log Out
                       </button>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Notification Bell & Dropdown -->
-                <div class="relative flex items-center">
-                  <button id="notif-bell-btn" class="w-9 h-9 rounded-full bg-gray-100 dark:bg-[#1a1a1a] border border-gray-200 dark:border-gray-700 flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-brand transition-all cursor-pointer relative border-0">
-                    <i class="fa-solid fa-bell text-sm"></i>
-                    <span id="notif-badge" class="hidden absolute -top-1 -right-1 bg-brand text-white text-[9px] font-black min-w-4 h-4 px-1 rounded-full flex items-center justify-center border-2 border-white dark:border-[#181818]">0</span>
-                  </button>
-                  
-                  <div id="notif-dropdown" class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-[9999] overflow-hidden">
-                    <div class="p-3 px-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
-                      <h4 class="font-extrabold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-2">
-                        <i class="fa-solid fa-bell text-brand"></i> Notifications
-                      </h4>
-                      <button id="btn-mark-all-read" class="text-[11px] font-bold text-brand hover:underline bg-transparent border-0 cursor-pointer">Mark all read</button>
-                    </div>
-                    <div id="notif-list" class="max-h-80 overflow-y-auto p-2 space-y-1.5 text-xs">
-                      <p class="text-center text-gray-400 py-6">No new notifications.</p>
                     </div>
                   </div>
                 </div>

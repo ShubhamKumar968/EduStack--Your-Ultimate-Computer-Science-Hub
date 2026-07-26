@@ -4136,6 +4136,42 @@ body {
   background-color: #1e293b !important;
 }
 
+/* Notification Bell High Visibility Styles (Light & Dark Mode) */
+
+.btn-notif-bell {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+.btn-notif-bell:hover {
+  background-color: #ff385c !important;
+  color: #ffffff !important;
+  border-color: #ff385c !important;
+}
+
+.dark .btn-notif-bell {
+  background-color: #262626 !important;
+  color: #f3f4f6 !important;
+  border-color: #404040 !important;
+}
+
+.dark .btn-notif-bell:hover {
+  background-color: #ff385c !important;
+  color: #ffffff !important;
+  border-color: #ff385c !important;
+}
+
 .file\:mr-4::file-selector-button {
   margin-right: 1rem;
 }
