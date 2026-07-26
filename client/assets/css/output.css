@@ -4098,6 +4098,44 @@ body {
   transform: rotate(180deg);
 }
 
+/* Subject Card Buttons High-Visibility Design (Unconditional) */
+
+.btn-subject-details {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+}
+
+.btn-subject-details:hover {
+  background-color: #1d4ed8 !important;
+}
+
+.btn-subject-fav {
+  background-color: #ff385c !important;
+  color: #ffffff !important;
+}
+
+.btn-subject-fav:hover {
+  background-color: #c2255c !important;
+}
+
+.btn-subject-enroll {
+  background-color: #059669 !important;
+  color: #ffffff !important;
+}
+
+.btn-subject-enroll:hover {
+  background-color: #047857 !important;
+}
+
+.btn-subject-enrolled {
+  background-color: #334155 !important;
+  color: #ffffff !important;
+}
+
+.btn-subject-enrolled:hover {
+  background-color: #1e293b !important;
+}
+
 .file\:mr-4::file-selector-button {
   margin-right: 1rem;
 }

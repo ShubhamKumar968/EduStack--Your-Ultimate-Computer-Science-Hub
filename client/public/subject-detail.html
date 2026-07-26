@@ -110,7 +110,8 @@
               <span class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-[0.15em]">Access Price</span>
               <span class="font-black text-brand text-[22px]">Free <span class="font-semibold text-gray-400 text-[13px] tracking-normal">forever</span></span>
             </div>
-            <button id="enrollNowBtn" class="w-full bg-brand text-white font-bold text-[15px] py-3.5 rounded-xl hover:bg-brand-deep transition-all active:scale-[0.99] border-0 cursor-pointer shadow-sm">
+            <button id="enrollNowBtn" class="btn-subject-enroll w-full text-white font-bold text-[15px] py-3.5 rounded-xl transition-all active:scale-[0.99] border-0 cursor-pointer shadow-md flex items-center justify-center gap-2" style="background-color: #059669; color: #ffffff;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-5 h-5"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
               Enroll Now
             </button>
           </div>
@@ -202,10 +203,25 @@
           ? targetSubject.pyqLink 
           : `https://www.google.com/search?q=${encodeURIComponent(subName + ' Previous Year Question Papers PYQ PDF')}`;
 
+        let initialEnrolled = new Set(JSON.parse(localStorage.getItem('edustack_enrolled') || '[]'));
+        if (initialEnrolled.has(subName) || (targetSubject._id && initialEnrolled.has(targetSubject._id))) {
+          enrollBtn.innerHTML = `✓ Already Enrolled`;
+          enrollBtn.style.backgroundColor = '#334155';
+          enrollBtn.classList.remove('btn-subject-enroll');
+          enrollBtn.classList.add('btn-subject-enrolled');
+        }
+
         enrollBtn.addEventListener('click', () => {
           let enrolled = new Set(JSON.parse(localStorage.getItem('edustack_enrolled') || '[]'));
           enrolled.add(subName);
+          if (targetSubject._id) enrolled.add(targetSubject._id);
           localStorage.setItem('edustack_enrolled', JSON.stringify(Array.from(enrolled)));
+          
+          enrollBtn.innerHTML = `✓ Already Enrolled`;
+          enrollBtn.style.backgroundColor = '#334155';
+          enrollBtn.classList.remove('btn-subject-enroll');
+          enrollBtn.classList.add('btn-subject-enrolled');
+
           if (window.showToast) window.showToast(`🎉 Enrolled in ${subName} successfully!`, 'success');
           else alert(`Enrolled in ${subName} successfully!`);
         });

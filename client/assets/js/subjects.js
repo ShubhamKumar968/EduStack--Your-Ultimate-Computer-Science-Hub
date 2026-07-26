@@ -136,16 +136,19 @@ document.addEventListener('DOMContentLoaded', () => {
       buttonsHtml = `
         <div class="flex gap-2 mb-2">
           <button onclick="requireAuth(function(){ enrollByKey('${safeId}'); }, 'enroll in this subject')"
-            class="flex-1 py-2 rounded-xl bg-[#20c997] text-white font-bold text-xs hover:bg-[#1aa179] transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            class="${isEnrolled ? 'btn-subject-enrolled' : 'btn-subject-enroll'} flex-1 py-2 rounded-xl text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+            style="background-color: ${isEnrolled ? '#334155' : '#059669'}; color: #ffffff;">
             <svg viewBox="0 0 24 24" fill="currentColor" class="w-3.5 h-3.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             ${isEnrolled ? 'Enrolled ✓' : 'Book Now'}
           </button>
           <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'manage favourites')"
-            class="flex-1 py-2 rounded-xl bg-red-50 dark:bg-red-900/20 text-brand font-bold text-xs hover:bg-red-100 transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            class="flex-1 py-2 rounded-xl text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+            style="background-color: #dc2626; color: #ffffff;">
             <i class="fa-solid fa-trash-can text-xs"></i> Remove
           </button>
         </div>
-        <a href="${detailUrl}" class="w-full block py-2 text-center rounded-xl bg-gray-100 dark:bg-[#2e2e2e] font-bold text-gray-700 dark:text-gray-300 text-xs hover:bg-gray-200 transition-colors no-underline">
+        <a href="${detailUrl}" class="btn-subject-details w-full block py-2 text-center rounded-xl font-bold text-white text-xs transition-colors no-underline shadow-sm"
+          style="background-color: #2563eb; color: #ffffff;">
           <i class="fa-solid fa-circle-info mr-1"></i> View Full Details
         </a>
       `;
@@ -161,7 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
               <div class="w-1.5 h-1.5 rounded-full bg-[#137333]"></div> Enrolled
             </span>
           </div>
-          <a href="${detailUrl}" class="w-full block py-2 text-center rounded-xl bg-brand text-white font-bold text-xs hover:bg-brand-deep transition-colors no-underline">
+          <a href="${detailUrl}" class="btn-subject-details w-full block py-2 text-center rounded-xl text-white font-bold text-xs transition-colors no-underline shadow-sm"
+            style="background-color: #ff385c; color: #ffffff;">
             <i class="fa-solid fa-book-open mr-1"></i> Go to Subject Materials
           </a>
         </div>
@@ -171,16 +175,19 @@ document.addEventListener('DOMContentLoaded', () => {
       buttonsHtml = `
         <div class="flex gap-2 mb-2">
           <button onclick="requireAuth(function(){ window.location.href='${detailUrl}'; }, 'view subject details')"
-            class="flex-1 py-2 text-center rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            class="btn-subject-details flex-1 py-2 text-center rounded-xl text-white font-bold text-xs transition-all border-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+            style="background-color: #2563eb; color: #ffffff;">
             <i class="fa-solid fa-circle-info text-[11px]"></i> Details
           </button>
           <button onclick="requireAuth(function(){ toggleFavByKey('${safeId}', '${safeName}'); }, 'add to favourites')"
-            class="flex-1 py-2 rounded-xl bg-brand text-white font-bold text-xs hover:bg-brand-deep transition-colors border-0 cursor-pointer flex items-center justify-center gap-1.5">
+            class="btn-subject-fav flex-1 py-2 rounded-xl text-white font-bold text-xs transition-all border-0 cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+            style="background-color: #ff385c; color: #ffffff;">
             <i class="fa-solid fa-heart ${isFav ? 'text-yellow-300' : 'text-white'} text-[11px]"></i> ${isFav ? 'Remove' : 'Add'}
           </button>
         </div>
         <button onclick="requireAuth(function(){ enrollByKey('${safeId}'); }, 'enroll in this subject')"
-          class="w-full py-2 rounded-xl ${isEnrolled ? 'bg-gray-700' : 'bg-[#20c997] hover:bg-[#1aa179]'} text-white font-bold text-xs transition-colors border-0 cursor-pointer flex items-center justify-center gap-2">
+          class="${isEnrolled ? 'btn-subject-enrolled' : 'btn-subject-enroll'} w-full py-2 rounded-xl text-white font-bold text-xs transition-all border-0 cursor-pointer flex items-center justify-center gap-2 shadow-sm"
+          style="background-color: ${isEnrolled ? '#334155' : '#059669'}; color: #ffffff;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
           ${isEnrolled ? 'Already Enrolled ✓' : 'Enroll Now'}
         </button>
