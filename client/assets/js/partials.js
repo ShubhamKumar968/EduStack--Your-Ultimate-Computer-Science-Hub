@@ -857,38 +857,38 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                     <div class="p-2 space-y-1">
                       ${u.role === 'admin' ? `
-                      <a href="${base}admin/add-subject.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}admin/add-subject.html" class="dropdown-item-indigo flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-plus-circle w-4 text-center text-indigo-500"></i> Add New Subject
                       </a>` : ''}
                       ${u.role === 'admin' || u.role === 'contributor' ? `
-                      <a href="${base}admin/admin-subject-list.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}admin/admin-subject-list.html" class="dropdown-item-purple flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-list-check w-4 text-center text-purple-500"></i> Manage Subjects
                       </a>` : ''}
                       ${u.role === 'admin' ? `
-                      <a href="${base}admin/broadcast-notification.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}admin/broadcast-notification.html" class="dropdown-item-rose flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-bullhorn w-4 text-center text-rose-500"></i> Broadcast Notification
                       </a>` : ''}
                       ${u.role === 'contributor' || u.role === 'admin' ? `
-                      <a href="/contribute.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="/contribute.html" class="dropdown-item-emerald flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-cloud-arrow-up w-4 text-center text-emerald-500"></i> Contribute Resources
                       </a>` : `
-                      <a href="/contribute.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="/contribute.html" class="dropdown-item-emerald flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-handshake w-4 text-center text-emerald-500"></i> Become a Contributor
                       </a>`}
                       ${u.isPremium ? `
-                      <a href="/premium-dsa-sheet.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="/premium-dsa-sheet.html" class="dropdown-item-amber flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-star w-4 text-center text-amber-500"></i> Premium DSA Sheet
                       </a>` : ''}
-                      <a href="${base}guest/enrollments.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}guest/enrollments.html" class="dropdown-item-blue flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-graduation-cap w-4 text-center text-blue-500"></i> My Enrollments
                       </a>
-                      <a href="${base}guest/favourite-list.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}guest/favourite-list.html" class="dropdown-item-brand flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-heart w-4 text-center text-brand"></i> My Favourites
                       </a>
-                      <a href="${base}auth/edit-profile.html" class="flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2a2a2a] rounded-xl transition-all no-underline">
+                      <a href="${base}auth/edit-profile.html" class="dropdown-item-emerald flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-user-pen w-4 text-center text-emerald-500"></i> Edit Profile
                       </a>
-                      <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="w-full text-left flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-extrabold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all cursor-pointer bg-transparent border-0">
+                      <button onclick="fetch('/api/auth/logout',{method:'POST',credentials:'include'}).then(()=>window.location.href='/')" class="dropdown-item-rose w-full text-left flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-extrabold text-rose-600 dark:text-rose-400 rounded-xl transition-all cursor-pointer bg-transparent border-0">
                         <i class="fa-solid fa-arrow-right-from-bracket w-4 text-center"></i> Log Out
                       </button>
                     </div>

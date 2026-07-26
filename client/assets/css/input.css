@@ -100,3 +100,67 @@
   right: -4px !important;
   z-index: 20 !important;
 }
+
+/* Profile Dropdown Items Hover Color Matching Icon Colors */
+.dropdown-item-indigo:hover {
+  background-color: rgba(99, 102, 241, 0.12) !important;
+  color: #4f46e5 !important;
+}
+.dark .dropdown-item-indigo:hover {
+  background-color: rgba(99, 102, 241, 0.22) !important;
+  color: #818cf8 !important;
+}
+
+.dropdown-item-purple:hover {
+  background-color: rgba(168, 85, 247, 0.12) !important;
+  color: #9333ea !important;
+}
+.dark .dropdown-item-purple:hover {
+  background-color: rgba(168, 85, 247, 0.22) !important;
+  color: #c084fc !important;
+}
+
+.dropdown-item-rose:hover {
+  background-color: rgba(244, 63, 94, 0.12) !important;
+  color: #e11d48 !important;
+}
+.dark .dropdown-item-rose:hover {
+  background-color: rgba(244, 63, 94, 0.22) !important;
+  color: #fb7185 !important;
+}
+
+.dropdown-item-emerald:hover {
+  background-color: rgba(16, 185, 129, 0.12) !important;
+  color: #059669 !important;
+}
+.dark .dropdown-item-emerald:hover {
+  background-color: rgba(16, 185, 129, 0.22) !important;
+  color: #34d399 !important;
+}
+
+.dropdown-item-amber:hover {
+  background-color: rgba(245, 158, 11, 0.12) !important;
+  color: #d97706 !important;
+}
+.dark .dropdown-item-amber:hover {
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  color: #fbbf24 !important;
+}
+
+.dropdown-item-blue:hover {
+  background-color: rgba(59, 130, 246, 0.12) !important;
+  color: #2563eb !important;
+}
+.dark .dropdown-item-blue:hover {
+  background-color: rgba(59, 130, 246, 0.22) !important;
+  color: #60a5fa !important;
+}
+
+.dropdown-item-brand:hover {
+  background-color: rgba(255, 56, 92, 0.12) !important;
+  color: #ff385c !important;
+}
+.dark .dropdown-item-brand:hover {
+  background-color: rgba(255, 56, 92, 0.22) !important;
+  color: #ff6b81 !important;
+}
