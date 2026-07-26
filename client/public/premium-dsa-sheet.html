@@ -754,6 +754,7 @@
         return;
       }
 
+      let currentSubtopicGroup = '';
       tbody.innerHTML = filtered.map((p, index) => {
         const isSolved = solvedIds.includes(p.id);
         
@@ -774,31 +775,50 @@
           </div>
         ` : '';
 
+        // Subtopic / Pattern Group Divider Banner Row
+        let subtopicHeaderRow = '';
+        const effectiveSubtopic = p.subTopic || p.category;
+        if (effectiveSubtopic !== currentSubtopicGroup) {
+          currentSubtopicGroup = effectiveSubtopic;
+          const subCount = filtered.filter(item => (item.subTopic || item.category) === effectiveSubtopic).length;
+          const subColor = getSubtopicColor(effectiveSubtopic);
+
+          subtopicHeaderRow = `
+            <tr class="bg-gray-100/90 dark:bg-[#181726] border-y border-gray-200 dark:border-[#28263c]">
+              <td colspan="9" class="py-3.5 px-6">
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-3">
+                    <span class="w-2.5 h-2.5 rounded-full bg-brand shadow-sm shadow-brand/50 animate-pulse"></span>
+                    <span class="text-xs md:text-sm font-black tracking-wide uppercase px-3 py-1 rounded-xl ${subColor}">
+                      <i class="fa-solid fa-layer-group text-xs mr-1"></i> ${effectiveSubtopic}
+                    </span>
+                  </div>
+                  <span class="text-[10px] font-black px-3 py-1 rounded-full bg-white dark:bg-[#252338] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-[#34324c] shadow-xs">
+                    ${subCount} Pattern Problems
+                  </span>
+                </div>
+              </td>
+            </tr>
+          `;
+        }
+
         return `
+          ${subtopicHeaderRow}
           <tr class="hover:bg-gray-50/80 dark:hover:bg-[#161622] transition-colors ${isSolved ? 'bg-emerald-500/5' : ''}">
             <td class="py-4 px-4 text-center">
               <input type="checkbox" ${isSolved ? 'checked' : ''} onchange="toggleSolved(${p.id})" class="w-4 h-4 accent-brand cursor-pointer rounded">
             </td>
             <td class="py-4 px-4 font-bold text-gray-400 text-xs text-center">${String(index + 1).padStart(2, '0')}</td>
             <td class="py-4 px-4 max-w-xs">
-              <!-- Dark Bold Heading for Pattern / Subtopic -->
-              ${p.subTopic ? `
-                <div class="inline-block text-[11px] font-black px-2.5 py-0.5 rounded-md mb-1 shadow-xs ${getSubtopicColor(p.subTopic)}">
-                  ${p.subTopic}
-                </div>
-              ` : `
-                <div class="text-[11px] font-black text-gray-900 dark:text-white uppercase tracking-wider mb-1">
-                  ${p.category}
-                </div>
-              `}
-              <!-- Light Color Text & Direct Link for Problem Name -->
-              <div class="text-xs font-extrabold text-gray-700 dark:text-gray-300 ${isSolved ? 'line-through text-gray-400 dark:text-gray-500' : ''}">
+              <!-- Clean Problem Title & Direct Link -->
+              <div class="text-xs font-black text-gray-900 dark:text-white ${isSolved ? 'line-through text-gray-400 dark:text-gray-500' : ''}">
                 ${p.problemLink ? `
                   <a href="${p.problemLink}" target="_blank" rel="noopener" class="hover:text-brand transition-colors no-underline">
                     ${p.title} <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-gray-400 ml-0.5"></i>
                   </a>
                 ` : `<span>${p.title}</span>`}
               </div>
+              <!-- Overlapping Company Favicons -->
               ${companyLogos}
             </td>
             <td class="py-4 px-4">
