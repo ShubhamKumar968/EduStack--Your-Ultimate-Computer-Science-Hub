@@ -547,16 +547,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.insertAdjacentHTML('beforeend', headHtml);
 
     // Helper for active nav states
-    const getNavItem = (href, icon, label, targetStr) => {
+    const getNavItem = (href, icon, label, targetStr, colorClass = "nav-item-brand", iconColorStyle = "color:#ff385c;") => {
       const isActive = path.includes(targetStr);
-      const linkClass = isActive 
-        ? "flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline bg-gray-100 dark:bg-[#222222] text-brand"
-        : "flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300";
-      const iconClass = isActive ? "text-brand" : "text-gray-400";
       return `
             <li>
-              <a href="${base}${href}" class="${linkClass}">
-                <i class="${icon} ${iconClass}"></i> ${label}
+              <a href="${base}${href}" class="${colorClass} flex items-center gap-2 px-3.5 py-1.5 rounded-full transition-all no-underline text-gray-700 dark:text-gray-200 ${isActive ? 'font-black opacity-100' : ''}">
+                <i class="${icon}" style="${iconColorStyle}"></i> ${label}
               </a>
             </li>`;
     };
@@ -695,22 +691,22 @@ document.addEventListener('DOMContentLoaded', () => {
           <!-- CENTER: Nav links (desktop only) -->
           <ul style="display:none;align-items:center;gap:2px;list-style:none;margin:0;padding:0;font-size:13px;font-weight:700;flex-shrink:0;" class="desktop-nav-links">
             ${isGuest ? `
-            ${getNavItem('guest/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'guest/subject-list')}
-            ${getNavItem('guest/favourite-list.html', 'fa-solid fa-heart', 'Favourites', 'guest/favourite-list')}
-            ${getNavItem('guest/enrollments.html', 'fa-solid fa-calendar-check', 'Enrollments', 'guest/enrollments')}
+            ${getNavItem('guest/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'guest/subject-list', 'nav-item-purple', 'color:#8b5cf6;')}
+            ${getNavItem('guest/favourite-list.html', 'fa-solid fa-heart', 'Favourites', 'guest/favourite-list', 'nav-item-brand', 'color:#ff385c;')}
+            ${getNavItem('guest/enrollments.html', 'fa-solid fa-calendar-check', 'Enrollments', 'guest/enrollments', 'nav-item-blue', 'color:#3b82f6;')}
             ` : isAdmin ? `
-            ${getNavItem('admin/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'admin/subject-list')}
-            ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects')}
-            ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject')}
+            ${getNavItem('admin/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'admin/subject-list', 'nav-item-purple', 'color:#8b5cf6;')}
+            ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects', 'nav-item-indigo', 'color:#6366f1;')}
+            ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject', 'nav-item-emerald', 'color:#10b981;')}
             ` : `
-            <li><a href="${base}index.html#demo-subjects" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#demo-subjects"><i class="fa-solid fa-book-open" style="color:#ff385c;"></i> Explore Subjects</a></li>
-            <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:16px;height:16px;object-fit:contain;display:inline-block;"> College Links</a></li>
-            <li><a href="${base}index.html#resources" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources</a></li>
-            <li><a href="${base}index.html#ai-tools" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools</a></li>
-            <li><a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" style="display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:900;font-size:13px;transition:all 0.15s;"><i class="fa-solid fa-crown" style="color:#f59e0b;font-size:14px;"></i> <span style="background:linear-gradient(135deg, #f59e0b, #f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DSA Sheet</span></a></li>
-            <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute</a></li>
-            <li><a href="${base}index.html#about" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About</a></li>
-            <li><a href="${base}index.html#contact" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact</a></li>
+            <li><a href="${base}index.html#demo-subjects" class="nav-link-hash nav-item-brand" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#demo-subjects"><i class="fa-solid fa-book-open" style="color:#ff385c;"></i> Explore Subjects</a></li>
+            <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash nav-item-amber" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:16px;height:16px;object-fit:contain;display:inline-block;"> College Links</a></li>
+            <li><a href="${base}index.html#resources" class="nav-link-hash nav-item-blue" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources</a></li>
+            <li><a href="${base}index.html#ai-tools" class="nav-link-hash nav-item-purple" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools</a></li>
+            <li><a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" class="nav-item-amber" style="display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:900;font-size:13px;"><i class="fa-solid fa-crown" style="color:#f59e0b;font-size:14px;"></i> <span style="background:linear-gradient(135deg, #f59e0b, #f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DSA Sheet</span></a></li>
+            <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" class="nav-item-emerald" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute</a></li>
+            <li><a href="${base}index.html#about" class="nav-link-hash nav-item-orange" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About</a></li>
+            <li><a href="${base}index.html#contact" class="nav-link-hash nav-item-pink" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact</a></li>
             `}
           </ul>
 
@@ -1000,19 +996,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const updateHashNav = () => {
           const currentHash = window.location.hash;
           document.querySelectorAll('.nav-link-hash').forEach(link => {
-            const icon = link.querySelector('i');
             if (currentHash && link.getAttribute('data-hash') === currentHash) {
-              link.className = "nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline bg-gray-100 dark:bg-[#222222] text-brand";
-              if (icon) {
-                icon.classList.remove('text-gray-400');
-                icon.classList.add('text-brand');
-              }
+              link.classList.add('font-black');
             } else {
-              link.className = "nav-link-hash flex items-center gap-2 px-4 py-2 rounded-full transition-colors no-underline hover:bg-gray-50 dark:hover:bg-[#222222] text-gray-700 dark:text-gray-300";
-              if (icon) {
-                icon.classList.remove('text-brand');
-                icon.classList.add('text-gray-400');
-              }
+              link.classList.remove('font-black');
             }
           });
         };
