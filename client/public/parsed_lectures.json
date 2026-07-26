@@ -1,0 +1,326 @@
+[
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Arrays , Vectors , Pointers & Strings",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Arrays",
+        "link": "https://youtu.be/8wmn7k1TTcI?si=MluIxl9RZ6eBZdlg"
+      },
+      {
+        "title": "Vectors",
+        "link": "https://youtu.be/NWg38xWYzEg?si=TBgEF4I9FpfkjmVG"
+      },
+      {
+        "title": "Pointers",
+        "link": "https://youtu.be/qYEjR6M0wSk?si=5FZoyeZcHsGcd7yy"
+      },
+      {
+        "title": "Strings",
+        "link": "https://youtu.be/MOSjYaVymcU?si=jDO5bPt93uxvosGr"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Standard Template Library (STL) & Comparators",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "STL",
+        "link": "https://youtu.be/okhdtEk1iKk?si=0oLlUBcf5r7VvXMU"
+      },
+      {
+        "title": "Comparators",
+        "link": "https://youtu.be/Eht8pA9Qz58?si=f96znq3z_SWJcWwd"
+      },
+      {
+        "title": "2D- Arrays",
+        "link": "https://youtu.be/lBL8327gq8I?si=yeyORw2r36yKJLkV"
+      },
+      {
+        "title": "Sorting Algorithms",
+        "link": "https://youtu.be/1jCFUv-Xlqo?si=OEGGmbZ28_h-i0kr"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Object Oriented Programming (Oops) & SQL",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Object Oriented Programming",
+        "link": "https://youtu.be/mlIUKyZIUUU?si=z03Xd9wAKmdVVEhL"
+      },
+      {
+        "title": "SQL",
+        "link": "https://youtu.be/hlGoQC332VM?si=EByuzBFWhldbV5Dl"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Linked Lists",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Singly Linked List",
+        "link": "https://youtu.be/LyuuqCVkP5I?si=2-qCPdAmveJd8znb"
+      },
+      {
+        "title": "Doubly Linked List",
+        "link": "https://youtu.be/bO5DasTsaRQ?si=xrZ3k7XPhSKne795"
+      },
+      {
+        "title": "Circular Linked List",
+        "link": "https://youtu.be/e6lZY5Yha8U?si=IQHIBFmJZBtBez4k"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Stack & Queue",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Stack",
+        "link": "https://youtu.be/0X-fV-1ir9c?si=5vl4-Erd1Ra8nons"
+      },
+      {
+        "title": "Queue",
+        "link": "https://youtu.be/Khf9v67Ya30?si=6M2iFFJZgbKLCYfe"
+      },
+      {
+        "title": "Circular Queue",
+        "link": "https://youtu.be/4mKKolshFD0?si=oil--OjdV2GcG7rO"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Binary Trees , BST & Heap",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Binary Trees",
+        "link": "https://youtu.be/eKJrXBCRuNQ?si=QPcL48_6c557Ra0I"
+      },
+      {
+        "title": "Binary Search Trees",
+        "link": "https://youtu.be/RuF7dPfj27Q?si=V938NqJG3qvqR1K1"
+      },
+      {
+        "title": "Heap",
+        "link": "https://youtu.be/NKJnHewiGdc?si=2xxopM-bQqM_uYya"
+      }
+    ]
+  },
+  {
+    "section": "Some Conceptual Lectures",
+    "topic": "Graphs",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Graph Representation",
+        "link": "https://youtu.be/o9JvO7MGQPo?si=RkJk-HSn2T-SAGIH"
+      },
+      {
+        "title": "Graph Traversal",
+        "link": "https://youtu.be/V4xpJNgxMDY?si=ojj8g1K3b7FoqVMK"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Two Pointer , Sliding Window & Prefix Sum",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "2 Pointers Pattern",
+        "link": "https://youtu.be/QzZ7nmouLTI?si=NrZ-BulAXRFyKYIR"
+      },
+      {
+        "title": "Sliding Window Types",
+        "link": "https://youtu.be/EHCGAZBbB88?si=QAxFPyCJoa4eagie"
+      },
+      {
+        "title": "Sliding Window Pattern",
+        "link": "https://youtu.be/y2d0VHdvfdc?si=H__t90vA8wDF8EJR"
+      },
+      {
+        "title": "Prefix Sum Pattern",
+        "link": "https://youtu.be/yuws7YK0Yng?si=ZD11Wq2E-veT8ryq"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Slow & Fast Pointer, Monotonic Stack & Heap",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Slow & Fast Pointer Pattern",
+        "link": "https://youtu.be/b139yf7Ik-E?si=6mwZfgvvgvzmssqS"
+      },
+      {
+        "title": "Monotonic Stack",
+        "link": "https://youtu.be/BX38sNbRaMs?si=fzZ_md2emGNls5nk"
+      },
+      {
+        "title": "Monotonic Queue",
+        "link": "https://youtu.be/cnOtN6T_zMY?si=GUBpeZYEgCIOhR1Z"
+      },
+      {
+        "title": "Heap Pattern",
+        "link": "https://youtu.be/hW8PrQrvMNc?si=3T7mtiY7o5XDRADp"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Recursion, BackTracking & Dynamic Programming",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Recursion Pattern",
+        "link": "https://youtu.be/kHi1DUhp9kM?si=PEH95Re5X_32Rvj7"
+      },
+      {
+        "title": "Basics of Backtracking",
+        "link": "https://youtu.be/9kl-VbTTwYo?si=hv-HmmctWME-CgDr"
+      },
+      {
+        "title": "BackTracking Pattern",
+        "link": "https://youtu.be/cNWKkosDzGE?si=IwUkXremOBNzfb1o"
+      },
+      {
+        "title": "Dynamic Programming Pattern",
+        "link": "https://youtu.be/nqowUJzG-iM?si=qBRU42ozuGDSf6DY"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "KMP algorithm Pattern, Binary Search Pattern",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "KMP Pattern",
+        "link": "https://youtu.be/sODA1BzFvsE?si=SyjllylcB6tN_gF1"
+      },
+      {
+        "title": "KMP Algorithm",
+        "link": "https://youtu.be/6gQR8TaFXMw?si=6Mp-zmgleHrOPe6j"
+      },
+      {
+        "title": "Binary Search Pattern",
+        "link": "https://youtu.be/j7NodO9HIbk?si=pdDyKwmIH0sxbD4m"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Difference Array, Line Sweep, Top K from Sorted Pattern",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Difference Array Technique",
+        "link": "https://youtu.be/ZHNVmtm08WY?si=GMr9ep-VzwwmqkxZ"
+      },
+      {
+        "title": "Linen Sweep Technique",
+        "link": "https://youtu.be/-FxkJiCyg5g?si=NcDXQmJGbVWl7xQ5"
+      },
+      {
+        "title": "Top K from Sorted Pattern",
+        "link": "https://youtu.be/TZwPVMyG8-M?si=Gj4XGTmOdsvBbrN5"
+      },
+      {
+        "title": "Meet in the Middle Pattern",
+        "link": "https://youtu.be/NCr27WYjCH4?si=mnT49uEYgQEnoDfk"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Binary Tree Pattern",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "BST Pattern",
+        "link": "https://youtu.be/PoJYBTSM0IU?si=hn-PO5p_xjcbMTkx"
+      },
+      {
+        "title": "Level Order Traversal",
+        "link": "https://youtu.be/rpPWkRijTh0?si=gVnEqqyfuEBasRqQ"
+      },
+      {
+        "title": "Binary Lifting Pattern",
+        "link": "https://youtu.be/WTtuOj6FXE8?si=rs7xVxJPnCzEjEON"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Graph based Pattern",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "BFS & DFS",
+        "link": "https://youtu.be/V4xpJNgxMDY?si=hSxccUWwflxbDkxL"
+      },
+      {
+        "title": "Multi-Source BFS",
+        "link": "https://youtu.be/M7Lp0Uz-2xE?si=fCxuspgLlo7MdOqE"
+      },
+      {
+        "title": "0-1 BFS",
+        "link": "https://youtu.be/U83oTSsjNqY?si=lBWZCbtoao8U9j27"
+      },
+      {
+        "title": "Dijkstra Algorithm Pattern",
+        "link": "https://youtu.be/xQ3vjWwFRuI?si=2jMiPrxWVwfpJ9T7"
+      }
+    ]
+  },
+  {
+    "section": "Some Algorithmic Pattern Lectures",
+    "topic": "Disjoint Set Union (DSU) Pattern",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "DSU",
+        "link": "https://youtu.be/AsAdKHkITBQ?si=0gq6HmWwUdSMFPTL"
+      },
+      {
+        "title": "DSU by Rank & Path Compression",
+        "link": "https://youtu.be/iH3XVIVzl7M?si=26mGwwlk_vxjQaJh"
+      },
+      {
+        "title": "DSU by Size & Path Compression",
+        "link": "https://youtu.be/kGv33AiGhdc?si=fpVoLqttnfRKCESE"
+      },
+      {
+        "title": "Kahn's Algorithm",
+        "link": "https://youtu.be/uVl4ftleTes?si=n8icrPQ_MRnwKxs0"
+      }
+    ]
+  },
+  {
+    "section": "After DSA - System Design",
+    "topic": "System Design InterMediate",
+    "difficulty": "Medium",
+    "lectures": [
+      {
+        "title": "Design related Problems",
+        "link": "https://www.youtube.com/playlist?list=PLpIkg8OmuX-JW5294URE-iwVhl_tdWEP5"
+      },
+      {
+        "title": "Low- Level Design",
+        "link": "https://www.youtube.com/playlist?list=PLQEaRBV9gAFvzp6XhcNFpk1WdOcyVo9qT"
+      }
+    ]
+  }
+]

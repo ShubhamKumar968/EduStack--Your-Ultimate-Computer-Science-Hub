@@ -10,6 +10,52 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <!-- Production Compiled Tailwind CSS -->
   <link rel="stylesheet" href="/assets/css/output.css">
+  <!-- Marked Markdown Parser -->
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    .ai-rendered-content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0;
+      font-size: 11px;
+      overflow-x: auto;
+      display: block;
+    }
+    .ai-rendered-content th, .ai-rendered-content td {
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 6px 8px;
+      text-align: left;
+    }
+    .ai-rendered-content th {
+      background-color: rgba(88, 28, 135, 0.5);
+      color: #c084fc;
+      font-weight: 700;
+    }
+    .ai-rendered-content td {
+      background-color: rgba(15, 14, 23, 0.4);
+    }
+    .ai-rendered-content pre {
+      background: #0f0e17;
+      padding: 10px;
+      border-radius: 8px;
+      overflow-x: auto;
+      border: 1px solid rgba(168, 85, 247, 0.2);
+      margin: 8px 0;
+    }
+    .ai-rendered-content code {
+      font-family: monospace;
+      color: #e9d5ff;
+    }
+    .ai-rendered-content p {
+      margin-bottom: 6px;
+    }
+    .ai-rendered-content h1, .ai-rendered-content h2, .ai-rendered-content h3 {
+      font-weight: bold;
+      color: #c084fc;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+  </style>
   <script src="/assets/js/partials.js" defer></script>
 </head>
 <body class="bg-white dark:bg-[#181818] text-[#222222] dark:text-gray-100 transition-colors duration-300">
@@ -46,7 +92,7 @@
     <span class="text-gray-900 dark:text-white">Operating System</span>
   </div>
 
-  <a href="/dsa-sheet-coming-soon.html" class="hidden lg:flex items-center gap-2.5 absolute top-1/2 -translate-y-1/2 left-[2%] -rotate-2 animate-float bg-gradient-to-r from-amber-400 to-amber-500 border border-amber-300 rounded-2xl px-4 py-2.5 shadow-2xl shadow-amber-500/30 text-xs font-black text-amber-950 z-10 hover:scale-105 transition-transform no-underline" style="animation-delay:2.2s">
+  <a href="/public/premium-dsa-sheet.html" class="hidden lg:flex items-center gap-2.5 absolute top-1/2 -translate-y-1/2 left-[2%] -rotate-2 animate-float bg-gradient-to-r from-amber-400 to-amber-500 border border-amber-300 rounded-2xl px-4 py-2.5 shadow-2xl shadow-amber-500/30 text-xs font-black text-amber-950 z-10 hover:scale-105 transition-transform no-underline" style="animation-delay:2.2s">
     <span class="w-7 h-7 rounded-xl bg-white/40 flex items-center justify-center text-amber-950 font-black"><i class="fa-solid fa-star"></i></span>
     Best DSA Sheet
   </a>
@@ -715,10 +761,12 @@
       document.getElementById(loadingId)?.remove();
 
       const answer = data.answer || 'No answer returned.';
+      const formattedAnswer = (typeof marked !== 'undefined') ? marked.parse(answer) : answer;
+
       chatBox.innerHTML += `
         <div class="p-3.5 rounded-2xl bg-[#1c1b2b] border border-purple-500/30 text-gray-200 leading-relaxed font-medium space-y-1">
           <div class="text-[9px] font-black text-purple-400 uppercase">${data.model_used || 'Gemini RAG'}</div>
-          <div>${answer}</div>
+          <div class="ai-rendered-content overflow-x-auto">${formattedAnswer}</div>
         </div>
       `;
       chatBox.scrollTop = chatBox.scrollHeight;

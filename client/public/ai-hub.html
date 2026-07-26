@@ -24,6 +24,29 @@
     .glow-card {
       box-shadow: 0 10px 40px -10px rgba(255, 56, 92, 0.15), 0 0 30px -5px rgba(168, 85, 247, 0.15);
     }
+    
+    /* Markdown Table & Formatting Styles */
+    .prose table, table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 12px;
+      overflow-x: auto;
+      display: block;
+    }
+    .prose th, .prose td, table th, table td {
+      border: 1px solid rgba(168, 85, 247, 0.3);
+      padding: 8px 12px;
+      text-align: left;
+    }
+    .prose th, table th {
+      background-color: rgba(88, 28, 135, 0.5);
+      color: #c084fc;
+      font-weight: 700;
+    }
+    .prose td, table td {
+      background-color: rgba(15, 14, 23, 0.4);
+    }
     .chat-bubble-ai {
       background: rgba(255, 255, 255, 0.95);
       border: 1px solid rgba(229, 231, 235, 0.9);

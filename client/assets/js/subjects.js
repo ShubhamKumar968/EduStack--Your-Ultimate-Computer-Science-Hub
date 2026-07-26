@@ -626,8 +626,34 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  window.openRazorpayCheckout = function () {
-    window.location.href = '/dsa-sheet-coming-soon.html';
+  window.openRazorpayCheckout = async function () {
+    try {
+      const res = await fetch('/api/auth/me', { credentials: 'include' });
+      const data = await res.json();
+      if (!data.success || !data.data || !data.data.user) {
+        if (typeof window.showAuthModal === 'function') {
+          window.showAuthModal('access Ultimate SDE DSA Sheet & Premium Hub');
+        } else {
+          window.location.href = '/auth/login.html';
+        }
+        return;
+      }
+      
+      const user = data.data.user;
+      if (user.isPremium) {
+        window.location.href = '/public/premium-dsa-sheet.html';
+      } else if (typeof window.showRazorpayModal === 'function') {
+        window.showRazorpayModal();
+      } else {
+        window.location.href = '/public/premium-dsa-sheet.html';
+      }
+    } catch (err) {
+      if (typeof window.showRazorpayModal === 'function') {
+        window.showRazorpayModal();
+      } else {
+        window.location.href = '/public/premium-dsa-sheet.html';
+      }
+    }
   };
 
   window.updateMap = function () {

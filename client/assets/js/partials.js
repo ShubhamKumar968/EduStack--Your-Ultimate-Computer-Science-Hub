@@ -1,3 +1,17 @@
+window.triggerEduStackAIAssistant = function() {
+  const aiSection = document.getElementById('ai-tools');
+  if (aiSection) {
+    aiSection.scrollIntoView({ behavior: 'smooth' });
+  } else {
+    const isSubfolder = window.location.pathname.includes('/public/') || 
+                        window.location.pathname.includes('/auth/') || 
+                        window.location.pathname.includes('/guest/') || 
+                        window.location.pathname.includes('/admin/');
+    const redirectUrl = (isSubfolder ? '/' : './') + 'index.html#ai-tools';
+    window.location.href = redirectUrl;
+  }
+};
+
 window.showAuthModal = function(action) {
   const existing = document.getElementById('auth-guard-modal');
   if (existing) existing.remove();
@@ -588,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="${base}index.html#ai-tools" class="sb-link sb-hash-link" data-hash="#ai-tools">
             <i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools
           </a>
-          <a href="${base}dsa-sheet-coming-soon.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}dsa-sheet-coming-soon.html'; }, 'access Ultimate DSA Sheet')" class="sb-link">
+          <a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" class="sb-link">
             <i class="fa-solid fa-star" style="color:#eab308;"></i> Ultimate DSA Sheet
           </a>
           <a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" class="sb-link">
@@ -693,15 +707,26 @@ document.addEventListener('DOMContentLoaded', () => {
             <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:16px;height:16px;object-fit:contain;display:inline-block;"> College Links</a></li>
             <li><a href="${base}index.html#resources" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources</a></li>
             <li><a href="${base}index.html#ai-tools" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools</a></li>
-            <li><a href="${base}dsa-sheet-coming-soon.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}dsa-sheet-coming-soon.html'; }, 'access Ultimate DSA Sheet')" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;"><i class="fa-solid fa-star" style="color:#eab308;"></i> DSA Sheet</a></li>
+            <li><a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" style="display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:900;font-size:13px;transition:all 0.15s;"><i class="fa-solid fa-crown" style="color:#f59e0b;font-size:14px;"></i> <span style="background:linear-gradient(135deg, #f59e0b, #f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DSA Sheet</span></a></li>
             <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute</a></li>
             <li><a href="${base}index.html#about" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About</a></li>
             <li><a href="${base}index.html#contact" class="nav-link-hash" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;color:inherit;font-weight:700;font-size:13px;transition:background 0.15s;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact</a></li>
             `}
           </ul>
 
-          <!-- RIGHT: Theme toggle + Auth (always flex, never wraps) -->
-          <div id="nav-right-section">
+          <!-- RIGHT: Theme toggle + AI Assistant + Auth (always flex, never wraps) -->
+          <div id="nav-right-section" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+
+            <!-- EduStack AI Assistant Button in Header -->
+            <button onclick="window.triggerEduStackAIAssistant()"
+              title="EduStack AI Assistant"
+              style="display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:6px 13px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;"
+              onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+              <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;color:#fef08a;"></i>
+              <span class="hidden-xs">AI Assistant</span>
+              <span style="background:rgba(255,255,255,0.25);font-size:9px;padding:1px 5px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.5px;">LIVE</span>
+            </button>
+
             <!-- Theme Toggle -->
             <button id="themeToggle" aria-label="Toggle dark mode"
               style="width:46px;height:26px;border-radius:50px;background:#e5e7eb;border:none;position:relative;cursor:pointer;flex-shrink:0;display:flex;align-items:center;transition:background 0.2s;">

@@ -223,9 +223,35 @@ app.get('/', (req, res) => {
   });
 });
 
-// Explicit routes for DSA Sheet Coming Soon page
-app.get(['/dsa-sheet-coming-soon.html', '/public/dsa-sheet-coming-soon.html'], (req, res) => {
-  res.sendFile(path.join(__dirname, '../client/public/dsa-sheet-coming-soon.html'));
+app.get('/api/dsa-sheet/live', (req, res) => {
+  try {
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+
+    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
+    const lecPath = path.join(__dirname, '../client/public/parsed_lectures.json');
+
+    let data = [];
+    let lectures = [];
+
+    if (fs.existsSync(jsonPath)) {
+      data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+    }
+    if (fs.existsSync(lecPath)) {
+      lectures = JSON.parse(fs.readFileSync(lecPath, 'utf-8'));
+    }
+
+    return res.status(200).json({
+      success: true,
+      count: data.length,
+      data: data,
+      lectures: lectures,
+      lastSynced: new Date().toISOString()
+    });
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
 });
 
 app.get('/api/health', (req, res) => {
