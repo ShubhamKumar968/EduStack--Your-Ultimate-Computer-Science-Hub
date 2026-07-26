@@ -51,6 +51,9 @@ const aiRoutes           = require('./routes/aiRoutes');
 
 // ── Create Express App ────────────────────────────────────────
 const app = express();
+if (IS_PRODUCTION || process.env.RENDER) {
+  app.set('trust proxy', 1);
+}
 
 // ============================================================
 // ⚙️ MONGO-DB SESSION STORE CONFIGURATION
