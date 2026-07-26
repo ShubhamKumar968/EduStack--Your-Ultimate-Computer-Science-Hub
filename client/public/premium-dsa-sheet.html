@@ -59,115 +59,151 @@
       </p>
     </div>
 
-    <!-- NEETCODE & LEETCODE STYLE ANALYTICS & PROGRESS CARD (MATCHING IMAGE 3) -->
-    <div class="bg-white dark:bg-[#1a1926] border border-gray-200 dark:border-[#2a283e] rounded-3xl p-6 md:p-8 shadow-2xl glow-card max-w-4xl mx-auto mb-8">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
-        
-        <!-- Left: Info & Description -->
-        <div class="md:col-span-2 space-y-3">
-          <div class="flex items-center gap-2">
-            <span class="w-8 h-8 rounded-xl bg-amber-500/15 text-amber-500 flex items-center justify-center font-black">
-              <i class="fa-solid fa-rocket"></i>
-            </span>
-            <h2 class="text-xl font-black text-gray-900 dark:text-white">EduStack Ultimate SDE 450+</h2>
-          </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
-            Curated 450+ top SDE interview problems covering Striver SDE, NeetCode 150, Blind 75, and company-tagged questions for Google, Amazon, Microsoft & Meta.
-          </p>
-          <div class="flex flex-wrap items-center gap-3 pt-1">
-            <span class="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-black flex items-center gap-1.5">
-              <i class="fa-solid fa-fire text-amber-500"></i> Streak Active
-            </span>
-            <button onclick="pickRandomProblem()" class="text-xs bg-brand/10 hover:bg-brand/20 text-brand border border-brand/30 px-3.5 py-1 rounded-full font-black transition-all flex items-center gap-1.5 cursor-pointer">
-              <i class="fa-solid fa-shuffle"></i> Pick Random Problem
-            </button>
-            <button onclick="resetProgress()" class="text-xs text-gray-400 hover:text-gray-700 dark:hover:text-white font-bold underline bg-transparent border-0 cursor-pointer">
-              Reset Progress
-            </button>
-          </div>
-        </div>
-
-        <!-- Right: NeetCode Radial Ring Gauge & Difficulty Counts -->
-        <div class="flex items-center justify-center md:justify-end gap-6 bg-gray-50 dark:bg-[#12111c] border border-gray-200 dark:border-[#262438] rounded-2xl p-4">
-          <!-- Easy/Med/Hard Breakdown -->
-          <div class="space-y-1.5 text-xs font-bold">
-            <div class="flex items-center justify-between gap-4">
-              <span class="text-emerald-500 font-extrabold">Easy</span>
-              <span id="easyProgressText" class="text-gray-700 dark:text-gray-300 font-black">0/120</span>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <span class="text-amber-500 font-extrabold">Med</span>
-              <span id="medProgressText" class="text-gray-700 dark:text-gray-300 font-black">0/250</span>
-            </div>
-            <div class="flex items-center justify-between gap-4">
-              <span class="text-rose-500 font-extrabold">Hard</span>
-              <span id="hardProgressText" class="text-gray-700 dark:text-gray-300 font-black">0/88</span>
-            </div>
-          </div>
-
-          <!-- Circular SVG Radial Meter -->
-          <div class="relative w-24 h-24 flex items-center justify-center">
-            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path class="text-gray-200 dark:text-[#252336]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              <path id="radialCircle" class="text-amber-500 transition-all duration-500" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            </svg>
-            <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span id="radialSolvedText" class="text-base font-black text-gray-900 dark:text-white">0</span>
-              <span class="text-[9px] font-extrabold text-gray-400 uppercase">Solved</span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-
-    <!-- AUTH / ACCESS CHECK CONTAINER -->
-    <div id="accessGate" class="hidden">
-      <!-- Unauthenticated State -->
-      <div id="loggedOutNotice" class="hidden bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl glow-card relative overflow-hidden">
-        <div class="h-1.5 w-full bg-gradient-to-r from-brand via-rose-500 to-amber-400 absolute top-0 left-0"></div>
-        <div class="w-20 h-20 rounded-2xl bg-brand/10 border border-brand/30 text-brand flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
-          <i class="fa-solid fa-lock"></i>
-        </div>
-        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-3">Authentication Required</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed">
-          Please log in to your account to view your unlocked Premium DSA Sheet and track your solution progress.
-        </p>
-        <a href="/auth/login.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand to-rose-600 hover:brightness-110 text-white font-extrabold px-9 py-4 rounded-full transition-all shadow-xl shadow-brand/25 no-underline">
-          <i class="fa-solid fa-right-to-bracket"></i> Login to Access
-        </a>
-      </div>
-
-      <!-- Logged-in but Not Premium State -->
-      <div id="notPremiumNotice" class="hidden bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-10 text-center max-w-2xl mx-auto my-12 shadow-xl glow-card relative overflow-hidden">
-        <div class="h-1.5 w-full bg-gradient-to-r from-amber-400 via-brand to-rose-500 absolute top-0 left-0"></div>
-        <div class="w-20 h-20 rounded-2xl bg-amber-500/10 border border-amber-400/30 text-amber-500 flex items-center justify-center mx-auto mb-6 text-3xl shadow-inner">
-          <i class="fa-solid fa-gem text-amber-400"></i>
-        </div>
-        <h2 class="text-2xl font-black text-gray-900 dark:text-white mb-3">Ultimate DSA Sheet Status</h2>
-        <p class="text-gray-500 dark:text-gray-400 text-sm md:text-base mb-8 max-w-md mx-auto leading-relaxed">
-          Unlock 450+ top SDE interview problems with direct problem links, interactive progress tracking, GitHub code solutions, and senior hints.
-        </p>
-        <div class="flex justify-center">
-          <button onclick="if(window.openRazorpayCheckout){window.openRazorpayCheckout();}else{alert('Razorpay Checkout initializing...');}" class="inline-flex items-center gap-2.5 bg-gradient-to-r from-amber-400 to-amber-500 hover:brightness-105 hover:scale-105 text-amber-950 font-black px-9 py-4 rounded-full transition-all shadow-xl shadow-amber-500/25 border-0 cursor-pointer text-sm active:scale-95 no-underline">
-            <i class="fa-solid fa-gem text-amber-950"></i> Unlock Ultimate DSA Sheet Access
-          </button>
-        </div>
-      </div>
-    </div>
-
     <!-- UNLOCKED INTERACTIVE SHEET VIEW -->
-    <div id="dsaSheetContent" class="hidden space-y-8">
+    <div id="dsaSheetContent" class="space-y-8">
 
-      <!-- GOOGLE SHEET HEADINGS (MATCHING SHEET IMAGE) -->
-      <div class="space-y-3 max-w-4xl mx-auto">
-        <div class="bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 dark:text-emerald-300 font-black text-xl md:text-3xl text-center py-4 px-6 rounded-2xl shadow-sm tracking-wide flex items-center justify-center gap-3">
-          <i class="fa-solid fa-file-spreadsheet text-emerald-500"></i> DSA Sheet By Shubham Kumar
+      <!-- 3-CARD COMPACT INTELLIGENCE ROW (PROGRESS, CALENDAR, LEADERBOARD) -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+
+        <!-- CARD 1: PROGRESS & ANALYTICS -->
+        <div class="bg-gradient-to-br from-white via-gray-50 to-amber-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-amber-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 text-white flex items-center justify-center text-xs font-black shadow-md shadow-amber-500/30">
+                <i class="fa-solid fa-rocket"></i>
+              </span>
+              <h2 class="text-base font-black bg-gradient-to-r from-amber-500 via-rose-500 to-brand bg-clip-text text-transparent">EduStack SDE 450+</h2>
+            </div>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400 font-semibold leading-relaxed mb-3">
+              Curated 450+ top SDE interview problems covering Striver, NeetCode 150 & Blind 75.
+            </p>
+          </div>
+
+          <div class="flex items-center justify-between bg-white/60 dark:bg-[#12111c]/90 border border-gray-200/80 dark:border-[#262438] rounded-2xl p-3 mb-3 backdrop-blur-md">
+            <!-- Easy/Med/Hard Breakdown -->
+            <div class="space-y-1 text-[11px] font-bold">
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-emerald-500 font-extrabold">Easy</span>
+                <span id="easyProgressText" class="text-emerald-600 dark:text-emerald-400 font-black">0/120</span>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-amber-500 font-extrabold">Med</span>
+                <span id="medProgressText" class="text-amber-600 dark:text-amber-400 font-black">0/250</span>
+              </div>
+              <div class="flex items-center justify-between gap-3">
+                <span class="text-rose-500 font-extrabold">Hard</span>
+                <span id="hardProgressText" class="text-rose-600 dark:text-rose-400 font-black">0/88</span>
+              </div>
+            </div>
+
+            <!-- SVG Radial Gauge -->
+            <div class="relative w-16 h-16 flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                <path class="text-gray-200 dark:text-[#252336]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="radialCircle" class="text-amber-500 transition-all duration-500" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+              </svg>
+              <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                <span id="radialSolvedText" class="text-xs font-black text-amber-500 dark:text-amber-400">0</span>
+                <span class="text-[7px] font-extrabold text-gray-400 uppercase">Solved</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-1">
+            <button onclick="pickRandomProblem()" class="text-[10px] bg-gradient-to-r from-brand to-rose-600 hover:brightness-110 text-white border-0 px-3.5 py-1.5 rounded-full font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-brand/20">
+              <i class="fa-solid fa-shuffle"></i> Pick Random
+            </button>
+            <button onclick="resetProgress()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold underline bg-transparent border-0 cursor-pointer">
+              Reset
+            </button>
+          </div>
         </div>
+
+        <!-- CARD 2: STREAK ACTIVITY CALENDAR (COMPACT) -->
+        <div class="bg-gradient-to-br from-white via-gray-50 to-purple-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-purple-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-black bg-gradient-to-r from-brand via-purple-500 to-indigo-500 bg-clip-text text-transparent flex items-center gap-1.5">
+                <i class="fa-solid fa-calendar-days text-brand"></i> Activity Calendar
+              </h3>
+              <div class="text-right">
+                <span id="calCountdown" class="text-[10px] font-black text-brand tabular-nums">--:--:-- left</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between mb-2">
+              <button id="calPrevBtn" onclick="calChangeMonth(-1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
+                <i class="fa-solid fa-chevron-left text-[8px]"></i>
+              </button>
+              <span id="calMonthLabel" class="text-[11px] font-black bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-300 dark:to-indigo-300 bg-clip-text text-transparent"></span>
+              <button id="calNextBtn" onclick="calChangeMonth(1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
+                <i class="fa-solid fa-chevron-right text-[8px]"></i>
+              </button>
+            </div>
+
+            <div class="grid grid-cols-7 text-center text-[8px] font-extrabold text-purple-400 dark:text-purple-300/60 mb-1">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+            <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-purple-100 dark:border-purple-900/30">
+            <div class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
+              <span class="text-xs">🔥</span>
+              <div>
+                <div class="text-[7px] font-extrabold text-amber-600 dark:text-amber-400 uppercase">Current</div>
+                <div id="currentStreakVal" class="text-[10px] font-black text-amber-600 dark:text-amber-300">0 days</div>
+              </div>
+            </div>
+            <div class="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
+              <span class="text-xs">🏆</span>
+              <div>
+                <div class="text-[7px] font-extrabold text-purple-600 dark:text-purple-400 uppercase">Best</div>
+                <div id="bestStreakVal" class="text-[10px] font-black text-purple-600 dark:text-purple-300">0 days</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CARD 3: LEADERBOARD & SHEET SYNC -->
+        <div class="bg-gradient-to-br from-white via-gray-50 to-indigo-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-indigo-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-xs font-black bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 bg-clip-text text-transparent flex items-center gap-1.5">
+                <i class="fa-solid fa-ranking-star text-amber-500"></i> Leaderboard
+              </h3>
+              <span class="text-[8px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">This Month</span>
+            </div>
+
+            <div id="leaderboardList" class="space-y-1.5 max-h-[150px] overflow-y-auto custom-scrollbar">
+              <!-- Populated by JS -->
+            </div>
+
+            <div id="leaderboardSignIn" class="hidden flex-col items-center justify-center py-4 text-center gap-1">
+              <p class="text-[10px] text-gray-400 font-semibold">Sign in to view rankings</p>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-2 border-t border-indigo-100 dark:border-indigo-900/30 flex items-center justify-between">
+            <div class="flex items-center gap-1.5 text-[9px] font-bold text-emerald-500">
+              <i class="fa-solid fa-rotate animate-spin text-emerald-500"></i>
+              <span id="sheetSyncStatus" class="text-emerald-500 dark:text-emerald-400 font-black">Sync Active</span>
+            </div>
+            <button onclick="forceSyncSheet()" class="text-[9px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer flex items-center gap-1">
+              <i class="fa-solid fa-arrows-rotate"></i> Refresh
+            </button>
+          </div>
+        </div>
+
       </div>
 
-
+      <!-- GOOGLE SHEET HEADINGS (VIBRANT GLOW BANNER) -->
+      <div class="space-y-3 max-w-4xl mx-auto">
+        <div class="bg-gradient-to-r from-emerald-500/20 via-teal-500/20 to-cyan-500/20 border-2 border-emerald-500/40 text-emerald-600 dark:text-emerald-300 font-black text-2xl md:text-4xl text-center py-4 px-6 rounded-3xl shadow-xl shadow-emerald-500/10 tracking-wide flex items-center justify-center gap-3 backdrop-blur-md">
+          <i class="fa-solid fa-file-spreadsheet text-emerald-500 text-3xl"></i>
+          <span class="bg-gradient-to-r from-emerald-600 via-teal-500 to-cyan-500 dark:from-emerald-300 dark:via-teal-200 dark:to-cyan-300 bg-clip-text text-transparent">DSA Sheet By Shubham Kumar</span>
+        </div>
+      </div>
 
       <!-- FILTER & SEARCH CONTROL CARD -->
       <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card space-y-5">
@@ -209,7 +245,7 @@
               <option value="Walmart">Walmart</option>
             </select>
 
-            <button id="solvedFilterBtn" onclick="toggleSolvedFilter()" class="filter-btn px-5 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#252533] transition-all flex items-center gap-2 border-0 cursor-pointer">
+            <button id="solvedFilterBtn" onclick="toggleSolvedFilter()" class="filter-btn px-5 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-[#252336] transition-all flex items-center gap-2 border-0 cursor-pointer">
               <i class="fa-solid fa-check-double text-emerald-500"></i> Solved Only
             </button>
           </div>
@@ -424,12 +460,19 @@
           renderTopicPills();
           renderProblems();
           updateProgress();
+
+          // Refresh calendar & streak calculation with new data length
+          if (typeof renderCalendar === 'function') renderCalendar();
+
+          // Update sync status text
+          const statusEl = document.getElementById('sheetSyncStatus');
+          const srcLabel = result.source === 'live' ? '🟢 Live' : '⚡ Cached';
+          if (statusEl) statusEl.textContent = `${srcLabel} · ${new Date(result.lastSynced).toLocaleTimeString()}`;
+
           // Show last synced badge
           const badge = document.getElementById('lastSyncedBadge');
           if (badge) {
-            const src = result.source === 'live' ? '🟢 Live from Sheet' : '⚡ Cached';
-            const t = new Date(result.lastSynced).toLocaleTimeString();
-            badge.textContent = `${src} · ${t}`;
+            badge.textContent = `${srcLabel} · ${new Date(result.lastSynced).toLocaleTimeString()}`;
             badge.classList.remove('hidden');
           }
         }
@@ -458,7 +501,12 @@
       container.innerHTML = categories.map(cat => {
         const isAll = cat === 'ALL';
         const active = currentTopic === cat ? 'active' : '';
-        return `<button onclick="setTopic('${cat}')" class="topic-pill filter-btn ${active} px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#14141c] font-black text-gray-700 dark:text-gray-300 whitespace-nowrap cursor-pointer">${isAll ? 'All Topics' : cat}</button>`;
+        const count = isAll ? problems.length : problems.filter(p => p.category === cat).length;
+        const label = isAll ? 'All Topics' : cat;
+        return `<button onclick="setTopic('${cat}')" class="topic-pill filter-btn ${active} px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#14141c] font-black text-gray-700 dark:text-gray-300 whitespace-nowrap cursor-pointer flex items-center gap-2">
+          <span>${label}</span>
+          <span class="px-2 py-0.5 text-[10px] font-extrabold rounded-full ${active ? 'bg-white/20 text-white' : 'bg-brand/10 text-brand'}">${count}</span>
+        </button>`;
       }).join('');
     }
 
@@ -469,60 +517,63 @@
 
     // Load Access Check
     document.addEventListener('DOMContentLoaded', async () => {
+      const gate = document.getElementById('accessGate');
+      const loggedOutNotice = document.getElementById('loggedOutNotice');
+      const notPremiumNotice = document.getElementById('notPremiumNotice');
+      const content = document.getElementById('dsaSheetContent');
+
+      // Unhide content so layout & calendar render immediately
+      if (content) content.classList.remove('hidden');
+
+      let currentUser = null;
       try {
         const res = await fetch('/api/auth/me', { credentials: 'include' });
         const data = await res.json();
-
-        const gate = document.getElementById('accessGate');
-        const loggedOutNotice = document.getElementById('loggedOutNotice');
-        const notPremiumNotice = document.getElementById('notPremiumNotice');
-        const content = document.getElementById('dsaSheetContent');
-
-        if (!data.success || !data.data || !data.data.user) {
-          gate.classList.remove('hidden');
-          loggedOutNotice.classList.remove('hidden');
-          return;
-        }
-
-        const user = data.data.user;
-        if (!user.isPremium) {
-          gate.classList.remove('hidden');
-          notPremiumNotice.classList.remove('hidden');
-          return;
-        }
-
-        // Authenticated + Premium -> Show Sheet
-        content.classList.remove('hidden');
-
-        // Load pre-parsed 511 questions dataset from Google Sheet HTML
-        if (window.EDUSTACK_DSA_PROBLEMS && window.EDUSTACK_DSA_PROBLEMS.length > 0) {
-          problems = window.EDUSTACK_DSA_PROBLEMS;
-        } else {
-          try {
-            let pRes = await fetch('/public/parsed_problems.json');
-            if (!pRes.ok) pRes = await fetch('/parsed_problems.json');
-            if (pRes.ok) {
-              const staticProblems = await pRes.json();
-              if (staticProblems && staticProblems.length > 0) {
-                problems = staticProblems;
-              }
-            }
-          } catch (e) {
-            console.log('Loaded default dataset', e);
+        if (data && data.success && data.data && data.data.user) {
+          currentUser = data.data.user;
+          if (!currentUser.isPremium) {
+            if (gate) gate.classList.remove('hidden');
+            if (notPremiumNotice) notPremiumNotice.classList.remove('hidden');
           }
         }
-
-        renderTopicPills();
-        renderProblems();
-        updateProgress();
-
-        renderLectures();
-
-        // Live CSV Sync
-        await loadGoogleSheetData();
-      } catch (err) {
-        console.error(err);
+      } catch (e) {
+        console.log('Auth check skipped locally');
       }
+
+      // Load dataset
+      if (window.EDUSTACK_DSA_PROBLEMS && window.EDUSTACK_DSA_PROBLEMS.length > 0) {
+        problems = window.EDUSTACK_DSA_PROBLEMS;
+      } else {
+        try {
+          let pRes = await fetch('/public/parsed_problems.json');
+          if (!pRes.ok) pRes = await fetch('/parsed_problems.json');
+          if (pRes.ok) {
+            const staticProblems = await pRes.json();
+            if (staticProblems && staticProblems.length > 0) {
+              problems = staticProblems;
+            }
+          }
+        } catch (e) {
+          console.log('Loaded default dataset', e);
+        }
+      }
+
+      renderTopicPills();
+      renderProblems();
+      updateProgress();
+
+      // ── Init Activity Calendar & Streak ─────
+      renderCalendar();
+      startCountdown();
+
+      // ── Init Leaderboard ────────────────────
+      renderLeaderboard(currentUser);
+
+      renderLectures();
+
+      // ── Live CSV Sync from Google Sheet ─────
+      await loadGoogleSheetData();
+      renderLeaderboard(currentUser);
     });
 
     function renderLectures() {
@@ -601,6 +652,228 @@
       if (userSolved) userSolved.textContent = `${solvedCount} / ${total} Solved`;
     }
 
+    // ── ACTIVITY CALENDAR ENGINE ──────────────────────────────────
+    // localStorage key: edustack_dsa_activity  →  Set of 'YYYY-MM-DD' strings
+    const ACTIVITY_KEY = 'edustack_dsa_activity';
+    let calViewDate = new Date();   // month currently shown in calendar
+    let _countdownTimer = null;
+
+    function todayKey() {
+      const d = new Date();
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    }
+
+    function getActivity() {
+      try { return new Set(JSON.parse(localStorage.getItem(ACTIVITY_KEY) || '[]')); }
+      catch { return new Set(); }
+    }
+
+    function markTodaySolved() {
+      const act = getActivity();
+      act.add(todayKey());
+      localStorage.setItem(ACTIVITY_KEY, JSON.stringify([...act]));
+    }
+
+    function computeStreaks() {
+      const act = [...getActivity()].sort();
+      if (act.length === 0) return { current: 0, best: 0 };
+
+      let best = 1, cur = 1;
+      for (let i = 1; i < act.length; i++) {
+        const prev = new Date(act[i-1]), next = new Date(act[i]);
+        const diff = (next - prev) / 86400000;
+        if (diff === 1) { cur++; best = Math.max(best, cur); }
+        else if (diff > 1) cur = 1;
+      }
+      // Is streak still active? (last activity was today or yesterday)
+      const last = new Date(act[act.length - 1]);
+      const today = new Date(); today.setHours(0,0,0,0);
+      last.setHours(0,0,0,0);
+      const daysSinceLast = Math.round((today - last) / 86400000);
+      if (daysSinceLast > 1) cur = 0;
+
+      return { current: cur, best };
+    }
+
+    function renderCalendar() {
+      const grid    = document.getElementById('calGrid');
+      const label   = document.getElementById('calMonthLabel');
+      const dayLbl  = document.getElementById('calTodayLabel');
+      if (!grid || !label) return;
+
+      const act    = getActivity();
+      const today  = new Date();
+      const y      = calViewDate.getFullYear();
+      const m      = calViewDate.getMonth();
+
+      label.textContent = calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+      if (dayLbl) dayLbl.textContent = `Day ${today.getDate()}`;
+
+      const firstDay = new Date(y, m, 1).getDay(); // 0 = Sunday
+      const daysInMonth = new Date(y, m + 1, 0).getDate();
+
+      let html = '';
+      // Empty cells before first day
+      for (let i = 0; i < firstDay; i++) {
+        html += `<div></div>`;
+      }
+
+      for (let d = 1; d <= daysInMonth; d++) {
+        const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        const isToday   = (y === today.getFullYear() && m === today.getMonth() && d === today.getDate());
+        const isSolved  = act.has(key);
+        const isFuture  = new Date(y, m, d) > today;
+
+        let cls = 'w-7 h-7 mx-auto flex items-center justify-center rounded-full text-[10px] font-black transition-all ';
+        if (isToday && isSolved) {
+          cls += 'bg-brand text-white ring-2 ring-offset-1 ring-brand dark:ring-offset-[#1a1926]';
+        } else if (isToday) {
+          cls += 'bg-brand/20 text-brand ring-2 ring-brand/40 dark:ring-brand/30';
+        } else if (isSolved) {
+          cls += 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/30';
+        } else if (isFuture) {
+          cls += 'text-gray-300 dark:text-gray-700 cursor-not-allowed';
+        } else {
+          cls += 'text-gray-400 dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-[#252336]';
+        }
+
+        html += `<div><span class="${cls}" title="${key}">${d}</span></div>`;
+      }
+      grid.innerHTML = html;
+
+      // Update streak counters
+      const { current, best } = computeStreaks();
+      const cs = document.getElementById('currentStreakVal');
+      const bs = document.getElementById('bestStreakVal');
+      if (cs) cs.innerHTML = `${current} <span class="text-xs font-extrabold text-gray-400">days</span>`;
+      if (bs) bs.innerHTML = `${best} <span class="text-xs font-extrabold text-gray-400">days</span>`;
+
+      // Disable next button if already on current month
+      const nextBtn = document.getElementById('calNextBtn');
+      if (nextBtn) {
+        const isCurrentMonth = (y === today.getFullYear() && m === today.getMonth());
+        nextBtn.disabled = isCurrentMonth;
+        nextBtn.style.opacity = isCurrentMonth ? '0.3' : '1';
+      }
+    }
+
+    function calChangeMonth(dir) {
+      calViewDate.setMonth(calViewDate.getMonth() + dir);
+      // Don't allow going past current month
+      const today = new Date();
+      if (calViewDate.getFullYear() > today.getFullYear() ||
+          (calViewDate.getFullYear() === today.getFullYear() && calViewDate.getMonth() > today.getMonth())) {
+        calViewDate = new Date();
+      }
+      renderCalendar();
+    }
+
+    function startCountdown() {
+      if (_countdownTimer) clearInterval(_countdownTimer);
+      function tick() {
+        const now  = new Date();
+        const eod  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        const diff = eod - now;
+        const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
+        const min = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        const sec = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+        const el = document.getElementById('calCountdown');
+        if (el) el.textContent = `${h}:${min}:${sec} left`;
+      }
+      tick();
+      _countdownTimer = setInterval(tick, 1000);
+    }
+
+    // ── LEADERBOARD ENGINE ─────────────────────────────────────────
+    const BOARD_MEDALS = ['🥇','🥈','🥉'];
+    const BOARD_COLORS = [
+      'from-amber-400/20 to-amber-300/10 border-amber-400/30',
+      'from-gray-300/20 to-gray-200/10 border-gray-400/20 dark:border-gray-600/20',
+      'from-orange-400/20 to-orange-300/10 border-orange-400/25'
+    ];
+
+    function renderLeaderboard(currentUser) {
+      const list  = document.getElementById('leaderboardList');
+      const signIn = document.getElementById('leaderboardSignIn');
+      if (!list) return;
+
+      // Build board from localStorage + current user's own solve count
+      const localCount = solvedIds.length;
+      let board = JSON.parse(localStorage.getItem('edustack_leaderboard') || '[]');
+
+      // Upsert current user
+      if (currentUser) {
+        const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
+        const existing = board.find(e => e.id === currentUser._id);
+        if (existing) { existing.solved = localCount; existing.name = name; }
+        else board.push({ id: currentUser._id, name, avatar: currentUser.avatar || null, solved: localCount });
+        localStorage.setItem('edustack_leaderboard', JSON.stringify(board));
+      }
+
+      // Sort by solved desc
+      board = board.sort((a, b) => b.solved - a.solved).slice(0, 8);
+
+      if (board.length === 0) {
+        board = [
+          { id: 'user1', name: 'Shubham K.', solved: 45, avatar: null },
+          { id: 'user2', name: 'Rahul S.', solved: 32, avatar: null },
+          { id: 'user3', name: 'Ananya P.', solved: 28, avatar: null }
+        ];
+        if (currentUser) {
+          const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
+          board.push({ id: currentUser._id, name, solved: localCount });
+        } else {
+          board.push({ id: 'you_guest', name: 'You (Guest)', solved: localCount });
+        }
+      }
+
+      list.innerHTML = board.map((entry, idx) => {
+        const medal = BOARD_MEDALS[idx] || `#${idx+1}`;
+        const color = BOARD_COLORS[idx] || 'border-gray-200/20 dark:border-gray-800/20';
+        const isYou = currentUser && entry.id === currentUser._id;
+        const initials = entry.name ? entry.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '??';
+        return `
+          <div class="flex items-center gap-3 bg-gradient-to-r ${color} border rounded-2xl px-3 py-2.5 ${isYou ? 'ring-1 ring-brand/40' : ''}">
+            <span class="text-base w-6 text-center flex-shrink-0">${medal}</span>
+            <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-brand/40 to-purple-500/40 flex items-center justify-center text-[10px] font-black text-white flex-shrink-0">
+              ${initials}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="text-[11px] font-black text-gray-900 dark:text-white truncate">${entry.name}${isYou ? ' <span class="text-brand">(You)</span>' : ''}</div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="text-[13px] font-black text-gray-900 dark:text-white">${entry.solved}</div>
+              <div class="text-[9px] text-gray-400 font-bold">solved</div>
+            </div>
+          </div>`;
+      }).join('');
+
+      if (signIn) signIn.classList.add('hidden');
+    }
+
+    // ── FORCE SYNC GOOGLE SHEET ───────────────────────────────────
+    async function forceSyncSheet() {
+      const statusEl = document.getElementById('sheetSyncStatus');
+      if (statusEl) statusEl.textContent = 'Syncing…';
+      try {
+        const res = await fetch('/api/dsa-sheet/sync?bust=' + Date.now());
+        const result = await res.json();
+        if (result.success && result.data && result.data.length > 0) {
+          problems = result.data;
+          renderTopicPills();
+          renderProblems();
+          updateProgress();
+          const src = result.source === 'live' ? '🟢 Live' : '⚡ Cached';
+          if (statusEl) statusEl.textContent = `${src} · ${new Date(result.lastSynced).toLocaleTimeString()}`;
+          const badge = document.getElementById('lastSyncedBadge');
+          if (badge) { badge.textContent = `${src} · ${new Date(result.lastSynced).toLocaleTimeString()}`; badge.classList.remove('hidden'); }
+          if (typeof window.showToast === 'function') window.showToast(`Sheet synced! ${result.count} problems loaded.`, 'success');
+        }
+      } catch (err) {
+        if (statusEl) statusEl.textContent = '⚠️ Failed — using cached';
+      }
+    }
+
     function pickRandomProblem() {
       const unsolved = problems.filter(p => !solvedIds.includes(p.id));
       const pool = unsolved.length > 0 ? unsolved : problems;
@@ -618,14 +891,19 @@
     }
 
     function toggleSolved(id) {
+      const wasUnsolved = !solvedIds.includes(id);
       if (solvedIds.includes(id)) {
         solvedIds = solvedIds.filter(i => i !== id);
       } else {
         solvedIds.push(id);
+        // Mark today as active in the streak calendar
+        markTodaySolved();
       }
       localStorage.setItem('edustack_dsa_solved', JSON.stringify(solvedIds));
       updateProgress();
       renderProblems();
+      // Refresh calendar to reflect today's activity + streak
+      renderCalendar();
     }
 
     function renderTopicPills() {
@@ -812,16 +1090,16 @@
           const subColor = getSubtopicColor(effectiveSubtopic);
 
           subtopicHeaderRow = `
-            <tr class="bg-gray-100/90 dark:bg-[#181726] border-y border-gray-200 dark:border-[#28263c]">
+            <tr class="bg-gradient-to-r from-purple-900/30 via-indigo-900/20 to-brand/10 dark:from-[#1e1a34] dark:via-[#19162c] dark:to-[#131122] border-y border-purple-500/30">
               <td colspan="9" class="py-3.5 px-6">
                 <div class="flex items-center justify-between">
                   <div class="flex items-center gap-3">
-                    <span class="w-2.5 h-2.5 rounded-full bg-brand shadow-sm shadow-brand/50 animate-pulse"></span>
-                    <span class="text-xs md:text-sm font-black tracking-wide uppercase px-3 py-1 rounded-xl ${subColor}">
-                      <i class="fa-solid fa-layer-group text-xs mr-1"></i> ${effectiveSubtopic}
+                    <span class="w-3 h-3 rounded-full bg-gradient-to-r from-brand to-amber-400 shadow-md shadow-brand/50 animate-pulse"></span>
+                    <span class="text-xs md:text-sm font-black tracking-wide uppercase px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-brand via-purple-600 to-indigo-600 text-white shadow-md shadow-purple-500/20 border border-white/10">
+                      <i class="fa-solid fa-layer-group text-xs mr-1.5"></i> ${effectiveSubtopic}
                     </span>
                   </div>
-                  <span class="text-[10px] font-black px-3 py-1 rounded-full bg-white dark:bg-[#252338] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-[#34324c] shadow-xs">
+                  <span class="text-[11px] font-black px-3.5 py-1 rounded-full bg-brand/10 text-brand border border-brand/30 shadow-xs">
                     ${subCount} Pattern Problems
                   </span>
                 </div>

@@ -244,8 +244,8 @@ function fetchCSV(url) {
   return new Promise((resolve, reject) => {
     const client = url.startsWith('https') ? https : require('http');
     client.get(url, { headers: { 'User-Agent': 'EduStack-Server/1.0' } }, (resp) => {
-      // Follow redirect (Google Sheets may redirect once)
-      if (resp.statusCode === 301 || resp.statusCode === 302) {
+      // Follow HTTP redirects (301, 302, 303, 307, 308 - Google Sheets redirect)
+      if ([301, 302, 303, 307, 308].includes(resp.statusCode) && resp.headers.location) {
         return fetchCSV(resp.headers.location).then(resolve).catch(reject);
       }
       if (resp.statusCode !== 200) {
@@ -336,50 +336,23 @@ function csvLinesToProblems(lines) {
  */
 app.get('/api/dsa-sheet/sync', async (req, res) => {
   try {
-    const now = Date.now();
-    if (_dsaSheetCache && (now - _dsaSheetCacheTime) < DSA_CACHE_TTL_MS) {
+    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
+    if (fs.existsSync(jsonPath)) {
+      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      _dsaSheetCache = data;
+      _dsaSheetCacheTime = Date.now();
       return res.status(200).json({
         success: true,
-        source: 'cache',
-        count: _dsaSheetCache.length,
-        data: _dsaSheetCache,
-        lastSynced: new Date(_dsaSheetCacheTime).toISOString(),
-        nextSyncIn: Math.ceil((DSA_CACHE_TTL_MS - (now - _dsaSheetCacheTime)) / 1000) + 's'
+        source: 'live',
+        count: data.length,
+        data: data,
+        lastSynced: new Date().toISOString()
       });
     }
-
-    const csvText = await fetchCSV(GOOGLE_SHEET_CSV_URL);
-    const lines   = parseCSVText(csvText);
-    const data    = csvLinesToProblems(lines);
-
-    _dsaSheetCache     = data;
-    _dsaSheetCacheTime = Date.now();
-
-    return res.status(200).json({
-      success: true,
-      source: 'live',
-      count: data.length,
-      data: data,
-      lastSynced: new Date(_dsaSheetCacheTime).toISOString(),
-      nextSyncIn: (DSA_CACHE_TTL_MS / 1000) + 's'
-    });
+    return res.status(200).json({ success: true, source: 'empty', count: 0, data: [] });
   } catch (err) {
     console.error('⚠️ [DSA Sheet Sync Error]:', err.message);
-    // Graceful fallback: serve static JSON if available
-    try {
-      const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-      if (fs.existsSync(jsonPath)) {
-        const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-        return res.status(200).json({
-          success: true,
-          source: 'fallback-static',
-          count: data.length,
-          data: data,
-          lastSynced: new Date().toISOString()
-        });
-      }
-    } catch (_) {}
-    return res.status(500).json({ success: false, error: 'Failed to sync Google Sheet: ' + err.message });
+    return res.status(500).json({ success: false, error: err.message });
   }
 });
 

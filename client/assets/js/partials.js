@@ -1103,11 +1103,11 @@ document.addEventListener('DOMContentLoaded', () => {
       #edustack-ml-status-widget {
         position: fixed;
         bottom: 20px;
-        right: 20px;
+        left: 20px;
         z-index: 99998;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: flex-start;
         gap: 8px;
         font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
       }
@@ -1115,15 +1115,15 @@ document.addEventListener('DOMContentLoaded', () => {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: rgba(15, 15, 25, 0.92);
-        backdrop-filter: blur(12px);
-        border: 1px solid rgba(255,255,255,0.1);
+        background: linear-gradient(135deg, #1e1b4b, #2e1065);
+        backdrop-filter: blur(16px);
+        border: 1.5px solid #a855f7;
         border-radius: 50px;
-        padding: 8px 14px;
-        color: #fff;
+        padding: 8px 16px;
+        color: #ffffff;
         font-size: 11px;
-        font-weight: 800;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        font-weight: 900;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(168, 85, 247, 0.4);
         cursor: default;
         transition: all 0.3s ease;
         min-width: 160px;
@@ -1167,20 +1167,27 @@ document.addEventListener('DOMContentLoaded', () => {
         display: none;
         align-items: center;
         gap: 7px;
-        background: linear-gradient(135deg, #7c3aed, #db2777);
-        color: #fff;
-        border: none;
+        background: linear-gradient(135deg, #ff385c, #e11d48, #8b5cf6);
+        background-size: 200% 200%;
+        animation: ml-gradient-shift 4s ease infinite, ml-slide-up 0.3s ease forwards;
+        color: #ffffff;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 50px;
-        padding: 9px 16px;
+        padding: 10px 18px;
         font-size: 11px;
         font-weight: 900;
         cursor: pointer;
-        box-shadow: 0 6px 20px rgba(124,58,237,0.45);
+        box-shadow: 0 8px 25px rgba(255, 56, 92, 0.45), 0 0 15px rgba(139, 92, 246, 0.3);
         transition: all 0.25s ease;
         font-family: inherit;
-        animation: ml-slide-up 0.3s ease forwards;
+        letter-spacing: 0.3px;
       }
-      #ml-wakeup-btn:hover { transform: scale(1.05); brightness(1.1); }
+      @keyframes ml-gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+      #ml-wakeup-btn:hover { transform: scale(1.05); filter: brightness(1.1); }
       #ml-wakeup-btn:active { transform: scale(0.97); }
       @keyframes ml-slide-up {
         from { opacity: 0; transform: translateY(10px); }
@@ -1203,7 +1210,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <span id="ml-status-dot" class="offline"></span>
           <span id="ml-status-text">AI Checking...</span>
         </div>
-        <span id="ml-status-label" style="font-size:9px;opacity:0.5;margin-left:4px;">ML</span>
+        <span id="ml-status-label" style="font-size:9px;font-weight:900;color:#e9d5ff;background:rgba(233,213,255,0.15);padding:2px 7px;border-radius:10px;margin-left:4px;">ML</span>
       </div>
     `;
     document.body.appendChild(widget);
