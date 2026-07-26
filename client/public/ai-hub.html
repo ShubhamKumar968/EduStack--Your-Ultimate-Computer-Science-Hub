@@ -347,6 +347,12 @@
   </main>
 
   <script>
+    // ── Load ML Service URL from server config (no hardcoded localhost) ──
+    let EDUSTACK_ML_URL = 'http://localhost:8000';
+    fetch('/api/config').then(r => r.json()).then(cfg => {
+      if (cfg && cfg.mlServiceUrl) EDUSTACK_ML_URL = cfg.mlServiceUrl;
+    }).catch(() => {});
+
     function fillSampleQuestion(q) {
       const input = document.getElementById('tutorInput');
       input.value = q;
@@ -419,8 +425,8 @@
           body: JSON.stringify({ question, subject })
         });
 
-        if (res.status === 404) {
-          res = await fetch('http://localhost:8000/api/rag/ask', {
+        if (res.status === 404 || !res.ok) {
+          res = await fetch(EDUSTACK_ML_URL + '/api/rag/ask', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question, subject })
@@ -537,8 +543,8 @@
           body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })
         });
 
-        if (res.status === 404) {
-          res = await fetch('http://localhost:8000/api/rag/generate-pyq', {
+        if (res.status === 404 || !res.ok) {
+          res = await fetch(EDUSTACK_ML_URL + '/api/rag/generate-pyq', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })

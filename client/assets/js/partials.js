@@ -1068,3 +1068,231 @@ document.addEventListener('DOMContentLoaded', () => {
     console.error('Error loading partials:', error);
   }
 });
+
+// ============================================================
+// 🤖 RENDER FREE-TIER ML SERVICE STATUS WIDGET
+// ============================================================
+// Shows a floating status indicator for the Python ML microservice.
+// On Render free tier, services sleep after 15 min of inactivity.
+// The "Wake Up AI" button pings the /health endpoint to wake it.
+// Status: 🔴 blinking = sleeping/offline | 🟢 pulsing = online
+// ============================================================
+(function initMLStatusWidget() {
+  let ML_URL = 'http://localhost:8000';
+  let _statusInterval = null;
+  let _isOnline = false;
+  let _waking = false;
+
+  // Fetch ML service URL from server config first
+  fetch('/api/config')
+    .then(r => r.json())
+    .then(cfg => { if (cfg && cfg.mlServiceUrl) ML_URL = cfg.mlServiceUrl; })
+    .catch(() => {})
+    .finally(() => {
+      injectWidget();
+      checkMLStatus();
+      // Poll every 30 seconds
+      _statusInterval = setInterval(checkMLStatus, 30000);
+    });
+
+  function injectWidget() {
+    if (document.getElementById('edustack-ml-status-widget')) return;
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #edustack-ml-status-widget {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 99998;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      }
+      #ml-status-badge {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(15, 15, 25, 0.92);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 50px;
+        padding: 8px 14px;
+        color: #fff;
+        font-size: 11px;
+        font-weight: 800;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+        cursor: default;
+        transition: all 0.3s ease;
+        min-width: 160px;
+        justify-content: space-between;
+      }
+      #ml-status-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex-shrink: 0;
+        transition: background 0.4s ease;
+      }
+      #ml-status-dot.online {
+        background: #22c55e;
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+        animation: ml-pulse-green 2s infinite;
+      }
+      #ml-status-dot.offline {
+        background: #ef4444;
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
+        animation: ml-pulse-red 1s infinite;
+      }
+      #ml-status-dot.waking {
+        background: #f59e0b;
+        animation: ml-pulse-amber 0.7s infinite;
+      }
+      @keyframes ml-pulse-green {
+        0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+        70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+      }
+      @keyframes ml-pulse-red {
+        0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+        50%       { opacity: 0.5; box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+      }
+      @keyframes ml-pulse-amber {
+        0%, 100% { opacity: 1; }
+        50%       { opacity: 0.4; }
+      }
+      #ml-wakeup-btn {
+        display: none;
+        align-items: center;
+        gap: 7px;
+        background: linear-gradient(135deg, #7c3aed, #db2777);
+        color: #fff;
+        border: none;
+        border-radius: 50px;
+        padding: 9px 16px;
+        font-size: 11px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 6px 20px rgba(124,58,237,0.45);
+        transition: all 0.25s ease;
+        font-family: inherit;
+        animation: ml-slide-up 0.3s ease forwards;
+      }
+      #ml-wakeup-btn:hover { transform: scale(1.05); brightness(1.1); }
+      #ml-wakeup-btn:active { transform: scale(0.97); }
+      @keyframes ml-slide-up {
+        from { opacity: 0; transform: translateY(10px); }
+        to   { opacity: 1; transform: translateY(0); }
+      }
+    `;
+    document.head.appendChild(style);
+
+    const widget = document.createElement('div');
+    widget.id = 'edustack-ml-status-widget';
+    widget.innerHTML = `
+      <button id="ml-wakeup-btn" onclick="window.wakeUpMLService()" title="Click to wake up the AI service">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>
+        </svg>
+        Wake Up AI
+      </button>
+      <div id="ml-status-badge" title="EduStack AI Service Status">
+        <div style="display:flex;align-items:center;gap:7px;">
+          <span id="ml-status-dot" class="offline"></span>
+          <span id="ml-status-text">AI Checking...</span>
+        </div>
+        <span id="ml-status-label" style="font-size:9px;opacity:0.5;margin-left:4px;">ML</span>
+      </div>
+    `;
+    document.body.appendChild(widget);
+  }
+
+  async function checkMLStatus() {
+    if (_waking) return;
+    try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      const res = await fetch(ML_URL + '/health', { signal: controller.signal });
+      clearTimeout(timeout);
+      const data = await res.json();
+      setOnline(data.status === 'healthy' || res.ok);
+    } catch {
+      setOffline();
+    }
+  }
+
+  function setOnline(val) {
+    _isOnline = val;
+    const dot = document.getElementById('ml-status-dot');
+    const text = document.getElementById('ml-status-text');
+    const btn = document.getElementById('ml-wakeup-btn');
+    if (!dot || !text) return;
+
+    if (val) {
+      dot.className = 'online';
+      text.textContent = 'AI Online';
+      if (btn) btn.style.display = 'none';
+    } else {
+      setOffline();
+    }
+  }
+
+  function setOffline() {
+    _isOnline = false;
+    const dot = document.getElementById('ml-status-dot');
+    const text = document.getElementById('ml-status-text');
+    const btn = document.getElementById('ml-wakeup-btn');
+    if (!dot || !text) return;
+    dot.className = 'offline';
+    text.textContent = 'AI Sleeping';
+    if (btn) btn.style.display = 'flex';
+  }
+
+  window.wakeUpMLService = async function() {
+    if (_waking) return;
+    _waking = true;
+    const dot = document.getElementById('ml-status-dot');
+    const text = document.getElementById('ml-status-text');
+    const btn = document.getElementById('ml-wakeup-btn');
+    if (dot) dot.className = 'waking';
+    if (text) text.textContent = 'Waking up...';
+    if (btn) { btn.disabled = true; btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Waking...'; }
+
+    // Inject spin animation if not present
+    if (!document.getElementById('ml-spin-style')) {
+      const s = document.createElement('style');
+      s.id = 'ml-spin-style';
+      s.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+      document.head.appendChild(s);
+    }
+
+    // Fire and forget — Render needs time to boot
+    fetch(ML_URL + '/health').catch(() => {});
+
+    // Poll every 3s for up to 45s
+    let attempts = 0;
+    const poll = setInterval(async () => {
+      attempts++;
+      try {
+        const res = await fetch(ML_URL + '/health', { signal: AbortSignal.timeout(4000) });
+        if (res.ok) {
+          clearInterval(poll);
+          _waking = false;
+          setOnline(true);
+          if (typeof window.showToast === 'function') {
+            window.showToast('🤖 AI Service is now online!', 'success');
+          }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI'; }
+        }
+      } catch {}
+      if (attempts >= 15) {
+        clearInterval(poll);
+        _waking = false;
+        setOffline();
+        if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI'; }
+      }
+    }, 3000);
+  };
+})();

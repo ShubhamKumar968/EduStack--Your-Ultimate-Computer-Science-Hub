@@ -230,9 +230,15 @@
             </h3>
             <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">Check off solved problems to dynamically track your readiness.</p>
           </div>
-          <span id="showingCountBadge" class="bg-brand/10 text-brand font-black text-xs px-3.5 py-1.5 rounded-full border border-brand/20">
-            Showing 0 Problems
-          </span>
+          <div class="flex items-center gap-2 flex-wrap justify-end">
+            <span id="showingCountBadge" class="bg-brand/10 text-brand font-black text-xs px-3.5 py-1.5 rounded-full border border-brand/20">
+              Showing 0 Problems
+            </span>
+            <span id="lastSyncedBadge" class="hidden bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] px-3 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+              🟢 Live from Sheet
+            </span>
+          </div>
+
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
@@ -409,16 +415,38 @@
 
     async function loadGoogleSheetData() {
       try {
-        const res = await fetch('/api/dsa-sheet/live');
+        // Try live Google Sheet sync first (reflects edits within 5 min)
+        let res = await fetch('/api/dsa-sheet/sync');
+        if (!res.ok) throw new Error('sync failed');
         const result = await res.json();
         if (result.success && result.data && result.data.length > 0) {
           problems = result.data;
           renderTopicPills();
           renderProblems();
           updateProgress();
+          // Show last synced badge
+          const badge = document.getElementById('lastSyncedBadge');
+          if (badge) {
+            const src = result.source === 'live' ? '🟢 Live from Sheet' : '⚡ Cached';
+            const t = new Date(result.lastSynced).toLocaleTimeString();
+            badge.textContent = `${src} · ${t}`;
+            badge.classList.remove('hidden');
+          }
         }
       } catch (err) {
-        console.log('Live sync active');
+        // Fallback to static JSON endpoint
+        try {
+          const res2 = await fetch('/api/dsa-sheet/live');
+          const r2 = await res2.json();
+          if (r2.success && r2.data && r2.data.length > 0) {
+            problems = r2.data;
+            renderTopicPills();
+            renderProblems();
+            updateProgress();
+          }
+        } catch (_) {
+          console.log('Using pre-loaded static dataset');
+        }
       }
     }
 

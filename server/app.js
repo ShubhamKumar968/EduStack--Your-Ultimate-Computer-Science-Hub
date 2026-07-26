@@ -8,6 +8,8 @@
 // ============================================================
 
 const path = require('path');
+const fs   = require('fs');
+const https = require('https');
 require('dotenv').config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const mongoose = require('mongoose');
@@ -26,7 +28,6 @@ const errorHandler = require('./middlewares/errorHandler');
 const User = require('./models/user');
 
 // ── Environment Variables ─────────────────────────────────────
-// DB_PATH MUST come from .env — no hardcoded fallback to prevent credential leaks
 const DB_PATH = process.env.MONGO_URI;
 if (!DB_PATH) {
   console.error('❌ FATAL: MONGO_URI is not set in environment variables. Exiting.');
@@ -35,6 +36,8 @@ if (!DB_PATH) {
 
 const PORT = process.env.PORT || 3000;
 const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+// ML Service URL — set ML_SERVICE_URL in Render dashboard for production
+const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
 
 // ── Route Modules ─────────────────────────────────────────────
 const authRoutes      = require('./routes/authRoutes');
@@ -223,6 +226,168 @@ app.get('/', (req, res) => {
   });
 });
 
+// ── Google Sheet Live Sync — In-Memory Cache ─────────────────
+// Caches parsed CSV for 5 minutes to avoid hammering Google on every request.
+// On Render free tier this is reset on each cold start (OK — will re-fetch on next visit).
+let _dsaSheetCache = null;
+let _dsaSheetCacheTime = 0;
+const DSA_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
+const GOOGLE_SHEET_CSV_URL =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWl0OsRO5q5cdOUY3t--QiGg4WozIQVKBo9h2WrPyb5Rv7MC9DYt9bdap-6bGQLLlS0UsqKLJOhwaa/pub?output=csv';
+
+/**
+ * Fetch raw CSV text from a URL using built-in https module.
+ * Returns a Promise<string>.
+ */
+function fetchCSV(url) {
+  return new Promise((resolve, reject) => {
+    const client = url.startsWith('https') ? https : require('http');
+    client.get(url, { headers: { 'User-Agent': 'EduStack-Server/1.0' } }, (resp) => {
+      // Follow redirect (Google Sheets may redirect once)
+      if (resp.statusCode === 301 || resp.statusCode === 302) {
+        return fetchCSV(resp.headers.location).then(resolve).catch(reject);
+      }
+      if (resp.statusCode !== 200) {
+        return reject(new Error(`CSV fetch failed: HTTP ${resp.statusCode}`));
+      }
+      let raw = '';
+      resp.on('data', chunk => { raw += chunk; });
+      resp.on('end', () => resolve(raw));
+    }).on('error', reject);
+  });
+}
+
+/**
+ * Parse CSV text into array of row arrays.
+ * Handles quoted fields, escaped quotes and CRLF.
+ */
+function parseCSVText(text) {
+  const lines = [];
+  let row = [], inQ = false, cur = '';
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i], n = text[i + 1];
+    if (c === '"') {
+      if (inQ && n === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (c === ',' && !inQ) {
+      row.push(cur.trim()); cur = '';
+    } else if ((c === '\r' || c === '\n') && !inQ) {
+      if (c === '\r' && n === '\n') i++;
+      row.push(cur.trim());
+      if (row.some(v => v !== '')) lines.push(row);
+      row = []; cur = '';
+    } else {
+      cur += c;
+    }
+  }
+  if (cur || row.length > 0) { row.push(cur.trim()); if (row.some(v => v !== '')) lines.push(row); }
+  return lines;
+}
+
+/**
+ * Convert raw CSV lines (from Google Sheet) into the problems array
+ * matching the schema used in parsed_problems.json.
+ */
+function csvLinesToProblems(lines) {
+  const problems = [];
+  const SKIP_KEYWORDS = [
+    'implementation based', 'conceptual', 'after dsa',
+    'system design', 'pattern lecture', 'lec ', 'some '
+  ];
+
+  for (let i = 1; i < lines.length; i++) {
+    const cols = lines[i];
+    if (!cols || cols.length < 3) continue;
+
+    const title = (cols[1] || '').trim();
+    if (!title || title.length < 2) continue;
+
+    // Skip lecture/meta rows
+    const titleLower = title.toLowerCase();
+    if (SKIP_KEYWORDS.some(kw => titleLower.includes(kw))) continue;
+
+    // Skip rows where LeetCode/GFG links are absent (likely section headers)
+    const lcLink  = (cols[3] || '').trim();
+    const gfgLink = (cols[4] || '').trim();
+    if (!lcLink && !gfgLink) continue;
+
+    problems.push({
+      id:         parseInt(cols[0]) || (i),
+      title:      title,
+      category:   (cols[2] || 'General').trim(),
+      difficulty: (cols[5] || 'Medium').trim(),
+      companies:  (cols[6] || '').split(/[,\/|]/).map(s => s.trim()).filter(Boolean),
+      leetcode:   lcLink,
+      gfg:        gfgLink,
+      time:       (cols[7] || '').trim(),
+      space:      (cols[8] || '').trim(),
+      intuition:  (cols[9] || '').trim(),
+      code:       (cols[10] || '').trim(),
+    });
+  }
+  return problems;
+}
+
+/**
+ * GET /api/dsa-sheet/sync
+ * Fetches the live Google Sheet CSV, parses it, caches for 5 min, returns JSON.
+ * This makes Google Sheet edits reflect on the website automatically.
+ */
+app.get('/api/dsa-sheet/sync', async (req, res) => {
+  try {
+    const now = Date.now();
+    if (_dsaSheetCache && (now - _dsaSheetCacheTime) < DSA_CACHE_TTL_MS) {
+      return res.status(200).json({
+        success: true,
+        source: 'cache',
+        count: _dsaSheetCache.length,
+        data: _dsaSheetCache,
+        lastSynced: new Date(_dsaSheetCacheTime).toISOString(),
+        nextSyncIn: Math.ceil((DSA_CACHE_TTL_MS - (now - _dsaSheetCacheTime)) / 1000) + 's'
+      });
+    }
+
+    const csvText = await fetchCSV(GOOGLE_SHEET_CSV_URL);
+    const lines   = parseCSVText(csvText);
+    const data    = csvLinesToProblems(lines);
+
+    _dsaSheetCache     = data;
+    _dsaSheetCacheTime = Date.now();
+
+    return res.status(200).json({
+      success: true,
+      source: 'live',
+      count: data.length,
+      data: data,
+      lastSynced: new Date(_dsaSheetCacheTime).toISOString(),
+      nextSyncIn: (DSA_CACHE_TTL_MS / 1000) + 's'
+    });
+  } catch (err) {
+    console.error('⚠️ [DSA Sheet Sync Error]:', err.message);
+    // Graceful fallback: serve static JSON if available
+    try {
+      const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
+      if (fs.existsSync(jsonPath)) {
+        const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+        return res.status(200).json({
+          success: true,
+          source: 'fallback-static',
+          count: data.length,
+          data: data,
+          lastSynced: new Date().toISOString()
+        });
+      }
+    } catch (_) {}
+    return res.status(500).json({ success: false, error: 'Failed to sync Google Sheet: ' + err.message });
+  }
+});
+
+/**
+ * GET /api/dsa-sheet/live
+ * Fast: serves pre-parsed static JSON from disk (committed to repo).
+ * Use /api/dsa-sheet/sync for live Google Sheet reflection.
+ */
 app.get('/api/dsa-sheet/live', (req, res) => {
   try {
     res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
@@ -230,7 +395,7 @@ app.get('/api/dsa-sheet/live', (req, res) => {
     res.setHeader('Expires', '0');
 
     const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-    const lecPath = path.join(__dirname, '../client/public/parsed_lectures.json');
+    const lecPath  = path.join(__dirname, '../client/public/parsed_lectures.json');
 
     let data = [];
     let lectures = [];
@@ -254,6 +419,19 @@ app.get('/api/dsa-sheet/live', (req, res) => {
   }
 });
 
+/**
+ * GET /api/config
+ * Exposes safe client-side configuration (no secrets).
+ * Frontend reads this once on load to know the ML service URL.
+ */
+app.get('/api/config', (req, res) => {
+  res.status(200).json({
+    success: true,
+    mlServiceUrl: ML_SERVICE_URL,
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -262,6 +440,7 @@ app.get('/api/health', (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
+
 
 // ============================================================
 // 🛣️ API ROUTE PIPELINES
