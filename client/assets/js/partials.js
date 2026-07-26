@@ -851,9 +851,11 @@ document.addEventListener('DOMContentLoaded', () => {
                   </div>
                   
                   <div id="user-profile-dropdown" class="hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#222222]/50">
-                      <p class="text-[10px] font-black text-gray-400 dark:text-gray-400 uppercase tracking-widest mb-1">Logged in as (${roleLabel})</p>
-                      <p class="text-[13px] font-bold text-gray-900 dark:text-white truncate">${u.email}</p>
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gradient-to-r from-rose-50/70 via-purple-50/40 to-indigo-50/70 dark:from-[#241c26] dark:via-[#1f1b2d] dark:to-[#1a1a2e] rounded-t-2xl">
+                      <p class="text-[10px] font-black text-brand dark:text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
+                        <i class="fa-solid fa-circle-user text-[11px]"></i> Logged in as <span class="font-extrabold text-amber-600 dark:text-amber-400 ml-0.5">(${roleLabel})</span>
+                      </p>
+                      <p class="text-[13.5px] font-black text-gray-900 dark:text-white truncate">${u.email}</p>
                     </div>
                     <div class="p-2 space-y-1">
                       ${u.role === 'admin' ? `
