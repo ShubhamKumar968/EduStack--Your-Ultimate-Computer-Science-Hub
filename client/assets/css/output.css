@@ -4253,23 +4253,51 @@ body {
   color: #ff6b81 !important;
 }
 
-/* Navbar Login Link High Visibility (Light & Dark Mode) */
+/* Navbar Login Button Pill (Light & Dark Mode) */
 
 .login-link-desktop {
-  color: #374151 !important;
-  transition: color 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  padding: 6px 14px !important;
+  border-radius: 50px !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  background-color: #f3f4f6 !important;
+  color: #1f2937 !important;
+  border: 1px solid #d1d5db !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08) !important;
 }
 
 .login-link-desktop:hover {
-  color: #ff385c !important;
+  background-color: #ff385c !important;
+  color: #ffffff !important;
+  border-color: #ff385c !important;
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.3) !important;
+}
+
+.login-link-desktop:hover i {
+  color: #ffffff !important;
 }
 
 .dark .login-link-desktop {
+  background-color: #262626 !important;
   color: #f3f4f6 !important;
+  border-color: #404040 !important;
 }
 
 .dark .login-link-desktop:hover {
-  color: #ff385c !important;
+  background-color: #ff385c !important;
+  color: #ffffff !important;
+  border-color: #ff385c !important;
+  box-shadow: 0 4px 12px rgba(255, 56, 92, 0.3) !important;
+}
+
+.dark .login-link-desktop:hover i {
+  color: #ffffff !important;
 }
 
 /* Main Desktop Nav Items Icon-Matching Hover Colors */

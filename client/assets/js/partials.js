@@ -755,9 +755,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             <!-- Auth Container (login+signup for guests, profile for logged-in) -->
             <div id="nav-auth-container" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
-              <a href="${base}auth/login.html"
-                style="display:flex;align-items:center;gap:6px;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap;padding:6px 12px;border-radius:50px;"
-                class="login-link-desktop">
+              <a href="${base}auth/login.html" class="login-link-desktop">
                 <i class="fa-solid fa-arrow-right-to-bracket text-brand" style="font-size:12px;"></i>
                 Login
               </a>
