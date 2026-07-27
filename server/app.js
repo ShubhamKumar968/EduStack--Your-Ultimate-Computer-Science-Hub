@@ -437,7 +437,26 @@ app.use('/api/resources',     resourceRoutes);
 app.use('/api/favourites',    favouriteRoutes);
 app.use('/api/payments',      paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
-app.use('/',                  authRoutes);
+// ── Google OAuth root-level aliases ──────────────────────────
+// These MUST live at root because Google Cloud Console's Authorized
+// Redirect URI is set to: https://your-app.onrender.com/auth/google/callback
+// All other auth endpoints are strictly under /api/auth/
+app.get('/auth/google',          passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/auth/login.html?error=oauth_failed' }), (req, res) => {
+  const { attachCookieToken } = require('./utils/generateToken');
+  attachCookieToken(res, req.user._id);
+  if (req.session) {
+    req.session.isLoggedIn = true;
+    req.session.user = {
+      _id:    req.user._id.toString(),
+      email:  req.user.email,
+      name:   `${req.user.firstName} ${req.user.lastName}`,
+      role:   req.user.role,
+      avatar: req.user.avatar,
+    };
+  }
+  res.redirect('/');
+});
 
 // Catch-all 404 handler — must be after all routes
 // API requests get a JSON error; browser/page requests get the custom 404.html
