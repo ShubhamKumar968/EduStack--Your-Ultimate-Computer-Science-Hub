@@ -66,9 +66,11 @@ const userSchema = new mongoose.Schema(
 
     // Stores Google OAuth user ID for social login.
     // null for local-auth users.
+    // index: true — ensures O(log n) lookup on every Google OAuth login
     googleId: {
       type:    String,
       default: null,
+      index:   true,  // Scalability: prevents full collection scan on every OAuth login
     },
 
     // ── Role & Status ──────────────────────────────────────

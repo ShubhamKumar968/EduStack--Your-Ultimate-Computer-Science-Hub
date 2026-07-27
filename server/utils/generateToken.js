@@ -53,11 +53,12 @@ const generateToken = (userId) => {
  */
 const attachCookieToken = (res, userId) => {
   const token = generateToken(userId);
+  const IS_PRODUCTION = process.env.NODE_ENV === 'production';
 
   res.cookie('edustack_token', token, {
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',  // HTTPS only in prod
-    sameSite: 'strict',
+    secure:   IS_PRODUCTION,                         // HTTPS only in prod
+    sameSite: IS_PRODUCTION ? 'none' : 'strict',    // 'none' needed for cross-site OAuth redirect in prod
     maxAge: 7 * 24 * 60 * 60 * 1000,               // 7 days in ms
   });
 

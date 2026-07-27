@@ -106,7 +106,7 @@ app.use(cors({
 }));
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json({ limit: '10mb' }));
+app.use(express.json({ limit: '1mb' })); // Reduced from 10mb — prevents large-payload DoS
 app.use(cookieParser());
 
 if (!IS_PRODUCTION) {

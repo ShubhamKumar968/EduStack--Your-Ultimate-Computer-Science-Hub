@@ -8,10 +8,26 @@ const http = require('http');
 const https = require('https');
 const multer = require('multer');
 const FormData = require('form-data');
+const rateLimit = require('express-rate-limit');
+const isAuth = require('../middlewares/isAuth');
 
 const upload = multer({ storage: multer.memoryStorage() });
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL || 'http://localhost:8000';
+
+// Rate limit: max 30 AI requests per 10 minutes per user IP
+// Prevents abuse of the ML microservice by bots or unauthenticated scrapers
+const aiRateLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 30,
+  message: { success: false, message: 'Too many AI requests. Please wait 10 minutes before trying again.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// All AI routes require authentication + rate limiting
+router.use(isAuth);
+router.use(aiRateLimiter);
 
 // Helper function to send JSON requests to FastAPI
 const postToMLService = (endpoint, payload) => {

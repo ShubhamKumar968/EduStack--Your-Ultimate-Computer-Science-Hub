@@ -59,10 +59,15 @@ transporter.verify((error) => {
  */
 const sendOtpEmail = async (to, otp) => {
   const expiresMin = process.env.OTP_EXPIRES_MIN || 10;
-  console.log(`🔑 [Nodemailer OTP Log]: Generated OTP for ${to} -> ${otp}`);
+  // ⚠️ NEVER log OTP in production — it would be visible in Render dashboard logs
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`🔑 [Nodemailer OTP Log - DEV ONLY]: Generated OTP for ${to} -> ${otp}`);
+  }
 
   if (!process.env.MAIL_USER || process.env.MAIL_USER.includes('your-email')) {
-    console.log(`ℹ️ [Nodemailer]: Skipping SMTP send (dev/test mode). OTP is ${otp}`);
+    if (process.env.NODE_ENV !== 'production') {
+      console.log(`ℹ️ [Nodemailer]: Skipping SMTP send (dev/test mode). OTP is ${otp}`);
+    }
     return true;
   }
 

@@ -54,6 +54,7 @@ router.put(
   subjectController.updateSubject
 );
 
-router.delete('/:id', isAuth, requireRole('admin', 'contributor'), subjectController.deleteSubject);
+// Only admins can delete subjects (contributors can create/update but NOT delete)
+router.delete('/:id', isAuth, requireRole('admin'), subjectController.deleteSubject);
 
 module.exports = router;

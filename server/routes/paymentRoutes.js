@@ -23,7 +23,10 @@ router.get('/key', paymentController.getRazorpayKey);
 router.use(isAuth);
 router.post('/create-order', paymentController.createOrder);
 router.post('/verify',       paymentController.verifyPayment);
-router.post('/simulate',     paymentController.simulatePayment);
 router.get('/history',       paymentController.getPaymentHistory);
+
+// Admin-only: simulate payment (test mode — must NOT be available to regular users in production)
+const requireRole = require('../middlewares/requireRole');
+router.post('/simulate', requireRole('admin'), paymentController.simulatePayment);
 
 module.exports = router;

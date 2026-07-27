@@ -348,10 +348,11 @@
 
   <script>
     // ── Load ML Service URL from server config (no hardcoded localhost) ──
-    let EDUSTACK_ML_URL = 'http://localhost:8000';
+    // Initialized to empty string — AI calls are gated until this resolves.
+    let EDUSTACK_ML_URL = '';
     fetch('/api/config').then(r => r.json()).then(cfg => {
       if (cfg && cfg.mlServiceUrl) EDUSTACK_ML_URL = cfg.mlServiceUrl;
-    }).catch(() => {});
+    }).catch(() => { EDUSTACK_ML_URL = ''; });
 
     function fillSampleQuestion(q) {
       const input = document.getElementById('tutorInput');

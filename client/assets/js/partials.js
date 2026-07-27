@@ -1080,7 +1080,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Status: 🔴 blinking = sleeping/offline | 🟢 pulsing = online
 // ============================================================
 (function initMLStatusWidget() {
-  let ML_URL = 'http://localhost:8000';
+  let ML_URL = ''; // Initialized empty — set from /api/config before any ML call
   let _statusInterval = null;
   let _isOnline = false;
   let _waking = false;

@@ -712,12 +712,12 @@
 
 <script>
   // ── Load ML Service URL from server config ─────────────────────
+  // Initialized to empty string — AI calls are gated until this resolves.
   // Set ML_SERVICE_URL env var in Render dashboard for production.
-  // Falls back to localhost:8000 for local development.
-  let EDUSTACK_ML_URL = 'http://localhost:8000';
+  let EDUSTACK_ML_URL = '';
   fetch('/api/config').then(r => r.json()).then(cfg => {
     if (cfg && cfg.mlServiceUrl) EDUSTACK_ML_URL = cfg.mlServiceUrl;
-  }).catch(() => {});
+  }).catch(() => { EDUSTACK_ML_URL = ''; });
 
   function toggleAIQuickWidget() {
     const popup = document.getElementById('aiQuickPopup');
