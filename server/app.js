@@ -440,10 +440,22 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/',                  authRoutes);
 
 // Catch-all 404 handler — must be after all routes
+// API requests get a JSON error; browser/page requests get the custom 404.html
 app.use((req, res) => {
-  res.status(404).json({
-    success: false,
-    message: `Route not found: ${req.method} ${req.originalUrl}`,
+  const isApiRequest = req.originalUrl.startsWith('/api/');
+  if (isApiRequest) {
+    return res.status(404).json({
+      success: false,
+      message: `Route not found: ${req.method} ${req.originalUrl}`,
+    });
+  }
+  // Serve the custom 404 HTML page for all other unknown routes
+  const notFoundPath = path.join(__dirname, '../client/public/404.html');
+  res.status(404).sendFile(notFoundPath, (err) => {
+    if (err) {
+      // Fallback if 404.html itself is missing
+      res.status(404).send('<h1>404 - Page Not Found</h1>');
+    }
   });
 });
 
