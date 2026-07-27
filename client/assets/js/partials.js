@@ -231,63 +231,71 @@ window.showRazorpayModal = function() {
     modalOverlay.id = 'edustack-rzp-modal';
     modalOverlay.className = 'fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/70 backdrop-blur-md transition-opacity duration-300 opacity-0 pointer-events-none';
     modalOverlay.innerHTML = `
-      <div id="edustack-rzp-card" class="bg-white dark:bg-[#1f1f1f] border border-gray-200 dark:border-gray-800 rounded-3xl max-w-md w-full shadow-2xl overflow-hidden transform scale-90 transition-all duration-300 relative">
-        <div class="bg-gradient-to-r from-blue-700 via-indigo-700 to-slate-900 text-white p-6 relative">
-          <button id="rzp-modal-close" class="absolute top-4 right-4 text-white/70 hover:text-white text-sm w-8 h-8 rounded-full bg-white/10 flex items-center justify-center border-0 cursor-pointer transition">
+      <div id="edustack-rzp-card" style="background:#fff;border-radius:24px;max-width:420px;width:100%;box-shadow:0 25px 60px rgba(0,0,0,0.35);overflow:hidden;transform:scale(0.9);transition:transform 0.3s ease, opacity 0.3s ease;position:relative;" class="dark-rzp-card">
+        <!-- Header: gradient bg using inline styles so Tailwind purge never removes it -->
+        <div style="background:linear-gradient(135deg,#1d4ed8 0%,#4338ca 50%,#0f172a 100%);color:#fff;padding:24px;position:relative;">
+          <button id="rzp-modal-close" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.12);border:none;border-radius:50%;width:32px;height:32px;color:rgba(255,255,255,0.8);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.background='rgba(255,255,255,0.22)'" onmouseout="this.style.color='rgba(255,255,255,0.8)';this.style.background='rgba(255,255,255,0.12)'">
             <i class="fa-solid fa-xmark"></i>
           </button>
-          <div class="flex items-center gap-3 mb-3">
-            <div class="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center text-xl text-blue-300 font-black">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <div style="width:42px;height:42px;border-radius:12px;background:rgba(255,255,255,0.12);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;font-size:20px;color:#93c5fd;flex-shrink:0;">
               <i class="fa-solid fa-shield-halved"></i>
             </div>
             <div>
-              <h4 class="font-extrabold text-base leading-tight">Razorpay Secure Gateway</h4>
-              <p class="text-[11px] text-blue-200 flex items-center gap-1">
-                <i class="fa-solid fa-lock text-emerald-400"></i> 256-Bit SSL Encrypted Payment
+              <h4 style="font-weight:800;font-size:15px;line-height:1.2;margin:0 0 3px;">Razorpay Secure Gateway</h4>
+              <p style="font-size:11px;color:#bfdbfe;margin:0;display:flex;align-items:center;gap:5px;">
+                <i class="fa-solid fa-lock" style="color:#34d399;"></i> 256-Bit SSL Encrypted Payment
               </p>
             </div>
           </div>
-          <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3.5 flex items-center justify-between border border-white/10">
+          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(8px);border-radius:16px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;border:1px solid rgba(255,255,255,0.12);">
             <div>
-              <span class="block text-[10px] uppercase font-bold text-blue-200">Merchant</span>
-              <span class="font-extrabold text-sm text-white">EduStack Premium Access</span>
+              <span style="display:block;font-size:10px;text-transform:uppercase;font-weight:700;color:#bfdbfe;letter-spacing:0.05em;margin-bottom:3px;">Merchant</span>
+              <span style="font-weight:800;font-size:13px;color:#fff;">EduStack Premium Access</span>
             </div>
-            <div class="text-right">
-              <span class="block text-[10px] uppercase font-bold text-blue-200">Amount</span>
-              <span class="font-black text-xl text-emerald-300">₹5.00</span>
+            <div style="text-align:right;">
+              <span style="display:block;font-size:10px;text-transform:uppercase;font-weight:700;color:#bfdbfe;letter-spacing:0.05em;margin-bottom:3px;">Amount</span>
+              <span style="font-weight:900;font-size:22px;color:#34d399;">₹5.00</span>
             </div>
           </div>
         </div>
 
-        <div class="p-6 space-y-4">
-          <div class="space-y-2">
-            <label class="block text-xs font-extrabold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Select Payment Method</label>
-            <div class="grid grid-cols-2 gap-3">
-              <button type="button" class="p-3 rounded-2xl border-2 border-blue-600 bg-blue-50/50 dark:bg-blue-900/20 text-left cursor-pointer transition flex items-center gap-2">
-                <i class="fa-solid fa-qrcode text-blue-600 text-lg"></i>
+        <!-- Body -->
+        <div style="padding:24px;display:flex;flex-direction:column;gap:16px;background:#fff;" class="rzp-body-bg">
+          <div>
+            <label style="display:block;font-size:11px;font-weight:800;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:10px;">Select Payment Method</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+              <button type="button" style="padding:12px;border-radius:14px;border:2px solid #2563eb;background:rgba(37,99,235,0.06);text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all 0.2s;">
+                <i class="fa-solid fa-qrcode" style="color:#2563eb;font-size:18px;flex-shrink:0;"></i>
                 <div>
-                  <span class="block font-bold text-xs text-gray-900 dark:text-white">UPI / QR Code</span>
-                  <span class="block text-[10px] text-gray-400">GPay, PhonePe, Paytm</span>
+                  <span style="display:block;font-weight:700;font-size:12px;color:#111827;">UPI / QR Code</span>
+                  <span style="display:block;font-size:10px;color:#9ca3af;">GPay, PhonePe, Paytm</span>
                 </div>
               </button>
-              <button type="button" class="p-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] text-left cursor-pointer transition flex items-center gap-2">
-                <i class="fa-solid fa-credit-card text-emerald-500 text-lg"></i>
+              <button type="button" style="padding:12px;border-radius:14px;border:1.5px solid #e5e7eb;background:#fff;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all 0.2s;" onmouseover="this.style.borderColor='#2563eb'" onmouseout="this.style.borderColor='#e5e7eb'">
+                <i class="fa-solid fa-credit-card" style="color:#10b981;font-size:18px;flex-shrink:0;"></i>
                 <div>
-                  <span class="block font-bold text-xs text-gray-900 dark:text-white">Cards / NetBanking</span>
-                  <span class="block text-[10px] text-gray-400">Visa, RuPay, SBI</span>
+                  <span style="display:block;font-weight:700;font-size:12px;color:#111827;">Cards / NetBanking</span>
+                  <span style="display:block;font-size:10px;color:#9ca3af;">Visa, RuPay, SBI</span>
                 </div>
               </button>
             </div>
           </div>
 
           <div>
-            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 mb-1.5">Enter VPA / UPI ID or Mobile Number</label>
-            <input type="text" id="rzp-upi-id" value="success@razorpay" placeholder="e.g. 9876543210@upi" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+            <label style="display:block;font-size:11px;font-weight:700;color:#6b7280;margin-bottom:6px;">Enter VPA / UPI ID or Mobile Number</label>
+            <input type="text" id="rzp-upi-id" value="success@razorpay" placeholder="e.g. 9876543210@upi"
+              style="width:100%;box-sizing:border-box;padding:10px 14px;border-radius:12px;border:1.5px solid #d1d5db;background:#f9fafb;font-size:12px;font-weight:600;outline:none;color:#111827;transition:border-color 0.2s;"
+              onfocus="this.style.borderColor='#2563eb';this.style.boxShadow='0 0 0 3px rgba(37,99,235,0.12)'"
+              onblur="this.style.borderColor='#d1d5db';this.style.boxShadow='none'">
           </div>
 
-          <div id="rzp-msg-box" class="hidden p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-bold text-center"></div>
+          <div id="rzp-msg-box" style="display:none;padding:12px;border-radius:12px;background:#eff6ff;color:#2563eb;font-size:12px;font-weight:700;text-align:center;"></div>
 
-          <button id="rzp-submit-btn" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-extrabold py-3.5 rounded-2xl transition shadow-lg active:scale-98 cursor-pointer border-0 flex items-center justify-center gap-2 text-sm">
+          <button id="rzp-submit-btn"
+            style="width:100%;background:linear-gradient(90deg,#2563eb,#4f46e5);color:#fff;font-weight:800;padding:14px;border-radius:16px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-size:14px;box-shadow:0 4px 15px rgba(37,99,235,0.35);transition:all 0.2s;"
+            onmouseover="this.style.background='linear-gradient(90deg,#1d4ed8,#4338ca)';this.style.transform='translateY(-1px)'"
+            onmouseout="this.style.background='linear-gradient(90deg,#2563eb,#4f46e5)';this.style.transform='translateY(0)'">
             <i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium
           </button>
         </div>
@@ -303,17 +311,18 @@ window.showRazorpayModal = function() {
 
   function closeModal() {
     modalOverlay.classList.add('opacity-0', 'pointer-events-none');
-    card.classList.add('scale-90');
-    card.classList.remove('scale-100');
+    card.style.transform = 'scale(0.9)';
   }
 
   closeBtn.onclick = closeModal;
 
   submitBtn.onclick = async () => {
     submitBtn.disabled = true;
+    submitBtn.style.opacity = '0.7';
     submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Authorizing ₹5.00 Transaction...`;
-    msgBox.classList.remove('hidden');
-    msgBox.className = 'p-3 rounded-xl bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 text-xs font-bold text-center';
+    msgBox.style.display = 'block';
+    msgBox.style.background = '#eff6ff';
+    msgBox.style.color = '#2563eb';
     msgBox.textContent = 'Connecting to Razorpay Banking Gateway...';
 
     try {
@@ -325,30 +334,37 @@ window.showRazorpayModal = function() {
       const data = await res.json();
 
       if (res.ok && data.success) {
-        msgBox.className = 'p-3 rounded-xl bg-emerald-50 text-emerald-600 text-xs font-bold text-center';
+        msgBox.style.background = '#ecfdf5';
+        msgBox.style.color = '#059669';
         msgBox.textContent = '🎉 Payment Successful! Premium Access Granted.';
+        submitBtn.style.background = 'linear-gradient(90deg,#059669,#047857)';
         setTimeout(() => {
           closeModal();
           window.location.href = '/premium-dsa-sheet.html';
         }, 800);
       } else {
-        msgBox.className = 'p-3 rounded-xl bg-red-50 text-red-600 text-xs font-bold text-center';
+        msgBox.style.background = '#fef2f2';
+        msgBox.style.color = '#dc2626';
         msgBox.textContent = `❌ ${data.message || 'Payment processing failed.'}`;
         submitBtn.disabled = false;
+        submitBtn.style.opacity = '1';
+        submitBtn.style.background = 'linear-gradient(90deg,#2563eb,#4f46e5)';
         submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium`;
       }
     } catch (err) {
-      msgBox.className = 'p-3 rounded-xl bg-red-50 text-red-600 text-xs font-bold text-center';
+      msgBox.style.background = '#fef2f2';
+      msgBox.style.color = '#dc2626';
       msgBox.textContent = '❌ Network error during payment processing.';
       submitBtn.disabled = false;
+      submitBtn.style.opacity = '1';
+      submitBtn.style.background = 'linear-gradient(90deg,#2563eb,#4f46e5)';
       submitBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Pay ₹5.00 & Unlock Premium`;
     }
   };
 
   modalOverlay.classList.remove('opacity-0', 'pointer-events-none');
   setTimeout(() => {
-    card.classList.remove('scale-90');
-    card.classList.add('scale-100');
+    card.style.transform = 'scale(1)';
   }, 10);
 };
 
