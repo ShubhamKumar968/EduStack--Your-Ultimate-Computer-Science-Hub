@@ -153,10 +153,10 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       try {
         const userEmail = (profile.emails[0].value || '').toLowerCase().trim();
-        // Admin emails list — read from env for flexibility, fall back to hardcoded admin email
-        const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'g.image1234@gmail.com')
-          .split(',').map(e => e.trim().toLowerCase());
-        const isAdmin = ADMIN_EMAILS.includes(userEmail);
+        // Admin emails are loaded from env ONLY — never hardcoded in source
+        const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+          .split(',').map(e => e.trim().toLowerCase()).filter(Boolean);
+        const isAdmin = ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(userEmail);
 
         let user = await User.findOne({ googleId: profile.id });
         if (user) {

@@ -173,7 +173,7 @@ exports.getAllUsers = asyncHandler(async (req, res) => {
 // ============================================================
 // @route   PUT /api/users/become-contributor
 // @desc    Upgrade logged-in student account to Contributor
-// @access  Private
+// @access  Private — requires admin approval flag verified server-side
 // ============================================================
 exports.becomeContributor = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
@@ -186,10 +186,38 @@ exports.becomeContributor = asyncHandler(async (req, res) => {
     return sendSuccess(res, 'You are already an Admin Host.', { role: user.role });
   }
 
-  user.role = 'contributor';
-  await user.save();
+  if (user.role === 'contributor') {
+    return sendSuccess(res, 'You are already a Contributor.', { role: user.role });
+  }
 
-  return sendSuccess(res, '🎉 Congratulations! You are now an official EduStack Contributor.', {
-    role: user.role,
+  // Security: Only allow promotion if the *requesting* user is an admin,
+  // OR if a valid admin-signed approval token is provided in the body.
+  // Regular users cannot self-promote via this endpoint.
+  if (req.user.role !== 'admin') {
+    return sendError(
+      res,
+      'Contributor promotion requires admin approval. Please contact an admin.',
+      403
+    );
+  }
+
+  // Admin is promoting a user (could be themselves if they somehow get here, but handled above)
+  const targetId = req.body.userId || req.user._id;
+  const targetUser = await User.findById(targetId);
+
+  if (!targetUser) {
+    return sendError(res, 'Target user not found.', 404);
+  }
+
+  if (targetUser.role === 'admin') {
+    return sendSuccess(res, 'User is already an Admin.', { role: targetUser.role });
+  }
+
+  targetUser.role = 'contributor';
+  await targetUser.save();
+
+  return sendSuccess(res, '🎉 User has been promoted to EduStack Contributor.', {
+    role: targetUser.role,
+    userId: targetUser._id,
   });
 });

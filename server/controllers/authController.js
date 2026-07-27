@@ -89,9 +89,13 @@ exports.register = asyncHandler(async (req, res) => {
     lName = parts[1] ? parts[1].charAt(0).toUpperCase() + parts[1].slice(1) : '';
   }
 
-  const ADMIN_EMAILS = ['g.image1234@gmail.com'];
+  // Admin emails are loaded from env ONLY — never hardcoded in source
+  const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean);
   let assignedRole = 'user';
-  if (ADMIN_EMAILS.includes(normalizedEmail)) {
+  if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(normalizedEmail)) {
     assignedRole = 'admin';
   } else if (req.body.role === 'student' || req.body.role === 'user' || req.body.role === 'contributor') {
     assignedRole = req.body.role;
@@ -230,8 +234,12 @@ exports.login = asyncHandler(async (req, res) => {
     return sendError(res, 'Invalid email or password.', 401);
   }
 
-  const ADMIN_EMAILS = ['g.image1234@gmail.com'];
-  if (ADMIN_EMAILS.includes(normalizedEmail) && user.role !== 'admin') {
+  // Admin emails are loaded from env ONLY — never hardcoded in source
+  const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+    .split(',')
+    .map(e => e.trim().toLowerCase())
+    .filter(Boolean);
+  if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(normalizedEmail) && user.role !== 'admin') {
     user.role = 'admin';
     await user.save();
   }
