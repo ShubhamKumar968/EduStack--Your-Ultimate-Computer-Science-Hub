@@ -601,6 +601,7 @@
           if (liveData && liveData.length > 5) {
             problems = liveData;
             renderTopicPills();
+            populateCompanyDropdown();
             renderProblems();
             updateProgress();
             if (typeof renderCalendar === 'function') renderCalendar();
@@ -625,6 +626,7 @@
           if (result.success && result.data && result.data.length > 0) {
             problems = result.data;
             renderTopicPills();
+            populateCompanyDropdown();
             renderProblems();
             updateProgress();
             if (typeof renderCalendar === 'function') renderCalendar();
@@ -712,6 +714,7 @@
       }
 
       renderTopicPills();
+      populateCompanyDropdown();
       renderProblems();
       updateProgress();
 
@@ -1378,17 +1381,54 @@
       return subtopicThemeMap[key];
     }
 
+    function populateCompanyDropdown() {
+      const select = document.getElementById('companySelect');
+      if (!select) return;
+
+      const currentVal = select.value || 'ALL';
+      const companyMap = {};
+
+      problems.forEach(p => {
+        if (p.companies && Array.isArray(p.companies)) {
+          p.companies.forEach(c => {
+            const trimmed = c.trim();
+            if (trimmed) {
+              const lower = trimmed.toLowerCase();
+              if (!companyMap[lower]) {
+                companyMap[lower] = { name: trimmed, count: 0 };
+              }
+              companyMap[lower].count++;
+            }
+          });
+        }
+      });
+
+      const sorted = Object.values(companyMap).sort((a, b) => b.count - a.count || a.name.localeCompare(b.name));
+
+      let html = `<option value="ALL">🏢 All Companies (${problems.length})</option>`;
+      sorted.forEach(comp => {
+        const selected = comp.name.toLowerCase() === currentVal.toLowerCase() ? 'selected' : '';
+        html += `<option value="${comp.name}" ${selected}>${comp.name} (${comp.count})</option>`;
+      });
+
+      select.innerHTML = html;
+    }
+
+    function filterProblems() {
+      renderProblems();
+    }
+
     function renderProblems() {
-      const query = document.getElementById('searchInput').value.toLowerCase();
-      const diff = document.getElementById('difficultySelect').value;
+      const query = (document.getElementById('searchInput')?.value || '').toLowerCase();
+      const diff = document.getElementById('difficultySelect')?.value || 'ALL';
       const comp = document.getElementById('companySelect')?.value || 'ALL';
 
       const filtered = problems.filter(p => {
-        const matchesQuery = p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
+        const matchesQuery = !query || p.title.toLowerCase().includes(query) || p.category.toLowerCase().includes(query);
         const matchesTopic = currentTopic === 'ALL' || p.category.toLowerCase().includes(currentTopic.toLowerCase());
         const matchesDiff = diff === 'ALL' || p.difficulty === diff;
         const matchesSolved = !showSolvedOnly || solvedIds.includes(p.id);
-        const matchesComp = comp === 'ALL' || p.companies.some(c => c.toLowerCase().includes(comp.toLowerCase()));
+        const matchesComp = comp === 'ALL' || (p.companies && p.companies.some(c => c.toLowerCase().includes(comp.toLowerCase())));
         return matchesQuery && matchesTopic && matchesDiff && matchesSolved && matchesComp;
       });
 
