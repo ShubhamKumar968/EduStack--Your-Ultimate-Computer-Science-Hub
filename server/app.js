@@ -341,14 +341,30 @@ function csvLinesToProblems(lines) {
 
 /**
  * GET /api/dsa-sheet/sync
- * Fetches the live Google Sheet CSV, parses it, caches for 5 min, returns JSON.
- * This makes Google Sheet edits reflect on the website automatically.
+ * Tries to fetch the live Google Sheet CSV first (reflects edits within 5 min cache).
+ * Falls back to the static parsed_problems.json if Google Sheets is unreachable.
  */
 app.get('/api/dsa-sheet/sync', async (req, res) => {
+  const bust = req.query.bust; // cache-bust param forces re-fetch
+
+  // Serve in-memory cache if still fresh and no bust
+  if (!bust && _dsaSheetCache && (Date.now() - _dsaSheetCacheTime) < DSA_CACHE_TTL_MS) {
+    return res.status(200).json({
+      success: true,
+      source: 'cached',
+      count: _dsaSheetCache.length,
+      data: _dsaSheetCache,
+      lastSynced: new Date(_dsaSheetCacheTime).toISOString()
+    });
+  }
+
+  // Try live Google Sheet fetch
   try {
-    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-    if (fs.existsSync(jsonPath)) {
-      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+    const rawCSV = await fetchCSV(GOOGLE_SHEET_CSV_URL);
+    const lines = parseCSVText(rawCSV);
+    const data = csvLinesToProblems(lines);
+
+    if (data && data.length > 0) {
       _dsaSheetCache = data;
       _dsaSheetCacheTime = Date.now();
       return res.status(200).json({
@@ -359,11 +375,30 @@ app.get('/api/dsa-sheet/sync', async (req, res) => {
         lastSynced: new Date().toISOString()
       });
     }
-    return res.status(200).json({ success: true, source: 'empty', count: 0, data: [] });
-  } catch (err) {
-    console.error('⚠️ [DSA Sheet Sync Error]:', err.message);
-    return res.status(500).json({ success: false, error: err.message });
+  } catch (liveErr) {
+    console.warn('⚠️ [DSA Sheet] Live Google Sheet fetch failed, falling back to static JSON:', liveErr.message);
   }
+
+  // Fallback: serve static parsed_problems.json
+  try {
+    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
+    if (fs.existsSync(jsonPath)) {
+      const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+      _dsaSheetCache = data;
+      _dsaSheetCacheTime = Date.now();
+      return res.status(200).json({
+        success: true,
+        source: 'static',
+        count: data.length,
+        data: data,
+        lastSynced: new Date().toISOString()
+      });
+    }
+  } catch (staticErr) {
+    console.error('⚠️ [DSA Sheet Sync Error]:', staticErr.message);
+  }
+
+  return res.status(200).json({ success: true, source: 'empty', count: 0, data: [] });
 });
 
 /**
