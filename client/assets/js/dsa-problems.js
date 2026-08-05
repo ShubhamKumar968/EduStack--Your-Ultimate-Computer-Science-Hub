@@ -7674,7 +7674,7 @@ window.EDUSTACK_DSA_PROBLEMS = [
         "companies":  [
 
                       ],
-        "problemLink":  "https://leetcode.com/problems/binary-subarrays-with-sum/",
+        "problemLink":  "https://www.geeksforgeeks.org/problems/binary-subarray-with-sum/1",
         "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/24_binarySubarraySum.cpp",
         "video":  "",
         "intuition":  "",
@@ -7689,7 +7689,7 @@ window.EDUSTACK_DSA_PROBLEMS = [
         "companies":  [
 
                       ],
-        "problemLink":  "https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/",
+        "problemLink":  "https://www.geeksforgeeks.org/problems/count-substring/1",
         "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/25_countSubstringWithAll3Characters.cpp",
         "video":  "",
         "intuition":  "",
@@ -7704,7 +7704,7 @@ window.EDUSTACK_DSA_PROBLEMS = [
         "companies":  [
 
                       ],
-        "problemLink":  "https://www.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/1",
+        "problemLink":  "https://www.geeksforgeeks.org/problems/count-the-number-of-subarrays/1",
         "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/26_subarrayWithSumInRange.cpp",
         "video":  "",
         "intuition":  "",
@@ -7736,7 +7736,7 @@ window.EDUSTACK_DSA_PROBLEMS = [
         "companies":  [
                           "Amazon"
                       ],
-        "problemLink":  "https://leetcode.com/problems/longest-repeating-character-replacement/",
+        "problemLink":  "https://www.geeksforgeeks.org/problems/longest-repeating-character-replacement/1",
         "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/28_longestRepeatingCharacterReplacement.cpp",
         "video":  "",
         "intuition":  "",
