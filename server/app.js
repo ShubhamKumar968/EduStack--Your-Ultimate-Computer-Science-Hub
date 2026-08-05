@@ -244,7 +244,7 @@ let _dsaSheetCacheTime = 0;
 const DSA_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
 const GOOGLE_SHEET_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWl0OsRO5q5cdOUY3t--QiGg4WozIQVKBo9h2WrPyb5Rv7MC9DYt9bdap-6bGQLLlS0UsqKLJOhwaa/pub?output=csv';
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWl0OsRO5q5cdOUY3t--QiGg4WozIQVKBo9h2WrPyb5Rv7MC9DYt9bdap-6bGQLLlS0UsqKLJOhwaa/pub?gid=0&single=true&output=csv';
 
 /**
  * Fetch raw CSV text from a URL using built-in https module.
