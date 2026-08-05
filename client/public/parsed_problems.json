@@ -1066,7 +1066,7 @@
       "Netflix",
       "Google"
     ],
-    "problemLink": "",
+    "problemLink": "https://www.geeksforgeeks.org/problems/disjoint-set-union-find/1",
     "github": "",
     "video": "https://youtu.be/AsAdKHkITBQ?si=-P9hIuJxsMsR2Tbe",
     "time": "O(N)",
@@ -3458,7 +3458,7 @@
     "subTopic": "Heaps Related Problems",
     "difficulty": "Medium",
     "companies": [],
-    "problemLink": "",
+    "problemLink": "https://www.geeksforgeeks.org/problems/magician-and-chocolates/1",
     "github": "https://github.com/ShubhamKumar968/data-Structures/blob/main/(6).%20Heap/17_magicianAndChocolates.cpp",
     "video": "https://youtu.be/pCsWDX2K06o?si=KFkW3sNC7LT-U8gg",
     "time": "O(N)",
@@ -5128,7 +5128,7 @@
       "Microsoft",
       "Amazon"
     ],
-    "problemLink": "",
+    "problemLink": "https://www.geeksforgeeks.org/problems/merge-two-sorted-arrays5135/1",
     "github": "https://github.com/ShubhamKumar968/data-Structures/blob/main/(2).%20Arrays/15_merge2SortedArrays.cpp",
     "video": "https://youtu.be/-1cLK6PaLsQ?si=Nkd6cpTSuKY3guI2",
     "time": "O(N)",
@@ -7220,21 +7220,6 @@
     "code": "// Solution & Logic for: Find kth  positive missing in sorted array\n// Category: Binary Search (Some important problems)\n// Approach & Hint:\n// NPCI"
   },
   {
-    "id": 401,
-    "title": "Binary Search on answers",
-    "category": "Binary Search",
-    "subTopic": "Some important problems",
-    "difficulty": "Medium",
-    "companies": [],
-    "problemLink": "",
-    "github": "",
-    "video": "",
-    "time": "O(N)",
-    "space": "O(N)",
-    "intuition": "Refer to problem logic & hints.",
-    "code": "// Solution & Logic for: Binary Search on answers\n// Category: Binary Search (Some important problems)\n// Approach & Hint:\n// Refer to problem logic & hints."
-  },
-  {
     "id": 402,
     "title": "Allocate Minimum Number of Pages",
     "category": "Binary Search",
@@ -8246,5 +8231,70 @@
     "space": "O(N)",
     "intuition": "Amazon",
     "code": "// Solution & Logic for: Candy\n// Category: Greedy Algorithm (Line Sweep Technique or interval problems)\n// Approach & Hint:\n// Amazon"
+  },
+  {
+    "title": "Maximum average Subarray of size k",
+    "category": "Sliding Window",
+    "subTopic": "Fixed size window problems",
+    "difficulty": "Medium",
+    "companies": [
+      "Amazon"
+    ],
+    "problemLink": "https://leetcode.com/problems/maximum-average-subarray-i/",
+    "github": "",
+    "video": "",
+    "time": "O(N)",
+    "space": "O(N)",
+    "intuition": "Refer to problem logic & hints.",
+    "code": "// Solution & Logic for: Maximum average Subarray of size k",
+    "id": 459
+  },
+  {
+    "title": "Subarray with exactly K odd Numbers",
+    "category": "Sliding Window",
+    "subTopic": "Prefix-Sum + hashmap problems",
+    "difficulty": "Medium",
+    "companies": [],
+    "problemLink": "https://leetcode.com/problems/count-number-of-nice-subarrays/",
+    "github": "",
+    "video": "",
+    "time": "O(N)",
+    "space": "O(N)",
+    "intuition": "Refer to problem logic & hints.",
+    "code": "// Solution & Logic for: Subarray with exactly K odd Numbers",
+    "id": 460
+  },
+  {
+    "title": "Count subarray with exactly K distinct integer",
+    "category": "Sliding Window",
+    "subTopic": "Variable size window problems",
+    "difficulty": "Medium",
+    "companies": [
+      "Uber",
+      "Amazon"
+    ],
+    "problemLink": "https://leetcode.com/problems/subarrays-with-k-different-integers/",
+    "github": "",
+    "video": "",
+    "time": "O(N)",
+    "space": "O(N)",
+    "intuition": "Refer to problem logic & hints.",
+    "code": "// Solution & Logic for: Count subarray with exactly K distinct integer",
+    "id": 461
+  },
+  {
+    "title": "Maximum Points obtained from card",
+    "category": "Sliding Window",
+    "subTopic": "Variable size window problems",
+    "difficulty": "Medium",
+    "companies": [],
+    "problemLink": "https://leetcode.com/problems/maximum-points-you-can-obtain-from-cards/",
+    "github": "",
+    "video": "",
+    "time": "O(N)",
+    "space": "O(N)",
+    "intuition": "Refer to problem logic & hints.",
+    "code": "// Solution & Logic for: Maximum Points obtained from card",
+    "id": 463
   }
 ]

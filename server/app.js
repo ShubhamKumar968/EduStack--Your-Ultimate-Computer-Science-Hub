@@ -389,7 +389,9 @@ function csvLinesToProblems(lines) {
     }
 
     const isIdNum = !isNaN(parseInt(col2)) && parseInt(col2) > 0;
-    if (col3 && !isIdNum && (col1 === '' || col1 === 'FALSE' || col1 === 'TRUE') && (cols[4] || '').trim() === '') {
+    const col4Val = (cols[4] || '').trim();
+    const isPlaceholderLink = col4Val === '' || col4Val === 'Problem Link';
+    if (col3 && !isIdNum && (col1 === '' || col1 === 'FALSE' || col1 === 'TRUE') && isPlaceholderLink) {
       currentSubtopic = col3;
       continue;
     }
@@ -472,14 +474,38 @@ app.get('/api/dsa-sheet/sync', async (req, res) => {
     const liveProblems = csvLinesToProblems(csvLines);
 
     if (liveProblems && liveProblems.length > 5) {
+      // ── Merge live data with existing static JSON so manually-added
+      // problemLinks are never overwritten by a sync (since Google Sheets
+      // CSV export strips hyperlink URLs, leaving only placeholder text).
+      let mergedProblems = liveProblems;
+      try {
+        if (fs.existsSync(jsonPath)) {
+          const existingData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+          const existingMap = {};
+          existingData.forEach(p => { if (p.title) existingMap[p.title.trim().toLowerCase()] = p; });
+          mergedProblems = liveProblems.map(lp => {
+            const existing = existingMap[lp.title.trim().toLowerCase()] || {};
+            return {
+              ...lp,
+              // Preserve existing URLs if live CSV didn't provide a real one
+              problemLink: lp.problemLink || existing.problemLink || '',
+              github:      lp.github      || existing.github      || '',
+              video:       lp.video       || existing.video       || '',
+            };
+          });
+        }
+      } catch (mergeErr) {
+        console.warn('⚠️ [DSA Sheet Sync] Merge with existing JSON failed, using live data:', mergeErr.message);
+      }
+
       // Update in-memory cache
-      _dsaSheetCache = liveProblems;
+      _dsaSheetCache = mergedProblems;
       _dsaSheetCacheTime = Date.now();
 
       // Persist to disk so /api/dsa-sheet/live also stays fresh
       try {
-        fs.writeFileSync(jsonPath, JSON.stringify(liveProblems, null, 2), 'utf-8');
-        console.log(`✅ [DSA Sheet Sync] Wrote ${liveProblems.length} problems to parsed_problems.json`);
+        fs.writeFileSync(jsonPath, JSON.stringify(mergedProblems, null, 2), 'utf-8');
+        console.log(`✅ [DSA Sheet Sync] Wrote ${mergedProblems.length} problems to parsed_problems.json`);
       } catch (writeErr) {
         console.warn('⚠️ [DSA Sheet Sync] Could not write parsed_problems.json:', writeErr.message);
       }
@@ -487,8 +513,8 @@ app.get('/api/dsa-sheet/sync', async (req, res) => {
       return res.status(200).json({
         success: true,
         source: 'live',
-        count: liveProblems.length,
-        data: liveProblems,
+        count: mergedProblems.length,
+        data: mergedProblems,
         lastSynced: new Date().toISOString()
       });
     }

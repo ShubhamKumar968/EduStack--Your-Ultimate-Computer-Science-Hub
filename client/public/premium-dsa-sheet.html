@@ -538,7 +538,9 @@
 
         // Subtopic section header row: col3 has subtopic name, but col2 (id) is not a number and col1 is empty/FALSE/TRUE
         const isIdNum = !isNaN(parseInt(col2)) && parseInt(col2) > 0;
-        if (col3 && !isIdNum && (col1 === '' || col1 === 'FALSE' || col1 === 'TRUE') && (cols[4] || '').trim() === '') {
+        const col4Val = (cols[4] || '').trim();
+        const isPlaceholderLink = col4Val === '' || col4Val === 'Problem Link';
+        if (col3 && !isIdNum && (col1 === '' || col1 === 'FALSE' || col1 === 'TRUE') && isPlaceholderLink) {
           currentSubtopic = col3;
           continue;
         }
