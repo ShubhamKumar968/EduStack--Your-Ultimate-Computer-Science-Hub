@@ -1,4 +1,4 @@
-﻿window.EDUSTACK_DSA_PROBLEMS = [
+window.EDUSTACK_DSA_PROBLEMS = [
     {
         "id":  1,
         "title":  "Print adjacency list",
@@ -7675,7 +7675,7 @@
 
                       ],
         "problemLink":  "https://leetcode.com/problems/binary-subarrays-with-sum/",
-        "github":  "",
+        "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/24_binarySubarraySum.cpp",
         "video":  "",
         "intuition":  "",
         "code":  "// Solution \u0026 Logic for: Binary Subarray Sum"
@@ -7690,7 +7690,7 @@
 
                       ],
         "problemLink":  "https://leetcode.com/problems/number-of-substrings-containing-all-three-characters/",
-        "github":  "",
+        "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/25_countSubstringWithAll3Characters.cpp",
         "video":  "",
         "intuition":  "",
         "code":  "// Solution \u0026 Logic for: Count Substrings with all 3 characters"
@@ -7705,7 +7705,7 @@
 
                       ],
         "problemLink":  "https://www.geeksforgeeks.org/problems/subarray-with-given-sum-1587115621/1",
-        "github":  "",
+        "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/26_subarrayWithSumInRange.cpp",
         "video":  "",
         "intuition":  "",
         "code":  "// Solution \u0026 Logic for: Subarray with sum in range"
@@ -7721,8 +7721,8 @@
                           "Myntra",
                           "Paytm"
                       ],
-        "problemLink":  "https://www.geeksforgeeks.org/problems/max-sum-subarray-of-size-k5313/1",
-        "github":  "",
+        "problemLink":  "https://www.geeksforgeeks.org/problems/largest-sum-subarray-of-size-at-least-k3121/1",
+        "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/27_maximumSumOfSubarrayOfSizeAtleastK.cpp",
         "video":  "",
         "intuition":  "",
         "code":  "// Solution \u0026 Logic for: Maximum sum of Subarray of size atleast k (-ve)"
@@ -7737,7 +7737,7 @@
                           "Amazon"
                       ],
         "problemLink":  "https://leetcode.com/problems/longest-repeating-character-replacement/",
-        "github":  "",
+        "github":  "https://github.com/ShubhamKumar968/data-Structures/blob/main/(5).%20Sliding%20Window/28_longestRepeatingCharacterReplacement.cpp",
         "video":  "",
         "intuition":  "",
         "code":  "// Solution \u0026 Logic for: Longest repeating character replacement"
