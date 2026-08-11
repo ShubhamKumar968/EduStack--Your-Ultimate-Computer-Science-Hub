@@ -45,7 +45,9 @@ class PYQGenerationRequest(BaseModel):
     subject: str
     topic: str
     difficulty: Optional[str] = "Medium"
-    num_questions: int = Field(default=3, ge=1, le=10)
+    num_mcqs: Optional[int] = 10
+    num_theory: Optional[int] = 5
+    num_questions: Optional[int] = 5
 
 # ── In-Memory RAG Engine (Render Free-Tier Optimized) ─────────
 class LightRAGStore:
@@ -201,6 +203,9 @@ Answer:"""
 
 @app.post("/api/rag/generate-pyq")
 def generate_pyq(req: PYQGenerationRequest):
+    num_mcqs = req.num_mcqs or 10
+    num_theory = req.num_theory or (req.num_questions or 5)
+
     gemini_api_key = os.getenv("GEMINI_API_KEY")
     if gemini_api_key:
         try:
@@ -209,16 +214,46 @@ def generate_pyq(req: PYQGenerationRequest):
             
             models_to_try = get_available_gemini_models(genai)
             
-            prompt = f"""You are EduStack AI. Generate {req.num_questions} university exam-style questions for Computer Science students.
-Subject: {req.subject}
-Topic: {req.topic}
-Difficulty: {req.difficulty}
+            prompt = f"""You are EduStack AI, an expert Computer Science professor creating an official University Exam & Practice Quiz paper.
 
-Formatting Rules:
-1. Use clear, beautifully structured Markdown headers (`### Question 1: ...`).
-2. If code solutions are included, provide them in **C++** syntax inside standard Markdown code blocks (` ```cpp `) and ALWAYS use `using namespace std;` to avoid `std::` prefixes.
-3. Do NOT output raw LaTeX math formulas (like $V$ or $|E|$); use clean readable text (like V, E, O(V + E)).
-4. Include detailed marking schemes for each sub-question.
+SUBJECT: {req.subject}
+TOPIC: {req.topic}
+DIFFICULTY: {req.difficulty}
+NUMBER OF MCQs TO GENERATE: {num_mcqs}
+NUMBER OF THEORETICAL / NUMERICAL QUESTIONS TO GENERATE: {num_theory}
+
+CRITICAL PAPER STRUCTURE REQUIREMENTS:
+
+============================================================
+SECTION 1: MULTIPLE CHOICE PRACTICE QUIZ ({num_mcqs} Questions)
+============================================================
+Generate exactly {num_mcqs} Multiple Choice Questions (MCQs).
+For EVERY single MCQ, follow this EXACT Markdown structure so students can interactively test their knowledge:
+
+### MCQ 1: [Question Title / Problem Statement]
+- **Option A**: [Option A Text]
+- **Option B**: [Option B Text]
+- **Option C**: [Option C Text]
+- **Option D**: [Option D Text]
+> **Correct Answer**: Option [A/B/C/D]
+> **Explanation**: [1-2 sentence detailed conceptual explanation.]
+
+============================================================
+SECTION 2: THEORETICAL & NUMERICAL EXAM PYQs ({num_theory} Questions)
+============================================================
+Generate exactly {num_theory} comprehensive, university-level theoretical and numerical exam questions with detailed solutions and visual diagrams.
+
+For EVERY Theoretical / Numerical question:
+1. **Title & Problem Statement**: Clear academic/engineering question statement (including realistic numerical values).
+2. **Visual Diagram / ASCII Illustration**: Provide a clear ASCII art diagram, tree/graph layout, memory layout table, or flowchart (`[Node A] -> [Node B]`, matrix grid, memory table) whenever helpful for exam visualization.
+3. **Step-by-Step Solution & Calculations**: Provide full numerical derivation or theoretical explanation divided into clear readable paragraphs.
+4. **C++ Code Solution (if applicable to topic)**: Provide C++ implementation wrapped in ```cpp code blocks with `using namespace std;`.
+5. **Exam Marking Scheme**: Breakdown of marks (e.g. `[2 Marks: Diagram, 3 Marks: Formula, 5 Marks: Solution]`).
+
+STRICT NO-LATEX & DOLLAR SIGN RULE:
+- ABSOLUTELY DO NOT use dollar signs ($ or $$) or raw LaTeX syntax (\\text, \\in, \\ge, \\ceil, \\log).
+- Write all math, formulas, and complexities as clean, readable plain text (e.g. `O(V + E)`, `Balance Factor = Height(Left) - Height(Right)`, `ceil(m/2)`).
+- Use generous paragraph spacing and bold subheadings so the content is super readable and attractive!
 """
 
             response = None
@@ -239,14 +274,16 @@ Formatting Rules:
                 "success": True,
                 "questions": response.text,
                 "subject": req.subject,
-                "topic": req.topic
+                "topic": req.topic,
+                "num_mcqs": num_mcqs,
+                "num_theory": num_theory
             }
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     else:
         return {
             "success": True,
-            "questions": f"1. Explain the fundamentals of {req.topic} in {req.subject}.\n2. Compare {req.topic} with alternative approaches.",
+            "questions": f"### MCQ 1: Fundamentals of {req.topic}\n- **Option A**: Option A\n- **Option B**: Option B\n- **Option C**: Option C\n- **Option D**: Option D\n> **Correct Answer**: Option A\n> **Explanation**: Explanation here.",
             "note": "Set GEMINI_API_KEY for dynamic AI generation."
         }
 

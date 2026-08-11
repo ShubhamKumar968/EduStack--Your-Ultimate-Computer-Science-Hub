@@ -361,26 +361,36 @@
             </div>
           </div>
 
-          <!-- PANEL 3: PYQ GENERATOR -->
+          <!-- PANEL 3: PYQ & MCQ GENERATOR -->
           <div id="panelQuiz" class="hidden space-y-6 flex-1">
             <div class="border-b border-gray-100 dark:border-gray-800 pb-4">
               <h2 class="text-base font-black text-gray-900 dark:text-white flex items-center gap-2">
-                <i class="fa-solid fa-list-check text-amber-500"></i> Exam PYQ & MCQ Quiz Generator
+                <i class="fa-solid fa-list-check text-amber-500"></i> Exam PYQ & Interactive MCQ Generator
               </h2>
-              <p class="text-xs text-gray-400 font-semibold mt-1">Generate university exam questions with C++ solutions and marking schemes.</p>
+              <p class="text-xs text-gray-400 font-semibold mt-1">Generate 2 distinct sections: Section 1 Interactive MCQ Quiz & Section 2 Theoretical/Numerical PYQs with ASCII diagrams and C++ solutions.</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Specific Topic:</label>
-                <input id="quizTopic" type="text" value="Graphs & Topological Sort" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="md:col-span-1">
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Subject & Topic:</label>
+                <input id="quizTopic" type="text" value="Graphs & Topological Sort" placeholder="e.g. Operating Systems Paging or Data Structures Trees" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Number of Questions:</label>
-                <select id="quizNum" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
-                  <option value="3">3 Questions</option>
-                  <option value="5" selected>5 Questions</option>
-                  <option value="10">10 Questions</option>
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 1: MCQ Practice Count:</label>
+                <select id="mcqNum" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                  <option value="10" selected>10 MCQs</option>
+                  <option value="20">20 MCQs</option>
+                  <option value="30">30 MCQs</option>
+                  <option value="40">40 MCQs</option>
+                  <option value="50">50 MCQs</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 2: Theoretical & Numerical PYQs:</label>
+                <select id="theoryNum" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                  <option value="5" selected>5 Exam Questions</option>
+                  <option value="10">10 Exam Questions</option>
+                  <option value="15">15 Exam Questions</option>
                 </select>
               </div>
             </div>
@@ -390,8 +400,9 @@
             </button>
 
             <div id="quizResultBox" class="hidden p-6 rounded-2xl bg-gray-50 dark:bg-[#14141c] border border-amber-500/30 space-y-4">
-              <h4 class="text-xs font-black text-amber-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3">
-                🎓 Practice Quiz & C++ Marking Scheme
+              <h4 class="text-xs font-black text-amber-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3 flex items-center justify-between">
+                <span>🎓 Section 1: Interactive MCQs & Section 2: Exam PYQs</span>
+                <span class="text-[10px] text-amber-400 font-normal">Click MCQ options to guess answers!</span>
               </h4>
               <div id="quizText" class="text-xs md:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-sans prose dark:prose-invert max-w-none"></div>
             </div>
@@ -406,7 +417,6 @@
 
   <script>
     // ── Load ML Service URL from server config (no hardcoded localhost) ──
-    // Initialized to empty string — AI calls are gated until this resolves.
     let EDUSTACK_ML_URL = '';
     fetch('/api/config').then(r => r.json()).then(cfg => {
       if (cfg && cfg.mlServiceUrl) EDUSTACK_ML_URL = cfg.mlServiceUrl;
@@ -429,13 +439,93 @@
         const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
         
         if (t === toolName) {
-          btn.className = "w-full p-4 rounded-2xl border flex items-center gap-4 transition-all text-left cursor-pointer border-brand bg-brand/10 text-brand dark:text-white font-extrabold shadow-md";
+          btn.className = 'w-full p-4 rounded-2xl border border-brand/30 bg-brand/10 text-brand font-extrabold flex items-center gap-4 transition-all text-left shadow-sm';
           panel.classList.remove('hidden');
-          panel.classList.add('block');
         } else {
-          btn.className = "w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer";
-          panel.classList.remove('block');
+          btn.className = 'w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer';
           panel.classList.add('hidden');
+        }
+      });
+    }
+
+    function cleanAndRenderMarkdown(rawText) {
+      if (!rawText) return '';
+      let text = String(rawText);
+
+      text = text.replace(/\$\$\s*([\s\S]*?)\s*\$\$/g, (match, p1) => {
+        let clean = p1.replace(/\\text\{([^}]+)\}/g, '$1')
+                      .replace(/\\mathcal\{([^}]+)\}/g, '$1')
+                      .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+                      .trim();
+        return '\n\n**' + clean + '**\n\n';
+      });
+
+      text = text.replace(/\$([^$\n]+)\$/g, (match, p1) => {
+        let clean = p1.replace(/\\text\{([^}]+)\}/g, '$1')
+                      .replace(/\\mathcal\{([^}]+)\}/g, '$1')
+                      .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+                      .trim();
+        return clean;
+      });
+
+      text = text.replace(/\\text\{([^}]+)\}/g, '$1');
+      text = text.replace(/\\mathcal\{([^}]+)\}/g, '$1');
+      text = text.replace(/\\mathbf\{([^}]+)\}/g, '$1');
+      text = text.replace(/\\notin/g, 'not in ');
+      text = text.replace(/\\in/g, ' in ');
+      text = text.replace(/\\ge/g, ' >= ');
+      text = text.replace(/\\le/g, ' <= ');
+      text = text.replace(/\\neq/g, ' != ');
+      text = text.replace(/\\cdot/g, ' * ');
+      text = text.replace(/\\times/g, ' x ');
+      text = text.replace(/\\ceil\s*([^\\\]]+)\s*\\rceil/g, 'ceil($1)');
+      text = text.replace(/\\floor\s*([^\\\]]+)\s*\\rfloor/g, 'floor($1)');
+      text = text.replace(/\\log/g, 'log');
+      text = text.replace(/\\infty/g, 'infinity');
+
+      text = text.replace(/\$/g, '');
+
+      if (typeof marked !== 'undefined') {
+        return marked.parse(text);
+      }
+      return text;
+    }
+
+    function makeMCQsInteractive() {
+      const container = document.getElementById('quizText');
+      if (!container) return;
+
+      const listItems = container.querySelectorAll('li');
+      listItems.forEach(li => {
+        const text = li.innerText || '';
+        if (text.match(/^Option [A-D]:/i)) {
+          li.classList.add('cursor-pointer', 'p-3', 'my-2', 'rounded-xl', 'border', 'border-gray-200', 'dark:border-gray-700/80', 'bg-white', 'dark:bg-[#1e1c2b]', 'hover:border-amber-500', 'transition-all', 'font-semibold', 'select-none');
+          li.onclick = function() {
+            let parent = li.closest('ul') || li.parentElement;
+            let block = parent ? parent.parentElement : null;
+            let correctMatch = block ? block.innerText.match(/Correct Answer\s*:\s*Option ([A-D])/i) : null;
+            let correctOpt = correctMatch ? correctMatch[1].toUpperCase() : null;
+            
+            let clickedOptMatch = text.match(/^Option ([A-D]):/i);
+            let clickedOpt = clickedOptMatch ? clickedOptMatch[1].toUpperCase() : null;
+
+            parent.querySelectorAll('li').forEach(item => {
+              item.classList.remove('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-400', 'bg-red-500/20', 'border-red-500', 'text-red-400');
+            });
+
+            if (clickedOpt && correctOpt) {
+              if (clickedOpt === correctOpt) {
+                li.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-400');
+              } else {
+                li.classList.add('bg-red-500/20', 'border-red-500', 'text-red-400');
+                parent.querySelectorAll('li').forEach(item => {
+                  if (item.innerText.match(new RegExp('^Option ' + correctOpt + ':', 'i'))) {
+                    item.classList.add('bg-emerald-500/20', 'border-emerald-500', 'text-emerald-400');
+                  }
+                });
+              }
+            }
+          };
         }
       });
     }
@@ -448,22 +538,16 @@
       if (!question) return;
 
       const chatBox = document.getElementById('chatBox');
-      
-      // Append User message
       chatBox.innerHTML += `
-        <div class="flex items-start justify-end gap-3">
-          <div class="chat-bubble-user text-white p-4 rounded-2xl max-w-xl font-semibold shadow-md">
+        <div class="flex justify-end">
+          <div class="chat-bubble-user text-white p-4 rounded-2xl max-w-[85%] md:max-w-xl text-xs md:text-sm font-semibold shadow-md min-w-0 overflow-hidden break-words">
             ${question}
-          </div>
-          <div class="w-8 h-8 rounded-2xl bg-brand text-white flex items-center justify-center text-xs font-bold flex-shrink-0 shadow-sm">
-            <i class="fa-solid fa-user"></i>
           </div>
         </div>
       `;
       input.value = '';
       chatBox.scrollTop = chatBox.scrollHeight;
 
-      // Append Loading
       const loadingId = 'loading-' + Date.now();
       chatBox.innerHTML += `
         <div id="${loadingId}" class="flex items-start gap-3">
@@ -498,7 +582,7 @@
         document.getElementById(loadingId)?.remove();
 
         if (!res.ok || data.success === false) {
-          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to use AI tutor.' : 'Failed to connect to AI service.');
+          const errText = data.message || data.error || 'Failed to connect to AI service.';
           chatBox.innerHTML += `
             <div class="flex items-start gap-3">
               <div class="w-9 h-9 rounded-2xl bg-red-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
@@ -534,11 +618,6 @@
         chatBox.scrollTop = chatBox.scrollHeight;
       } catch (err) {
         document.getElementById(loadingId)?.remove();
-        chatBox.innerHTML += `
-          <div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">
-            ⚠️ Service Error: ${err.message}. Ensure python main.py service is active.
-          </div>
-        `;
       }
     }
 
@@ -578,9 +657,8 @@
         const text = document.getElementById('summaryText');
 
         if (!res.ok || data.success === false) {
-          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to summarize PDFs.' : 'Failed to generate summary.');
           box.classList.remove('hidden');
-          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Service Warning: ${errText}</div>`;
+          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Error processing document.</div>`;
           btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Executive Summary`;
           btn.disabled = false;
           return;
@@ -592,7 +670,6 @@
         btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Executive Summary`;
         btn.disabled = false;
       } catch (err) {
-        alert("Error summarizing PDF: " + err.message);
         btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Executive Summary`;
         btn.disabled = false;
       }
@@ -601,10 +678,11 @@
     async function handleGenerateQuiz() {
       const subject = document.getElementById('sidebarSubjectSelect').value;
       const topic = document.getElementById('quizTopic').value;
-      const num_questions = document.getElementById('quizNum').value;
+      const num_mcqs = parseInt(document.getElementById('mcqNum').value || '10');
+      const num_theory = parseInt(document.getElementById('theoryNum').value || '5');
 
       const btn = document.getElementById('generateQuizBtn');
-      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Generating Questions...`;
+      btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin mr-2"></i> Generating ${num_mcqs} MCQs & ${num_theory} Exam PYQs...`;
       btn.disabled = true;
 
       try {
@@ -612,7 +690,7 @@
           method: 'POST',
           credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })
+          body: JSON.stringify({ subject, topic, num_mcqs, num_theory })
         });
 
         if (res.status === 404) {
@@ -620,7 +698,7 @@
             method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })
+            body: JSON.stringify({ subject, topic, num_mcqs, num_theory })
           });
         }
 
@@ -630,9 +708,8 @@
         const text = document.getElementById('quizText');
 
         if (!res.ok || data.success === false) {
-          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to generate practice quizzes.' : 'Failed to generate quiz.');
           box.classList.remove('hidden');
-          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Service Warning: ${errText}</div>`;
+          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Error generating quiz.</div>`;
           btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Generate Practice Quiz & PYQs`;
           btn.disabled = false;
           return;
@@ -641,6 +718,8 @@
         box.classList.remove('hidden');
         const rawContent = data.questions || JSON.stringify(data, null, 2);
         text.innerHTML = cleanAndRenderMarkdown(rawContent);
+
+        makeMCQsInteractive();
 
         btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Generate Practice Quiz & PYQs`;
         btn.disabled = false;
