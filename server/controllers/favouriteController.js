@@ -2,35 +2,59 @@
 // controllers/favouriteController.js
 // ============================================================
 // PURPOSE:
-//   Manages a user's personal bookmarked resources.
-//   Each user has their own list — fully independent from others.
+//   Manages a user's personal bookmarked resources and subjects.
 //
 // ROUTES HANDLED:
-//   GET    /api/favourites          → Get logged-in user's favourites
-//   POST   /api/favourites/:id      → Add a resource to favourites
-//   DELETE /api/favourites/:id      → Remove a resource from favourites
+//   GET    /api/favourites             → Get logged-in user's favourites
+//   POST   /api/favourites/:id         → Add resource or subject to favourites
+//   DELETE /api/favourites/:id         → Remove resource or subject from favourites
+//   GET    /api/favourites/check/:id   → Check favourite status
 // ============================================================
 
+const mongoose = require('mongoose');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
 const Favourite = require('../models/favourite');
 const Resource  = require('../models/resource');
+const Subject   = require('../models/subject');
 
+// Helper to resolve an ID or Name to a Subject or Resource document
+async function resolveTarget(idOrName) {
+  if (!idOrName) return { target: null, type: null };
+
+  if (mongoose.Types.ObjectId.isValid(idOrName)) {
+    const sub = await Subject.findById(idOrName);
+    if (sub) return { target: sub, type: 'subject' };
+
+    const res = await Resource.findById(idOrName);
+    if (res) return { target: res, type: 'resource' };
+  }
+
+  // Try matching subject by name or code
+  const subByName = await Subject.findOne({
+    $or: [
+      { name: new RegExp(`^${idOrName}$`, 'i') },
+      { code: idOrName.toUpperCase() }
+    ]
+  });
+  if (subByName) return { target: subByName, type: 'subject' };
+
+  return { target: null, type: null };
+}
 
 // ============================================================
 // @route   GET /api/favourites
-// @desc    Get all favourited resources for the logged-in user
+// @desc    Get all favourited items (subjects & resources) for logged-in user
 // @access  Private
 // ============================================================
 exports.getFavourites = asyncHandler(async (req, res) => {
-  // Find all Favourite documents where user = logged-in user
-  // .populate('resource') replaces the resource ObjectId with the full Resource document
   const favourites = await Favourite.find({ user: req.user._id })
     .populate({
       path:     'resource',
-      populate: { path: 'subject', select: 'name code' }, // Nested populate: resource → subject
+      populate: { path: 'subject', select: 'name code' },
     })
-    .sort({ createdAt: -1 }); // Most recently bookmarked first
+    .populate('subject')
+    .sort({ createdAt: -1 });
 
   return sendSuccess(res, 'Favourites fetched.', {
     count: favourites.length,
@@ -38,71 +62,88 @@ exports.getFavourites = asyncHandler(async (req, res) => {
   });
 });
 
-
 // ============================================================
-// @route   POST /api/favourites/:resourceId
-// @desc    Add a resource to the user's favourites
+// @route   POST /api/favourites/:id
+// @desc    Add a resource or subject to favourites
 // @access  Private
 // ============================================================
 exports.addFavourite = asyncHandler(async (req, res) => {
-  const { resourceId } = req.params;
+  const targetId = req.params.id || req.params.resourceId;
 
-  // Confirm the resource exists before bookmarking it
-  const resource = await Resource.findById(resourceId);
-  if (!resource) {
-    return sendError(res, 'Resource not found.', 404);
+  const { target, type } = await resolveTarget(targetId);
+
+  if (!target) {
+    return sendError(res, 'Target item (Subject or Resource) not found.', 404);
   }
 
-  // Try to create the favourite document.
-  // The compound unique index { user, resource } will throw a MongoDB
-  // duplicate key error (code 11000) if already bookmarked.
-  // The global errorHandler will catch it and return a 409 response.
-  const favourite = await Favourite.create({
-    user:     req.user._id,
-    resource: resourceId,
-  });
+  const query = { user: req.user._id };
+  if (type === 'subject') query.subject = target._id;
+  else query.resource = target._id;
 
-  return sendSuccess(res, 'Resource added to favourites.', { favourite }, 201);
+  const existing = await Favourite.findOne(query);
+  if (existing) {
+    return sendSuccess(res, 'Item already in favourites.', { favourite: existing });
+  }
+
+  const favourite = await Favourite.create(query);
+  if (type === 'subject') await favourite.populate('subject');
+  else await favourite.populate('resource');
+
+  return sendSuccess(res, 'Item added to favourites.', { favourite }, 201);
 });
 
-
 // ============================================================
-// @route   DELETE /api/favourites/:resourceId
-// @desc    Remove a resource from the user's favourites
+// @route   DELETE /api/favourites/:id
+// @desc    Remove a resource or subject from favourites
 // @access  Private
 // ============================================================
 exports.removeFavourite = asyncHandler(async (req, res) => {
-  const { resourceId } = req.params;
+  const targetId = req.params.id || req.params.resourceId;
 
-  // Find the exact bookmark for THIS user + THIS resource
-  const favourite = await Favourite.findOneAndDelete({
-    user:     req.user._id,
-    resource: resourceId,
-  });
-
-  if (!favourite) {
-    return sendError(res, 'This resource is not in your favourites.', 404);
+  const { target, type } = await resolveTarget(targetId);
+  
+  let query = { user: req.user._id };
+  if (target) {
+    if (type === 'subject') query.subject = target._id;
+    else query.resource = target._id;
+  } else if (mongoose.Types.ObjectId.isValid(targetId)) {
+    query = {
+      user: req.user._id,
+      $or: [{ subject: targetId }, { resource: targetId }]
+    };
+  } else {
+    return sendError(res, 'Item not found in favourites.', 404);
   }
 
-  return sendSuccess(res, 'Resource removed from favourites.');
+  const favourite = await Favourite.findOneAndDelete(query);
+
+  if (!favourite) {
+    return sendError(res, 'This item is not in your favourites.', 404);
+  }
+
+  return sendSuccess(res, 'Item removed from favourites.');
 });
 
-
 // ============================================================
-// @route   GET /api/favourites/check/:resourceId
-// @desc    Check if a specific resource is in user's favourites
-//          Used by the frontend to toggle the bookmark icon state
+// @route   GET /api/favourites/check/:id
+// @desc    Check if a specific item is in user's favourites
 // @access  Private
 // ============================================================
 exports.checkFavourite = asyncHandler(async (req, res) => {
-  const { resourceId } = req.params;
+  const targetId = req.params.id || req.params.resourceId;
 
-  const exists = await Favourite.exists({
-    user:     req.user._id,
-    resource: resourceId,
-  });
+  const { target, type } = await resolveTarget(targetId);
+  if (!target) {
+    return sendSuccess(res, 'Favourite status checked.', { isFavourited: false });
+  }
+
+  const query = { user: req.user._id };
+  if (type === 'subject') query.subject = target._id;
+  else query.resource = target._id;
+
+  const exists = await Favourite.exists(query);
 
   return sendSuccess(res, 'Favourite status checked.', {
-    isFavourited: !!exists, // true or false
+    isFavourited: !!exists,
   });
 });

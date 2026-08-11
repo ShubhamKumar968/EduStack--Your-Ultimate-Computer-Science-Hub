@@ -23,9 +23,48 @@ document.addEventListener('DOMContentLoaded', () => {
             dsaBtn.onclick = () => { window.location.href = '/premium-dsa-sheet.html'; };
           }
         }
+
+        // ── Fetch & Sync MongoDB Favourites & Enrollments ────
+        syncUserDataFromMongoDB();
       }
     })
     .catch(() => { window.currentUser = null; });
+
+  async function syncUserDataFromMongoDB() {
+    try {
+      const [favRes, enrollRes] = await Promise.all([
+        fetch('/api/favourites', { credentials: 'include' }).then(r => r.json()).catch(() => null),
+        fetch('/api/enrollments', { credentials: 'include' }).then(r => r.json()).catch(() => null)
+      ]);
+
+      if (favRes && favRes.success && favRes.data && Array.isArray(favRes.data.favourites)) {
+        favRes.data.favourites.forEach(item => {
+          if (item.subject) {
+            if (item.subject._id) favourites.add(item.subject._id.toString());
+            if (item.subject.name) favourites.add(item.subject.name);
+          }
+          if (item.resource) {
+            if (item.resource._id) favourites.add(item.resource._id.toString());
+          }
+        });
+      }
+
+      if (enrollRes && enrollRes.success && enrollRes.data && Array.isArray(enrollRes.data.enrollments)) {
+        enrollRes.data.enrollments.forEach(item => {
+          if (item.subject) {
+            if (item.subject._id) enrolledSubjects.add(item.subject._id.toString());
+            if (item.subject.name) enrolledSubjects.add(item.subject.name);
+          }
+        });
+      }
+
+      saveState();
+      applyFilters();
+      renderFavourites();
+    } catch (err) {
+      console.warn('⚠️ [EduStack] Sync user data notice:', err);
+    }
+  }
 
   /* ================= ICONS & CONSTANTS ================= */
   const capIcon = '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5a6 3 0 0012 0v-5"/><path d="M22 10v6"/>';
@@ -433,6 +472,16 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState();
     applyFilters();
     renderFavourites();
+
+    // Persist to MongoDB if user is authenticated
+    if (window.currentUser) {
+      const target = key || name;
+      const method = isFav ? 'DELETE' : 'POST';
+      fetch(`/api/favourites/${encodeURIComponent(target)}`, {
+        method,
+        credentials: 'include'
+      }).catch(err => console.warn('⚠️ [EduStack] Favourite API update notice:', err));
+    }
   };
 
   // Legacy name-based (kept for compatibility)
@@ -446,6 +495,15 @@ document.addEventListener('DOMContentLoaded', () => {
   window.enrollByKey = function (key) {
     enrolledSubjects.add(key);
     saveState();
+
+    // Persist to MongoDB if user is authenticated
+    if (window.currentUser) {
+      fetch(`/api/enrollments/${encodeURIComponent(key)}`, {
+        method: 'POST',
+        credentials: 'include'
+      }).catch(err => console.warn('⚠️ [EduStack] Enrollment API update notice:', err));
+    }
+
     window.location.href = '/guest/enrollments.html';
   };
 

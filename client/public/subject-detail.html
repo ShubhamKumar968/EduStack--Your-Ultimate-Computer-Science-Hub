@@ -211,6 +211,28 @@
           enrollBtn.classList.add('btn-subject-enrolled');
         }
 
+        // Re-check MongoDB enrollment for logged-in user
+        fetch('/api/auth/me', { credentials: 'include' })
+          .then(r => r.json())
+          .then(d => {
+            if (d && d.success && d.data && d.data.user) {
+              const checkId = targetSubject._id || subName;
+              fetch(`/api/enrollments/check/${encodeURIComponent(checkId)}`, { credentials: 'include' })
+                .then(cr => cr.json())
+                .then(cd => {
+                  if (cd && cd.success && cd.data && cd.data.isEnrolled) {
+                    initialEnrolled.add(subName);
+                    if (targetSubject._id) initialEnrolled.add(targetSubject._id);
+                    localStorage.setItem('edustack_enrolled', JSON.stringify(Array.from(initialEnrolled)));
+                    enrollBtn.innerHTML = `✓ Already Enrolled`;
+                    enrollBtn.style.backgroundColor = '#334155';
+                    enrollBtn.classList.remove('btn-subject-enroll');
+                    enrollBtn.classList.add('btn-subject-enrolled');
+                  }
+                }).catch(() => {});
+            }
+          }).catch(() => {});
+
         enrollBtn.addEventListener('click', () => {
           let enrolled = new Set(JSON.parse(localStorage.getItem('edustack_enrolled') || '[]'));
           enrolled.add(subName);
@@ -221,6 +243,12 @@
           enrollBtn.style.backgroundColor = '#334155';
           enrollBtn.classList.remove('btn-subject-enroll');
           enrollBtn.classList.add('btn-subject-enrolled');
+
+          const enrollId = targetSubject._id || subName;
+          fetch(`/api/enrollments/${encodeURIComponent(enrollId)}`, {
+            method: 'POST',
+            credentials: 'include'
+          }).catch(() => {});
 
           if (window.showToast) window.showToast(`🎉 Enrolled in ${subName} successfully!`, 'success');
           else alert(`Enrolled in ${subName} successfully!`);

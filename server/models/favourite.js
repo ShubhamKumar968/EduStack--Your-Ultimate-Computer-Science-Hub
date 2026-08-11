@@ -2,46 +2,49 @@
 // models/favourite.js
 // ============================================================
 // PURPOSE:
-//   Tracks which resources a user has bookmarked/favourited.
-//   Each document represents ONE bookmark: user ↔ resource.
-//
-// DESIGN DECISIONS:
-//   • Compound unique index on { user, resource } prevents a user
-//     from bookmarking the same resource more than once.
-//   • To get all favourites of a user:
-//       Favourite.find({ user: userId }).populate('resource')
-//   • To check if a specific resource is favourited by user:
-//       Favourite.findOne({ user: userId, resource: resourceId })
-//   • To remove a favourite:
-//       Favourite.findOneAndDelete({ user: userId, resource: resourceId })
+//   Tracks which subjects or resources a user has bookmarked.
+//   Each document represents ONE bookmark: user ↔ resource OR user ↔ subject.
 // ============================================================
 
 const mongoose = require('mongoose');
 
 const favouriteSchema = new mongoose.Schema(
   {
-    // The user who bookmarked the resource
+    // The user who bookmarked the item
     user: {
       type:     mongoose.Schema.Types.ObjectId,
       ref:      'User',
       required: true,
     },
 
-    // The resource that was bookmarked
+    // The resource that was bookmarked (optional)
     resource: {
       type:     mongoose.Schema.Types.ObjectId,
       ref:      'Resource',
-      required: true,
+      default:  null,
+    },
+
+    // The subject that was bookmarked (optional)
+    subject: {
+      type:     mongoose.Schema.Types.ObjectId,
+      ref:      'Subject',
+      default:  null,
     },
   },
-  { timestamps: true } // createdAt tells us when it was bookmarked
+  { timestamps: true }
 );
 
-// ── Unique Compound Index ──────────────────────────────────
-// Ensures each (user, resource) pair is unique — no duplicate bookmarks.
-// MongoDB will throw a duplicate-key error if you try to insert twice;
-// the controller catches this and returns a clean 409 response.
-favouriteSchema.index({ user: 1, resource: 1 }, { unique: true });
+// Ensure at least one reference is provided
+favouriteSchema.pre('validate', function (next) {
+  if (!this.resource && !this.subject) {
+    return next(new Error('Favourite must refer to either a Resource or a Subject.'));
+  }
+  next();
+});
+
+// Indexes for fast lookups
+favouriteSchema.index({ user: 1, resource: 1 }, { sparse: true });
+favouriteSchema.index({ user: 1, subject: 1 }, { sparse: true });
 
 const Favourite = mongoose.models.Favourite || mongoose.model('Favourite', favouriteSchema);
 

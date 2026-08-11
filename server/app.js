@@ -47,6 +47,7 @@ const resourceRoutes  = require('./routes/resourceRoutes');
 const favouriteRoutes = require('./routes/favouriteRoutes');
 const paymentRoutes   = require('./routes/paymentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const enrollmentRoutes   = require('./routes/enrollmentRoutes');
 const aiRoutes           = require('./routes/aiRoutes');
 
 // ── Create Express App ────────────────────────────────────────
@@ -614,6 +615,7 @@ app.use('/api/user',          userRoutes);
 app.use('/api/subjects',      subjectRoutes);
 app.use('/api/resources',     resourceRoutes);
 app.use('/api/favourites',    favouriteRoutes);
+app.use('/api/enrollments',   enrollmentRoutes);
 app.use('/api/payments',      paymentRoutes);
 app.use('/api/notifications', notificationRoutes);
 // ── Google OAuth root-level aliases ──────────────────────────
