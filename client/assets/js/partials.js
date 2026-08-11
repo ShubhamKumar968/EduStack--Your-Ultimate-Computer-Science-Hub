@@ -995,7 +995,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ROOT.style.setProperty('--brand-soft', t.soft);
           ROOT.style.setProperty('--brand-rgb',  t.rgb);
 
-          // Dynamic global brand CSS overrides
+          // Dynamic global brand CSS overrides for Light & Dark mode
           let brandStyleEl = document.getElementById('edustack-brand-override');
           if (!brandStyleEl) {
             brandStyleEl = document.createElement('style');
@@ -1008,12 +1008,67 @@ document.addEventListener('DOMContentLoaded', () => {
               --brand-soft: ${t.soft} !important;
               --brand-rgb: ${t.rgb} !important;
             }
-            .bg-brand, .bg-\\[\\#ff385c\\] { background-color: ${t.color} !important; }
-            .text-brand, .text-\\[\\#ff385c\\] { color: ${t.color} !important; }
-            .border-brand, .border-\\[\\#ff385c\\] { border-color: ${t.color} !important; }
-            .hover\\:bg-brand:hover, .hover\\:bg-\\[\\#ff385c\\]:hover { background-color: ${t.color} !important; }
-            .hover\\:text-brand:hover, .hover\\:text-\\[\\#ff385c\\]:hover { color: ${t.color} !important; }
-            .accent-brand { accent-color: ${t.color} !important; }
+            .bg-brand,
+            .bg-\\[\\#ff385c\\],
+            .dark .bg-brand,
+            .dark .dark\\:bg-brand,
+            .dark .dark\\:bg-\\[\\#ff385c\\] {
+              background-color: ${t.color} !important;
+            }
+
+            .text-brand,
+            .text-\\[\\#ff385c\\],
+            .dark .text-brand,
+            .dark .dark\\:text-brand,
+            .dark .dark\\:text-rose-400,
+            .dark .dark\\:text-rose-500,
+            .dark .dark\\:text-\\[\\#ff385c\\] {
+              color: ${t.color} !important;
+            }
+
+            .border-brand,
+            .border-\\[\\#ff385c\\],
+            .dark .border-brand,
+            .dark .dark\\:border-brand,
+            .dark .dark\\:border-rose-500\\/30 {
+              border-color: ${t.color} !important;
+            }
+
+            .hover\\:bg-brand:hover,
+            .hover\\:bg-\\[\\#ff385c\\]:hover,
+            .dark .dark\\:hover\\:bg-brand:hover,
+            .dark .dark\\:hover\\:bg-\\[\\#ff385c\\]:hover {
+              background-color: ${t.color} !important;
+            }
+
+            .hover\\:text-brand:hover,
+            .hover\\:text-\\[\\#ff385c\\]:hover,
+            .dark .dark\\:hover\\:text-brand:hover,
+            .dark .dark\\:hover\\:text-rose-400:hover,
+            .dark .dark\\:hover\\:text-rose-500:hover {
+              color: ${t.color} !important;
+            }
+
+            .accent-brand {
+              accent-color: ${t.color} !important;
+            }
+
+            .bg-brand\\/5, .dark .dark\\:bg-brand\\/10, .dark .dark\\:bg-rose-500\\/10 {
+              background-color: rgba(${t.rgb}, 0.08) !important;
+            }
+            .bg-brand\\/10, .dark .dark\\:bg-brand\\/20, .dark .dark\\:bg-rose-500\\/20 {
+              background-color: rgba(${t.rgb}, 0.16) !important;
+            }
+            .bg-brand\\/20 {
+              background-color: rgba(${t.rgb}, 0.24) !important;
+            }
+            .border-brand\\/10, .border-brand\\/20, .border-brand\\/30 {
+              border-color: rgba(${t.rgb}, 0.28) !important;
+            }
+
+            .notif-dropdown-panel #btn-mark-all-read {
+              color: ${t.color} !important;
+            }
           `;
 
           // Update palette icon color live
@@ -1044,8 +1099,22 @@ document.addEventListener('DOMContentLoaded', () => {
             document.head.appendChild(bgStyleEl);
           }
           bgStyleEl.textContent = `
-            body { background-color: ${b.bodyBg} !important; color: ${b.dark ? '#f3f4f6' : '#111827'} !important; }
-            nav.bg-white, nav.dark\\:bg-\\[\\#181818\\] { background-color: ${b.navBg} !important; }
+            body {
+              background-color: ${b.bodyBg} !important;
+              color: ${b.dark ? '#f3f4f6' : '#111827'} !important;
+            }
+            nav.bg-white,
+            nav.dark\\:bg-\\[\\#181818\\],
+            header {
+              background-color: ${b.navBg} !important;
+            }
+            .dark .bg-white,
+            .dark .dark\\:bg-\\[\\#181818\\],
+            .dark .dark\\:bg-\\[\\#161622\\],
+            .dark .dark\\:bg-\\[\\#1a1a24\\],
+            .dark .dark\\:bg-\\[\\#1a1a2e\\] {
+              background-color: ${b.bg} !important;
+            }
           `;
           // Refresh toggle UI
           if (typeof window.initThemeToggle === 'function') window.initThemeToggle();
