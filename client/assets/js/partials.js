@@ -737,7 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
               onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px;color:#fef08a;"></i>
               <span class="hidden-xs" style="color:#ffffff !important;">AI Assistant</span>
-              <span style="background:rgba(255,255,255,0.25);color:#ffffff !important;font-size:8.5px;padding:2px 6px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.6px;display:inline-block;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.2);">LIVE</span>
+              <span class="nav-ai-live-tag" style="background:#ffffff !important;color:#3b0764 !important;font-size:8.5px;padding:2px 6px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.6px;display:inline-block;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.2);">LIVE</span>
             </button>
 
             <!-- Theme Picker Button -->

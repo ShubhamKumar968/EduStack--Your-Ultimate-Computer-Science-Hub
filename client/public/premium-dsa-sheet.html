@@ -118,7 +118,7 @@
         <i class="fa-solid fa-crown text-amber-500"></i> EduStack SDE Practice Intelligence
       </div>
       <h1 class="text-3xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
-        Ultimate SDE <span class="bg-gradient-to-r from-brand via-brand-soft to-amber-500 bg-clip-text text-transparent">DSA Practice Sheet</span>
+        Ultimate SDE <span class="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 dark:from-purple-300 dark:via-pink-400 dark:to-indigo-300 bg-clip-text text-transparent font-black">DSA Practice Sheet</span>
       </h1>
       <p class="mt-3 text-sm md:text-base text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
         Track your interview preparation live with interactive topic filters, problem solutions, hints, and direct links for LeetCode & GeeksforGeeks.
@@ -138,7 +138,7 @@
               <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 text-white flex items-center justify-center text-xs font-black shadow-md shadow-amber-500/30">
                 <i class="fa-solid fa-rocket"></i>
               </span>
-              <h2 class="text-base font-black bg-gradient-to-r from-amber-500 via-rose-500 to-brand bg-clip-text text-transparent">EduStack SDE 450+</h2>
+              <h2 class="text-base font-black text-rose-600 dark:text-rose-400">EduStack SDE 450+</h2>
             </div>
             <p class="text-[11px] text-gray-500 dark:text-gray-400 font-semibold leading-relaxed mb-3">
               Curated 450+ top SDE interview problems covering Striver, NeetCode 150 & Blind 75.
@@ -176,7 +176,7 @@
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <button onclick="pickRandomProblem()" class="text-[10px] bg-gradient-to-r from-brand to-rose-600 hover:brightness-110 text-white border-0 px-3.5 py-1.5 rounded-full font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-brand/20">
+            <button onclick="pickRandomProblem()" class="text-[10px] bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:opacity-90 text-white border-0 px-3.5 py-1.5 rounded-full font-black transition-all flex items-center gap-1.5 cursor-pointer shadow-md shadow-purple-500/30">
               <i class="fa-solid fa-shuffle"></i> Pick Random
             </button>
             <button onclick="resetProgress()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold underline bg-transparent border-0 cursor-pointer">
@@ -189,8 +189,8 @@
         <div class="bg-gradient-to-br from-white via-gray-50 to-purple-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-purple-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xs font-black bg-gradient-to-r from-brand via-purple-500 to-indigo-500 bg-clip-text text-transparent flex items-center gap-1.5">
-                <i class="fa-solid fa-calendar-days text-brand"></i> Activity Calendar
+              <h3 class="text-xs font-black text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-calendar-days text-purple-600 dark:text-purple-400"></i> Activity Calendar
               </h3>
               <div class="text-right">
                 <span id="calCountdown" class="text-[10px] font-black text-brand tabular-nums">--:--:-- left</span>
@@ -201,13 +201,13 @@
               <button id="calPrevBtn" onclick="calChangeMonth(-1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
                 <i class="fa-solid fa-chevron-left text-[8px]"></i>
               </button>
-              <span id="calMonthLabel" class="text-[11px] font-black bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-300 dark:to-indigo-300 bg-clip-text text-transparent"></span>
+              <span id="calMonthLabel" class="text-[11px] font-black text-purple-900 dark:text-purple-200"></span>
               <button id="calNextBtn" onclick="calChangeMonth(1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
                 <i class="fa-solid fa-chevron-right text-[8px]"></i>
               </button>
             </div>
 
-            <div class="grid grid-cols-7 text-center text-[8px] font-extrabold text-purple-400 dark:text-purple-300/60 mb-1">
+            <div class="grid grid-cols-7 text-center text-[9px] font-black text-purple-700 dark:text-purple-300 mb-1">
               <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
             </div>
             <div id="calGrid" class="grid grid-cols-7 gap-1"></div>
@@ -235,7 +235,7 @@
         <div class="bg-gradient-to-br from-white via-gray-50 to-indigo-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-indigo-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
-              <h3 class="text-xs font-black bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 bg-clip-text text-transparent flex items-center gap-1.5">
+              <h3 class="text-xs font-black text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                 <i class="fa-solid fa-ranking-star text-amber-500"></i> Leaderboard
               </h3>
               <span class="text-[8px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">This Month</span>
@@ -1009,7 +1009,7 @@
         } else if (isFuture) {
           cls += 'text-gray-300 dark:text-gray-700 cursor-not-allowed';
         } else {
-          cls += 'text-gray-400 dark:text-gray-600 hover:bg-gray-100 dark:hover:bg-[#252336]';
+          cls += 'text-gray-700 dark:text-gray-300 font-extrabold hover:bg-purple-100 dark:hover:bg-[#252336]';
         }
 
         html += `<div><span class="${cls}" title="${key}">${d}</span></div>`;

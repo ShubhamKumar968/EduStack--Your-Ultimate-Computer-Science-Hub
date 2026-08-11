@@ -366,3 +366,10 @@
 .dark .dark-border-fix {
   border-color: #2d2d2d !important;
 }
+
+/* AI Assistant Navbar Live Badge Background (Solid white background in Dark Mode & Light Mode) */
+.nav-ai-live-tag,
+.dark .nav-ai-live-tag {
+  background-color: #ffffff !important;
+  color: #3b0764 !important;
+}
