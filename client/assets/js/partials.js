@@ -733,11 +733,11 @@ document.addEventListener('DOMContentLoaded', () => {
             <button onclick="window.triggerEduStackAIAssistant()"
               title="EduStack AI Assistant"
               class="nav-ai-btn"
-              style="align-items:center;gap:5px;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:5px 11px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;white-space:nowrap;"
+              style="align-items:center;gap:5px;font-size:11px;font-weight:800;color:#ffffff !important;background:linear-gradient(135deg,#9333ea,#ec4899);padding:5px 11px;border-radius:50px;border:1px solid rgba(255,255,255,0.25);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;white-space:nowrap;"
               onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
               <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px;color:#fef08a;"></i>
-              <span class="hidden-xs">AI Assistant</span>
-              <span style="background:rgba(255,255,255,0.25);font-size:8px;padding:1px 4px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.5px;">LIVE</span>
+              <span class="hidden-xs" style="color:#ffffff !important;">AI Assistant</span>
+              <span style="background:rgba(255,255,255,0.25);color:#ffffff !important;font-size:8.5px;padding:2px 6px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.6px;display:inline-block;line-height:1;box-shadow:0 1px 3px rgba(0,0,0,0.2);">LIVE</span>
             </button>
 
             <!-- Theme Picker Button -->
