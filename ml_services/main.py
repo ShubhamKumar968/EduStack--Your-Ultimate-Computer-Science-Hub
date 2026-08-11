@@ -275,8 +275,9 @@ async def summarize_pdf(file: UploadFile = File(...)):
     gemini_api_key = os.getenv("GEMINI_API_KEY")
     if not gemini_api_key:
         return {
+            "success": False,
             "filename": file.filename,
-            "summary": "GEMINI_API_KEY not set. Text extracted successfully.",
+            "summary": "GEMINI_API_KEY not set in environment. Text extracted successfully.",
             "text_length": len(pdf_text)
         }
 
@@ -286,29 +287,45 @@ async def summarize_pdf(file: UploadFile = File(...)):
         
         models_to_try = get_available_gemini_models(genai)
 
-        prompt = f"""You are EduStack AI. Analyze the following textbook/notes document content and provide:
+        prompt_instruction = """You are EduStack AI. Analyze the following textbook/notes document content (which may contain typed text, handwritten study notes, diagrams, or equations) and provide:
 1. 📌 Executive Summary (2-3 paragraphs)
 2. 🔑 Key Concepts & Definitions (Bullet points)
-3. 💡 Important Exam Takeaways
+3. 💡 Important Exam Takeaways"""
 
-Document Content:
-{pdf_text[:10000]}"""
+        # If extracted text is rich (> 50 chars), use text context; otherwise pass PDF inline data for Gemini Vision OCR
+        if len(pdf_text) > 50:
+            contents = [f"{prompt_instruction}\n\nDocument Content:\n{pdf_text[:10000]}"]
+        else:
+            contents = [{"mime_type": "application/pdf", "data": pdf_bytes}, prompt_instruction]
 
         response = None
         for m in models_to_try:
             try:
                 model = genai.GenerativeModel(m)
-                res = model.generate_content(prompt)
+                res = model.generate_content(contents)
                 if res and res.text:
                     response = res
                     break
             except Exception:
                 continue
 
+        # Fallback to text prompt if multimodal failed
+        if not response and len(pdf_text) > 0:
+            fallback_contents = [f"{prompt_instruction}\n\nDocument Content:\n{pdf_text[:10000]}"]
+            for m in models_to_try:
+                try:
+                    model = genai.GenerativeModel(m)
+                    res = model.generate_content(fallback_contents)
+                    if res and res.text:
+                        response = res
+                        break
+                except Exception:
+                    continue
+
         return {
             "success": True,
             "filename": file.filename,
-            "summary": response.text if response else "Failed to generate summary.",
+            "summary": response.text if response else "Failed to generate summary from PDF.",
             "characters_extracted": len(pdf_text)
         }
     except Exception as e:
@@ -329,26 +346,40 @@ async def generate_quiz_from_pdf(num_questions: int = 5, file: UploadFile = File
         
         models_to_try = get_available_gemini_models(genai)
 
-        prompt = f"""You are EduStack AI. Generate an interactive Quiz with {num_questions} Multiple-Choice Questions (MCQs) based on the document text below.
+        prompt_instruction = f"""You are EduStack AI. Generate an interactive Quiz with {num_questions} Multiple-Choice Questions (MCQs) based on the document below (typed or handwritten notes).
 For each question, provide:
 - Question
 - Options (A, B, C, D)
 - Correct Answer
-- Short Explanation
+- Short Explanation"""
 
-Document Content:
-{pdf_text[:10000]}"""
+        if len(pdf_text) > 50:
+            contents = [f"{prompt_instruction}\n\nDocument Content:\n{pdf_text[:10000]}"]
+        else:
+            contents = [{"mime_type": "application/pdf", "data": pdf_bytes}, prompt_instruction]
 
         response = None
         for m in models_to_try:
             try:
                 model = genai.GenerativeModel(m)
-                res = model.generate_content(prompt)
+                res = model.generate_content(contents)
                 if res and res.text:
                     response = res
                     break
             except Exception:
                 continue
+
+        if not response and len(pdf_text) > 0:
+            fallback_contents = [f"{prompt_instruction}\n\nDocument Content:\n{pdf_text[:10000]}"]
+            for m in models_to_try:
+                try:
+                    model = genai.GenerativeModel(m)
+                    res = model.generate_content(fallback_contents)
+                    if res and res.text:
+                        response = res
+                        break
+                except Exception:
+                    continue
 
         return {
             "success": True,

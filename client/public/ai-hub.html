@@ -422,13 +422,15 @@
       try {
         let res = await fetch('/api/ai/ask', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question, subject })
         });
 
-        if (res.status === 404 || !res.ok) {
+        if (res.status === 404) {
           res = await fetch(EDUSTACK_ML_URL + '/api/rag/ask', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ question, subject })
           });
@@ -438,7 +440,7 @@
         document.getElementById(loadingId)?.remove();
 
         if (!res.ok || data.success === false) {
-          const errText = data.message || data.error || 'Failed to connect to AI service.';
+          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to use AI tutor.' : 'Failed to connect to AI service.');
           chatBox.innerHTML += `
             <div class="flex items-start gap-3">
               <div class="w-9 h-9 rounded-2xl bg-red-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0">
@@ -509,12 +511,22 @@
       try {
         const res = await fetch('/api/ai/pdf/summarize', {
           method: 'POST',
+          credentials: 'include',
           body: formData
         });
         const data = await res.json();
 
         const box = document.getElementById('summaryResultBox');
         const text = document.getElementById('summaryText');
+
+        if (!res.ok || data.success === false) {
+          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to summarize PDFs.' : 'Failed to generate summary.');
+          box.classList.remove('hidden');
+          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Service Warning: ${errText}</div>`;
+          btn.innerHTML = `<i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Executive Summary`;
+          btn.disabled = false;
+          return;
+        }
 
         box.classList.remove('hidden');
         text.innerHTML = typeof marked !== 'undefined' ? marked.parse(data.summary || '') : (data.summary || '');
@@ -540,13 +552,15 @@
       try {
         let res = await fetch('/api/ai/generate-pyq', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })
         });
 
-        if (res.status === 404 || !res.ok) {
+        if (res.status === 404) {
           res = await fetch(EDUSTACK_ML_URL + '/api/rag/generate-pyq', {
             method: 'POST',
+            credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ subject, topic, num_questions: parseInt(num_questions) })
           });
@@ -556,6 +570,15 @@
 
         const box = document.getElementById('quizResultBox');
         const text = document.getElementById('quizText');
+
+        if (!res.ok || data.success === false) {
+          const errText = data.message || data.error || (res.status === 401 ? 'Authentication required. Please log in to generate practice quizzes.' : 'Failed to generate quiz.');
+          box.classList.remove('hidden');
+          text.innerHTML = `<div class="p-4 rounded-xl bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold">⚠️ Service Warning: ${errText}</div>`;
+          btn.innerHTML = `<i class="fa-solid fa-bolt"></i> Generate Practice Quiz & PYQs`;
+          btn.disabled = false;
+          return;
+        }
 
         box.classList.remove('hidden');
         const rawContent = data.questions || JSON.stringify(data, null, 2);

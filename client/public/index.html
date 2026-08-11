@@ -753,13 +753,15 @@
     try {
       let res = await fetch('/api/ai/ask', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ question, subject: 'Data Structures' })
       });
 
-      if (res.status === 404 || !res.ok) {
+      if (res.status === 404) {
         res = await fetch(EDUSTACK_ML_URL + '/api/rag/ask', {
           method: 'POST',
+          credentials: 'include',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ question, subject: 'Data Structures' })
         });
