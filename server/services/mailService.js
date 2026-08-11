@@ -24,12 +24,13 @@ const nodemailer = require('nodemailer');
 // Creating it inside a function would open a new SMTP connection
 // on every email — wasteful and slow.
 const transporter = nodemailer.createTransport({
-  host:   process.env.MAIL_HOST,   // e.g. smtp.gmail.com
+  host:   process.env.MAIL_HOST || 'smtp.gmail.com',
   port:   parseInt(process.env.MAIL_PORT) || 587,
   secure: process.env.MAIL_PORT === '465', // true for port 465 (SSL), false for 587 (TLS)
+  family: 4, // Force IPv4 to prevent ENETUNREACH IPv6 errors on Render/cloud hosts
   auth: {
-    user: process.env.MAIL_USER,   // your Gmail address
-    pass: process.env.MAIL_PASS,   // Gmail App Password (not account password)
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
 });
 
