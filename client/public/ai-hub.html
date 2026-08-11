@@ -292,32 +292,32 @@
           <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">Target Subject:</label>
           <select id="sidebarSubjectSelect" onchange="syncSubject(this.value)"
             class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
-            <option value="Data Structures & Algorithms">Data Structures & Algorithms (DSA)</option>
-            <option value="Database Management Systems">Database Management Systems (DBMS)</option>
-            <option value="Operating Systems">Operating Systems (OS)</option>
-            <option value="Computer Networks">Computer Networks (CN)</option>
-            <option value="Object Oriented Programming">Object Oriented Programming (OOPs / C++)</option>
-            <option value="Computer Organization & Architecture">Computer Organization & Architecture (COA)</option>
-            <option value="Theory of Computation">Theory of Computation (TOC / Automata)</option>
+            <option value="Data Structures & Algorithms">Data Structures & Algorithms</option>
+            <option value="Database Management Systems">Database Management Systems</option>
+            <option value="Operating Systems">Operating Systems</option>
+            <option value="Computer Networks">Computer Networks</option>
+            <option value="Object Oriented Programming">Object Oriented Programming</option>
+            <option value="Computer Organization & Architecture">Computer Organization & Architecture</option>
+            <option value="Theory of Computation">Theory of Computation</option>
             <option value="Compiler Design">Compiler Design</option>
-            <option value="Design and Analysis of Algorithms">Design & Analysis of Algorithms (DAA)</option>
+            <option value="Design and Analysis of Algorithms">Design & Analysis of Algorithms</option>
             <option value="Software Engineering">Software Engineering</option>
-            <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
-            <option value="Machine Learning">Machine Learning (ML)</option>
+            <option value="Artificial Intelligence">Artificial Intelligence</option>
+            <option value="Machine Learning">Machine Learning</option>
             <option value="Data Mining & Data Warehousing">Data Mining & Data Warehousing</option>
             <option value="Discrete Mathematics">Discrete Mathematics</option>
-            <option value="Cyber Security & Cryptography">Information Security & Cryptography</option>
+            <option value="Information Security & Cryptography">Information Security & Cryptography</option>
             <option value="Cloud Computing & DevOps">Cloud Computing & DevOps</option>
             <option value="Full Stack Web Development">Full Stack Web Development</option>
-            <option value="Engineering Mathematics">Engineering Mathematics (I, II, III, IV)</option>
+            <option value="Engineering Mathematics">Engineering Mathematics</option>
             <option value="Engineering Physics">Engineering Physics</option>
             <option value="Engineering Chemistry">Engineering Chemistry</option>
-            <option value="Basic Electrical Engineering">Basic Electrical & Electronics (BEEE)</option>
-            <option value="Digital Logic & Design">Digital Logic & Design (DLD)</option>
+            <option value="Basic Electrical Engineering">Basic Electrical & Electronics</option>
+            <option value="Digital Logic & Design">Digital Logic & Design</option>
             <option value="Python Programming & Data Science">Python Programming & Data Science</option>
             <option value="Distributed Systems">Distributed Systems</option>
-            <option value="Natural Language Processing">Natural Language Processing (NLP)</option>
-            <option value="Internet of Things">Internet of Things (IoT)</option>
+            <option value="Natural Language Processing">Natural Language Processing</option>
+            <option value="Internet of Things">Internet of Things</option>
           </select>
         </div>
 
@@ -546,12 +546,13 @@
           const existingValues = new Set(Array.from(select.options).map(o => o.value.toLowerCase()));
 
           resData.data.subjects.forEach(sub => {
-            if (sub.name && !existingValues.has(sub.name.toLowerCase())) {
+            const cleanSubName = (sub.name || '').replace(/\s*[\(\{\[][^\)\}\]]*[\)\}\]]/g, '').replace(/\s+/g, ' ').trim();
+            if (cleanSubName && !existingValues.has(cleanSubName.toLowerCase())) {
               const opt = document.createElement('option');
-              opt.value = sub.name;
-              opt.textContent = sub.name + (sub.code ? ` (${sub.code})` : '');
+              opt.value = cleanSubName;
+              opt.textContent = cleanSubName;
               select.appendChild(opt);
-              existingValues.add(sub.name.toLowerCase());
+              existingValues.add(cleanSubName.toLowerCase());
             }
           });
         }
