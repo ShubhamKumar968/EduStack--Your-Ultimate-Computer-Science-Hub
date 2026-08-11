@@ -373,3 +373,14 @@
   background-color: #ffffff !important;
   color: #3b0764 !important;
 }
+
+/* Floating AI Launcher Button Live Badge */
+button[onclick*="toggleAIQuickWidget"] span:last-child {
+  background-color: #ffffff !important;
+  color: #3b0764 !important;
+}
+.dark button[onclick*="toggleAIQuickWidget"] span:last-child {
+  background-color: #ffffff !important;
+  color: #3b0764 !important;
+}
+
