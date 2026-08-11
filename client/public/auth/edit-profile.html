@@ -245,7 +245,7 @@
             lastName:  document.getElementById('lastName').value.trim(),
             phoneNumber: document.getElementById('phone').value.trim(),
             branch:    document.getElementById('branch').value,
-            semester:  document.getElementById('semester').value
+            semester:  parseInt(document.getElementById('semester').value, 10) || 1
           };
 
           if (newPassVal) {

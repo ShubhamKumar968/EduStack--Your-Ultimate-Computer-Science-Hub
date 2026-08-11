@@ -36,6 +36,8 @@ exports.getProfile = asyncHandler(async (req, res) => {
       role:        user.role,
       avatar:      user.avatar,
       phoneNumber: user.phoneNumber,
+      branch:      user.branch || 'CSE',
+      semester:    user.semester || 1,
       bio:         user.bio,
       createdAt:   user.createdAt,
     },
@@ -45,18 +47,20 @@ exports.getProfile = asyncHandler(async (req, res) => {
 
 // ============================================================
 // @route   PUT /api/users/profile (or /api/users/me)
-// @desc    Update own profile details (name, phone, bio, avatar)
+// @desc    Update own profile details (name, phone, bio, branch, semester, avatar)
 // @access  Private
 // ============================================================
 exports.updateProfile = asyncHandler(async (req, res) => {
-  const { firstName, lastName, phoneNumber, phone, bio, newPassword } = req.body;
+  const { firstName, lastName, phoneNumber, phone, bio, branch, semester, newPassword } = req.body;
 
   const updates = {};
   if (firstName !== undefined && firstName !== '') updates.firstName   = firstName.trim();
   if (lastName  !== undefined && lastName !== '')  updates.lastName    = lastName.trim();
   if (phoneNumber !== undefined) updates.phoneNumber = phoneNumber.trim();
   if (phone       !== undefined && phoneNumber === undefined) updates.phoneNumber = phone.trim();
-  if (bio       !== undefined) updates.bio         = bio.trim();
+  if (bio         !== undefined) updates.bio         = bio.trim();
+  if (branch      !== undefined && branch !== '')  updates.branch      = branch.trim();
+  if (semester    !== undefined && semester !== '') updates.semester    = parseInt(semester, 10);
 
   if (newPassword && newPassword.trim().length >= 6) {
     const bcrypt = require('bcryptjs');
@@ -100,6 +104,8 @@ exports.updateProfile = asyncHandler(async (req, res) => {
       role:        updatedUser.role,
       avatar:      updatedUser.avatar,
       phoneNumber: updatedUser.phoneNumber,
+      branch:      updatedUser.branch || 'CSE',
+      semester:    updatedUser.semester || 1,
       bio:         updatedUser.bio,
       isPremium:   updatedUser.isPremium || false,
     },

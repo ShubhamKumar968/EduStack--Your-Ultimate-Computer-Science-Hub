@@ -114,6 +114,19 @@ const userSchema = new mongoose.Schema(
       maxlength: [300, 'Bio cannot exceed 300 characters'],
       default: '',
     },
+
+    branch: {
+      type:    String,
+      trim:    true,
+      default: 'CSE',
+    },
+
+    semester: {
+      type:    Number,
+      min:     [1, 'Semester must be between 1 and 8'],
+      max:     [8, 'Semester must be between 1 and 8'],
+      default: 1,
+    },
   },
   {
     // Automatically adds createdAt and updatedAt fields

@@ -393,6 +393,8 @@ exports.getMe = asyncHandler(async (req, res) => {
       role:        user.role,
       avatar:      user.avatar,
       phoneNumber: user.phoneNumber,
+      branch:      user.branch || 'CSE',
+      semester:    user.semester || 1,
       bio:         user.bio,
       isVerified:  user.isVerified,
       isPremium:   user.isPremium || false,
