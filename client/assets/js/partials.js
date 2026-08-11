@@ -965,15 +965,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // ── Theme Picker Engine ───────────────────────────────────────────
       (function initThemePicker() {
         const ACCENT_THEMES = [
-          { name: 'Brand Red',   color: '#ff385c', soft: '#ff6b81', rgb: '255,56,92'   },
-          { name: 'Emerald',     color: '#10b981', soft: '#34d399', rgb: '16,185,129'  },
-          { name: 'Ocean Blue',  color: '#2563eb', soft: '#60a5fa', rgb: '37,99,235'   },
-          { name: 'Violet',      color: '#7c3aed', soft: '#a78bfa', rgb: '124,58,237'  },
-          { name: 'Cyan',        color: '#06b6d4', soft: '#67e8f9', rgb: '6,182,212'   },
-          { name: 'Amber',       color: '#d97706', soft: '#fbbf24', rgb: '217,119,6'   },
-          { name: 'Rose',        color: '#e11d48', soft: '#fb7185', rgb: '225,29,72'   },
-          { name: 'Orange',      color: '#ea580c', soft: '#fb923c', rgb: '234,88,12'   },
-          { name: 'Teal',        color: '#0d9488', soft: '#2dd4bf', rgb: '13,148,136'  },
+          { name: 'Brand Red',   color: '#ff385c', soft: '#ff6b81', light: '#ffb199', rgb: '255,56,92'   },
+          { name: 'Emerald',     color: '#10b981', soft: '#34d399', light: '#6ee7b7', rgb: '16,185,129'  },
+          { name: 'Ocean Blue',  color: '#2563eb', soft: '#60a5fa', light: '#93c5fd', rgb: '37,99,235'   },
+          { name: 'Violet',      color: '#7c3aed', soft: '#a78bfa', light: '#c4b5fd', rgb: '124,58,237'  },
+          { name: 'Cyan',        color: '#06b6d4', soft: '#67e8f9', light: '#a5f3fc', rgb: '6,182,212'   },
+          { name: 'Amber',       color: '#d97706', soft: '#fbbf24', light: '#fde68a', rgb: '217,119,6'   },
+          { name: 'Rose',        color: '#e11d48', soft: '#fb7185', light: '#fca5a5', rgb: '225,29,72'   },
+          { name: 'Orange',      color: '#ea580c', soft: '#fb923c', light: '#ffedd5', rgb: '234,88,12'   },
+          { name: 'Teal',        color: '#0d9488', soft: '#2dd4bf', light: '#99f6e4', rgb: '13,148,136'  },
         ];
         const BG_THEMES = [
           // Light variants
@@ -991,9 +991,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const LS_BG     = 'edustack_bg';
 
         function applyAccent(t) {
-          ROOT.style.setProperty('--brand',     t.color);
-          ROOT.style.setProperty('--brand-soft', t.soft);
-          ROOT.style.setProperty('--brand-rgb',  t.rgb);
+          ROOT.style.setProperty('--brand',       t.color);
+          ROOT.style.setProperty('--brand-soft',  t.soft);
+          ROOT.style.setProperty('--brand-light', t.light || t.soft);
+          ROOT.style.setProperty('--brand-rgb',    t.rgb);
 
           // Dynamic global brand CSS overrides for Light & Dark mode
           let brandStyleEl = document.getElementById('edustack-brand-override');
@@ -1006,6 +1007,7 @@ document.addEventListener('DOMContentLoaded', () => {
             :root {
               --brand: ${t.color} !important;
               --brand-soft: ${t.soft} !important;
+              --brand-light: ${t.light || t.soft} !important;
               --brand-rgb: ${t.rgb} !important;
             }
             .bg-brand,
@@ -1034,29 +1036,64 @@ document.addEventListener('DOMContentLoaded', () => {
               border-color: ${t.color} !important;
             }
 
+            /* Tailwind Gradient Dynamic Overrides */
+            .from-brand {
+              --tw-gradient-from: ${t.color} var(--tw-gradient-from-position) !important;
+              --tw-gradient-to: rgba(${t.rgb}, 0) var(--tw-gradient-to-position) !important;
+              --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+            }
+            .from-brand\\/40 {
+              --tw-gradient-from: rgba(${t.rgb}, 0.4) var(--tw-gradient-from-position) !important;
+              --tw-gradient-to: rgba(${t.rgb}, 0) var(--tw-gradient-to-position) !important;
+              --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+            }
+            .via-brand-soft {
+              --tw-gradient-to: rgba(${t.rgb}, 0) var(--tw-gradient-to-position) !important;
+              --tw-gradient-stops: var(--tw-gradient-from), ${t.soft} var(--tw-gradient-via-position), var(--tw-gradient-to) !important;
+            }
+            .to-brand-light {
+              --tw-gradient-to: ${t.light || t.soft} var(--tw-gradient-to-position) !important;
+            }
+            .to-brand {
+              --tw-gradient-to: ${t.color} var(--tw-gradient-to-position) !important;
+            }
+            .to-brand-soft {
+              --tw-gradient-to: ${t.soft} var(--tw-gradient-to-position) !important;
+            }
+
             .hover\\:bg-brand:hover,
             .hover\\:bg-\\[\\#ff385c\\]:hover,
-            .dark .dark\\:hover\\:bg-brand:hover,
-            .dark .dark\\:hover\\:bg-\\[\\#ff385c\\]:hover {
+            .dark .dark\\:hover\\:bg-brand:hover {
               background-color: ${t.color} !important;
             }
 
             .hover\\:text-brand:hover,
             .hover\\:text-\\[\\#ff385c\\]:hover,
-            .dark .dark\\:hover\\:text-brand:hover,
-            .dark .dark\\:hover\\:text-rose-400:hover,
-            .dark .dark\\:hover\\:text-rose-500:hover {
+            .dark .dark\\:hover\\:text-brand:hover {
               color: ${t.color} !important;
+            }
+
+            .hover\\:border-brand:hover,
+            .dark .dark\\:hover\\:border-brand:hover {
+              border-color: ${t.color} !important;
+            }
+
+            .shadow-brand\\/20 {
+              --tw-shadow-color: rgba(${t.rgb}, 0.2) !important;
+              box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 4px 14px rgba(${t.rgb}, 0.25) !important;
+            }
+            .shadow-brand\\/15, .hover\\:shadow-brand\\/15:hover {
+              box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 10px 25px rgba(${t.rgb}, 0.18) !important;
             }
 
             .accent-brand {
               accent-color: ${t.color} !important;
             }
 
-            .bg-brand\\/5, .dark .dark\\:bg-brand\\/10, .dark .dark\\:bg-rose-500\\/10 {
+            .bg-brand\\/5, .dark .dark\\:bg-brand\\/10 {
               background-color: rgba(${t.rgb}, 0.08) !important;
             }
-            .bg-brand\\/10, .dark .dark\\:bg-brand\\/20, .dark .dark\\:bg-rose-500\\/20 {
+            .bg-brand\\/10, .dark .dark\\:bg-brand\\/20 {
               background-color: rgba(${t.rgb}, 0.16) !important;
             }
             .bg-brand\\/20 {
@@ -1083,48 +1120,83 @@ document.addEventListener('DOMContentLoaded', () => {
           localStorage.setItem(LS_ACCENT, JSON.stringify(t));
         }
 
+        // Remember user's last selected dark/light background variants
+        let lastDarkBg = BG_THEMES[3];  // Charcoal
+        let lastLightBg = BG_THEMES[0]; // Default
+
         function applyBg(b) {
           if (b.dark) {
+            lastDarkBg = b;
             ROOT.classList.add('dark');
             localStorage.setItem('theme', 'dark');
           } else {
+            lastLightBg = b;
             ROOT.classList.remove('dark');
             localStorage.setItem('theme', 'light');
           }
-          // Patch nav + body bg via CSS variable injection
+
           let bgStyleEl = document.getElementById('edustack-bg-style');
           if (!bgStyleEl) {
             bgStyleEl = document.createElement('style');
             bgStyleEl.id = 'edustack-bg-style';
             document.head.appendChild(bgStyleEl);
           }
-          bgStyleEl.textContent = `
-            body {
-              background-color: ${b.bodyBg} !important;
-              color: ${b.dark ? '#f3f4f6' : '#111827'} !important;
-            }
-            nav.bg-white,
-            nav.dark\\:bg-\\[\\#181818\\],
-            header {
-              background-color: ${b.navBg} !important;
-            }
-            .dark .bg-white,
-            .dark .dark\\:bg-\\[\\#181818\\],
-            .dark .dark\\:bg-\\[\\#161622\\],
-            .dark .dark\\:bg-\\[\\#1a1a24\\],
-            .dark .dark\\:bg-\\[\\#1a1a2e\\] {
-              background-color: ${b.bg} !important;
-            }
-          `;
-          // Refresh toggle UI
-          if (typeof window.initThemeToggle === 'function') window.initThemeToggle();
-          // Highlight active bg swatch
+
+          if (b.dark) {
+            bgStyleEl.textContent = `
+              body {
+                background-color: ${b.bodyBg} !important;
+                color: #f3f4f6 !important;
+              }
+              nav.bg-white,
+              nav.dark\\:bg-\\[\\#181818\\],
+              header {
+                background-color: ${b.navBg} !important;
+              }
+              .dark .bg-white,
+              .dark .dark\\:bg-\\[\\#181818\\],
+              .dark .dark\\:bg-\\[\\#161622\\],
+              .dark .dark\\:bg-\\[\\#1a1a24\\],
+              .dark .dark\\:bg-\\[\\#1a1a2e\\],
+              .dark .dark\\:bg-\\[\\#222222\\] {
+                background-color: ${b.bg} !important;
+              }
+            `;
+          } else {
+            bgStyleEl.textContent = `
+              body {
+                background-color: ${b.bodyBg} !important;
+                color: #111827 !important;
+              }
+              nav.bg-white,
+              header {
+                background-color: ${b.navBg} !important;
+              }
+            `;
+          }
+
+          if (typeof window.updateThemeToggleUI === 'function') {
+            window.updateThemeToggleUI(b.dark);
+          }
+
           document.querySelectorAll('#bg-swatches .bg-swatch').forEach(el => {
             const isMatch = el.getAttribute('data-bg') === b.name;
             el.classList.toggle('active', isMatch);
           });
           localStorage.setItem(LS_BG, JSON.stringify(b));
         }
+
+        // Global theme synchronizer called when #themeToggle is clicked
+        window.syncThemeStyles = function(isDark) {
+          const savedBg = (() => { try { return JSON.parse(localStorage.getItem(LS_BG)); } catch { return null; } })();
+          let matchingBgTheme;
+          if (isDark) {
+            matchingBgTheme = (savedBg && savedBg.dark) ? savedBg : lastDarkBg;
+          } else {
+            matchingBgTheme = (savedBg && !savedBg.dark) ? savedBg : lastLightBg;
+          }
+          applyBg(matchingBgTheme);
+        };
 
         function buildSwatches() {
           const accentEl = document.getElementById('accent-swatches');
@@ -1152,7 +1224,11 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedAccent = (() => { try { return JSON.parse(localStorage.getItem(LS_ACCENT)); } catch { return null; } })();
         const savedBg     = (() => { try { return JSON.parse(localStorage.getItem(LS_BG));     } catch { return null; } })();
         if (savedAccent) applyAccent(savedAccent);
-        if (savedBg)     applyBg(savedBg);
+        if (savedBg) {
+          if (savedBg.dark) lastDarkBg = savedBg;
+          else lastLightBg = savedBg;
+          applyBg(savedBg);
+        }
 
         // Open/close theme picker popup & click handler
         document.addEventListener('click', (e) => {
@@ -1177,13 +1253,19 @@ document.addEventListener('DOMContentLoaded', () => {
               const accentBtn = e.target.closest('[data-accent-idx]');
               if (accentBtn) {
                 const idx = parseInt(accentBtn.dataset.accentIdx, 10);
-                if (ACCENT_THEMES[idx]) applyAccent(ACCENT_THEMES[idx]);
+                if (ACCENT_THEMES[idx]) {
+                  applyAccent(ACCENT_THEMES[idx]);
+                  popup.style.display = 'none';
+                }
                 return;
               }
               const bgBtn = e.target.closest('[data-bg-idx]');
               if (bgBtn) {
                 const idx = parseInt(bgBtn.dataset.bgIdx, 10);
-                if (BG_THEMES[idx]) applyBg(BG_THEMES[idx]);
+                if (BG_THEMES[idx]) {
+                  applyBg(BG_THEMES[idx]);
+                  popup.style.display = 'none';
+                }
                 return;
               }
             });

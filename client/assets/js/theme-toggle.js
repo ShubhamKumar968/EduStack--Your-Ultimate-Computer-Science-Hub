@@ -16,18 +16,26 @@ window.initThemeToggle = function() {
     updateToggleUI(false);
   }
 
-  toggle.addEventListener('click', () => {
+  toggle.onclick = function() {
+    const popup = document.getElementById('theme-picker-popup');
+    if (popup) popup.style.display = 'none';
+
     const isDark = html.classList.contains('dark');
-    if (isDark) {
-      html.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-      updateToggleUI(false);
-    } else {
+    const newIsDark = !isDark;
+    if (newIsDark) {
       html.classList.add('dark');
       localStorage.setItem('theme', 'dark');
-      updateToggleUI(true);
+    } else {
+      html.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
     }
-  });
+    updateToggleUI(newIsDark);
+    if (typeof window.syncThemeStyles === 'function') {
+      window.syncThemeStyles(newIsDark);
+    }
+  };
+
+  window.updateThemeToggleUI = updateToggleUI;
 
   function updateToggleUI(isDark) {
     const thumb = document.getElementById('thumb');
@@ -39,12 +47,9 @@ window.initThemeToggle = function() {
     }
 
     if (thumb) {
-      // Calculate translate: toggle width (46px) - thumb width (20px) - offset (3px*2) = 20px
-      thumb.style.transform = isDark ? 'translateX(20px)' : 'translateX(0px)';
-      // Also handle Tailwind-class based toggles (larger)
-      const toggleW = toggle.offsetWidth || 46;
+      const toggleW = toggle.offsetWidth || 42;
       const thumbW  = thumb.offsetWidth  || 20;
-      const offset  = 3;
+      const offset  = 2;
       const tx = isDark ? (toggleW - thumbW - offset * 2) : 0;
       thumb.style.transform = `translateX(${tx}px)`;
 
@@ -70,3 +75,4 @@ window.initThemeToggle = function() {
     document.documentElement.classList.remove('dark');
   }
 })();
+
