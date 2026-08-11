@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navPlaceholder = document.getElementById('nav-placeholder');
     if (navPlaceholder) {
       const navHtml = `
-        <nav style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(0,0,0,0.07);position:relative;z-index:50;flex-wrap:nowrap;width:100%;box-sizing:border-box;gap:6px;overflow:hidden;" class="bg-white dark:bg-[#181818] dark-border-fix">
+        <nav style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(0,0,0,0.07);position:relative;z-index:999;flex-wrap:nowrap;width:100%;box-sizing:border-box;gap:6px;overflow:visible;" class="bg-white dark:bg-[#181818] dark-border-fix">
 
           <!-- LEFT: Logo + hamburger -->
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;min-width:0;">
@@ -868,8 +868,22 @@ document.addEventListener('DOMContentLoaded', () => {
           .notif-dropdown-panel { width: 360px; }
         }
 
-        /* ── Profile Dropdown: Mobile-safe positioning ── */
-        .profile-dropdown-panel { max-width: calc(100vw - 16px); }
+        /* ── Profile Dropdown: Mobile-safe positioning & avatar button ── */
+        .profile-name-col { display: none !important; }
+        .profile-chevron { display: none !important; }
+        .profile-pill {
+          padding: 2px !important;
+          border-radius: 50% !important;
+        }
+        @media (min-width: 640px) {
+          .profile-name-col { display: flex !important; }
+          .profile-chevron { display: inline-block !important; }
+          .profile-pill {
+            padding: 4px 10px 4px 4px !important;
+            border-radius: 50px !important;
+          }
+        }
+        .profile-dropdown-panel { max-width: calc(100vw - 16px); z-index: 99999 !important; }
         @media (max-width: 360px) {
           .profile-dropdown-panel {
             right: auto;
@@ -883,14 +897,22 @@ document.addEventListener('DOMContentLoaded', () => {
         #theme-picker-popup {
           --tp-bg: #ffffff;
           --tp-border: #e5e7eb;
-          --tp-label: #9ca3af;
-        }
-        .dark #theme-picker-popup {
-          --tp-bg: #1e1e1e;
-          --tp-border: #333;
           --tp-label: #6b7280;
+          --tp-text: #111827;
           background: var(--tp-bg) !important;
           border-color: var(--tp-border) !important;
+          color: var(--tp-text) !important;
+          box-shadow: 0 14px 40px rgba(0,0,0,0.25) !important;
+          z-index: 99999 !important;
+        }
+        .dark #theme-picker-popup {
+          --tp-bg: #1a1a24;
+          --tp-border: #333348;
+          --tp-label: #9ca3af;
+          --tp-text: #ffffff;
+          background: var(--tp-bg) !important;
+          border-color: var(--tp-border) !important;
+          color: var(--tp-text) !important;
         }
         .theme-swatch {
           width: 26px;
@@ -1083,8 +1105,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
               container.innerHTML = `
                 <div class="relative" id="user-profile-menu" style="flex-shrink:0;">
-                  <div class="profile-pill" id="profile-pill-btn" onclick="const d=document.getElementById('user-profile-dropdown'); d.classList.toggle('hidden');" style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1.5px solid #e5e7eb;border-radius:50px;cursor:pointer;background:#f9fafb;transition:all 0.2s;" onmouseenter="this.style.borderColor='#ff385c'" onmouseleave="this.style.borderColor='#e5e7eb'">
-                    <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;border:1px solid rgba(255,56,92,0.3);flex-shrink:0;">
+                  <div class="profile-pill" id="profile-pill-btn" onclick="event.stopPropagation(); const d=document.getElementById('user-profile-dropdown'); if(d) d.classList.toggle('hidden');" style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1.5px solid #e5e7eb;border-radius:50px;cursor:pointer;background:#f9fafb;transition:all 0.2s;" onmouseenter="this.style.borderColor='var(--brand,#ff385c)'" onmouseleave="this.style.borderColor='#e5e7eb'">
+                    <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--brand,#ff385c);flex-shrink:0;">
                       <img src="${avatar}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
                     </div>
                     <div style="display:flex;flex-direction:column;justify-content:center;" class="profile-name-col">
@@ -1096,15 +1118,23 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${roleLabel}
                       </span>
                     </div>
-                    <i class="fa-solid fa-chevron-down" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
+                    <i class="fa-solid fa-chevron-down profile-chevron" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
                   </div>
                   
-                  <div id="user-profile-dropdown" class="profile-dropdown-panel hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
-                    <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gradient-to-r from-rose-50/70 via-purple-50/40 to-indigo-50/70 dark:from-[#241c26] dark:via-[#1f1b2d] dark:to-[#1a1a2e] rounded-t-2xl">
-                      <p class="text-[10px] font-black text-brand dark:text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                        <i class="fa-solid fa-circle-user text-[11px]"></i> Logged in as <span class="font-extrabold text-amber-600 dark:text-amber-400 ml-0.5">(${roleLabel})</span>
-                      </p>
-                      <p class="text-[13.5px] font-black text-gray-900 dark:text-white truncate">${u.email}</p>
+                  <div id="user-profile-dropdown" class="profile-dropdown-panel hidden absolute right-0 top-[115%] w-64 bg-white dark:bg-[#1a1a24] text-gray-900 dark:text-white border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
+                    <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gradient-to-r from-rose-50/80 via-purple-50/50 to-indigo-50/80 dark:from-[#241c26] dark:via-[#1f1b2d] dark:to-[#1a1a2e] rounded-t-2xl flex items-center gap-3">
+                      <div style="width:38px;height:38px;border-radius:50%;overflow:hidden;border:2px solid var(--brand,#ff385c);flex-shrink:0;" class="shadow-sm">
+                        <img src="${avatar}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-[13px] font-black text-gray-900 dark:text-white truncate flex items-center gap-1.5 mb-0.5">
+                          ${displayName} ${roleIcon}
+                        </p>
+                        <p class="text-[10px] font-extrabold ${roleColor} uppercase tracking-wider mb-0.5">
+                          ${roleLabel}
+                        </p>
+                        <p class="text-[11px] font-bold text-gray-500 dark:text-gray-400 truncate">${u.email}</p>
+                      </div>
                     </div>
                     <div class="p-2 space-y-1">
                       ${u.role === 'admin' ? `
