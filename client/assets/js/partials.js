@@ -756,7 +756,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span id="notif-badge" class="hidden absolute -top-1 -right-1 bg-brand text-white text-[9px] font-black min-w-4 h-4 px-1 rounded-full flex items-center justify-center border-2 border-white dark:border-[#181818] shadow-sm">0</span>
               </button>
               
-              <div id="notif-dropdown" class="hidden absolute right-0 top-12 w-80 sm:w-96 bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-[99999] overflow-hidden">
+              <div id="notif-dropdown" class="notif-dropdown-panel hidden bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl z-[99999] overflow-hidden">
                 <div class="p-3 px-4 border-b border-gray-100 dark:border-gray-800 flex items-center justify-between">
                   <h4 class="font-extrabold text-xs text-gray-800 dark:text-gray-200 flex items-center gap-2">
                     <i class="fa-solid fa-bell text-brand"></i> Notifications
@@ -817,6 +817,43 @@ document.addEventListener('DOMContentLoaded', () => {
         .dark nav { border-color:#2d2d2d; }
         .dark-nav-link:hover { background:#222 !important; color:#ff385c !important; }
         .dark #themeToggle { background:#374151 !important; }
+
+        /* ── Notification Dropdown: Mobile-first responsive positioning ── */
+        .notif-dropdown-panel {
+          position: absolute;
+          top: calc(100% + 10px);
+          right: 0;
+          width: 320px;
+          max-width: calc(100vw - 16px);
+        }
+        /* On very small screens shift left if it would overflow */
+        @media (max-width: 380px) {
+          .notif-dropdown-panel {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100vw - 24px);
+            max-width: 320px;
+          }
+        }
+        @media (min-width: 480px) {
+          .notif-dropdown-panel {
+            width: 360px;
+          }
+        }
+
+        /* ── Profile Dropdown: Mobile-safe positioning ── */
+        .profile-dropdown-panel {
+          max-width: calc(100vw - 16px);
+        }
+        @media (max-width: 360px) {
+          .profile-dropdown-panel {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100vw - 24px);
+          }
+        }
       `;
       document.head.appendChild(navStyle);
 
@@ -860,7 +897,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <i class="fa-solid fa-chevron-down" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
                   </div>
                   
-                  <div id="user-profile-dropdown" class="hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
+                  <div id="user-profile-dropdown" class="profile-dropdown-panel hidden absolute right-0 top-[115%] w-60 bg-white dark:bg-[#1a1a1a] border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
                     <div class="p-4 border-b border-gray-100 dark:border-gray-800/80 bg-gradient-to-r from-rose-50/70 via-purple-50/40 to-indigo-50/70 dark:from-[#241c26] dark:via-[#1f1b2d] dark:to-[#1a1a2e] rounded-t-2xl">
                       <p class="text-[10px] font-black text-brand dark:text-rose-400 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                         <i class="fa-solid fa-circle-user text-[11px]"></i> Logged in as <span class="font-extrabold text-amber-600 dark:text-amber-400 ml-0.5">(${roleLabel})</span>
