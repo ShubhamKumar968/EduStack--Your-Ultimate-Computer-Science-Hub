@@ -994,12 +994,36 @@ document.addEventListener('DOMContentLoaded', () => {
           ROOT.style.setProperty('--brand',     t.color);
           ROOT.style.setProperty('--brand-soft', t.soft);
           ROOT.style.setProperty('--brand-rgb',  t.rgb);
+
+          // Dynamic global brand CSS overrides
+          let brandStyleEl = document.getElementById('edustack-brand-override');
+          if (!brandStyleEl) {
+            brandStyleEl = document.createElement('style');
+            brandStyleEl.id = 'edustack-brand-override';
+            document.head.appendChild(brandStyleEl);
+          }
+          brandStyleEl.textContent = `
+            :root {
+              --brand: ${t.color} !important;
+              --brand-soft: ${t.soft} !important;
+              --brand-rgb: ${t.rgb} !important;
+            }
+            .bg-brand, .bg-\\[\\#ff385c\\] { background-color: ${t.color} !important; }
+            .text-brand, .text-\\[\\#ff385c\\] { color: ${t.color} !important; }
+            .border-brand, .border-\\[\\#ff385c\\] { border-color: ${t.color} !important; }
+            .hover\\:bg-brand:hover, .hover\\:bg-\\[\\#ff385c\\]:hover { background-color: ${t.color} !important; }
+            .hover\\:text-brand:hover, .hover\\:text-\\[\\#ff385c\\]:hover { color: ${t.color} !important; }
+            .accent-brand { accent-color: ${t.color} !important; }
+          `;
+
           // Update palette icon color live
           const icon = document.querySelector('#theme-picker-btn i');
           if (icon) icon.style.color = t.color;
+
           // Highlight active swatch
-          document.querySelectorAll('.theme-swatch').forEach(el => {
-            el.classList.toggle('active', el.dataset.color === t.color);
+          document.querySelectorAll('#accent-swatches .theme-swatch').forEach(el => {
+            const isMatch = el.getAttribute('data-color') === t.color;
+            el.classList.toggle('active', isMatch);
           });
           localStorage.setItem(LS_ACCENT, JSON.stringify(t));
         }
@@ -1020,14 +1044,15 @@ document.addEventListener('DOMContentLoaded', () => {
             document.head.appendChild(bgStyleEl);
           }
           bgStyleEl.textContent = `
-            body { background-color: ${b.bodyBg} !important; }
+            body { background-color: ${b.bodyBg} !important; color: ${b.dark ? '#f3f4f6' : '#111827'} !important; }
             nav.bg-white, nav.dark\\:bg-\\[\\#181818\\] { background-color: ${b.navBg} !important; }
           `;
           // Refresh toggle UI
           if (typeof window.initThemeToggle === 'function') window.initThemeToggle();
           // Highlight active bg swatch
-          document.querySelectorAll('.bg-swatch').forEach(el => {
-            el.classList.toggle('active', el.dataset.bg === b.name);
+          document.querySelectorAll('#bg-swatches .bg-swatch').forEach(el => {
+            const isMatch = el.getAttribute('data-bg') === b.name;
+            el.classList.toggle('active', isMatch);
           });
           localStorage.setItem(LS_BG, JSON.stringify(b));
         }
@@ -1038,34 +1063,29 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!accentEl || !bgEl) return;
 
           const savedAccent = (() => { try { return JSON.parse(localStorage.getItem(LS_ACCENT)); } catch { return null; } })();
-          const savedBg     = (() => { try { return JSON.parse(localStorage.getItem(LS_BG));     } catch { return null; } })();
+          const activeAccentColor = savedAccent ? savedAccent.color : '#ff385c';
+          const savedBg = (() => { try { return JSON.parse(localStorage.getItem(LS_BG)); } catch { return null; } })();
 
-          accentEl.innerHTML = ACCENT_THEMES.map(t => `
-            <button class="theme-swatch ${savedAccent && savedAccent.color === t.color ? 'active' : ''}"
-              data-color="${t.color}" title="${t.name}"
-              style="background:${t.color};"
-              onclick="(function(){ window._applyAccent && window._applyAccent(${JSON.stringify(t)}); })()">
+          accentEl.innerHTML = ACCENT_THEMES.map((t, idx) => `
+            <button class="theme-swatch ${activeAccentColor.toLowerCase() === t.color.toLowerCase() ? 'active' : ''}"
+              data-accent-idx="${idx}" data-color="${t.color}" title="${t.name}"
+              style="background:${t.color};">
             </button>`).join('');
 
-          bgEl.innerHTML = BG_THEMES.map(b => `
+          bgEl.innerHTML = BG_THEMES.map((b, idx) => `
             <button class="bg-swatch ${savedBg && savedBg.name === b.name ? 'active' : ''}"
-              data-bg="${b.name}"
-              onclick="(function(){ window._applyBg && window._applyBg(${JSON.stringify(b)}); })()">
+              data-bg-idx="${idx}" data-bg="${b.name}">
               ${b.name}
             </button>`).join('');
         }
 
-        // Expose for onclick usage inside template strings
-        window._applyAccent = applyAccent;
-        window._applyBg     = applyBg;
-
-        // Restore saved preferences
+        // Restore saved preferences immediately
         const savedAccent = (() => { try { return JSON.parse(localStorage.getItem(LS_ACCENT)); } catch { return null; } })();
         const savedBg     = (() => { try { return JSON.parse(localStorage.getItem(LS_BG));     } catch { return null; } })();
         if (savedAccent) applyAccent(savedAccent);
         if (savedBg)     applyBg(savedBg);
 
-        // Open/close theme picker popup
+        // Open/close theme picker popup & click handler
         document.addEventListener('click', (e) => {
           const btn   = document.getElementById('theme-picker-btn');
           const popup = document.getElementById('theme-picker-popup');
@@ -1078,6 +1098,28 @@ document.addEventListener('DOMContentLoaded', () => {
             popup.style.display = 'none';
           }
         });
+
+        // Event delegation inside theme-picker-popup for swatches
+        setTimeout(() => {
+          const popup = document.getElementById('theme-picker-popup');
+          if (popup) {
+            popup.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const accentBtn = e.target.closest('[data-accent-idx]');
+              if (accentBtn) {
+                const idx = parseInt(accentBtn.dataset.accentIdx, 10);
+                if (ACCENT_THEMES[idx]) applyAccent(ACCENT_THEMES[idx]);
+                return;
+              }
+              const bgBtn = e.target.closest('[data-bg-idx]');
+              if (bgBtn) {
+                const idx = parseInt(bgBtn.dataset.bgIdx, 10);
+                if (BG_THEMES[idx]) applyBg(BG_THEMES[idx]);
+                return;
+              }
+            });
+          }
+        }, 100);
       })();
       // ─────────────────────────────────────────────────────────────────
 
