@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const navPlaceholder = document.getElementById('nav-placeholder');
     if (navPlaceholder) {
       const navHtml = `
-        <nav style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid rgba(0,0,0,0.07);position:relative;z-index:50;flex-wrap:nowrap;width:100%;box-sizing:border-box;gap:8px;" class="bg-white dark:bg-[#181818] dark-border-fix">
+        <nav style="display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(0,0,0,0.07);position:relative;z-index:50;flex-wrap:nowrap;width:100%;box-sizing:border-box;gap:6px;overflow:hidden;" class="bg-white dark:bg-[#181818] dark-border-fix">
 
           <!-- LEFT: Logo + hamburger -->
           <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;min-width:0;">
@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
 
           <!-- CENTER: Nav links (desktop only) -->
-          <ul style="display:none;align-items:center;gap:2px;list-style:none;margin:0;padding:0;font-size:13px;font-weight:700;flex-shrink:0;" class="desktop-nav-links">
+          <ul style="display:none;align-items:center;gap:0px;list-style:none;margin:0;padding:0;font-size:12px;font-weight:700;flex:1;min-width:0;justify-content:center;" class="desktop-nav-links">
             ${isGuest ? `
             ${getNavItem('guest/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'guest/subject-list', 'nav-item-purple', 'color:#8b5cf6;')}
             ${getNavItem('guest/favourite-list.html', 'fa-solid fa-heart', 'Favourites', 'guest/favourite-list', 'nav-item-brand', 'color:#ff385c;')}
@@ -715,36 +715,55 @@ document.addEventListener('DOMContentLoaded', () => {
             ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects', 'nav-item-indigo', 'color:#6366f1;')}
             ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject', 'nav-item-emerald', 'color:#10b981;')}
             ` : `
-            <li><a href="${base}index.html#demo-subjects" class="nav-link-hash nav-item-brand" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#demo-subjects"><i class="fa-solid fa-book-open" style="color:#ff385c;"></i> Explore Subjects</a></li>
-            <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash nav-item-amber" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:16px;height:16px;object-fit:contain;display:inline-block;"> College Links</a></li>
-            <li><a href="${base}index.html#resources" class="nav-link-hash nav-item-blue" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;"></i> Resources</a></li>
-            <li><a href="${base}index.html#ai-tools" class="nav-link-hash nav-item-purple" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;"></i> AI Tools</a></li>
-            <li><a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" class="nav-item-amber" style="display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:900;font-size:13px;"><i class="fa-solid fa-crown" style="color:#f59e0b;font-size:14px;"></i> <span style="background:linear-gradient(135deg, #f59e0b, #f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DSA Sheet</span></a></li>
-            <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" class="nav-item-emerald" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;"></i> Contribute</a></li>
-            <li><a href="${base}index.html#about" class="nav-link-hash nav-item-orange" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;"></i> About</a></li>
-            <li><a href="${base}index.html#contact" class="nav-link-hash nav-item-pink" style="display:flex;align-items:center;gap:5px;padding:7px 11px;border-radius:50px;text-decoration:none;font-weight:700;font-size:13px;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact</a></li>
+            <li><a href="${base}index.html#demo-subjects" class="nav-link-hash nav-item-brand" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#demo-subjects"><i class="fa-solid fa-book-open" style="color:#ff385c;font-size:11px;"></i> Explore Subjects</a></li>
+            <li><a href="${base}index.html#college-websites" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}index.html#college-websites'; }, 'access College Useful Links')" class="nav-link-hash nav-item-amber" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#college-websites"><img src="https://upload.wikimedia.org/wikipedia/en/b/b5/National_Institute_of_Technology%2C_Patna_Logo.png" alt="NITP" style="width:14px;height:14px;object-fit:contain;display:inline-block;"> College Links</a></li>
+            <li><a href="${base}index.html#resources" class="nav-link-hash nav-item-blue" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#resources"><i class="fa-solid fa-folder-open" style="color:#3b82f6;font-size:11px;"></i> Resources</a></li>
+            <li><a href="${base}index.html#ai-tools" class="nav-link-hash nav-item-purple" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#ai-tools"><i class="fa-solid fa-robot" style="color:#8b5cf6;font-size:11px;"></i> AI Tools</a></li>
+            <li><a href="${base}public/premium-dsa-sheet.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}public/premium-dsa-sheet.html'; }, 'access Ultimate DSA Sheet')" class="nav-item-amber" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:900;font-size:12px;white-space:nowrap;"><i class="fa-solid fa-crown" style="color:#f59e0b;font-size:12px;"></i> <span style="background:linear-gradient(135deg,#f59e0b,#f43f5e);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">DSA Sheet</span></a></li>
+            <li><a href="${base}contribute.html" onclick="event.preventDefault(); window.requireAuth(function(){ window.location.href='${base}contribute.html'; }, 'contribute notes & PYQs')" class="nav-item-emerald" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;"><i class="fa-solid fa-cloud-arrow-up" style="color:#10b981;font-size:11px;"></i> Contribute</a></li>
+            <li><a href="${base}index.html#about" class="nav-link-hash nav-item-orange" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#about"><i class="fa-solid fa-circle-info" style="color:#f97316;font-size:11px;"></i> About</a></li>
+            <li><a href="${base}index.html#contact" class="nav-link-hash nav-item-pink" style="display:flex;align-items:center;gap:4px;padding:6px 9px;border-radius:50px;text-decoration:none;font-weight:700;font-size:12px;white-space:nowrap;" data-hash="#contact"><i class="fa-solid fa-address-card" style="color:#ec4899;font-size:11px;"></i> Contact</a></li>
             `}
           </ul>
 
-          <!-- RIGHT: Theme toggle + AI Assistant + Auth (always flex, never wraps) -->
-          <div id="nav-right-section" style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+          <!-- RIGHT: Theme Picker + Theme toggle + AI Assistant + Auth (always flex, never wraps) -->
+          <div id="nav-right-section" style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
 
             <!-- EduStack AI Assistant Button in Header -->
             <button onclick="window.triggerEduStackAIAssistant()"
               title="EduStack AI Assistant"
               class="nav-ai-btn"
-              style="align-items:center;gap:6px;font-size:12px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:6px 13px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;"
+              style="align-items:center;gap:5px;font-size:11px;font-weight:800;color:#fff;background:linear-gradient(135deg,#9333ea,#ec4899);padding:5px 11px;border-radius:50px;border:1px solid rgba(255,255,255,0.2);cursor:pointer;box-shadow:0 2px 10px rgba(147,51,234,0.3);transition:transform 0.2s, box-shadow 0.2s;white-space:nowrap;"
               onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
-              <i class="fa-solid fa-wand-magic-sparkles" style="font-size:11px;color:#fef08a;"></i>
+              <i class="fa-solid fa-wand-magic-sparkles" style="font-size:10px;color:#fef08a;"></i>
               <span class="hidden-xs">AI Assistant</span>
-              <span style="background:rgba(255,255,255,0.25);font-size:9px;padding:1px 5px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.5px;">LIVE</span>
+              <span style="background:rgba(255,255,255,0.25);font-size:8px;padding:1px 4px;border-radius:10px;text-transform:uppercase;font-weight:900;letter-spacing:0.5px;">LIVE</span>
             </button>
+
+            <!-- Theme Picker Button -->
+            <div style="position:relative;flex-shrink:0;" id="theme-picker-wrapper">
+              <button id="theme-picker-btn" title="Select Accent Theme"
+                style="width:32px;height:32px;border-radius:50%;border:2px solid #e5e7eb;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;flex-shrink:0;"
+                onmouseover="this.style.borderColor='var(--brand,#ff385c)'" onmouseout="this.style.borderColor=document.documentElement.classList.contains('dark')?'#374151':'#e5e7eb'">
+                <i class="fa-solid fa-palette" style="font-size:13px;color:var(--brand,#ff385c);"></i>
+              </button>
+              <!-- Theme Picker Popup -->
+              <div id="theme-picker-popup" style="display:none;position:absolute;top:calc(100% + 10px);right:0;min-width:230px;background:var(--tp-bg,#fff);border:1px solid var(--tp-border,#e5e7eb);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,0.15);padding:14px 16px;z-index:99999;">
+                <p style="font-size:10px;font-weight:900;color:var(--tp-label,#9ca3af);text-transform:uppercase;letter-spacing:0.12em;margin:0 0 10px 0;">Select Accent Theme</p>
+                <!-- Accent Color Row -->
+                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;" id="accent-swatches"></div>
+                <hr style="border:none;border-top:1px solid var(--tp-border,#e5e7eb);margin:10px 0;">
+                <p style="font-size:10px;font-weight:900;color:var(--tp-label,#9ca3af);text-transform:uppercase;letter-spacing:0.12em;margin:0 0 10px 0;">Background Style</p>
+                <!-- Background (light/dark combos) Row -->
+                <div style="display:flex;gap:8px;flex-wrap:wrap;" id="bg-swatches"></div>
+              </div>
+            </div>
 
             <!-- Theme Toggle -->
             <button id="themeToggle" aria-label="Toggle dark mode"
-              style="width:46px;height:26px;border-radius:50px;background:#e5e7eb;border:none;position:relative;cursor:pointer;flex-shrink:0;display:flex;align-items:center;transition:background 0.2s;">
+              style="width:42px;height:24px;border-radius:50px;background:#e5e7eb;border:none;position:relative;cursor:pointer;flex-shrink:0;display:flex;align-items:center;transition:background 0.2s;">
               <span id="thumb"
-                style="position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;transition:transform 0.25s;">
+                style="position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;transition:transform 0.25s;">
                 <i id="thumbIcon" class="fa-solid fa-sun" style="color:#f59e0b;font-size:10px;"></i>
               </span>
             </button>
@@ -794,16 +813,23 @@ document.addEventListener('DOMContentLoaded', () => {
           max-width: 100% !important;
           overflow-x: hidden !important;
         }
+        /* ── Accent CSS Variables (defaults) ── */
+        :root {
+          --brand: #ff385c;
+          --brand-soft: #ff6b81;
+          --brand-rgb: 255,56,92;
+        }
         .hidden-xs { display: none !important; }
         @media (min-width: 768px) {
           .hidden-xs { display: inline-block !important; }
         }
+        /* Nav links: flex-shrink allowed so they compress before hiding */
         .desktop-nav-links { display: none !important; }
         @media (min-width: 1024px) {
           .desktop-nav-links { display: flex !important; }
         }
         .login-link-desktop { display: none !important; }
-        @media (min-width: 1024px) {
+        @media (min-width: 1280px) {
           .login-link-desktop { display: flex !important; }
         }
         .nav-ai-btn { display: none !important; }
@@ -814,8 +840,11 @@ document.addEventListener('DOMContentLoaded', () => {
         @media (min-width: 480px) {
           .nav-signup-btn { display: flex !important; }
         }
+        /* Fit all nav items inside viewport without overflow */
+        nav { max-width: 100vw; }
+        #nav-right-section { flex-shrink: 0; }
         .dark nav { border-color:#2d2d2d; }
-        .dark-nav-link:hover { background:#222 !important; color:#ff385c !important; }
+        .dark-nav-link:hover { background:#222 !important; color:var(--brand,#ff385c) !important; }
         .dark #themeToggle { background:#374151 !important; }
 
         /* ── Notification Dropdown: Mobile-first responsive positioning ── */
@@ -826,7 +855,6 @@ document.addEventListener('DOMContentLoaded', () => {
           width: 320px;
           max-width: calc(100vw - 16px);
         }
-        /* On very small screens shift left if it would overflow */
         @media (max-width: 380px) {
           .notif-dropdown-panel {
             right: auto;
@@ -837,15 +865,11 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         }
         @media (min-width: 480px) {
-          .notif-dropdown-panel {
-            width: 360px;
-          }
+          .notif-dropdown-panel { width: 360px; }
         }
 
         /* ── Profile Dropdown: Mobile-safe positioning ── */
-        .profile-dropdown-panel {
-          max-width: calc(100vw - 16px);
-        }
+        .profile-dropdown-panel { max-width: calc(100vw - 16px); }
         @media (max-width: 360px) {
           .profile-dropdown-panel {
             right: auto;
@@ -854,10 +878,188 @@ document.addEventListener('DOMContentLoaded', () => {
             width: calc(100vw - 24px);
           }
         }
+
+        /* ── Theme Picker Popup ── */
+        #theme-picker-popup {
+          --tp-bg: #ffffff;
+          --tp-border: #e5e7eb;
+          --tp-label: #9ca3af;
+        }
+        .dark #theme-picker-popup {
+          --tp-bg: #1e1e1e;
+          --tp-border: #333;
+          --tp-label: #6b7280;
+          background: var(--tp-bg) !important;
+          border-color: var(--tp-border) !important;
+        }
+        .theme-swatch {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          border: 2.5px solid transparent;
+          cursor: pointer;
+          transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+          flex-shrink: 0;
+        }
+        .theme-swatch:hover { transform: scale(1.18); }
+        .theme-swatch.active {
+          border-color: #fff;
+          box-shadow: 0 0 0 2px var(--brand,#ff385c), 0 0 8px rgba(var(--brand-rgb,255,56,92),0.5);
+          transform: scale(1.1);
+        }
+        .bg-swatch {
+          display: flex;
+          align-items: center;
+          gap: 5px;
+          padding: 5px 10px;
+          border-radius: 10px;
+          border: 1.5px solid var(--tp-border,#e5e7eb);
+          cursor: pointer;
+          font-size: 10px;
+          font-weight: 800;
+          color: var(--tp-text,#374151);
+          background: transparent;
+          transition: all 0.15s;
+          white-space: nowrap;
+        }
+        .dark .bg-swatch { color: #d1d5db; }
+        .bg-swatch:hover, .bg-swatch.active {
+          border-color: var(--brand,#ff385c);
+          background: rgba(var(--brand-rgb,255,56,92),0.08);
+          color: var(--brand,#ff385c);
+        }
+        /* ── Theme Picker popup on small screens: position left instead of right ── */
+        @media (max-width: 480px) {
+          #theme-picker-popup {
+            right: auto;
+            left: 50%;
+            transform: translateX(-50%);
+            min-width: calc(100vw - 32px);
+          }
+        }
       `;
       document.head.appendChild(navStyle);
 
-      // Dynamically fetch current logged-in user profile from REST API
+      // ── Theme Picker Engine ───────────────────────────────────────────
+      (function initThemePicker() {
+        const ACCENT_THEMES = [
+          { name: 'Brand Red',   color: '#ff385c', soft: '#ff6b81', rgb: '255,56,92'   },
+          { name: 'Emerald',     color: '#10b981', soft: '#34d399', rgb: '16,185,129'  },
+          { name: 'Ocean Blue',  color: '#2563eb', soft: '#60a5fa', rgb: '37,99,235'   },
+          { name: 'Violet',      color: '#7c3aed', soft: '#a78bfa', rgb: '124,58,237'  },
+          { name: 'Cyan',        color: '#06b6d4', soft: '#67e8f9', rgb: '6,182,212'   },
+          { name: 'Amber',       color: '#d97706', soft: '#fbbf24', rgb: '217,119,6'   },
+          { name: 'Rose',        color: '#e11d48', soft: '#fb7185', rgb: '225,29,72'   },
+          { name: 'Orange',      color: '#ea580c', soft: '#fb923c', rgb: '234,88,12'   },
+          { name: 'Teal',        color: '#0d9488', soft: '#2dd4bf', rgb: '13,148,136'  },
+        ];
+        const BG_THEMES = [
+          // Light variants
+          { name: '☀️ Default',   dark: false, bg: '#ffffff', navBg: '#ffffff', bodyBg: '#f9fafb' },
+          { name: '🌿 Warm',      dark: false, bg: '#fffbf5', navBg: '#fffbf5', bodyBg: '#fef3e2' },
+          { name: '🧊 Cool',      dark: false, bg: '#f0f9ff', navBg: '#f0f9ff', bodyBg: '#e0f2fe' },
+          // Dark variants
+          { name: '🌑 Charcoal',  dark: true,  bg: '#181818', navBg: '#181818', bodyBg: '#111111' },
+          { name: '🌌 Midnight',  dark: true,  bg: '#0f0f1a', navBg: '#0f0f1a', bodyBg: '#08080f' },
+          { name: '🌲 Forest',    dark: true,  bg: '#0d1f1a', navBg: '#0d1f1a', bodyBg: '#081510' },
+        ];
+
+        const ROOT = document.documentElement;
+        const LS_ACCENT = 'edustack_accent';
+        const LS_BG     = 'edustack_bg';
+
+        function applyAccent(t) {
+          ROOT.style.setProperty('--brand',     t.color);
+          ROOT.style.setProperty('--brand-soft', t.soft);
+          ROOT.style.setProperty('--brand-rgb',  t.rgb);
+          // Update palette icon color live
+          const icon = document.querySelector('#theme-picker-btn i');
+          if (icon) icon.style.color = t.color;
+          // Highlight active swatch
+          document.querySelectorAll('.theme-swatch').forEach(el => {
+            el.classList.toggle('active', el.dataset.color === t.color);
+          });
+          localStorage.setItem(LS_ACCENT, JSON.stringify(t));
+        }
+
+        function applyBg(b) {
+          if (b.dark) {
+            ROOT.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+          } else {
+            ROOT.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+          }
+          // Patch nav + body bg via CSS variable injection
+          let bgStyleEl = document.getElementById('edustack-bg-style');
+          if (!bgStyleEl) {
+            bgStyleEl = document.createElement('style');
+            bgStyleEl.id = 'edustack-bg-style';
+            document.head.appendChild(bgStyleEl);
+          }
+          bgStyleEl.textContent = `
+            body { background-color: ${b.bodyBg} !important; }
+            nav.bg-white, nav.dark\\:bg-\\[\\#181818\\] { background-color: ${b.navBg} !important; }
+          `;
+          // Refresh toggle UI
+          if (typeof window.initThemeToggle === 'function') window.initThemeToggle();
+          // Highlight active bg swatch
+          document.querySelectorAll('.bg-swatch').forEach(el => {
+            el.classList.toggle('active', el.dataset.bg === b.name);
+          });
+          localStorage.setItem(LS_BG, JSON.stringify(b));
+        }
+
+        function buildSwatches() {
+          const accentEl = document.getElementById('accent-swatches');
+          const bgEl     = document.getElementById('bg-swatches');
+          if (!accentEl || !bgEl) return;
+
+          const savedAccent = (() => { try { return JSON.parse(localStorage.getItem(LS_ACCENT)); } catch { return null; } })();
+          const savedBg     = (() => { try { return JSON.parse(localStorage.getItem(LS_BG));     } catch { return null; } })();
+
+          accentEl.innerHTML = ACCENT_THEMES.map(t => `
+            <button class="theme-swatch ${savedAccent && savedAccent.color === t.color ? 'active' : ''}"
+              data-color="${t.color}" title="${t.name}"
+              style="background:${t.color};"
+              onclick="(function(){ window._applyAccent && window._applyAccent(${JSON.stringify(t)}); })()">
+            </button>`).join('');
+
+          bgEl.innerHTML = BG_THEMES.map(b => `
+            <button class="bg-swatch ${savedBg && savedBg.name === b.name ? 'active' : ''}"
+              data-bg="${b.name}"
+              onclick="(function(){ window._applyBg && window._applyBg(${JSON.stringify(b)}); })()">
+              ${b.name}
+            </button>`).join('');
+        }
+
+        // Expose for onclick usage inside template strings
+        window._applyAccent = applyAccent;
+        window._applyBg     = applyBg;
+
+        // Restore saved preferences
+        const savedAccent = (() => { try { return JSON.parse(localStorage.getItem(LS_ACCENT)); } catch { return null; } })();
+        const savedBg     = (() => { try { return JSON.parse(localStorage.getItem(LS_BG));     } catch { return null; } })();
+        if (savedAccent) applyAccent(savedAccent);
+        if (savedBg)     applyBg(savedBg);
+
+        // Open/close theme picker popup
+        document.addEventListener('click', (e) => {
+          const btn   = document.getElementById('theme-picker-btn');
+          const popup = document.getElementById('theme-picker-popup');
+          if (!btn || !popup) return;
+          if (btn.contains(e.target)) {
+            const isOpen = popup.style.display !== 'none';
+            popup.style.display = isOpen ? 'none' : 'block';
+            if (!isOpen) buildSwatches();
+          } else if (!popup.contains(e.target)) {
+            popup.style.display = 'none';
+          }
+        });
+      })();
+      // ─────────────────────────────────────────────────────────────────
+
+
       fetch('/api/auth/me', { credentials: 'include' })
         .then(res => res.json())
         .then(resData => {
