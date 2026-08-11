@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,8 @@
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <!-- Production Compiled Tailwind CSS -->
   <link rel="stylesheet" href="/assets/css/output.css">
   <script src="/assets/js/partials.js" defer></script>
@@ -19,14 +21,15 @@
     body {
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
-    
+
     /* Modern Glassmorphic Shadows & Aesthetics */
     .glow-card {
       box-shadow: 0 10px 40px -10px rgba(255, 56, 92, 0.15), 0 0 30px -5px rgba(168, 85, 247, 0.15);
     }
-    
+
     /* Modern Glassmorphic & Ultra-Clean Markdown Formatting Styles */
-    .prose table, table {
+    .prose table,
+    table {
       width: 100% !important;
       border-collapse: separate !important;
       border-spacing: 0 !important;
@@ -37,7 +40,9 @@
       border: 1px solid rgba(168, 85, 247, 0.25) !important;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05) !important;
     }
-    .prose th, table th {
+
+    .prose th,
+    table th {
       background: linear-gradient(135deg, rgba(88, 28, 135, 0.95), rgba(126, 34, 206, 0.95)) !important;
       color: #f3e8ff !important;
       font-weight: 800 !important;
@@ -47,47 +52,64 @@
       font-size: 11px !important;
       border-bottom: 1px solid rgba(168, 85, 247, 0.3) !important;
     }
-    .prose td, table td {
+
+    .prose td,
+    table td {
       padding: 10px 16px !important;
       border-bottom: 1px solid rgba(168, 85, 247, 0.12) !important;
       background-color: rgba(15, 14, 23, 0.3) !important;
       color: inherit !important;
     }
-    .dark .prose td, .dark table td {
+
+    .dark .prose td,
+    .dark table td {
       background-color: rgba(22, 22, 31, 0.6) !important;
     }
-    .prose tr:last-child td, table tr:last-child td {
+
+    .prose tr:last-child td,
+    table tr:last-child td {
       border-bottom: none !important;
     }
-    .prose tr:hover td, table tr:hover td {
+
+    .prose tr:hover td,
+    table tr:hover td {
       background-color: rgba(168, 85, 247, 0.08) !important;
       transition: background-color 0.2s ease !important;
     }
-    .prose h1, .prose h2, .prose h3, .prose h4 {
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4 {
       color: #a855f7 !important;
       font-weight: 800 !important;
       margin-top: 1.25em !important;
       margin-bottom: 0.5em !important;
       line-height: 1.3 !important;
     }
+
     .prose h3 {
       font-size: 1rem !important;
       border-bottom: 1px solid rgba(168, 85, 247, 0.2) !important;
       padding-bottom: 6px !important;
     }
+
     .prose ul {
       list-style-type: disc !important;
       padding-left: 1.25rem !important;
       margin: 8px 0 !important;
     }
+
     .prose ol {
       list-style-type: decimal !important;
       padding-left: 1.25rem !important;
       margin: 8px 0 !important;
     }
+
     .prose li {
       margin-bottom: 4px !important;
     }
+
     .prose code:not(pre code) {
       background: rgba(168, 85, 247, 0.15) !important;
       color: #c084fc !important;
@@ -97,6 +119,7 @@
       font-weight: 700 !important;
       border: 1px solid rgba(168, 85, 247, 0.25) !important;
     }
+
     .prose blockquote {
       border-left: 4px solid #a855f7 !important;
       background: rgba(168, 85, 247, 0.08) !important;
@@ -105,16 +128,19 @@
       margin: 12px 0 !important;
       font-style: italic !important;
     }
+
     .chat-bubble-ai {
       background: rgba(255, 255, 255, 0.95);
       border: 1px solid rgba(229, 231, 235, 0.9);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
     }
+
     .dark .chat-bubble-ai {
       background: rgba(26, 26, 36, 0.95);
       border: 1px solid rgba(168, 85, 247, 0.25);
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
     }
+
     .chat-bubble-user {
       background: linear-gradient(135deg, #ff385c, #e00b41);
       box-shadow: 0 4px 15px rgba(255, 56, 92, 0.3);
@@ -129,6 +155,7 @@
       font-family: ui-monospace, SFMono-Regular, Consolas, monospace !important;
       font-size: 0.85em !important;
     }
+
     .prose pre {
       background-color: #0f0f17 !important;
       border: 1px solid rgba(168, 85, 247, 0.25) !important;
@@ -136,56 +163,75 @@
       padding: 1.25rem !important;
       overflow-x: auto !important;
     }
+
     .prose pre code {
       background-color: transparent !important;
       color: #e2e8f0 !important;
       padding: 0 !important;
       border: none !important;
     }
-    .prose h1, .prose h2, .prose h3, .prose h4 {
+
+    .prose h1,
+    .prose h2,
+    .prose h3,
+    .prose h4 {
       font-weight: 800 !important;
       margin-top: 1rem !important;
       margin-bottom: 0.5rem !important;
     }
-    .dark .prose h1, .dark .prose h2, .dark .prose h3, .dark .prose h4 {
+
+    .dark .prose h1,
+    .dark .prose h2,
+    .dark .prose h3,
+    .dark .prose h4 {
       color: #f3e8ff !important;
     }
   </style>
 </head>
-<body class="bg-slate-50 dark:bg-[#121212] text-[#222222] dark:text-gray-100 min-h-screen transition-colors duration-300">
+
+<body
+  class="bg-slate-50 dark:bg-[#121212] text-[#222222] dark:text-gray-100 min-h-screen transition-colors duration-300">
   <!-- Nav Placeholder injected by partials.js -->
   <div id="nav-placeholder"></div>
 
   <!-- MAIN CONTAINER -->
   <main class="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-12">
-    
+
     <!-- HEADER HERO BANNER -->
     <div class="text-center max-w-3xl mx-auto mb-10">
-      <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
+      <div
+        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-black uppercase tracking-wider mb-4 shadow-sm">
         <i class="fa-solid fa-wand-magic-sparkles animate-pulse"></i> EduStack Academic Intelligence
       </div>
       <h1 class="text-3xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
-        EduStack <span class="bg-gradient-to-r from-brand via-brand-soft to-brand-light bg-clip-text text-transparent">AI & RAG Hub</span>
+        EduStack <span
+          class="bg-gradient-to-r from-brand via-brand-soft to-brand-light bg-clip-text text-transparent">AI & RAG
+          Hub</span>
       </h1>
       <p class="mt-3 text-sm md:text-base text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
-        Interactive AI tutoring grounded in verified CS course notes, instant textbook PDF summarization, and exam PYQ generation.
+        Interactive AI tutoring grounded in verified CS course notes, instant textbook PDF summarization, and exam PYQ
+        generation.
       </p>
     </div>
 
     <!-- MAIN GRID LAYOUT (Intuitive 2-Column Responsive Layout) -->
     <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-      
+
       <!-- LEFT SIDEBAR: CONTROLS & NAVIGATION (4 Cols) -->
       <div class="lg:col-span-4 space-y-6">
-        
+
         <!-- Navigation Card -->
-        <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card">
-          <h3 class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Select AI Feature</h3>
-          
+        <div
+          class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card">
+          <h3 class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-4">Select AI
+            Feature</h3>
+
           <div class="space-y-3">
             <!-- Tool 1: AI Tutor -->
-            <button id="navBtnTutor" onclick="switchTool('tutor')" class="w-full p-4 rounded-2xl border flex items-center gap-4 transition-all text-left cursor-pointer border-brand bg-brand/10 text-brand dark:text-white font-extrabold shadow-md">
-              <div class="w-10 h-10 rounded-xl bg-brand text-white flex items-center justify-center text-base flex-shrink-0 shadow-md shadow-brand/20">
+            <button id="navBtnTutor" onclick="switchTool('tutor')"
+              class="w-full p-4 rounded-2xl border flex items-center gap-4 transition-all text-left cursor-pointer border-brand bg-brand/10 text-brand dark:text-white font-extrabold shadow-md">
+              <div
+                class="w-10 h-10 rounded-xl bg-brand text-white flex items-center justify-center text-base flex-shrink-0 shadow-md shadow-brand/20">
                 <i class="fa-solid fa-robot"></i>
               </div>
               <div class="flex-1">
@@ -196,8 +242,10 @@
             </button>
 
             <!-- Tool 2: PDF Summarizer -->
-            <button id="navBtnSummarizer" onclick="switchTool('summarizer')" class="w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer">
-              <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-base flex-shrink-0">
+            <button id="navBtnSummarizer" onclick="switchTool('summarizer')"
+              class="w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer">
+              <div
+                class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-file-pdf"></i>
               </div>
               <div class="flex-1">
@@ -208,8 +256,10 @@
             </button>
 
             <!-- Tool 3: PYQ Quiz -->
-            <button id="navBtnQuiz" onclick="switchTool('quiz')" class="w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer">
-              <div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-base flex-shrink-0">
+            <button id="navBtnQuiz" onclick="switchTool('quiz')"
+              class="w-full p-4 rounded-2xl border border-gray-100 dark:border-gray-800/80 bg-gray-50/50 dark:bg-[#16161f] text-gray-700 dark:text-gray-300 font-extrabold flex items-center gap-4 hover:border-brand/40 transition-all text-left cursor-pointer">
+              <div
+                class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-base flex-shrink-0">
                 <i class="fa-solid fa-list-check"></i>
               </div>
               <div class="flex-1">
@@ -223,32 +273,38 @@
 
         <!-- Subject Selection Card -->
         <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl">
-          <h3 class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Academic Context</h3>
-          
+          <h3 class="text-xs font-black text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Academic Context
+          </h3>
+
           <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-2">Target Subject:</label>
-          <select id="sidebarSubjectSelect" onchange="syncSubject(this.value)" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
+          <select id="sidebarSubjectSelect" onchange="syncSubject(this.value)"
+            class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
             <option value="Data Structures & Algorithms">Data Structures & Algorithms (DSA)</option>
             <option value="Database Management Systems">Database Management Systems (DBMS)</option>
             <option value="Operating Systems">Operating Systems (OS)</option>
             <option value="Computer Networks">Computer Networks (CN)</option>
-            <option value="Engineering Physics">Engineering Physics</option>
-            <option value="Engineering Mathematics">Engineering Mathematics (I, II, III)</option>
             <option value="Object Oriented Programming">Object Oriented Programming (OOPs / C++)</option>
-            <option value="Theory of Computation">Theory of Computation (TOC)</option>
+            <option value="Computer Organization & Architecture">Computer Organization & Architecture (COA)</option>
+            <option value="Theory of Computation">Theory of Computation (TOC / Automata)</option>
             <option value="Compiler Design">Compiler Design</option>
             <option value="Design and Analysis of Algorithms">Design & Analysis of Algorithms (DAA)</option>
             <option value="Software Engineering">Software Engineering</option>
             <option value="Artificial Intelligence">Artificial Intelligence (AI)</option>
             <option value="Machine Learning">Machine Learning (ML)</option>
             <option value="Data Mining & Data Warehousing">Data Mining & Data Warehousing</option>
-
-            <option value="Computer Organization & Architecture">Computer Organization & Architecture (COA)</option>
             <option value="Discrete Mathematics">Discrete Mathematics</option>
-            <option value="Cyber Security & Cryptography">Cyber Security & Cryptography</option>
+            <option value="Cyber Security & Cryptography">Information Security & Cryptography</option>
             <option value="Cloud Computing & DevOps">Cloud Computing & DevOps</option>
             <option value="Full Stack Web Development">Full Stack Web Development</option>
-            <option value="Basic Electrical Engineering">Basic Electrical Engineering</option>
-            <option value="Environmental Science">Environmental Science</option>
+            <option value="Engineering Mathematics">Engineering Mathematics (I, II, III, IV)</option>
+            <option value="Engineering Physics">Engineering Physics</option>
+            <option value="Engineering Chemistry">Engineering Chemistry</option>
+            <option value="Basic Electrical Engineering">Basic Electrical & Electronics (BEEE)</option>
+            <option value="Digital Logic & Design">Digital Logic & Design (DLD)</option>
+            <option value="Python Programming & Data Science">Python Programming & Data Science</option>
+            <option value="Distributed Systems">Distributed Systems</option>
+            <option value="Natural Language Processing">Natural Language Processing (NLP)</option>
+            <option value="Internet of Things">Internet of Things (IoT)</option>
           </select>
         </div>
 
@@ -256,61 +312,79 @@
 
       <!-- RIGHT DISPLAY PANEL: WORKSPACE (8 Cols) -->
       <div class="lg:col-span-8">
-        
+
         <!-- WORKSPACE CARD CONTAINER -->
-        <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl shadow-xl p-6 md:p-8 min-h-[580px] flex flex-col justify-between glow-card">
-          
+        <div
+          class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl shadow-xl p-6 md:p-8 min-h-[580px] flex flex-col justify-between glow-card">
+
           <!-- PANEL 1: AI TUTOR CHAT UI -->
           <div id="panelTutor" class="block space-y-5 flex-1 flex flex-col justify-between">
             <!-- Header Bar -->
             <div class="flex items-center justify-between border-b border-gray-100 dark:border-gray-800 pb-4">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand text-lg font-black">
+                <div
+                  class="w-10 h-10 rounded-2xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand text-lg font-black">
                   <i class="fa-solid fa-robot"></i>
                 </div>
                 <div>
                   <h2 class="text-base font-black text-gray-900 dark:text-white">EduStack AI Tutor</h2>
                   <p class="text-xs text-gray-400 font-semibold flex items-center gap-1.5">
-                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Grounded in Verified CS Notes
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Grounded in Verified CS
+                    Notes
                   </p>
                 </div>
               </div>
-              <span id="activeSubjectBadge" class="px-3 py-1 rounded-full text-xs font-black bg-brand/10 text-brand border border-brand/20">
+              <span id="activeSubjectBadge"
+                class="px-3 py-1 rounded-full text-xs font-black bg-brand/10 text-brand border border-brand/20">
                 DSA
               </span>
             </div>
 
             <!-- Chat Scroll Area -->
-            <div id="chatBox" class="h-[420px] overflow-y-auto p-4 md:p-6 rounded-3xl bg-slate-100/80 dark:bg-[#12111a] border border-gray-200 dark:border-gray-800/80 space-y-5 text-xs md:text-sm overflow-x-hidden custom-scrollbar">
+            <div id="chatBox"
+              class="h-[420px] overflow-y-auto p-4 md:p-6 rounded-3xl bg-slate-100/80 dark:bg-[#12111a] border border-gray-200 dark:border-gray-800/80 space-y-5 text-xs md:text-sm overflow-x-hidden custom-scrollbar">
               <div class="flex items-start gap-3.5 max-w-full">
-                <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand via-rose-500 to-pink-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-brand/25 flex-shrink-0">
+                <div
+                  class="w-10 h-10 rounded-2xl bg-gradient-to-br from-brand via-rose-500 to-pink-600 flex items-center justify-center text-white text-sm font-bold shadow-lg shadow-brand/25 flex-shrink-0">
                   <i class="fa-solid fa-robot"></i>
                 </div>
-                <div class="bg-white dark:bg-[#1c1a29] border border-gray-200/90 dark:border-purple-500/30 p-5 md:p-6 rounded-3xl rounded-tl-sm max-w-[90%] md:max-w-xl shadow-md space-y-4 min-w-0 overflow-hidden">
-                  <div class="flex items-center justify-between border-b border-gray-100 dark:border-purple-500/20 pb-3">
+                <div
+                  class="bg-white dark:bg-[#1c1a29] border border-gray-200/90 dark:border-purple-500/30 p-5 md:p-6 rounded-3xl rounded-tl-sm max-w-[90%] md:max-w-xl shadow-md space-y-4 min-w-0 overflow-hidden">
+                  <div
+                    class="flex items-center justify-between border-b border-gray-100 dark:border-purple-500/20 pb-3">
                     <div class="flex items-center gap-2">
-                      <span class="text-xs font-black text-gray-900 dark:text-purple-300 tracking-wide uppercase">EduStack AI Assistant</span>
+                      <span
+                        class="text-xs font-black text-gray-900 dark:text-purple-300 tracking-wide uppercase">EduStack
+                        AI Assistant</span>
                       <span class="px-2 py-0.5 rounded-full text-[9px] font-black bg-brand/10 text-brand">v2.0</span>
                     </div>
-                    <span class="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
+                    <span
+                      class="flex items-center gap-1.5 text-[10px] font-extrabold text-emerald-500 bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-0.5 rounded-full">
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> ONLINE
                     </span>
                   </div>
                   <p class="text-gray-800 dark:text-gray-200 font-semibold leading-relaxed text-xs md:text-sm">
-                    👋 Hello! I'm your dedicated Computer Science AI Tutor. I can answer technical questions, explain algorithms in <strong class="text-brand dark:text-purple-400 font-extrabold">C++</strong>, or generate practice exam questions!
+                    👋 Hello! I'm your dedicated Computer Science AI Tutor. I can answer technical questions, explain
+                    algorithms in <strong class="text-brand dark:text-purple-400 font-extrabold">C++</strong>, or
+                    generate practice exam questions!
                   </p>
-                  
+
                   <!-- Sample Prompt Chips -->
                   <div class="pt-2 space-y-2">
-                    <div class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Try Asking:</div>
+                    <div class="text-[10px] font-black text-gray-400 dark:text-gray-500 uppercase tracking-widest">Try
+                      Asking:</div>
                     <div class="flex flex-wrap gap-2">
-                      <button onclick="fillSampleQuestion('Explain Kahn\'s Algorithm for Topological Sort with C++ code.')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                      <button
+                        onclick="fillSampleQuestion('Explain Kahn\'s Algorithm for Topological Sort with C++ code.')"
+                        class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
                         <span>💡 Kahn's Algo (C++)</span>
                       </button>
-                      <button onclick="fillSampleQuestion('What is a B-Tree and where is it used?')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                      <button onclick="fillSampleQuestion('What is a B-Tree and where is it used?')"
+                        class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
                         <span>💡 B-Tree Concept</span>
                       </button>
-                      <button onclick="fillSampleQuestion('Explain TCP vs UDP with key differences.')" class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
+                      <button onclick="fillSampleQuestion('Explain TCP vs UDP with key differences.')"
+                        class="px-3.5 py-2 rounded-2xl bg-gray-100 dark:bg-[#272438] text-gray-800 dark:text-gray-200 text-xs font-bold hover:bg-brand hover:text-white dark:hover:bg-brand transition-all cursor-pointer border border-gray-200 dark:border-purple-500/20 shadow-sm flex items-center gap-1.5">
                         <span>💡 TCP vs UDP</span>
                       </button>
                     </div>
@@ -321,8 +395,12 @@
 
             <!-- Input Form -->
             <form onsubmit="handleTutorSubmit(event)" class="flex flex-col sm:flex-row gap-2.5 pt-2">
-              <input id="tutorInput" type="text" placeholder="Type your CS question (e.g., 'Write C++ code for Binary Tree Inorder Traversal')..." required class="flex-1 min-w-0 px-5 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs md:text-sm font-bold text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand shadow-inner">
-              <button type="submit" id="tutorSendBtn" class="px-7 py-4 rounded-2xl bg-gradient-to-r from-brand via-brand-soft to-brand-light text-white font-extrabold text-xs md:text-sm hover:scale-105 transition-all shadow-md shadow-brand/20 cursor-pointer border-0 flex items-center justify-center gap-2 flex-shrink-0">
+              <input id="tutorInput" type="text"
+                placeholder="Type your CS question (e.g., 'Write C++ code for Binary Tree Inorder Traversal')..."
+                required
+                class="flex-1 min-w-0 px-5 py-4 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs md:text-sm font-bold text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-brand shadow-inner">
+              <button type="submit" id="tutorSendBtn"
+                class="px-7 py-4 rounded-2xl bg-gradient-to-r from-brand via-brand-soft to-brand-light text-white font-extrabold text-xs md:text-sm hover:scale-105 transition-all shadow-md shadow-brand/20 cursor-pointer border-0 flex items-center justify-center gap-2 flex-shrink-0">
                 <span>Ask AI</span> <i class="fa-solid fa-paper-plane"></i>
               </button>
             </form>
@@ -334,30 +412,41 @@
               <h2 class="text-base font-black text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-file-pdf text-purple-500"></i> Textbook & Handwritten Notes Summarizer
               </h2>
-              <p class="text-xs text-gray-400 font-semibold mt-1">Upload PDF files up to 20MB. Extract executive summaries, key definitions, and exam takeaways.</p>
+              <p class="text-xs text-gray-400 font-semibold mt-1">Upload PDF files up to 20MB. Extract executive
+                summaries, key definitions, and exam takeaways.</p>
             </div>
 
-            <div class="text-center p-10 rounded-3xl border-2 border-dashed border-purple-500/40 bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer group" onclick="document.getElementById('pdfFileInput').click()">
-              <div class="w-16 h-16 rounded-2xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
+            <div
+              class="text-center p-10 rounded-3xl border-2 border-dashed border-purple-500/40 bg-purple-500/5 hover:bg-purple-500/10 transition-all cursor-pointer group"
+              onclick="document.getElementById('pdfFileInput').click()">
+              <div
+                class="w-16 h-16 rounded-2xl bg-purple-500/20 text-purple-500 flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition-transform">
                 <i class="fa-solid fa-cloud-arrow-up"></i>
               </div>
               <h3 class="text-sm md:text-base font-black text-gray-900 dark:text-white">Click or Drag PDF File Here</h3>
               <p class="text-xs text-gray-400 mt-1">Supports textbook chapters and handwritten notes.</p>
               <input type="file" id="pdfFileInput" accept=".pdf" class="hidden" onchange="handlePDFSelected(this)">
-              <div id="selectedFileName" class="mt-4 text-xs font-black text-purple-600 dark:text-purple-400 bg-purple-500/10 border border-purple-500/30 px-4 py-2 rounded-xl inline-block hidden"></div>
+              <div id="selectedFileName"
+                class="mt-4 text-xs font-black text-purple-600 dark:text-purple-400 bg-purple-500/10 border border-purple-500/30 px-4 py-2 rounded-xl inline-block hidden">
+              </div>
             </div>
 
             <div class="flex justify-center">
-              <button id="summarizeBtn" onclick="handleSummarizePDF()" disabled class="px-10 py-4 rounded-2xl bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-extrabold text-xs md:text-sm transition-all cursor-not-allowed border-0">
+              <button id="summarizeBtn" onclick="handleSummarizePDF()" disabled
+                class="px-10 py-4 rounded-2xl bg-gray-300 dark:bg-gray-700 text-gray-500 dark:text-gray-400 font-extrabold text-xs md:text-sm transition-all cursor-not-allowed border-0">
                 <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Generate Executive Summary
               </button>
             </div>
 
-            <div id="summaryResultBox" class="hidden p-6 rounded-2xl bg-gray-50 dark:bg-[#14141c] border border-purple-500/30 space-y-4">
-              <h4 class="text-xs font-black text-purple-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3">
+            <div id="summaryResultBox"
+              class="hidden p-6 rounded-2xl bg-gray-50 dark:bg-[#14141c] border border-purple-500/30 space-y-4">
+              <h4
+                class="text-xs font-black text-purple-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3">
                 📌 Document Summary Output
               </h4>
-              <div id="summaryText" class="text-xs md:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium prose dark:prose-invert max-w-none"></div>
+              <div id="summaryText"
+                class="text-xs md:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-medium prose dark:prose-invert max-w-none">
+              </div>
             </div>
           </div>
 
@@ -367,17 +456,22 @@
               <h2 class="text-base font-black text-gray-900 dark:text-white flex items-center gap-2">
                 <i class="fa-solid fa-list-check text-amber-500"></i> Exam PYQ & Interactive MCQ Generator
               </h2>
-              <p class="text-xs text-gray-400 font-semibold mt-1">Generate 2 distinct sections: Section 1 Interactive MCQ Quiz & Section 2 Theoretical/Numerical PYQs with ASCII diagrams and C++ solutions.</p>
+              <p class="text-xs text-gray-400 font-semibold mt-1">Generate 2 distinct sections: Section 1 Interactive
+                MCQ Quiz & Section 2 Theoretical/Numerical PYQs with ASCII diagrams and C++ solutions.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div class="md:col-span-1">
                 <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Subject & Topic:</label>
-                <input id="quizTopic" type="text" value="Graphs & Topological Sort" placeholder="e.g. Operating Systems Paging or Data Structures Trees" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <input id="quizTopic" type="text" value="Graphs & Topological Sort"
+                  placeholder="e.g. Operating Systems Paging or Data Structures Trees"
+                  class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 1: MCQ Practice Count:</label>
-                <select id="mcqNum" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 1: MCQ Practice
+                  Count:</label>
+                <select id="mcqNum"
+                  class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
                   <option value="10" selected>10 MCQs</option>
                   <option value="20">20 MCQs</option>
                   <option value="30">30 MCQs</option>
@@ -386,8 +480,10 @@
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 2: Theoretical & Numerical PYQs:</label>
-                <select id="theoryNum" class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
+                <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1.5">Section 2: Theoretical &
+                  Numerical PYQs:</label>
+                <select id="theoryNum"
+                  class="w-full px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-amber-500">
                   <option value="5" selected>5 Exam Questions</option>
                   <option value="10">10 Exam Questions</option>
                   <option value="15">15 Exam Questions</option>
@@ -395,16 +491,21 @@
               </div>
             </div>
 
-            <button onclick="handleGenerateQuiz()" id="generateQuizBtn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold text-xs md:text-sm hover:scale-[1.02] transition-all shadow-md shadow-amber-500/20 cursor-pointer border-0 flex items-center justify-center gap-2">
+            <button onclick="handleGenerateQuiz()" id="generateQuizBtn"
+              class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 to-orange-500 text-white font-extrabold text-xs md:text-sm hover:scale-[1.02] transition-all shadow-md shadow-amber-500/20 cursor-pointer border-0 flex items-center justify-center gap-2">
               <i class="fa-solid fa-bolt"></i> Generate Practice Quiz & PYQs
             </button>
 
-            <div id="quizResultBox" class="hidden p-6 rounded-2xl bg-gray-50 dark:bg-[#14141c] border border-amber-500/30 space-y-4">
-              <h4 class="text-xs font-black text-amber-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3 flex items-center justify-between">
+            <div id="quizResultBox"
+              class="hidden p-6 rounded-2xl bg-gray-50 dark:bg-[#14141c] border border-amber-500/30 space-y-4">
+              <h4
+                class="text-xs font-black text-amber-500 uppercase tracking-wider border-b border-gray-200 dark:border-gray-800 pb-3 flex items-center justify-between">
                 <span>🎓 Section 1: Interactive MCQs & Section 2: Exam PYQs</span>
                 <span class="text-[10px] text-amber-400 font-normal">Click MCQ options to guess answers!</span>
               </h4>
-              <div id="quizText" class="text-xs md:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-sans prose dark:prose-invert max-w-none"></div>
+              <div id="quizText"
+                class="text-xs md:text-sm text-gray-800 dark:text-gray-200 leading-relaxed font-sans prose dark:prose-invert max-w-none">
+              </div>
             </div>
           </div>
 
@@ -416,11 +517,33 @@
   </main>
 
   <script>
-    // ── Load ML Service URL from server config (no hardcoded localhost) ──
+    // ── Load ML Service URL & Dynamic Subjects from Server ──
     let EDUSTACK_ML_URL = '';
     fetch('/api/config').then(r => r.json()).then(cfg => {
       if (cfg && cfg.mlServiceUrl) EDUSTACK_ML_URL = cfg.mlServiceUrl;
     }).catch(() => { EDUSTACK_ML_URL = ''; });
+
+    // Fetch live subjects from MongoDB and append any missing subjects to dropdown
+    fetch('/api/subjects')
+      .then(res => res.json())
+      .then(resData => {
+        if (resData && resData.success && resData.data && Array.isArray(resData.data.subjects)) {
+          const select = document.getElementById('sidebarSubjectSelect');
+          if (!select) return;
+          const existingValues = new Set(Array.from(select.options).map(o => o.value.toLowerCase()));
+
+          resData.data.subjects.forEach(sub => {
+            if (sub.name && !existingValues.has(sub.name.toLowerCase())) {
+              const opt = document.createElement('option');
+              opt.value = sub.name;
+              opt.textContent = sub.name + (sub.code ? ` (${sub.code})` : '');
+              select.appendChild(opt);
+              existingValues.add(sub.name.toLowerCase());
+            }
+          });
+        }
+      })
+      .catch(() => { });
 
     function fillSampleQuestion(q) {
       const input = document.getElementById('tutorInput');
@@ -437,7 +560,7 @@
       ['tutor', 'summarizer', 'quiz'].forEach(t => {
         const btn = document.getElementById('navBtn' + t.charAt(0).toUpperCase() + t.slice(1));
         const panel = document.getElementById('panel' + t.charAt(0).toUpperCase() + t.slice(1));
-        
+
         if (t === toolName) {
           btn.className = 'w-full p-4 rounded-2xl border border-brand/30 bg-brand/10 text-brand font-extrabold flex items-center gap-4 transition-all text-left shadow-sm';
           panel.classList.remove('hidden');
@@ -454,17 +577,17 @@
 
       text = text.replace(/\$\$\s*([\s\S]*?)\s*\$\$/g, (match, p1) => {
         let clean = p1.replace(/\\text\{([^}]+)\}/g, '$1')
-                      .replace(/\\mathcal\{([^}]+)\}/g, '$1')
-                      .replace(/\\mathbf\{([^}]+)\}/g, '$1')
-                      .trim();
+          .replace(/\\mathcal\{([^}]+)\}/g, '$1')
+          .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+          .trim();
         return '\n\n**' + clean + '**\n\n';
       });
 
       text = text.replace(/\$([^$\n]+)\$/g, (match, p1) => {
         let clean = p1.replace(/\\text\{([^}]+)\}/g, '$1')
-                      .replace(/\\mathcal\{([^}]+)\}/g, '$1')
-                      .replace(/\\mathbf\{([^}]+)\}/g, '$1')
-                      .trim();
+          .replace(/\\mathcal\{([^}]+)\}/g, '$1')
+          .replace(/\\mathbf\{([^}]+)\}/g, '$1')
+          .trim();
         return clean;
       });
 
@@ -500,12 +623,12 @@
         const text = li.innerText || '';
         if (text.match(/^Option [A-D]:/i)) {
           li.classList.add('cursor-pointer', 'p-3', 'my-2', 'rounded-xl', 'border', 'border-gray-200', 'dark:border-gray-700/80', 'bg-white', 'dark:bg-[#1e1c2b]', 'hover:border-amber-500', 'transition-all', 'font-semibold', 'select-none');
-          li.onclick = function() {
+          li.onclick = function () {
             let parent = li.closest('ul') || li.parentElement;
             let block = parent ? parent.parentElement : null;
             let correctMatch = block ? block.innerText.match(/Correct Answer\s*:\s*Option ([A-D])/i) : null;
             let correctOpt = correctMatch ? correctMatch[1].toUpperCase() : null;
-            
+
             let clickedOptMatch = text.match(/^Option ([A-D]):/i);
             let clickedOpt = clickedOptMatch ? clickedOptMatch[1].toUpperCase() : null;
 
@@ -732,4 +855,5 @@
   </script>
   <script src="/assets/js/theme-toggle.js"></script>
 </body>
+
 </html>
