@@ -965,15 +965,12 @@ document.addEventListener('DOMContentLoaded', () => {
       // ── Theme Picker Engine ───────────────────────────────────────────
       (function initThemePicker() {
         const ACCENT_THEMES = [
-          { name: 'Brand Red',   color: '#ff385c', soft: '#ff6b81', light: '#ffb199', rgb: '255,56,92'   },
-          { name: 'Emerald',     color: '#10b981', soft: '#34d399', light: '#6ee7b7', rgb: '16,185,129'  },
-          { name: 'Ocean Blue',  color: '#2563eb', soft: '#60a5fa', light: '#93c5fd', rgb: '37,99,235'   },
-          { name: 'Violet',      color: '#7c3aed', soft: '#a78bfa', light: '#c4b5fd', rgb: '124,58,237'  },
-          { name: 'Cyan',        color: '#06b6d4', soft: '#67e8f9', light: '#a5f3fc', rgb: '6,182,212'   },
-          { name: 'Amber',       color: '#d97706', soft: '#fbbf24', light: '#fde68a', rgb: '217,119,6'   },
-          { name: 'Rose',        color: '#e11d48', soft: '#fb7185', light: '#fca5a5', rgb: '225,29,72'   },
-          { name: 'Orange',      color: '#ea580c', soft: '#fb923c', light: '#ffedd5', rgb: '234,88,12'   },
-          { name: 'Teal',        color: '#0d9488', soft: '#2dd4bf', light: '#99f6e4', rgb: '13,148,136'  },
+          { name: 'Rose Red',        color: '#ff385c', soft: '#ff6b81', light: '#fca5a5', rgb: '255,56,92' },
+          { name: 'Emerald Green',   color: '#10b981', soft: '#34d399', light: '#a7f3d0', rgb: '16,185,129' },
+          { name: 'Electric Violet', color: '#8b5cf6', soft: '#c084fc', light: '#ddd6fe', rgb: '139,92,246' },
+          { name: 'Sky Cyan',        color: '#06b6d4', soft: '#38bdf8', light: '#bae6fd', rgb: '6,182,212' },
+          { name: 'Sunset Orange',   color: '#ff6b35', soft: '#ff9f1c', light: '#ffd166', rgb: '255,107,53' },
+          { name: 'Royal Blue',      color: '#2563eb', soft: '#60a5fa', light: '#93c5fd', rgb: '37,99,235' },
         ];
         const BG_THEMES = [
           // Light variants
