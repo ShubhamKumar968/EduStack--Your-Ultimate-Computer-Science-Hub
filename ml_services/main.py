@@ -321,17 +321,18 @@ async def summarize_pdf(file: UploadFile = File(...)):
         
         models_to_try = get_available_gemini_models(genai)
 
-        prompt_instruction = """You are EduStack AI. Analyze the following textbook/notes document content (typed or handwritten study notes, diagrams, equations) and provide an executive, student-friendly summary.
+        prompt_instruction = """You are EduStack AI. Analyze the uploaded textbook/notes document content (typed or handwritten notes, diagrams, equations) and provide an executive, highly structured, student-friendly study summary.
 
-RESPONSE STRUCTURE & FORMATTING REQUIREMENTS:
-1. 📌 Executive Summary (2-3 clear, readable paragraphs)
-2. 🔑 Key Concepts & Definitions (Use Markdown Tables: `| Concept | Definition / Formula | Notes |`)
-3. ⚡ Algorithm Complexities & Formulas (MUST be presented in a clean Markdown Table: `| Operation | Time Complexity | Space Complexity | Notes |`)
-4. 💡 Important Exam Takeaways (Bullet points with key tips)
+POINT-BY-POINT & PARAGRAPH FORMATTING REQUIREMENTS:
+1. 📌 Executive Overview: Provide 2-3 short, well-spaced paragraphs separated by blank lines. Keep sentences punchy and easy to read.
+2. 🔑 Core Concepts & Definitions: Present all concepts as **bullet points** (point-by-point form) with bold terms for maximum legibility.
+3. ⚡ Algorithm Complexities & Formulas: MUST be presented in a clean Markdown Table (`| Concept / Operation | Complexity | Description |`).
+4. 💡 Key Exam Takeaways: Use bullet points for quick revision.
 
-STRICT NO-LATEX & DOLLAR SIGN RULE:
-- ABSOLUTELY DO NOT use dollar signs ($ or $$) or raw LaTeX syntax (\\text{}, \\in, \\ge, \\ceil, \\log).
-- Write all math, formulas, and complexities as clean, readable plain text (e.g. `O(log n)`, `Balance Factor = Height(Left) - Height(Right)`, `K in {-1, 0, 1}`, `ceil(m/2)`)."""
+STRICT READABILITY & NO-LATEX RULES:
+- NEVER generate dense walls of text. Always separate paragraphs and bullet points with double line breaks.
+- ABSOLUTELY DO NOT use dollar signs ($ or $$) or raw LaTeX code (like \\text{}, \\in, \\ge, \\ceil, \\log).
+- Write all equations and complexities as clean, readable plain text (e.g. `O(log n)`, `Balance Factor = Height(Left) - Height(Right)`)."""
 
         # If extracted text is rich (> 50 chars), use text context; otherwise pass PDF inline data for Gemini Vision OCR
         if len(pdf_text) > 50:

@@ -77,14 +77,21 @@
       transition: background-color 0.2s ease !important;
     }
 
+    .prose p {
+      margin-top: 0.75rem !important;
+      margin-bottom: 1.25rem !important;
+      line-height: 1.8 !important;
+      font-size: 0.875rem !important;
+    }
+
     .prose h1,
     .prose h2,
     .prose h3,
     .prose h4 {
       color: #a855f7 !important;
       font-weight: 800 !important;
-      margin-top: 1.25em !important;
-      margin-bottom: 0.5em !important;
+      margin-top: 1.5em !important;
+      margin-bottom: 0.6em !important;
       line-height: 1.3 !important;
     }
 
@@ -97,27 +104,33 @@
     .prose ul {
       list-style-type: disc !important;
       padding-left: 1.25rem !important;
-      margin: 8px 0 !important;
+      margin: 10px 0 !important;
     }
 
     .prose ol {
       list-style-type: decimal !important;
       padding-left: 1.25rem !important;
-      margin: 8px 0 !important;
+      margin: 10px 0 !important;
     }
 
     .prose li {
-      margin-bottom: 4px !important;
+      margin-bottom: 6px !important;
+      line-height: 1.65 !important;
     }
 
     .prose code:not(pre code) {
+      background: rgba(168, 85, 247, 0.1) !important;
+      color: #a855f7 !important;
+      padding: 2px 6px !important;
+      border-radius: 5px !important;
+      font-size: 0.88em !important;
+      font-weight: 700 !important;
+      border: 1px solid rgba(168, 85, 247, 0.2) !important;
+    }
+
+    .dark .prose code:not(pre code) {
       background: rgba(168, 85, 247, 0.15) !important;
       color: #c084fc !important;
-      padding: 2px 7px !important;
-      border-radius: 6px !important;
-      font-size: 0.85em !important;
-      font-weight: 700 !important;
-      border: 1px solid rgba(168, 85, 247, 0.25) !important;
     }
 
     .prose blockquote {
