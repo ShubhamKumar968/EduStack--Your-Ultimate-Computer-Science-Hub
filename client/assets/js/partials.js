@@ -424,17 +424,15 @@ document.addEventListener('DOMContentLoaded', () => {
           flex-shrink: 0 !important;
           min-width: 0;
         }
-        /* Profile pill: limit max width on very small screens */
+        /* Profile pill: round circular button on all screens */
         #nav-auth-container .profile-pill {
-          max-width: 220px;
-        }
-        @media (max-width: 480px) {
-          #nav-auth-container .profile-pill {
-            max-width: 160px;
-          }
-          #nav-auth-container .profile-name-col {
-            display: none;
-          }
+          width: 36px;
+          height: 36px;
+          border-radius: 50% !important;
+          padding: 2px !important;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         /* ── Mobile Sidebar ── */
@@ -868,20 +866,17 @@ document.addEventListener('DOMContentLoaded', () => {
           .notif-dropdown-panel { width: 360px; }
         }
 
-        /* ── Profile Dropdown: Mobile-safe positioning & avatar button ── */
+        /* ── Profile Dropdown: Round circular avatar button on all screens ── */
         .profile-name-col { display: none !important; }
         .profile-chevron { display: none !important; }
         .profile-pill {
           padding: 2px !important;
           border-radius: 50% !important;
-        }
-        @media (min-width: 640px) {
-          .profile-name-col { display: flex !important; }
-          .profile-chevron { display: inline-block !important; }
-          .profile-pill {
-            padding: 4px 10px 4px 4px !important;
-            border-radius: 50px !important;
-          }
+          width: 36px !important;
+          height: 36px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
         }
         .profile-dropdown-panel { max-width: calc(100vw - 16px); z-index: 99999 !important; }
         @media (max-width: 360px) {
@@ -1295,11 +1290,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
               container.innerHTML = `
                 <div class="relative" id="user-profile-menu" style="flex-shrink:0;">
-                  <div class="profile-pill" id="profile-pill-btn" onclick="event.stopPropagation(); const d=document.getElementById('user-profile-dropdown'); if(d) d.classList.toggle('hidden');" style="display:flex;align-items:center;gap:6px;padding:4px 10px 4px 4px;border:1.5px solid #e5e7eb;border-radius:50px;cursor:pointer;background:#f9fafb;transition:all 0.2s;" onmouseenter="this.style.borderColor='var(--brand,#ff385c)'" onmouseleave="this.style.borderColor='#e5e7eb'">
-                    <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;border:1.5px solid var(--brand,#ff385c);flex-shrink:0;">
-                      <img src="${avatar}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;">
+                  <div class="profile-pill" id="profile-pill-btn" title="${displayName} (${roleLabel})" onclick="event.stopPropagation(); const d=document.getElementById('user-profile-dropdown'); if(d) d.classList.toggle('hidden');" style="display:flex;align-items:center;justify-content:center;padding:2px;border:2px solid var(--brand,#ff385c);border-radius:50%;cursor:pointer;background:#ffffff;transition:transform 0.2s, box-shadow 0.2s, border-color 0.2s;width:36px;height:36px;box-sizing:border-box;" onmouseenter="this.style.transform='scale(1.06)';this.style.boxShadow='0 0 10px rgba(var(--brand-rgb,255,56,92),0.35)'" onmouseleave="this.style.transform='scale(1)';this.style.boxShadow='none'">
+                    <div style="width:28px;height:28px;border-radius:50%;overflow:hidden;flex-shrink:0;">
+                      <img src="${avatar}" alt="${displayName}" style="width:100%;height:100%;object-fit:cover;">
                     </div>
-                    <div style="display:flex;flex-direction:column;justify-content:center;" class="profile-name-col">
+                    <div style="display:none;" class="profile-name-col">
                       <span style="font-size:12px;font-weight:800;line-height:1;color:#111827;display:flex;align-items:center;gap:4px;" class="dark:text-white">
                         ${displayName}
                         ${roleIcon}
@@ -1308,7 +1303,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         ${roleLabel}
                       </span>
                     </div>
-                    <i class="fa-solid fa-chevron-down profile-chevron" style="font-size:9px;color:#9ca3af;margin-left:2px;"></i>
+                    <i class="fa-solid fa-chevron-down profile-chevron" style="display:none;font-size:9px;color:#9ca3af;margin-left:2px;"></i>
                   </div>
                   
                   <div id="user-profile-dropdown" class="profile-dropdown-panel hidden absolute right-0 top-[115%] w-64 bg-white dark:bg-[#1a1a24] text-gray-900 dark:text-white border border-gray-100 dark:border-gray-800 rounded-2xl shadow-2xl transition-all duration-200 z-[99999]" onclick="event.stopPropagation()">
