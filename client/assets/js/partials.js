@@ -371,7 +371,7 @@ window.showRazorpayModal = function() {
 document.addEventListener('DOMContentLoaded', () => {
   try {
     const path = window.location.pathname;
-    const isSubfolder = path.includes('/auth/') || path.includes('/guest/') || path.includes('/admin/');
+    const isSubfolder = path.includes('/auth/') || path.includes('/guest/') || path.includes('/admin/') || path.includes('/public/');
     const base = isSubfolder ? '../' : './';
     
     const isGuest = path.includes('/guest/');
