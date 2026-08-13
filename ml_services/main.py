@@ -230,7 +230,8 @@ SECTION 1: MULTIPLE CHOICE PRACTICE QUIZ ({num_mcqs} Questions)
 Generate exactly {num_mcqs} Multiple Choice Questions (MCQs).
 For EVERY single MCQ, follow this EXACT Markdown structure so students can interactively test their knowledge:
 
-### MCQ 1: [Question Title / Problem Statement]
+### MCQ 1: [Short Topic Title]
+**Question**: [Write the full, complete question sentence here — e.g. "Which layer of the OSI model is responsible for data translation and encryption?"]
 - **Option A**: [Option A Text]
 - **Option B**: [Option B Text]
 - **Option C**: [Option C Text]
