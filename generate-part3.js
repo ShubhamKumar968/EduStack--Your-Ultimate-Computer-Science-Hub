@@ -16,7 +16,8 @@ const doc = new PDFDocument({
   margins: { top: 40, bottom: 20, left: 50, right: 50 },
   bufferPages: true
 });
-doc.pipe(fs.createWriteStream(OUT));
+const stream = fs.createWriteStream(OUT);
+doc.pipe(stream);
 
 const ML = 50, MR = 545, MB = 770, TW = 495;
 const C = {
@@ -435,7 +436,7 @@ for (let fp = 0; fp < range.count; fp++) {
 }
 
 doc.end();
-doc.on('end', function () {
+stream.on('finish', function () {
   const kb = (fs.statSync(OUT).size / 1024).toFixed(1);
   console.log('\n✅  VOLUME 3 PDF generated successfully!');
   console.log('📄  File:', OUT);
