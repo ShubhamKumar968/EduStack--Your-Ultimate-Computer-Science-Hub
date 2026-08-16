@@ -1756,10 +1756,6 @@ body {
   overflow-wrap: break-word;
 }
 
-.break-all {
-  word-break: break-all;
-}
-
 .rounded {
   border-radius: 0.25rem;
 }
@@ -2058,10 +2054,6 @@ body {
 .border-purple-200 {
   --tw-border-opacity: 1;
   border-color: rgb(233 213 255 / var(--tw-border-opacity, 1));
-}
-
-.border-purple-200\/60 {
-  border-color: rgb(233 213 255 / 0.6);
 }
 
 .border-purple-200\/70 {
