@@ -624,6 +624,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="${base}index.html#contact" class="sb-link sb-hash-link" data-hash="#contact">
             <i class="fa-solid fa-address-card" style="color:#ec4899;"></i> Contact
           </a>
+          <a href="https://portfolio-shubham-dybt.onrender.com/" target="_blank" rel="noopener" class="sb-link">
+            <i class="fa-solid fa-user-tie" style="color:#a855f7;"></i> Portfolio
+          </a>
           <div class="sb-divider"></div>
           <span class="sb-section-label">Account</span>
           <a href="${base}auth/login.html" class="sb-link">
