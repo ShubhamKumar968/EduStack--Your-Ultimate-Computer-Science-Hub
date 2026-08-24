@@ -673,8 +673,45 @@ app.use(errorHandler);
 // ============================================================
 
 mongoose.connect(DB_PATH)
-  .then(() => {
+  .then(async () => {
     console.log('✅ Connected Successfully to MongoDB Atlas Cluster!');
+
+    // ── Sync unverified contributor accounts into Admin approval queue ──
+    try {
+      const ContributorRequest = require('./models/contributorRequest');
+      const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || '')
+        .split(',')
+        .map(e => e.trim().toLowerCase())
+        .filter(Boolean);
+
+      const unverifiedContributors = await User.find({ role: 'contributor' });
+      for (const u of unverifiedContributors) {
+        if (ADMIN_EMAILS.includes((u.email || '').toLowerCase())) continue;
+
+        const approvedReq = await ContributorRequest.findOne({ user: u._id, status: 'approved' });
+        if (!approvedReq) {
+          u.role = 'student';
+          await u.save();
+
+          const existingReq = await ContributorRequest.findOne({ user: u._id });
+          if (!existingReq) {
+            await ContributorRequest.create({
+              user: u._id,
+              branch: u.branch || 'CSE',
+              semester: u.semester || 1,
+              reason: 'Contributor account requiring administrator verification.',
+              status: 'pending',
+            });
+          } else if (existingReq.status !== 'approved') {
+            existingReq.status = 'pending';
+            await existingReq.save();
+          }
+          console.log(`ℹ️ [Contributor Sync] Queued user ${u.email} for Admin approval.`);
+        }
+      }
+    } catch (syncErr) {
+      console.warn('⚠️ [Contributor Sync] Warning during role sync:', syncErr.message);
+    }
 
     // ── Start HTTP Server ───────────────────────────────────
     const server = app.listen(PORT, () => {

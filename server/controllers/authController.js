@@ -94,11 +94,10 @@ exports.register = asyncHandler(async (req, res) => {
     .split(',')
     .map(e => e.trim().toLowerCase())
     .filter(Boolean);
-  let assignedRole = 'user';
+
+  let assignedRole = 'student';
   if (ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(normalizedEmail)) {
     assignedRole = 'admin';
-  } else if (req.body.role === 'student' || req.body.role === 'user' || req.body.role === 'contributor') {
-    assignedRole = req.body.role;
   }
 
   // ── Create the user document ───────────────────────────────
@@ -109,7 +108,37 @@ exports.register = asyncHandler(async (req, res) => {
     password:  hashedPassword,
     avatar:    avatarUrl,
     role:      assignedRole,
+    branch:    req.body.branch || 'CSE',
+    semester:  req.body.semester ? parseInt(req.body.semester, 10) : 1,
   });
+
+  // If user requested contributor role during registration, submit a pending request
+  const wantsContributor = req.body.role === 'contributor' || req.body.userType === 'contributor';
+  if (wantsContributor && assignedRole !== 'admin') {
+    try {
+      const ContributorRequest = require('../models/contributorRequest');
+      const Notification = require('../models/notification');
+
+      await ContributorRequest.create({
+        user: user._id,
+        branch: user.branch || 'CSE',
+        semester: user.semester || 1,
+        reason: req.body.reason || 'Requested contributor publishing access during registration.',
+        status: 'pending',
+      });
+
+      await Notification.create({
+        title: '📩 New Contributor Request',
+        message: `${user.firstName} ${user.lastName} (${user.email}) requested to become an EduStack Contributor during registration. Review in Contributor Approvals.`,
+        type: 'alert',
+        link: '/admin/contributor-requests.html',
+        createdBy: user._id,
+        readBy: [],
+      });
+    } catch (reqErr) {
+      console.warn('⚠️ Contributor request creation on registration warning:', reqErr.message);
+    }
+  }
 
   // ── Send verification OTP ──────────────────────────────────
   // otpService generates a code, saves to OTP collection, emails it
