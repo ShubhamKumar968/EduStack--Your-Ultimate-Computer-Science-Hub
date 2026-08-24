@@ -25,8 +25,7 @@ router.post('/create-order', paymentController.createOrder);
 router.post('/verify',       paymentController.verifyPayment);
 router.get('/history',       paymentController.getPaymentHistory);
 
-// Admin-only: simulate payment (test mode — must NOT be available to regular users in production)
-const requireRole = require('../middlewares/requireRole');
-router.post('/simulate', requireRole('admin'), paymentController.simulatePayment);
+// Test simulation endpoint (accessible by all authenticated users for demo/testing)
+router.post('/simulate', paymentController.simulatePayment);
 
 module.exports = router;

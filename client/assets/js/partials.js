@@ -80,36 +80,56 @@ window.showToast = function(message, type = 'info', duration = 4000) {
   if (!container) {
     container = document.createElement('div');
     container.id = 'edustack-toast-container';
-    container.className = 'fixed top-5 right-5 z-[999999] flex flex-col gap-3 max-w-sm w-full pointer-events-none px-4';
+    container.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999999;display:flex;flex-direction:column;gap:10px;max-width:380px;width:calc(100vw - 40px);pointer-events:none;font-family:\'Plus Jakarta Sans\',system-ui,-apple-system,sans-serif;';
     document.body.appendChild(container);
   }
 
-  const isError = type === 'error' || message.includes('❌') || message.includes('⛔') || message.includes('failed') || message.includes('Error');
-  const isSuccess = type === 'success' || message.includes('🎉') || message.includes('✅') || message.includes('success') || message.includes('Congratulations');
+  const isError = type === 'error' || message.includes('❌') || message.includes('⛔') || message.includes('failed') || message.includes('Error') || message.includes('⚠️');
+  const isSuccess = type === 'success' || message.includes('🎉') || message.includes('✅') || message.includes('success') || message.includes('Congratulations') || message.includes('Online');
 
   const toast = document.createElement('div');
-  toast.className = `pointer-events-auto flex items-center gap-3 p-4 rounded-2xl shadow-2xl border transition-all duration-300 transform translate-x-12 opacity-0 backdrop-blur-md ${
-    isError 
-      ? 'bg-red-900/90 text-white border-red-700/50 dark:bg-red-950/90 shadow-red-950/30' 
-      : isSuccess 
-      ? 'bg-emerald-900/90 text-white border-emerald-700/50 dark:bg-emerald-950/90 shadow-emerald-950/30' 
-      : 'bg-gray-900/90 text-white border-gray-700/50 dark:bg-[#222]/95 shadow-gray-950/30'
-  }`;
+  toast.style.cssText = `
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: 16px;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.2px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    transform: translateX(30px);
+    opacity: 0;
+    ${
+      isError
+        ? 'background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 60%, #b91c1c 100%); border: 1.5px solid #f87171; box-shadow: 0 12px 30px rgba(153, 27, 27, 0.45);'
+        : isSuccess
+        ? 'background: linear-gradient(135deg, #064e3b 0%, #047857 60%, #059669 100%); border: 1.5px solid #34d399; box-shadow: 0 12px 30px rgba(4, 120, 87, 0.45);'
+        : 'background: linear-gradient(135deg, #1e1b4b 0%, #312e81 60%, #4338ca 100%); border: 1.5px solid #818cf8; box-shadow: 0 12px 30px rgba(49, 46, 129, 0.45);'
+    }
+  `;
 
   const iconClass = isError 
-    ? 'fa-circle-xmark text-red-400' 
+    ? 'fa-circle-xmark' 
     : isSuccess 
-    ? 'fa-circle-check text-emerald-400' 
-    : 'fa-circle-info text-blue-400';
+    ? 'fa-circle-check' 
+    : 'fa-circle-info';
+
+  const iconColor = isError ? '#fca5a5' : isSuccess ? '#6ee7b7' : '#93c5fd';
 
   toast.innerHTML = `
-    <div class="w-8 h-8 rounded-xl flex items-center justify-center text-lg flex-shrink-0 bg-white/10">
+    <div style="width:32px;height:32px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;background:rgba(255,255,255,0.15);color:${iconColor};">
       <i class="fa-solid ${iconClass}"></i>
     </div>
-    <div class="flex-grow text-xs font-extrabold leading-snug tracking-wide">
+    <div style="flex-grow:1;color:#ffffff;text-shadow:0 1px 2px rgba(0,0,0,0.2);">
       ${message}
     </div>
-    <button class="text-white/60 hover:text-white text-xs w-6 h-6 rounded-full flex items-center justify-center border-0 cursor-pointer bg-transparent transition" onclick="this.parentElement.remove()">
+    <button style="color:rgba(255,255,255,0.7);background:transparent;border:none;cursor:pointer;padding:4px;font-size:14px;display:flex;align-items:center;justify-content:center;transition:color 0.2s;" onmouseover="this.style.color='#ffffff'" onmouseout="this.style.color='rgba(255,255,255,0.7)'" onclick="this.parentElement.remove()">
       <i class="fa-solid fa-xmark"></i>
     </button>
   `;
@@ -117,16 +137,17 @@ window.showToast = function(message, type = 'info', duration = 4000) {
   container.appendChild(toast);
 
   requestAnimationFrame(() => {
-    toast.classList.remove('translate-x-12', 'opacity-0');
-    toast.classList.add('translate-x-0', 'opacity-100');
+    toast.style.transform = 'translateX(0)';
+    toast.style.opacity = '1';
   });
 
   setTimeout(() => {
-    toast.classList.remove('translate-x-0', 'opacity-100');
-    toast.classList.add('translate-x-12', 'opacity-0');
+    toast.style.transform = 'translateX(30px)';
+    toast.style.opacity = '0';
     setTimeout(() => toast.remove(), 300);
   }, duration);
 };
+
 
 // Override native browser alert globally across all pages
 window.alert = function(msg) {
@@ -1552,6 +1573,8 @@ document.addEventListener('DOMContentLoaded', () => {
 // The "Wake Up AI" button pings the /health endpoint to wake it.
 // Status: 🔴 blinking = sleeping/offline | 🟢 pulsing = online
 // ============================================================
+// AI / ML SERVICE STATUS & WAKEUP ENGINE
+// ============================================================
 (function initMLStatusWidget() {
   let ML_URL = ''; // Initialized empty — set from /api/config before any ML call
   let _statusInterval = null;
@@ -1584,25 +1607,40 @@ document.addEventListener('DOMContentLoaded', () => {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
-        font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+        font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      }
+      @media (max-width: 640px) {
+        #edustack-ml-status-widget {
+          bottom: 12px;
+          left: 12px;
+          gap: 6px;
+        }
       }
       #ml-status-badge {
         display: flex;
         align-items: center;
         gap: 8px;
-        background: linear-gradient(135deg, #1e1b4b, #2e1065);
-        backdrop-filter: blur(16px);
-        border: 1.5px solid #a855f7;
+        background: linear-gradient(135deg, #111827 0%, #1e1b4b 50%, #31104b 100%);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1.5px solid rgba(168, 85, 247, 0.6);
         border-radius: 50px;
-        padding: 8px 16px;
+        padding: 7px 14px;
         color: #ffffff;
         font-size: 11px;
-        font-weight: 900;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(168, 85, 247, 0.4);
+        font-weight: 800;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(168, 85, 247, 0.35);
         cursor: default;
         transition: all 0.3s ease;
-        min-width: 160px;
+        min-width: 145px;
         justify-content: space-between;
+      }
+      @media (max-width: 640px) {
+        #ml-status-badge {
+          min-width: 130px;
+          padding: 6px 12px;
+          font-size: 10px;
+        }
       }
       #ml-status-dot {
         width: 9px;
@@ -1619,19 +1657,19 @@ document.addEventListener('DOMContentLoaded', () => {
       #ml-status-dot.offline {
         background: #ef4444;
         box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-        animation: ml-pulse-red 1s infinite;
+        animation: ml-pulse-red 1.2s infinite;
       }
       #ml-status-dot.waking {
         background: #f59e0b;
         animation: ml-pulse-amber 0.7s infinite;
       }
       @keyframes ml-pulse-green {
-        0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+        0%   { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.8); }
         70%  { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
         100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
       }
       @keyframes ml-pulse-red {
-        0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.7); }
+        0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.8); }
         50%       { opacity: 0.5; box-shadow: 0 0 0 6px rgba(239,68,68,0); }
       }
       @keyframes ml-pulse-amber {
@@ -1642,20 +1680,26 @@ document.addEventListener('DOMContentLoaded', () => {
         display: none;
         align-items: center;
         gap: 7px;
-        background: linear-gradient(135deg, #ff385c, #e11d48, #8b5cf6);
+        background: linear-gradient(135deg, #ff385c 0%, #e11d48 50%, #8b5cf6 100%);
         background-size: 200% 200%;
         animation: ml-gradient-shift 4s ease infinite, ml-slide-up 0.3s ease forwards;
         color: #ffffff;
-        border: 1px solid rgba(255, 255, 255, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.4);
         border-radius: 50px;
-        padding: 10px 18px;
+        padding: 9px 16px;
         font-size: 11px;
         font-weight: 900;
         cursor: pointer;
-        box-shadow: 0 8px 25px rgba(255, 56, 92, 0.45), 0 0 15px rgba(139, 92, 246, 0.3);
+        box-shadow: 0 8px 25px rgba(255, 56, 92, 0.5), 0 0 15px rgba(139, 92, 246, 0.4);
         transition: all 0.25s ease;
         font-family: inherit;
         letter-spacing: 0.3px;
+      }
+      @media (max-width: 640px) {
+        #ml-wakeup-btn {
+          padding: 8px 14px;
+          font-size: 10px;
+        }
       }
       @keyframes ml-gradient-shift {
         0% { background-position: 0% 50%; }
@@ -1674,18 +1718,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const widget = document.createElement('div');
     widget.id = 'edustack-ml-status-widget';
     widget.innerHTML = `
-      <button id="ml-wakeup-btn" onclick="window.wakeUpMLService()" title="Click to wake up the AI service">
+      <button id="ml-wakeup-btn" onclick="window.wakeUpMLService()" title="Click to wake up the AI service on Render">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>
         </svg>
         Wake Up AI
       </button>
-      <div id="ml-status-badge" title="EduStack AI Service Status">
+      <div id="ml-status-badge" title="EduStack AI Microservice Status">
         <div style="display:flex;align-items:center;gap:7px;">
           <span id="ml-status-dot" class="offline"></span>
           <span id="ml-status-text">AI Checking...</span>
         </div>
-        <span id="ml-status-label" style="font-size:9px;font-weight:900;color:#e9d5ff;background:rgba(233,213,255,0.15);padding:2px 7px;border-radius:10px;margin-left:4px;">ML</span>
+        <span id="ml-status-label" style="font-size:9px;font-weight:900;color:#e9d5ff;background:rgba(233,213,255,0.2);padding:2px 7px;border-radius:10px;margin-left:4px;">ML</span>
       </div>
     `;
     document.body.appendChild(widget);
@@ -1740,9 +1784,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = document.getElementById('ml-wakeup-btn');
     if (dot) dot.className = 'waking';
     if (text) text.textContent = 'Waking up...';
-    if (btn) { btn.disabled = true; btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Waking...'; }
+    if (btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Waking...';
+    }
 
-    // Inject spin animation if not present
     if (!document.getElementById('ml-spin-style')) {
       const s = document.createElement('style');
       s.id = 'ml-spin-style';
@@ -1750,7 +1796,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.head.appendChild(s);
     }
 
-    // Fire and forget — Render needs time to boot
+    if (typeof window.showToast === 'function') {
+      window.showToast('🚀 Waking up EduStack AI Service on Render... Please wait ~10-20 seconds.', 'info', 6000);
+    }
+
+    // Fire and forget — Render starts container booting
     fetch(ML_URL + '/health').catch(() => {});
 
     // Poll every 3s for up to 45s
@@ -1764,17 +1814,27 @@ document.addEventListener('DOMContentLoaded', () => {
           _waking = false;
           setOnline(true);
           if (typeof window.showToast === 'function') {
-            window.showToast('🤖 AI Service is now online!', 'success');
+            window.showToast('🎉 EduStack AI Service is now Online & Ready!', 'success', 5000);
           }
-          if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI'; }
+          if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI';
+          }
         }
       } catch {}
       if (attempts >= 15) {
         clearInterval(poll);
         _waking = false;
         setOffline();
-        if (btn) { btn.disabled = false; btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI'; }
+        if (typeof window.showToast === 'function') {
+          window.showToast('⚠️ AI Service waking took longer than expected. Click again to retry.', 'error', 5000);
+        }
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/></svg> Wake Up AI';
+        }
       }
     }, 3000);
   };
 })();
+
