@@ -126,28 +126,35 @@
   </main>
 
   <!-- REJECT REASON MODAL -->
-  <div id="rejectModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+  <div id="rejectModal" class="hidden fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
     <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl relative animate-in fade-in zoom-in-95 duration-150">
-      <h3 class="font-black text-lg text-gray-900 dark:text-white mb-1 flex items-center gap-2">
-        <i class="fa-solid fa-circle-xmark text-rose-500"></i> Decline Application
-      </h3>
-      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">
-        Provide an optional note explaining why the request could not be approved.
+      
+      <div class="flex items-center justify-between pb-3 mb-3 border-b border-gray-100 dark:border-gray-800">
+        <h3 class="font-black text-lg text-gray-900 dark:text-white flex items-center gap-2 m-0">
+          <i class="fa-solid fa-circle-xmark text-red-500 text-xl" style="color: #e11d48;"></i> Decline Application
+        </h3>
+        <button type="button" onclick="document.getElementById('rejectModal').classList.add('hidden')" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center justify-center border-0 cursor-pointer transition">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-4 leading-relaxed">
+        Provide an optional note explaining why the contributor request could not be approved at this time.
       </p>
 
       <form id="rejectForm" class="space-y-4">
         <input type="hidden" id="rejectRequestId">
         <div>
-          <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">Feedback / Reason (Optional)</label>
-          <textarea id="rejectReasonInput" placeholder="e.g. Please provide more details on which semester resources you have prepared..." class="w-full px-3.5 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 text-xs focus:outline-none focus:ring-2 focus:ring-rose-500 min-h-[90px]"></textarea>
+          <label class="block text-xs font-bold text-gray-600 dark:text-gray-300 uppercase tracking-wider mb-1.5">Feedback / Reason (Optional)</label>
+          <textarea id="rejectReasonInput" placeholder="e.g. Please provide more details on which semester resources or notes you plan to share..." class="w-full px-3.5 py-2.5 border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 text-xs focus:outline-none focus:ring-2 focus:ring-red-500 min-h-[95px]"></textarea>
         </div>
 
-        <div class="flex items-center justify-end gap-3 pt-2">
-          <button type="button" id="btnCancelReject" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-xl border-0 cursor-pointer transition">
+        <div class="flex items-center justify-end gap-3 pt-3 border-t border-gray-100 dark:border-gray-800">
+          <button type="button" id="btnCancelReject" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold rounded-xl border-0 cursor-pointer transition shadow-sm" style="background-color: #f3f4f6; color: #374151;">
             Cancel
           </button>
-          <button type="submit" id="btnConfirmReject" class="px-6 py-2.5 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl border-0 cursor-pointer shadow-md transition">
-            Decline Application
+          <button type="submit" id="btnConfirmReject" class="px-6 py-2.5 font-bold text-xs rounded-xl border-0 cursor-pointer shadow-md transition flex items-center gap-1.5 active:scale-95" style="background-color: #e11d48; color: #ffffff;">
+            <i class="fa-solid fa-xmark"></i> Decline Application
           </button>
         </div>
       </form>
@@ -340,18 +347,18 @@
                 <!-- Right: Action Buttons -->
                 <div class="flex items-center gap-2.5 w-full lg:w-auto justify-end border-t lg:border-t-0 pt-4 lg:pt-0 border-gray-100 dark:border-gray-800">
                   ${isPending ? `
-                    <button onclick="approveRequest('${req._id}', '${fullName.replace(/'/g, "\\'")}')" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs rounded-full transition shadow-md flex items-center gap-2 border-0 cursor-pointer active:scale-95">
+                    <button onclick="approveRequest('${req._id}', '${fullName.replace(/'/g, "\\'")}')" class="px-5 py-2.5 font-extrabold text-xs rounded-full transition shadow-md flex items-center gap-2 border-0 cursor-pointer active:scale-95 hover:opacity-90" style="background-color: #059669; color: #ffffff;">
                       <i class="fa-solid fa-check"></i> Approve
                     </button>
-                    <button onclick="openRejectModal('${req._id}')" class="px-4 py-2.5 bg-rose-50 dark:bg-rose-950/30 hover:bg-rose-100 dark:hover:bg-rose-900/50 text-rose-600 dark:text-rose-400 font-bold text-xs rounded-full transition border border-rose-200 dark:border-rose-900/50 flex items-center gap-2 cursor-pointer active:scale-95">
+                    <button onclick="openRejectModal('${req._id}')" class="px-4 py-2.5 font-bold text-xs rounded-full transition flex items-center gap-2 cursor-pointer active:scale-95 hover:opacity-90" style="background-color: rgba(225, 29, 72, 0.08); color: #e11d48; border: 1px solid rgba(225, 29, 72, 0.25);">
                       <i class="fa-solid fa-xmark"></i> Decline
                     </button>
                   ` : req.status === 'approved' ? `
-                    <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5">
+                    <span class="text-xs font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1.5" style="color: #059669;">
                       <i class="fa-solid fa-shield-halved"></i> Active Contributor
                     </span>
                   ` : `
-                    <button onclick="approveRequest('${req._id}', '${fullName.replace(/'/g, "\\'")}')" class="px-4 py-2 bg-gray-100 dark:bg-gray-800 hover:bg-emerald-600 hover:text-white text-gray-600 dark:text-gray-300 font-bold text-xs rounded-full transition border-0 cursor-pointer">
+                    <button onclick="approveRequest('${req._id}', '${fullName.replace(/'/g, "\\'")}')" class="px-4 py-2 font-bold text-xs rounded-full transition border-0 cursor-pointer hover:opacity-90" style="background-color: #f3f4f6; color: #374151;">
                       <i class="fa-solid fa-rotate-left mr-1"></i> Re-Approve
                     </button>
                   `}
