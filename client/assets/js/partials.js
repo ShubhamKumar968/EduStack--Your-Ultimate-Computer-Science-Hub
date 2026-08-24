@@ -612,6 +612,9 @@ document.addEventListener('DOMContentLoaded', () => {
           <a href="${base}admin/subject-list.html" class="sb-link ${path.includes('admin/subject-list') ? 'active' : ''}">
             <i class="fa-solid fa-list-ul"></i> Subject-list
           </a>
+          <a href="${base}admin/contributor-requests.html" class="sb-link ${path.includes('admin/contributor-requests') ? 'active' : ''}">
+            <i class="fa-solid fa-user-shield"></i> Contributor Approvals
+          </a>
           <a href="${base}admin/host-subjects.html" class="sb-link ${path.includes('admin/host-subjects') ? 'active' : ''}">
             <i class="fa-solid fa-house"></i> Host Subjects
           </a>
@@ -734,6 +737,7 @@ document.addEventListener('DOMContentLoaded', () => {
             ${getNavItem('guest/enrollments.html', 'fa-solid fa-calendar-check', 'Enrollments', 'guest/enrollments', 'nav-item-blue', 'color:#3b82f6;')}
             ` : isAdmin ? `
             ${getNavItem('admin/subject-list.html', 'fa-solid fa-list-ul', 'Subject-list', 'admin/subject-list', 'nav-item-purple', 'color:#8b5cf6;')}
+            ${getNavItem('admin/contributor-requests.html', 'fa-solid fa-user-shield', 'Approvals', 'admin/contributor-requests', 'nav-item-teal', 'color:#14b8a6;')}
             ${getNavItem('admin/host-subjects.html', 'fa-solid fa-house', 'Host Subjects', 'admin/host-subjects', 'nav-item-indigo', 'color:#6366f1;')}
             ${getNavItem('admin/add-subject.html', 'fa-solid fa-circle-plus', 'Add Subject', 'admin/add-subject', 'nav-item-emerald', 'color:#10b981;')}
             ` : `
@@ -1346,6 +1350,10 @@ document.addEventListener('DOMContentLoaded', () => {
                       </div>
                     </div>
                     <div class="p-2 space-y-1">
+                      ${u.role === 'admin' ? `
+                      <a href="${base}admin/contributor-requests.html" class="dropdown-item-teal flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
+                        <i class="fa-solid fa-user-shield w-4 text-center text-teal-500"></i> Contributor Approvals
+                      </a>` : ''}
                       ${u.role === 'admin' ? `
                       <a href="${base}admin/add-subject.html" class="dropdown-item-indigo flex items-center gap-3 px-3.5 py-2.5 text-[13.5px] font-bold text-gray-700 dark:text-gray-200 rounded-xl transition-all no-underline">
                         <i class="fa-solid fa-plus-circle w-4 text-center text-indigo-500"></i> Add New Subject

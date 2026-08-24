@@ -156,6 +156,65 @@
           </button>
         </div>
       </form>
+    <!-- Contributor Application Modal -->
+    <div id="contributor-request-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div class="bg-white dark:bg-[#222222] border border-gray-100 dark:border-gray-800 rounded-3xl p-6 sm:p-8 max-w-lg w-full shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
+        
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-gray-100 dark:border-gray-800">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg font-bold">
+              <i class="fa-solid fa-handshake"></i>
+            </div>
+            <div>
+              <h3 class="font-black text-lg text-gray-900 dark:text-white">Apply as Contributor</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Join our team of academic resource contributors</p>
+            </div>
+          </div>
+          <button id="modal-close-btn" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-500 hover:text-gray-900 dark:hover:text-white flex items-center justify-center border-0 cursor-pointer transition">
+            <i class="fa-solid fa-xmark text-sm"></i>
+          </button>
+        </div>
+
+        <form id="contributor-application-form" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">Branch</label>
+              <select id="modal-branch" required class="w-full px-3.5 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <option value="CSE">CSE</option>
+                <option value="ECE">ECE</option>
+                <option value="EEE">EE</option>
+                <option value="MECH">ME</option>
+                <option value="CIVIL">CE</option>
+                <option value="IT">IT</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">Semester</label>
+              <input type="number" id="modal-semester" min="1" max="8" value="1" required class="w-full px-3.5 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-emerald-500">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1.5">
+              Why do you want to contribute? <span class="text-emerald-500">*</span>
+            </label>
+            <textarea id="modal-reason" required placeholder="e.g. I have handwritten lecture notes, past exam papers, and video playlist links for 3rd & 4th semester CSE subjects that I would like to upload..." class="w-full px-3.5 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[100px]"></textarea>
+          </div>
+
+          <div id="modal-error-box" class="hidden p-3 bg-rose-50 dark:bg-rose-950/30 border border-rose-200 dark:border-rose-900/50 text-rose-600 dark:text-rose-400 rounded-xl text-xs font-medium"></div>
+
+          <div class="pt-2 flex items-center justify-end gap-3">
+            <button type="button" id="modal-cancel-btn" class="px-5 py-2.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 text-xs font-bold rounded-xl border-0 cursor-pointer transition">
+              Cancel
+            </button>
+            <button type="submit" id="modal-submit-btn" class="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-xl border-0 cursor-pointer shadow-md transition flex items-center gap-2">
+              <i class="fa-solid fa-paper-plane"></i> Submit Application
+            </button>
+          </div>
+        </form>
+
+      </div>
     </div>
 
   </main>
@@ -225,12 +284,13 @@
       }
 
       try {
-        // Check user session
-        const res = await fetch('/api/auth/me', { credentials: 'include' });
+        // Fetch contributor request & user status
+        const res = await fetch('/api/contributor-requests/my-status', { credentials: 'include' });
         const data = await res.json();
 
         if (res.ok && data.success && data.data && data.data.user) {
           const user = data.data.user;
+          const reqInfo = data.data.request;
 
           if (user.role === 'admin' || user.role === 'contributor') {
             statusCard.innerHTML = `
@@ -241,7 +301,7 @@
                   </div>
                   <div>
                     <h3 class="font-extrabold text-base text-gray-900 dark:text-white">
-                      Welcome, ${user.firstName || 'Contributor'}!
+                      Welcome, ${user.name || 'Contributor'}!
                     </h3>
                     <p class="text-xs text-gray-500 dark:text-gray-400">
                       Your account has active <span class="font-bold text-emerald-500">${user.role === 'admin' ? 'Host / Admin' : 'Contributor'}</span> permissions. You can upload study materials directly.
@@ -251,7 +311,76 @@
               </div>
             `;
             formContainer.classList.remove('hidden');
+          } else if (reqInfo && reqInfo.status === 'pending') {
+            // Status: Pending Admin Approval
+            const appliedDate = new Date(reqInfo.createdAt).toLocaleDateString(undefined, {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric'
+            });
+
+            statusCard.innerHTML = `
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-amber-500 flex items-center justify-center text-xl font-bold flex-shrink-0 animate-pulse">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 class="font-extrabold text-lg text-gray-900 dark:text-white">
+                        Application Under Admin Review
+                      </h3>
+                      <span class="inline-flex items-center gap-1.5 bg-amber-500/15 text-amber-600 dark:text-amber-400 text-xs font-black px-2.5 py-0.5 rounded-full border border-amber-500/30">
+                        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 animate-ping"></span> Pending Approval
+                      </span>
+                    </div>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 max-w-xl mb-2">
+                      Your request to join the Contributor team is being reviewed by the EduStack Admin team. Once approved, the submission form below will unlock automatically.
+                    </p>
+                    <div class="flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400 font-medium">
+                      <span><i class="fa-solid fa-calendar text-gray-400 mr-1"></i> Applied: ${appliedDate}</span>
+                      <span><i class="fa-solid fa-graduation-cap text-gray-400 mr-1"></i> ${reqInfo.branch || 'Branch'} • Sem ${reqInfo.semester || 1}</span>
+                    </div>
+                  </div>
+                </div>
+                <button onclick="window.location.reload()" class="w-full md:w-auto px-5 py-2.5 bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-200 text-xs font-bold rounded-xl transition flex items-center justify-center gap-2 border-0 cursor-pointer">
+                  <i class="fa-solid fa-rotate-right"></i> Refresh Status
+                </button>
+              </div>
+            `;
+          } else if (reqInfo && reqInfo.status === 'rejected') {
+            // Status: Rejected by Admin
+            statusCard.innerHTML = `
+              <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-2xl bg-rose-500/10 text-rose-500 flex items-center justify-center text-xl font-bold flex-shrink-0">
+                    <i class="fa-solid fa-circle-xmark"></i>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                      <h3 class="font-extrabold text-lg text-gray-900 dark:text-white">
+                        Application Status Update
+                      </h3>
+                      <span class="bg-rose-500/15 text-rose-600 dark:text-rose-400 text-xs font-black px-2.5 py-0.5 rounded-full border border-rose-500/30">
+                        Declined
+                      </span>
+                    </div>
+                    <p class="text-xs text-gray-600 dark:text-gray-400 max-w-xl mb-1">
+                      ${reqInfo.adminNote ? `Admin Feedback: "${reqInfo.adminNote}"` : 'Your previous application could not be approved at this time.'}
+                    </p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400">
+                      You can submit an updated request with more details about the study materials you wish to share.
+                    </p>
+                  </div>
+                </div>
+                <button id="btn-open-request-modal" class="w-full md:w-auto whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-3 rounded-full transition-all shadow-md active:scale-[0.98] text-xs uppercase tracking-wider border-0 cursor-pointer flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-paper-plane"></i> Re-Apply for Contributor
+                </button>
+              </div>
+            `;
+            attachModalTrigger(user);
           } else {
+            // Not yet applied
             statusCard.innerHTML = `
               <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
                 <div>
@@ -259,32 +388,15 @@
                     <i class="fa-solid fa-graduation-cap text-brand"></i> Join the EduStack Contributor Team
                   </h3>
                   <p class="text-xs text-gray-500 dark:text-gray-400 max-w-xl">
-                    Want to share lecture notes or PYQs? Upgrade your account to a Contributor in 1 click to unlock resource submissions.
+                    Want to share lecture notes, pyqs, or summaries? Submit a quick request for admin approval to unlock resource submissions.
                   </p>
                 </div>
-                <button id="btn-become-contributor" class="w-full sm:w-auto whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-3 rounded-full transition-all shadow-md active:scale-[0.98] text-xs uppercase tracking-wider border-0 cursor-pointer flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-handshake"></i> Become a Contributor
+                <button id="btn-open-request-modal" class="w-full sm:w-auto whitespace-nowrap bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold px-6 py-3 rounded-full transition-all shadow-md active:scale-[0.98] text-xs uppercase tracking-wider border-0 cursor-pointer flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-paper-plane"></i> Request to Become Contributor
                 </button>
               </div>
             `;
-
-            document.getElementById('btn-become-contributor').addEventListener('click', async () => {
-              try {
-                const reqRes = await fetch('/api/users/become-contributor', {
-                  method: 'PUT',
-                  credentials: 'include'
-                });
-                const reqData = await reqRes.json();
-                if (reqRes.ok && reqData.success) {
-                  alert('🎉 Congratulations! You are now an official EduStack Contributor.');
-                  window.location.reload();
-                } else {
-                  alert(`❌ ${reqData.message || 'Failed to update contributor role.'}`);
-                }
-              } catch (err) {
-                alert('❌ Connection error while updating status.');
-              }
-            });
+            attachModalTrigger(user);
           }
         } else {
           statusCard.innerHTML = `
@@ -300,6 +412,70 @@
         }
       } catch (err) {
         console.error('Contributor hub error:', err);
+      }
+
+      function attachModalTrigger(user) {
+        const openBtn = document.getElementById('btn-open-request-modal');
+        if (!openBtn) return;
+
+        openBtn.addEventListener('click', () => {
+          document.getElementById('modal-branch').value = user.branch || 'CSE';
+          document.getElementById('modal-semester').value = user.semester || 1;
+          document.getElementById('modal-reason').value = '';
+          document.getElementById('modal-error-box').classList.add('hidden');
+          document.getElementById('contributor-request-modal').classList.remove('hidden');
+        });
+
+        // Close modal handlers
+        const modal = document.getElementById('contributor-request-modal');
+        const closeBtn = document.getElementById('modal-close-btn');
+        const cancelBtn = document.getElementById('modal-cancel-btn');
+        const appForm = document.getElementById('contributor-application-form');
+        const errorBox = document.getElementById('modal-error-box');
+        const submitBtn = document.getElementById('modal-submit-btn');
+
+        if (closeBtn) closeBtn.onclick = () => modal.classList.add('hidden');
+        if (cancelBtn) cancelBtn.onclick = () => modal.classList.add('hidden');
+
+        if (appForm) {
+          appForm.onsubmit = async (e) => {
+            e.preventDefault();
+            errorBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+            const payload = {
+              branch: document.getElementById('modal-branch').value,
+              semester: document.getElementById('modal-semester').value,
+              reason: document.getElementById('modal-reason').value.trim(),
+            };
+
+            try {
+              const appRes = await fetch('/api/contributor-requests', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
+                body: JSON.stringify(payload)
+              });
+              const appData = await appRes.json();
+
+              if (appRes.ok && appData.success) {
+                modal.classList.add('hidden');
+                alert('🎉 Your contributor application has been submitted to the Admin team for review!');
+                window.location.reload();
+              } else {
+                errorBox.textContent = `❌ ${appData.message || 'Failed to submit application.'}`;
+                errorBox.classList.remove('hidden');
+              }
+            } catch (err) {
+              errorBox.textContent = '❌ Network error submitting application. Please try again.';
+              errorBox.classList.remove('hidden');
+            } finally {
+              submitBtn.disabled = false;
+              submitBtn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Submit Application';
+            }
+          };
+        }
       }
 
       // Submit resource handler

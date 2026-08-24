@@ -49,6 +49,7 @@ const paymentRoutes   = require('./routes/paymentRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const enrollmentRoutes   = require('./routes/enrollmentRoutes');
 const aiRoutes           = require('./routes/aiRoutes');
+const contributorRequestRoutes = require('./routes/contributorRequestRoutes');
 
 // ── Create Express App ────────────────────────────────────────
 const app = express();
@@ -617,7 +618,8 @@ app.use('/api/resources',     resourceRoutes);
 app.use('/api/favourites',    favouriteRoutes);
 app.use('/api/enrollments',   enrollmentRoutes);
 app.use('/api/payments',      paymentRoutes);
-app.use('/api/notifications', notificationRoutes);
+app.use('/api/notifications',        notificationRoutes);
+app.use('/api/contributor-requests', contributorRequestRoutes);
 // ── Google OAuth root-level aliases ──────────────────────────
 // These MUST live at root because Google Cloud Console's Authorized
 // Redirect URI is set to: https://your-app.onrender.com/auth/google/callback
