@@ -69,6 +69,20 @@ exports.submitRequest = asyncHandler(async (req, res) => {
     adminNote: '',
   });
 
+  // Create an alert notification for Admin
+  try {
+    await Notification.create({
+      title: '📩 New Contributor Request',
+      message: `${user.firstName} ${user.lastName} (${user.email}) requested to become an EduStack Contributor for ${branch || user.branch || 'CSE'} Sem ${semester || user.semester || 1}.`,
+      type: 'alert',
+      link: '/admin/contributor-requests.html',
+      createdBy: user._id,
+      readBy: [],
+    });
+  } catch (notifErr) {
+    console.warn('⚠️ Could not create request notification:', notifErr.message);
+  }
+
   return sendSuccess(
     res,
     '🎉 Contributor application submitted successfully! Our admin team will review it shortly.',
@@ -237,6 +251,20 @@ exports.rejectRequest = asyncHandler(async (req, res) => {
   request.reviewedAt = new Date();
   request.adminNote = (req.body.reason || req.body.adminNote || 'Application declined by admin.').trim();
   await request.save();
+
+  // Create notification for student
+  try {
+    await Notification.create({
+      title: '📋 Contributor Application Update',
+      message: `Hello ${targetUser ? targetUser.firstName : 'Student'}, your contributor request has been reviewed. Feedback: "${request.adminNote}"`,
+      type: 'alert',
+      link: '/contribute.html',
+      createdBy: req.user._id,
+      readBy: [],
+    });
+  } catch (notifErr) {
+    console.warn('⚠️ Could not create reject notification:', notifErr.message);
+  }
 
   return sendSuccess(res, 'Contributor application has been rejected.', {
     requestId: request._id,
