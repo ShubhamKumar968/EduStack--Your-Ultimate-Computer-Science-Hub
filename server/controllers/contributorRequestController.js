@@ -69,14 +69,17 @@ exports.submitRequest = asyncHandler(async (req, res) => {
     adminNote: '',
   });
 
-  // Create an alert notification for Admin
+  // Create a private alert notification for Admin only
   try {
+    // Find any admin to set as recipient (private admin-only notification)
+    const adminUser = await User.findOne({ role: 'admin' }).select('_id').lean();
     await Notification.create({
       title: '📩 New Contributor Request',
       message: `${user.firstName} ${user.lastName} (${user.email}) requested to become an EduStack Contributor for ${branch || user.branch || 'CSE'} Sem ${semester || user.semester || 1}.`,
       type: 'alert',
       link: '/admin/contributor-requests.html',
       createdBy: user._id,
+      recipient: adminUser ? adminUser._id : null, // private to admin; fallback broadcast if no admin found
       readBy: [],
     });
   } catch (notifErr) {
@@ -211,7 +214,7 @@ exports.approveRequest = asyncHandler(async (req, res) => {
   request.adminNote = req.body.adminNote ? req.body.adminNote.trim() : 'Approved by Admin';
   await request.save();
 
-  // Create broadcast/system notification welcoming the user
+  // Create a private notification for the approved student only
   try {
     await Notification.create({
       title: '🎉 Contributor Request Approved!',
@@ -219,6 +222,7 @@ exports.approveRequest = asyncHandler(async (req, res) => {
       type: 'update',
       link: '/contribute.html',
       createdBy: req.user._id,
+      recipient: targetUser._id,  // private — only the approved student sees this
       readBy: [],
     });
   } catch (notifErr) {
@@ -252,7 +256,7 @@ exports.rejectRequest = asyncHandler(async (req, res) => {
   request.adminNote = (req.body.reason || req.body.adminNote || 'Application declined by admin.').trim();
   await request.save();
 
-  // Create notification for student
+  // Create a private notification for the rejected student only
   try {
     await Notification.create({
       title: '📋 Contributor Application Update',
@@ -260,6 +264,7 @@ exports.rejectRequest = asyncHandler(async (req, res) => {
       type: 'alert',
       link: '/contribute.html',
       createdBy: req.user._id,
+      recipient: targetUser ? targetUser._id : null,  // private — only the rejected student sees this
       readBy: [],
     });
   } catch (notifErr) {

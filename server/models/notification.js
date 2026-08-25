@@ -2,7 +2,9 @@
 // models/notification.js
 // ============================================================
 // PURPOSE:
-//   Represents broadcast notifications sent by admins to users.
+//   Represents notifications in EduStack.
+//   recipient = null  → broadcast (shown to ALL logged-in users)
+//   recipient = userId → private (shown ONLY to that specific user)
 // ============================================================
 
 const mongoose = require('mongoose');
@@ -39,6 +41,14 @@ const notificationSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+    },
+
+    // null = broadcast to ALL users
+    // userId = private notification for ONE specific user only
+    recipient: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
     },
 
     // Array of User ObjectIds who have read/dismissed this notification

@@ -41,17 +41,26 @@ exports.broadcastNotification = asyncHandler(async (req, res) => {
 // @access  Private
 // ============================================================
 exports.getNotifications = asyncHandler(async (req, res) => {
-  const userId = req.user._id.toString();
+  const userId = req.user._id;
 
-  const notifications = await Notification.find()
+  // Only fetch:
+  //   1. Broadcasts → recipient is null (visible to everyone)
+  //   2. Private     → recipient matches the logged-in user's ID
+  const notifications = await Notification.find({
+    $or: [
+      { recipient: null },
+      { recipient: userId },
+    ],
+  })
     .populate('createdBy', 'firstName lastName avatar')
     .sort({ createdAt: -1 })
-    .limit(30);
+    .limit(50);
 
   let unreadCount = 0;
+  const userIdStr = userId.toString();
 
   const formatted = notifications.map((n) => {
-    const isRead = n.readBy.some((id) => id.toString() === userId);
+    const isRead = n.readBy.some((id) => id.toString() === userIdStr);
     if (!isRead) unreadCount++;
 
     return {
@@ -71,6 +80,7 @@ exports.getNotifications = asyncHandler(async (req, res) => {
     notifications: formatted,
   });
 });
+
 
 // ============================================================
 // @route   PUT /api/notifications/:id/read
@@ -101,8 +111,14 @@ exports.markAsRead = asyncHandler(async (req, res) => {
 exports.markAllAsRead = asyncHandler(async (req, res) => {
   const userId = req.user._id;
 
+  // Only mark notifications this user is allowed to see
   await Notification.updateMany(
-    { readBy: { $ne: userId } },
+    {
+      $and: [
+        { readBy: { $ne: userId } },
+        { $or: [{ recipient: null }, { recipient: userId }] },
+      ],
+    },
     { $addToSet: { readBy: userId } }
   );
 
