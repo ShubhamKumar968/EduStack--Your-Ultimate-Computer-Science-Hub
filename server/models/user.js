@@ -128,7 +128,7 @@ const userSchema = new mongoose.Schema(
       default: 1,
     },
 
-    // ── DSA Sheet Progress ──────────────────────────────────
+    // ── DSA Sheet Progress & Gamification ──────────────────
     // Stores the number of DSA problems the user has solved.
     // Updated whenever the user toggles a problem on the DSA sheet.
     // Used as the ranking metric for the global leaderboard.
@@ -137,6 +137,48 @@ const userSchema = new mongoose.Schema(
       default: 0,
       min:     0,
       index:   true,  // Fast leaderboard sort queries
+    },
+
+    // Total EduStack Points earned (POTD, streak bonuses, etc.)
+    edustackPoints: {
+      type:    Number,
+      default: 0,
+      min:     0,
+    },
+
+    // Consistency Streak tracking
+    streak: {
+      current:        { type: Number, default: 0 },
+      best:           { type: Number, default: 0 },
+      lastActiveDate: { type: String, default: null },
+    },
+
+    // Unlocked consistency & milestone badges
+    unlockedBadges: [
+      {
+        id:         { type: String, required: true },
+        name:       { type: String, required: true },
+        tier:       { type: String, default: 'Bronze' },
+        unlockedAt: { type: Date, default: Date.now },
+      },
+    ],
+
+    // Bookmarked problems list (array of problem IDs)
+    bookmarkedProblems: {
+      type:    [Number],
+      default: [],
+    },
+
+    // Attempted problems list (array of problem IDs)
+    attemptedProblems: {
+      type:    [Number],
+      default: [],
+    },
+
+    // Dates when Problem of the Day was completed (YYYY-MM-DD strings)
+    potdCompletedDates: {
+      type:    [String],
+      default: [],
     },
   },
   {

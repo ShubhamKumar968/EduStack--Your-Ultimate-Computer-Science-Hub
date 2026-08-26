@@ -29,17 +29,24 @@ exports.getProfile = asyncHandler(async (req, res) => {
 
   return sendSuccess(res, 'Profile fetched successfully.', {
     user: {
-      id:          user._id,
-      firstName:   user.firstName,
-      lastName:    user.lastName,
-      email:       user.email,
-      role:        user.role,
-      avatar:      user.avatar,
-      phoneNumber: user.phoneNumber,
-      branch:      user.branch || 'CSE',
-      semester:    user.semester || 1,
-      bio:         user.bio,
-      createdAt:   user.createdAt,
+      id:                 user._id,
+      firstName:          user.firstName,
+      lastName:           user.lastName,
+      email:              user.email,
+      role:               user.role,
+      avatar:             user.avatar,
+      phoneNumber:        user.phoneNumber,
+      branch:             user.branch || 'CSE',
+      semester:           user.semester || 1,
+      bio:                user.bio,
+      dsaSolvedCount:     user.dsaSolvedCount || 0,
+      edustackPoints:     user.edustackPoints || 0,
+      streak:             user.streak || { current: 0, best: 0, lastActiveDate: null },
+      unlockedBadges:     user.unlockedBadges || [],
+      bookmarkedProblems: user.bookmarkedProblems || [],
+      attemptedProblems:  user.attemptedProblems || [],
+      potdCompletedDates: user.potdCompletedDates || [],
+      createdAt:          user.createdAt,
     },
   });
 });
@@ -237,15 +244,47 @@ exports.becomeContributor = asyncHandler(async (req, res) => {
 // @access  Private
 // ============================================================
 exports.updateDsaProgress = asyncHandler(async (req, res) => {
-  const { solvedCount } = req.body;
+  const {
+    solvedCount,
+    edustackPoints,
+    streak,
+    unlockedBadges,
+    bookmarkedProblems,
+    attemptedProblems,
+    potdCompletedDates,
+  } = req.body;
 
-  if (typeof solvedCount !== 'number' || solvedCount < 0) {
-    return sendError(res, 'solvedCount must be a non-negative number.', 400);
+  const updates = {};
+
+  if (typeof solvedCount === 'number' && solvedCount >= 0) {
+    updates.dsaSolvedCount = solvedCount;
+  }
+  if (typeof edustackPoints === 'number' && edustackPoints >= 0) {
+    updates.edustackPoints = edustackPoints;
+  }
+  if (streak && typeof streak === 'object') {
+    updates.streak = {
+      current: typeof streak.current === 'number' ? streak.current : 0,
+      best: typeof streak.best === 'number' ? streak.best : 0,
+      lastActiveDate: streak.lastActiveDate || null,
+    };
+  }
+  if (Array.isArray(unlockedBadges)) {
+    updates.unlockedBadges = unlockedBadges;
+  }
+  if (Array.isArray(bookmarkedProblems)) {
+    updates.bookmarkedProblems = bookmarkedProblems;
+  }
+  if (Array.isArray(attemptedProblems)) {
+    updates.attemptedProblems = attemptedProblems;
+  }
+  if (Array.isArray(potdCompletedDates)) {
+    updates.potdCompletedDates = potdCompletedDates;
   }
 
   const updatedUser = await User.findByIdAndUpdate(
     req.user._id,
-    { dsaSolvedCount: solvedCount },
+    updates,
     { new: true }
   );
 
@@ -254,7 +293,13 @@ exports.updateDsaProgress = asyncHandler(async (req, res) => {
   }
 
   return sendSuccess(res, 'DSA progress saved.', {
-    dsaSolvedCount: updatedUser.dsaSolvedCount,
+    dsaSolvedCount:     updatedUser.dsaSolvedCount,
+    edustackPoints:     updatedUser.edustackPoints,
+    streak:             updatedUser.streak,
+    unlockedBadges:     updatedUser.unlockedBadges,
+    bookmarkedProblems: updatedUser.bookmarkedProblems,
+    attemptedProblems:  updatedUser.attemptedProblems,
+    potdCompletedDates: updatedUser.potdCompletedDates,
   });
 });
 
