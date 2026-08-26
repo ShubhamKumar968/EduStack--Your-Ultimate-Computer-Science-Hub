@@ -127,6 +127,17 @@ const userSchema = new mongoose.Schema(
       max:     [8, 'Semester must be between 1 and 8'],
       default: 1,
     },
+
+    // ── DSA Sheet Progress ──────────────────────────────────
+    // Stores the number of DSA problems the user has solved.
+    // Updated whenever the user toggles a problem on the DSA sheet.
+    // Used as the ranking metric for the global leaderboard.
+    dsaSolvedCount: {
+      type:    Number,
+      default: 0,
+      min:     0,
+      index:   true,  // Fast leaderboard sort queries
+    },
   },
   {
     // Automatically adds createdAt and updatedAt fields

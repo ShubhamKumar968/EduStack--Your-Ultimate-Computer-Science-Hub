@@ -749,11 +749,13 @@
       if (content) content.classList.remove('hidden');
 
       let currentUser = null;
+      window._dsaCurrentUser = null; // Accessible by toggleSolved() outside this scope
       try {
         const res = await fetch('/api/auth/me', { credentials: 'include' });
         const data = await res.json();
         if (data && data.success && data.data && data.data.user) {
           currentUser = data.data.user;
+          window._dsaCurrentUser = currentUser; // Expose for toggleSolved()
           if (!currentUser.isPremium) {
             if (gate) gate.classList.remove('hidden');
             if (notPremiumNotice) notPremiumNotice.classList.remove('hidden');
@@ -1067,51 +1069,111 @@
       'from-orange-400/20 to-orange-300/10 border-orange-400/25'
     ];
 
-    function renderLeaderboard(currentUser) {
-      const list  = document.getElementById('leaderboardList');
+    // ── Sync DSA solved count to MongoDB (debounced 1.5 s) ───────
+    // Fires whenever the user marks / un-marks a problem so the global
+    // leaderboard always reflects real data from the database.
+    let _dsaSyncTimer = null;
+    function syncDsaProgress() {
+      const user = window._dsaCurrentUser;
+      if (!user) return; // Guest — nothing to sync
+      clearTimeout(_dsaSyncTimer);
+      _dsaSyncTimer = setTimeout(async () => {
+        try {
+          await fetch('/api/users/dsa-progress', {
+            method:      'PUT',
+            credentials: 'include',
+            headers:     { 'Content-Type': 'application/json' },
+            body:        JSON.stringify({ solvedCount: solvedIds.length }),
+          });
+          // Refresh leaderboard from server so rank changes appear immediately
+          renderLeaderboard(user);
+        } catch (err) {
+          console.warn('DSA progress sync failed (offline?):', err.message);
+        }
+      }, 1500);
+    }
+
+    // ── Real-time leaderboard from MongoDB ────────────────────────
+    // Fetches actual rankings from the server. Falls back to a local
+    // representation only if the API is unreachable.
+    async function renderLeaderboard(currentUser) {
+      const list   = document.getElementById('leaderboardList');
       const signIn = document.getElementById('leaderboardSignIn');
       if (!list) return;
 
-      // Build board from localStorage + current user's own solve count
-      const localCount = solvedIds.length;
-      let board = JSON.parse(localStorage.getItem('edustack_leaderboard') || '[]');
+      // Show a lightweight skeleton while fetching
+      list.innerHTML = `
+        <div class="flex items-center justify-center py-4 gap-2 text-gray-400">
+          <i class="fa-solid fa-spinner animate-spin text-brand text-xs"></i>
+          <span class="text-[10px] font-bold">Loading rankings…</span>
+        </div>`;
 
-      // Upsert current user
-      if (currentUser) {
-        const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
-        const existing = board.find(e => e.id === currentUser._id);
-        if (existing) { existing.solved = localCount; existing.name = name; }
-        else board.push({ id: currentUser._id, name, avatar: currentUser.avatar || null, solved: localCount });
-        localStorage.setItem('edustack_leaderboard', JSON.stringify(board));
+      let board = [];
+      try {
+        const apiRes = await fetch('/api/users/leaderboard', { credentials: 'include' });
+        if (apiRes.ok) {
+          const apiData = await apiRes.json();
+          if (apiData.success && Array.isArray(apiData.data?.board)) {
+            board = apiData.data.board; // [{id, name, avatar, solved}]
+          }
+        }
+      } catch (err) {
+        console.warn('Leaderboard API unreachable, using local fallback:', err.message);
       }
 
-      // Sort by solved desc
-      board = board.sort((a, b) => b.solved - a.solved).slice(0, 8);
-
+      // ── Local fallback: if no server data yet, show only the
+      //    current user so the board is never completely empty.
       if (board.length === 0) {
-        board = [
-          { id: 'user1', name: 'Shubham K.', solved: 45, avatar: null },
-          { id: 'user2', name: 'Rahul S.', solved: 32, avatar: null },
-          { id: 'user3', name: 'Ananya P.', solved: 28, avatar: null }
-        ];
-        if (currentUser) {
+        const localCount = solvedIds.length;
+        if (currentUser && localCount > 0) {
           const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
-          board.push({ id: currentUser._id, name, solved: localCount });
+          board = [{ id: currentUser._id || 'you', name, avatar: currentUser.avatar || null, solved: localCount }];
         } else {
-          board.push({ id: 'you_guest', name: 'You (Guest)', solved: localCount });
+          // Completely empty state
+          list.innerHTML = `
+            <div class="flex flex-col items-center justify-center py-4 text-center gap-1">
+              <i class="fa-solid fa-ranking-star text-amber-400 text-xl mb-1"></i>
+              <p class="text-[10px] text-gray-400 font-semibold">No rankings yet.<br>Solve problems to appear here!</p>
+            </div>`;
+          if (signIn) signIn.classList.add('hidden');
+          return;
+        }
+      }
+
+      // ── Ensure the current user appears in the board ──────────
+      //    (they might have solved less than the top-10 cutoff)
+      if (currentUser) {
+        const userInBoard = board.some(e => String(e.id) === String(currentUser._id));
+        if (!userInBoard && solvedIds.length > 0) {
+          const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
+          board.push({ id: currentUser._id, name, avatar: currentUser.avatar || null, solved: solvedIds.length, _isYouAppended: true });
         }
       }
 
       list.innerHTML = board.map((entry, idx) => {
-        const medal = BOARD_MEDALS[idx] || `#${idx+1}`;
-        const color = BOARD_COLORS[idx] || 'border-gray-200/20 dark:border-gray-800/20';
-        const isYou = currentUser && entry.id === currentUser._id;
-        const initials = entry.name ? entry.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() : '??';
+        const medal   = BOARD_MEDALS[idx] || `#${idx + 1}`;
+        const color   = BOARD_COLORS[idx] || 'border-gray-200/20 dark:border-gray-800/20';
+        const isYou   = currentUser && String(entry.id) === String(currentUser._id);
+
+        // Resolve the real profile picture using the same logic as the rest of the site:
+        // 1. Use Cloudinary/stored avatar if it exists and isn't the default placeholder
+        // 2. Fall back to ui-avatars.com (generates a branded letter-avatar from the user's name)
+        const hasRealAvatar = entry.avatar && entry.avatar !== 'default-avatar.png' && entry.avatar !== 'null';
+        const avatarSrc = hasRealAvatar
+          ? entry.avatar
+          : `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.name || 'U')}&background=ff385c&color=fff&bold=true&size=64`;
+        const uiAvatarFallback = `https://ui-avatars.com/api/?name=${encodeURIComponent(entry.name || 'U')}&background=ff385c&color=fff&bold=true&size=64`;
+
         return `
           <div class="flex items-center gap-3 bg-gradient-to-r ${color} border rounded-2xl px-3 py-2.5 ${isYou ? 'ring-1 ring-brand/40' : ''}">
-            <span class="text-base w-6 text-center flex-shrink-0">${medal}</span>
-            <div class="w-7 h-7 rounded-xl bg-gradient-to-br from-brand/40 to-purple-500/40 flex items-center justify-center text-[10px] font-black text-white flex-shrink-0">
-              ${initials}
+            <span class="text-base w-6 text-center flex-shrink-0">${entry._isYouAppended ? '→' : medal}</span>
+            <div class="w-7 h-7 rounded-xl overflow-hidden flex-shrink-0 border border-white/20 shadow-sm">
+              <img
+                src="${avatarSrc}"
+                alt="${entry.name}"
+                class="w-full h-full object-cover"
+                onerror="this.onerror=null;this.src='${uiAvatarFallback}'"
+              >
             </div>
             <div class="flex-1 min-w-0">
               <div class="text-[11px] font-black text-gray-900 dark:text-white truncate">${entry.name}${isYou ? ' <span class="text-brand">(You)</span>' : ''}</div>
@@ -1122,6 +1184,7 @@
             </div>
           </div>`;
       }).join('');
+
 
       if (signIn) signIn.classList.add('hidden');
     }
@@ -1197,6 +1260,8 @@
       renderProblems();
       // Refresh calendar to reflect today's activity + streak
       renderCalendar();
+      // Sync solved count to server so leaderboard stays real-world accurate
+      syncDsaProgress();
     }
 
     function renderTopicPills() {

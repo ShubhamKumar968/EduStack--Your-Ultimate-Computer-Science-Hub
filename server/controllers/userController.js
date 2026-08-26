@@ -227,3 +227,60 @@ exports.becomeContributor = asyncHandler(async (req, res) => {
     userId: targetUser._id,
   });
 });
+
+
+// ============================================================
+// @route   PUT /api/users/dsa-progress
+// @desc    Save the current user's DSA solved count to the DB.
+//          Called from the frontend whenever the user marks /
+//          un-marks a problem. Keeps the global leaderboard in sync.
+// @access  Private
+// ============================================================
+exports.updateDsaProgress = asyncHandler(async (req, res) => {
+  const { solvedCount } = req.body;
+
+  if (typeof solvedCount !== 'number' || solvedCount < 0) {
+    return sendError(res, 'solvedCount must be a non-negative number.', 400);
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(
+    req.user._id,
+    { dsaSolvedCount: solvedCount },
+    { new: true }
+  );
+
+  if (!updatedUser) {
+    return sendError(res, 'User not found.', 404);
+  }
+
+  return sendSuccess(res, 'DSA progress saved.', {
+    dsaSolvedCount: updatedUser.dsaSolvedCount,
+  });
+});
+
+
+// ============================================================
+// @route   GET /api/users/leaderboard
+// @desc    Return top 10 users ranked by DSA solved count.
+//          Public — no auth required so the card shows even for
+//          logged-out visitors (without revealing emails).
+// @access  Public
+// ============================================================
+exports.getLeaderboard = asyncHandler(async (req, res) => {
+  // Only expose safe, non-PII fields
+  const topUsers = await User
+    .find({ dsaSolvedCount: { $gt: 0 } })
+    .select('firstName lastName avatar dsaSolvedCount')
+    .sort({ dsaSolvedCount: -1 })
+    .limit(10)
+    .lean();
+
+  const board = topUsers.map(u => ({
+    id:     u._id,
+    name:   `${u.firstName} ${u.lastName ? u.lastName[0] + '.' : ''}`.trim(),
+    avatar: u.avatar || null,
+    solved: u.dsaSolvedCount,
+  }));
+
+  return sendSuccess(res, 'Leaderboard fetched.', { board });
+});

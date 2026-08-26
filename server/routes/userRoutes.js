@@ -4,10 +4,12 @@
 // BASE PATH (mounted in app.js): /api/users
 //
 // ENDPOINT TABLE:
-//   GET  /api/users           → List all users      (admin only)
-//   GET  /api/users/profile   → Get own profile     (private)
-//   PUT  /api/users/profile   → Update own profile  (private)
-//   PUT  /api/users/avatar    → Update avatar       (private)
+//   GET  /api/users/leaderboard  → Top DSA solvers    (public)
+//   GET  /api/users              → List all users     (admin only)
+//   GET  /api/users/profile      → Get own profile    (private)
+//   PUT  /api/users/profile      → Update own profile (private)
+//   PUT  /api/users/avatar       → Update avatar      (private)
+//   PUT  /api/users/dsa-progress → Save DSA progress  (private)
 // ============================================================
 
 const express = require('express');
@@ -31,7 +33,12 @@ const upload = multer({
   },
 });
 
-// All user routes require authentication
+// ── Public Routes (no auth required) ─────────────────────────
+// Leaderboard is public so the card renders for everyone,
+// including logged-out visitors (no PII exposed — only first name + last initial).
+router.get('/leaderboard', userController.getLeaderboard);
+
+// All remaining user routes require authentication
 router.use(isAuth);
 
 // ── User Routes ───────────────────────────────────────────────
@@ -49,5 +56,10 @@ router.post('/become_contributor', userController.becomeContributor);
 
 // Admin only: list all users
 router.get('/', requireRole('admin'), userController.getAllUsers);
+
+// ── DSA Progress (Private) ────────────────────────────────────
+// Save the current user's DSA solved count to MongoDB.
+// Called from the frontend on every problem toggle.
+router.put('/dsa-progress', userController.updateDsaProgress);
 
 module.exports = router;
