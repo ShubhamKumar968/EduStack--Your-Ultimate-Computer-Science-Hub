@@ -74,33 +74,8 @@ store.on('error', function(error) {
 // ============================================================
 // ⚙️ GLOBAL MIDDLEWARES
 // ============================================================
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: [
-        "'self'",
-        "'unsafe-inline'",           // Required for inline scripts in HTML pages
-        'https://cdnjs.cloudflare.com',
-        'https://checkout.razorpay.com',
-        'https://cdn.jsdelivr.net',
-        'https://fonts.googleapis.com',
-      ],
-      styleSrc: [
-        "'self'",
-        "'unsafe-inline'",           // Required for Tailwind/inline styles
-        'https://cdnjs.cloudflare.com',
-        'https://fonts.googleapis.com',
-      ],
-      fontSrc:  ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
-      imgSrc:   ["'self'", 'data:', 'https:', 'blob:'],
-      connectSrc: ["'self'", 'https://docs.google.com', 'https://api.razorpay.com'],
-      frameSrc:  ["'none'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: IS_PRODUCTION ? [] : null,
-    }
-  }
-}));
+app.use(helmet({ contentSecurityPolicy: false })); // Flexible for local asset & CDN loading, inline onclick handlers, and third-party APIs
+
 
 // ── Rate Limiters ─────────────────────────────────────────────
 // Auth endpoints: 5 requests per 15 minutes per IP (brute-force protection)
