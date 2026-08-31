@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,8 @@
   <!-- Google Fonts: Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
   <!-- Production Compiled Tailwind CSS -->
   <link rel="stylesheet" href="/assets/css/output.css">
   <script src="/assets/js/partials.js" defer></script>
@@ -19,27 +21,33 @@
     body {
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
     }
+
     .glow-card {
       box-shadow: 0 10px 40px -10px rgba(255, 56, 92, 0.1), 0 0 30px -5px rgba(168, 85, 247, 0.1);
     }
+
     .filter-btn.active {
       background: linear-gradient(135deg, #ff385c, #e11d48) !important;
       color: #ffffff !important;
       border-color: transparent !important;
       box-shadow: 0 4px 15px rgba(255, 56, 92, 0.35);
     }
+
     .custom-scrollbar::-webkit-scrollbar {
       height: 6px;
       width: 6px;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: rgba(255, 56, 92, 0.3);
       border-radius: 10px;
     }
+
     /* Overlapping Company Logos & Badges (Light/Dark Mode Adaptive) */
     .company-logo-img {
       display: inline-block;
-      width: 1.375rem; /* 22px */
+      width: 1.375rem;
+      /* 22px */
       height: 1.375rem;
       border-radius: 9999px;
       object-fit: cover;
@@ -49,6 +57,7 @@
       flex-shrink: 0;
       transition: transform 0.15s ease;
     }
+
     .dark .company-logo-img {
       box-shadow: 0 0 0 2px #181818;
       background-color: #242432;
@@ -69,6 +78,7 @@
       margin-left: -6px;
       transition: transform 0.15s ease;
     }
+
     .dark .company-avatar-fallback {
       box-shadow: 0 0 0 2px #181818;
     }
@@ -85,14 +95,17 @@
       flex-shrink: 0;
       margin-left: -6px;
       box-shadow: 0 0 0 2px #ffffff;
-      background-color: #0f172a; /* Slate 900 in light mode: high contrast white text */
+      background-color: #0f172a;
+      /* Slate 900 in light mode: high contrast white text */
       color: #ffffff;
       transition: transform 0.15s ease;
       cursor: default;
     }
+
     .dark .company-extra-count {
       box-shadow: 0 0 0 2px #181818;
-      background-color: #334155; /* Slate 700 in dark mode */
+      background-color: #334155;
+      /* Slate 700 in dark mode */
       color: #ffffff;
     }
 
@@ -108,9 +121,17 @@
       animation: popoverFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
       transform-origin: top;
     }
+
     @keyframes popoverFadeIn {
-      from { opacity: 0; transform: scale(0.96) translateY(-6px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
     }
 
     /* Custom Checkbox Design */
@@ -130,13 +151,16 @@
       transition: all 0.15s ease;
       flex-shrink: 0;
     }
+
     .dark .custom-checkbox {
       border-color: #4b5563;
     }
+
     .custom-checkbox:checked {
       background-color: #ff385c;
       border-color: #ff385c;
     }
+
     .custom-checkbox:checked::after {
       content: '✓';
       color: #ffffff;
@@ -151,24 +175,40 @@
       background: linear-gradient(135deg, rgba(255, 56, 92, 0.08) 0%, rgba(139, 92, 246, 0.08) 50%, rgba(6, 182, 212, 0.08) 100%);
       box-shadow: 0 10px 30px -10px rgba(255, 56, 92, 0.18), 0 0 20px -5px rgba(139, 92, 246, 0.18);
     }
+
     .dark .potd-card-glow {
       background: linear-gradient(135deg, rgba(255, 56, 92, 0.12) 0%, rgba(139, 92, 246, 0.12) 50%, rgba(6, 182, 212, 0.08) 100%);
     }
 
     /* 3D Badge & Coin Animation */
     @keyframes coinSpin {
-      0% { transform: rotateY(0deg) scale(1); }
-      50% { transform: rotateY(180deg) scale(1.1); }
-      100% { transform: rotateY(360deg) scale(1); }
+      0% {
+        transform: rotateY(0deg) scale(1);
+      }
+
+      50% {
+        transform: rotateY(180deg) scale(1.1);
+      }
+
+      100% {
+        transform: rotateY(360deg) scale(1);
+      }
     }
+
     .animate-coin {
       animation: coinSpin 3s infinite ease-in-out;
     }
 
     @keyframes shineSweep {
-      0% { transform: translateX(-100%) rotate(45deg); }
-      100% { transform: translateX(200%) rotate(45deg); }
+      0% {
+        transform: translateX(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(200%) rotate(45deg);
+      }
     }
+
     .shine-sweep::after {
       content: '';
       position: absolute;
@@ -176,7 +216,7 @@
       left: -50%;
       width: 200%;
       height: 200%;
-      background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%);
+      background: linear-gradient(60deg, transparent 30%, rgba(255, 255, 255, 0.4) 50%, transparent 70%);
       animation: shineSweep 4s infinite linear;
     }
 
@@ -188,24 +228,27 @@
       color: #0f172a;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     .dark .edustack-badge-card {
       background: linear-gradient(145deg, #1b1928 0%, #151320 60%, #0f0e18 100%) !important;
       border: 1.5px solid rgba(245, 158, 11, 0.35) !important;
       box-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.7) !important;
       color: #ffffff !important;
     }
+
     .edustack-badge-card:hover {
       transform: translateY(-4px);
       border-color: rgba(245, 158, 11, 0.8) !important;
       box-shadow: 0 15px 30px -5px rgba(245, 158, 11, 0.25) !important;
     }
-    
+
     .edustack-badge-title {
       color: #0f172a;
       font-size: 15px;
       font-weight: 900;
       letter-spacing: -0.01em;
     }
+
     .dark .edustack-badge-title {
       color: #ffffff !important;
     }
@@ -215,6 +258,7 @@
       font-size: 12px;
       font-weight: 800;
     }
+
     .dark .edustack-badge-streak-text {
       color: #fbbf24 !important;
     }
@@ -225,6 +269,7 @@
       font-weight: 600;
       line-height: 1.5;
     }
+
     .dark .edustack-badge-desc {
       color: #cbd5e1 !important;
     }
@@ -233,6 +278,7 @@
       background: linear-gradient(180deg, rgba(245, 158, 11, 0.15) 0%, rgba(245, 158, 11, 0.05) 100%);
       border: 1.5px solid rgba(245, 158, 11, 0.35);
     }
+
     .dark .edustack-badge-pedestal {
       background: linear-gradient(180deg, rgba(245, 158, 11, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%) !important;
       border: 1.5px solid rgba(245, 158, 11, 0.4) !important;
@@ -241,15 +287,17 @@
     .edustack-badge-footer {
       border-top: 1px solid rgba(245, 158, 11, 0.2);
     }
+
     .dark .edustack-badge-footer {
       border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
     }
-    
+
     .edustack-badge-footer-label {
       color: #334155;
       font-size: 10px;
       font-weight: 800;
     }
+
     .dark .edustack-badge-footer-label {
       color: #cbd5e1 !important;
     }
@@ -262,6 +310,7 @@
       margin-top: auto;
       width: 100%;
     }
+
     .dark .edustack-footer {
       background: #12111d !important;
       border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
@@ -269,7 +318,9 @@
     }
   </style>
 </head>
-<body class="bg-white dark:bg-[#181818] text-[#222222] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+
+<body
+  class="bg-white dark:bg-[#181818] text-[#222222] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
 
   <!-- Nav Placeholder injected by partials.js -->
   <div id="nav-placeholder"></div>
@@ -280,29 +331,47 @@
     <!-- HEADER HERO BANNER -->
     <div class="text-center max-w-3xl mx-auto mb-8">
       <div class="flex items-center justify-center gap-3 flex-wrap mb-3">
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-black uppercase tracking-wider shadow-sm">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-brand/10 border border-brand/20 text-brand text-xs font-black uppercase tracking-wider shadow-sm">
           <i class="fa-solid fa-crown text-amber-500"></i> EduStack SDE Practice Intelligence
         </div>
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-600 dark:text-amber-300 text-xs font-black shadow-sm">
+        <div
+          class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-600 dark:text-amber-300 text-xs font-black shadow-sm">
           <!-- EduStack Coin Logo -->
-          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 2px 4px rgba(245,158,11,0.5))">
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 100 100" fill="none"
+            style="filter:drop-shadow(0 2px 4px rgba(245,158,11,0.5))">
             <defs>
-              <linearGradient id="hdrCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="35%" stop-color="#fef08a"/><stop offset="70%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-              <radialGradient id="hdrCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="60%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></radialGradient>
+              <linearGradient id="hdrCoinG" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#fffbeb" />
+                <stop offset="35%" stop-color="#fef08a" />
+                <stop offset="70%" stop-color="#f59e0b" />
+                <stop offset="100%" stop-color="#b45309" />
+              </linearGradient>
+              <radialGradient id="hdrCoinC" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#fef9c3" />
+                <stop offset="60%" stop-color="#fbbf24" />
+                <stop offset="100%" stop-color="#d97706" />
+              </radialGradient>
             </defs>
-            <circle cx="50" cy="50" r="46" fill="url(#hdrCoinG)" stroke="#78350f" stroke-width="2"/>
-            <circle cx="50" cy="50" r="38" fill="url(#hdrCoinC)" stroke="#fef08a" stroke-width="1.5"/>
-            <polygon points="50,25 55,39 70,39 58,49 62,64 50,54 38,64 42,49 30,39 45,39" fill="#ffffff" opacity="0.95" stroke="#92400e" stroke-width="1.2"/>
-            <text x="50" y="80" text-anchor="middle" font-size="9" font-weight="900" fill="#78350f" letter-spacing="0.5">EDU</text>
+            <circle cx="50" cy="50" r="46" fill="url(#hdrCoinG)" stroke="#78350f" stroke-width="2" />
+            <circle cx="50" cy="50" r="38" fill="url(#hdrCoinC)" stroke="#fef08a" stroke-width="1.5" />
+            <polygon points="50,25 55,39 70,39 58,49 62,64 50,54 38,64 42,49 30,39 45,39" fill="#ffffff" opacity="0.95"
+              stroke="#92400e" stroke-width="1.2" />
+            <text x="50" y="80" text-anchor="middle" font-size="9" font-weight="900" fill="#78350f"
+              letter-spacing="0.5">EDU</text>
           </svg>
-          <span><strong id="userPointsHeaderVal" class="text-sm font-black text-amber-600 dark:text-amber-300">0</strong> EduStack Coins</span>
+          <span><strong id="userPointsHeaderVal"
+              class="text-sm font-black text-amber-600 dark:text-amber-300">0</strong> EduStack Coins</span>
         </div>
       </div>
       <h1 class="text-3xl md:text-5xl font-black tracking-tight text-gray-900 dark:text-white">
-        Ultimate SDE <span class="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 dark:from-purple-300 dark:via-pink-400 dark:to-indigo-300 bg-clip-text text-transparent font-black">DSA Practice Sheet</span>
+        Ultimate SDE <span
+          class="bg-gradient-to-r from-purple-700 via-pink-600 to-indigo-700 dark:from-purple-300 dark:via-pink-400 dark:to-indigo-300 bg-clip-text text-transparent font-black">DSA
+          Practice Sheet</span>
       </h1>
       <p class="mt-3 text-sm md:text-base text-gray-500 dark:text-gray-400 font-semibold leading-relaxed">
-        Track your interview preparation live with interactive topic filters, problem solutions, hints, and direct links for LeetCode & GeeksforGeeks.
+        Track your interview preparation live with interactive topic filters, problem solutions, hints, and direct links
+        for LeetCode & GeeksforGeeks.
       </p>
     </div>
 
@@ -313,25 +382,37 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
 
         <!-- CARD 1: PROGRESS & ANALYTICS -->
-        <div class="bg-gradient-to-br from-white via-gray-50 to-amber-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-amber-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+        <div
+          class="bg-gradient-to-br from-white via-gray-50 to-amber-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-amber-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between gap-2 mb-2">
               <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 text-white flex items-center justify-center text-xs font-black shadow-md shadow-amber-500/30">
+                <span
+                  class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-rose-500 text-white flex items-center justify-center text-xs font-black shadow-md shadow-amber-500/30">
                   <i class="fa-solid fa-rocket"></i>
                 </span>
                 <h2 class="text-base font-black text-rose-600 dark:text-rose-400">EduStack SDE 450+</h2>
               </div>
-              <div class="px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-600 dark:text-amber-300 text-[11px] font-black flex items-center gap-1.5 shadow-sm">
+              <div
+                class="px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-600 dark:text-amber-300 text-[11px] font-black flex items-center gap-1.5 shadow-sm">
                 <!-- EduStack Coin inline -->
-                <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
+                <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none"
+                  style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
                   <defs>
-                    <linearGradient id="crdCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-                    <radialGradient id="crdCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient>
+                    <linearGradient id="crdCoinG" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fffbeb" />
+                      <stop offset="40%" stop-color="#fef08a" />
+                      <stop offset="100%" stop-color="#b45309" />
+                    </linearGradient>
+                    <radialGradient id="crdCoinC" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#fef9c3" />
+                      <stop offset="70%" stop-color="#f59e0b" />
+                    </radialGradient>
                   </defs>
-                  <circle cx="50" cy="50" r="46" fill="url(#crdCoinG)" stroke="#78350f" stroke-width="2"/>
-                  <circle cx="50" cy="50" r="36" fill="url(#crdCoinC)"/>
-                  <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+                  <circle cx="50" cy="50" r="46" fill="url(#crdCoinG)" stroke="#78350f" stroke-width="2" />
+                  <circle cx="50" cy="50" r="36" fill="url(#crdCoinC)" />
+                  <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff"
+                    opacity="0.9" stroke="#92400e" stroke-width="1" />
                 </svg>
                 <span id="cardCoinsCounter">0</span>
               </div>
@@ -341,7 +422,8 @@
             </p>
           </div>
 
-          <div class="flex items-center justify-between bg-white/60 dark:bg-[#12111c]/90 border border-gray-200/80 dark:border-[#262438] rounded-2xl p-3 mb-3 backdrop-blur-md">
+          <div
+            class="flex items-center justify-between bg-white/60 dark:bg-[#12111c]/90 border border-gray-200/80 dark:border-[#262438] rounded-2xl p-3 mb-3 backdrop-blur-md">
             <!-- Easy/Med/Hard Breakdown -->
             <div class="space-y-1 text-[11px] font-bold">
               <div class="flex items-center justify-between gap-3">
@@ -361,8 +443,11 @@
             <!-- SVG Radial Gauge -->
             <div class="relative w-16 h-16 flex items-center justify-center">
               <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path class="text-gray-200 dark:text-[#252336]" stroke-width="3.5" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path id="radialCircle" class="text-amber-500 transition-all duration-500" stroke-dasharray="0, 100" stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path class="text-gray-200 dark:text-[#252336]" stroke-width="3.5" stroke="currentColor" fill="none"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="radialCircle" class="text-amber-500 transition-all duration-500" stroke-dasharray="0, 100"
+                  stroke-width="3.5" stroke-linecap="round" stroke="currentColor" fill="none"
+                  d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
                 <span id="radialSolvedText" class="text-xs font-black text-amber-500 dark:text-amber-400">0</span>
@@ -372,24 +457,28 @@
           </div>
 
           <div class="flex items-center justify-between pt-1">
-            <button onclick="pickRandomProblem()" class="text-xs bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-extrabold px-3.5 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 border-0 cursor-pointer transition-all hover:scale-105 active:scale-95">
+            <button onclick="pickRandomProblem()"
+              class="text-xs bg-gradient-to-r from-amber-500 to-rose-500 hover:from-amber-600 hover:to-rose-600 text-white font-extrabold px-3.5 py-1.5 rounded-xl shadow-md flex items-center gap-1.5 border-0 cursor-pointer transition-all hover:scale-105 active:scale-95">
               <i class="fa-solid fa-dice text-xs"></i> Pick Random
             </button>
-            <button onclick="resetProgress()" class="text-[10px] text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold underline bg-transparent border-0 cursor-pointer">
+            <button onclick="resetProgress()"
+              class="text-[10px] text-rose-500 hover:text-rose-600 dark:hover:text-rose-400 font-bold underline bg-transparent border-0 cursor-pointer">
               Reset Progress
             </button>
           </div>
         </div>
 
         <!-- CARD 2: STREAK ACTIVITY CALENDAR (COMPACT) -->
-        <div class="bg-gradient-to-br from-white via-gray-50 to-purple-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-purple-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+        <div
+          class="bg-gradient-to-br from-white via-gray-50 to-purple-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-purple-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xs font-black text-purple-800 dark:text-purple-300 flex items-center gap-1.5">
                 <i class="fa-solid fa-calendar-days text-purple-600 dark:text-purple-400"></i> Activity Calendar
               </h3>
               <div class="flex items-center gap-2">
-                <button onclick="openBadgesShowcaseModal()" title="View Consistency Streak Badges" class="text-[9px] bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-300 font-black px-2 py-0.5 rounded-full border border-purple-500/30 flex items-center gap-1 cursor-pointer transition-all">
+                <button onclick="openBadgesShowcaseModal()" title="View Consistency Streak Badges"
+                  class="text-[9px] bg-purple-500/15 hover:bg-purple-500/25 text-purple-600 dark:text-purple-300 font-black px-2 py-0.5 rounded-full border border-purple-500/30 flex items-center gap-1 cursor-pointer transition-all">
                   <i class="fa-solid fa-award text-amber-500"></i> Badges
                 </button>
                 <span id="calCountdown" class="text-[10px] font-black text-brand tabular-nums">--:--:-- left</span>
@@ -397,11 +486,13 @@
             </div>
 
             <div class="flex items-center justify-between mb-2">
-              <button id="calPrevBtn" onclick="calChangeMonth(-1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
+              <button id="calPrevBtn" onclick="calChangeMonth(-1)"
+                class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
                 <i class="fa-solid fa-chevron-left text-[8px]"></i>
               </button>
               <span id="calMonthLabel" class="text-[11px] font-black text-purple-900 dark:text-purple-200"></span>
-              <button id="calNextBtn" onclick="calChangeMonth(1)" class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
+              <button id="calNextBtn" onclick="calChangeMonth(1)"
+                class="w-5 h-5 rounded bg-purple-50 dark:bg-[#252336] flex items-center justify-center text-purple-600 dark:text-purple-300 hover:text-brand cursor-pointer border border-purple-200 dark:border-purple-800/40">
                 <i class="fa-solid fa-chevron-right text-[8px]"></i>
               </button>
             </div>
@@ -413,14 +504,17 @@
           </div>
 
           <div class="grid grid-cols-2 gap-2 mt-2 pt-2 border-t border-purple-100 dark:border-purple-900/30">
-            <div class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
+            <div
+              class="bg-gradient-to-r from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
               <span class="text-xs">🔥</span>
               <div>
                 <div class="text-[7px] font-extrabold text-amber-600 dark:text-amber-400 uppercase">Current</div>
-                <div id="currentStreakVal" class="text-[10px] font-black text-amber-600 dark:text-amber-300">0 days</div>
+                <div id="currentStreakVal" class="text-[10px] font-black text-amber-600 dark:text-amber-300">0 days
+                </div>
               </div>
             </div>
-            <div class="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
+            <div
+              class="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/20 rounded-xl p-1.5 flex items-center gap-1.5">
               <span class="text-xs">🏆</span>
               <div>
                 <div class="text-[7px] font-extrabold text-purple-600 dark:text-purple-400 uppercase">Best</div>
@@ -432,12 +526,17 @@
           <!-- LeetCode-Style Earned Badges Row -->
           <div class="mt-2 pt-2 border-t border-purple-100 dark:border-purple-900/30">
             <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1">
+              <span
+                class="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1">
                 <i class="fa-solid fa-award text-amber-500"></i> Badges
               </span>
               <div class="flex items-center gap-1.5">
-                <span id="miniUnlockedCount" class="text-[9px] font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/30">0 / 12</span>
-                <button onclick="openBadgesShowcaseModal()" class="text-[8px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer">See all →</button>
+                <span id="miniUnlockedCount"
+                  class="text-[9px] font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/30">0
+                  / 12</span>
+                <button onclick="openBadgesShowcaseModal()"
+                  class="text-[8px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer">See
+                  all →</button>
               </div>
             </div>
             <!-- Scrollable Badge Hexagons (LeetCode Style) -->
@@ -445,20 +544,24 @@
               <div class="flex-shrink-0 text-[10px] text-gray-400 font-semibold italic">Solve daily to earn badges</div>
             </div>
             <!-- Most Recent Badge Label -->
-            <div id="mostRecentBadgeLabel" class="hidden mt-1.5 text-[9px] text-gray-500 dark:text-gray-400 font-semibold">
+            <div id="mostRecentBadgeLabel"
+              class="hidden mt-1.5 text-[9px] text-gray-500 dark:text-gray-400 font-semibold">
               Most Recent: <span id="mostRecentBadgeName" class="text-brand font-black">—</span>
             </div>
           </div>
         </div>
 
         <!-- CARD 3: LEADERBOARD & SHEET SYNC -->
-        <div class="bg-gradient-to-br from-white via-gray-50 to-indigo-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-indigo-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
+        <div
+          class="bg-gradient-to-br from-white via-gray-50 to-indigo-50/20 dark:from-[#1b192b] dark:via-[#151424] dark:to-[#12111d] border border-indigo-500/20 dark:border-purple-500/30 rounded-3xl p-5 shadow-2xl glow-card flex flex-col justify-between">
           <div>
             <div class="flex items-center justify-between mb-2">
               <h3 class="text-xs font-black text-amber-600 dark:text-amber-400 flex items-center gap-1.5">
                 <i class="fa-solid fa-ranking-star text-amber-500"></i> Leaderboard
               </h3>
-              <span class="text-[8px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">This Month</span>
+              <span
+                class="text-[8px] font-black bg-gradient-to-r from-amber-500 to-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">This
+                Month</span>
             </div>
 
             <div id="leaderboardList" class="space-y-1.5 max-h-[150px] overflow-y-auto custom-scrollbar">
@@ -475,7 +578,8 @@
               <i class="fa-solid fa-rotate animate-spin text-emerald-500"></i>
               <span id="sheetSyncStatus" class="text-emerald-500 dark:text-emerald-400 font-black">Sync Active</span>
             </div>
-            <button onclick="forceSyncSheet()" class="text-[9px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer flex items-center gap-1">
+            <button onclick="forceSyncSheet()"
+              class="text-[9px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer flex items-center gap-1">
               <i class="fa-solid fa-arrows-rotate"></i> Refresh
             </button>
           </div>
@@ -483,38 +587,54 @@
       </div>
 
       <!-- PROBLEM OF THE DAY (POTD) HERO CARD -->
-      <div id="potdCard" class="potd-card-glow border border-amber-500/30 dark:border-purple-500/40 rounded-3xl p-5 md:p-6 shadow-2xl backdrop-blur-md mb-8 transition-all">
+      <div id="potdCard"
+        class="potd-card-glow border border-amber-500/30 dark:border-purple-500/40 rounded-3xl p-5 md:p-6 shadow-2xl backdrop-blur-md mb-8 transition-all">
         <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-5">
           <div class="flex items-start gap-4">
-            <div class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center text-xl md:text-2xl shadow-lg shadow-amber-500/30 flex-shrink-0 animate-pulse">
+            <div
+              class="w-12 h-12 md:w-14 md:h-14 rounded-2xl bg-gradient-to-tr from-amber-500 via-rose-500 to-purple-600 text-white flex items-center justify-center text-xl md:text-2xl shadow-lg shadow-amber-500/30 flex-shrink-0 animate-pulse">
               <i class="fa-solid fa-fire"></i>
             </div>
             <div>
               <div class="flex items-center gap-2 flex-wrap mb-1.5">
-                <span class="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
+                <span
+                  class="bg-gradient-to-r from-amber-500 via-rose-500 to-purple-600 text-white text-[10px] font-black px-3 py-0.5 rounded-full uppercase tracking-wider shadow-sm flex items-center gap-1">
                   <i class="fa-solid fa-star text-[9px]"></i> Problem of the Day
                 </span>
                 <span id="potdDateBadge" class="text-xs font-bold text-gray-500 dark:text-gray-400"></span>
-                <span class="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span
+                  class="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
                   <!-- EduStack Coin -->
-                  <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
+                  <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none"
+                    style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
                     <defs>
-                      <linearGradient id="potdCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
-                      <radialGradient id="potdCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient>
+                      <linearGradient id="potdCoinG" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#fffbeb" />
+                        <stop offset="40%" stop-color="#fef08a" />
+                        <stop offset="100%" stop-color="#b45309" />
+                      </linearGradient>
+                      <radialGradient id="potdCoinC" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="#fef9c3" />
+                        <stop offset="70%" stop-color="#f59e0b" />
+                      </radialGradient>
                     </defs>
-                    <circle cx="50" cy="50" r="46" fill="url(#potdCoinG)" stroke="#78350f" stroke-width="2"/>
-                    <circle cx="50" cy="50" r="36" fill="url(#potdCoinC)"/>
-                    <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+                    <circle cx="50" cy="50" r="46" fill="url(#potdCoinG)" stroke="#78350f" stroke-width="2" />
+                    <circle cx="50" cy="50" r="36" fill="url(#potdCoinC)" />
+                    <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff"
+                      opacity="0.9" stroke="#92400e" stroke-width="1" />
                   </svg>
                   +10 EduStack Coins (<span id="potdCoinsBalance">0</span> Total)
                 </span>
               </div>
-              <h3 id="potdTitle" class="text-base md:text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
+              <h3 id="potdTitle"
+                class="text-base md:text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
                 Two Sum
               </h3>
               <div class="flex items-center gap-2.5 mt-2 flex-wrap">
-                <span id="potdCategory" class="bg-purple-500/10 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-lg">Arrays</span>
-                <span id="potdDiff" class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">Easy</span>
+                <span id="potdCategory"
+                  class="bg-purple-500/10 text-purple-600 dark:text-purple-300 border border-purple-500/30 text-[10px] font-black px-2.5 py-0.5 rounded-lg">Arrays</span>
+                <span id="potdDiff"
+                  class="text-[10px] font-black px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">Easy</span>
                 <div id="potdCompanyLogos" class="flex items-center -space-x-1.5"></div>
               </div>
             </div>
@@ -522,14 +642,26 @@
 
           <!-- POTD Actions -->
           <div class="flex items-center gap-3 w-full lg:w-auto justify-end flex-wrap">
-            <button id="potdSolveBtn" onclick="openPotdProblem()" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white font-black text-xs transition-all cursor-pointer flex items-center gap-2 shadow-md shadow-purple-500/25 active:scale-95 border-0">
+            <button id="potdSolveBtn" onclick="openPotdProblem()"
+              class="px-5 py-3 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:brightness-110 text-white font-black text-xs transition-all cursor-pointer flex items-center gap-2 shadow-md shadow-purple-500/25 active:scale-95 border-0">
               <i class="fa-solid fa-code"></i> Solve Challenge
             </button>
-            <button id="potdClaimBtn" onclick="claimPotdPoints()" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-brand hover:brightness-110 text-white font-black text-xs transition-all cursor-pointer flex items-center gap-2 shadow-md shadow-rose-500/25 active:scale-95 border-0">
+            <button id="potdClaimBtn" onclick="claimPotdPoints()"
+              class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-brand hover:brightness-110 text-white font-black text-xs transition-all cursor-pointer flex items-center gap-2 shadow-md shadow-rose-500/25 active:scale-95 border-0">
               <i class="fa-solid fa-circle-check"></i>
               <span id="potdClaimText">Mark Solved</span>
               <span class="flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded-full">
-                <svg class="w-3 h-3" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="clmCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#clmCG)"/><polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9"/></svg>
+                <svg class="w-3 h-3" viewBox="0 0 100 100" fill="none">
+                  <defs>
+                    <linearGradient id="clmCG" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#fffbeb" />
+                      <stop offset="100%" stop-color="#f59e0b" />
+                    </linearGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="46" fill="url(#clmCG)" />
+                  <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff"
+                    opacity="0.9" />
+                </svg>
                 +10
               </span>
             </button>
@@ -538,37 +670,46 @@
       </div>
 
       <!-- CONSISTENCY MILESTONE BADGES SHOWCASE (EDUSTACK THEMED) -->
-      <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-7 shadow-xl glow-card relative overflow-hidden mb-8 transition-all">
+      <div
+        class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 sm:p-7 shadow-xl glow-card relative overflow-hidden mb-8 transition-all">
         <!-- Top Accent Strip -->
         <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-brand via-rose-500 to-amber-500"></div>
 
         <!-- Header Row -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-gray-800/80">
+        <div
+          class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-100 dark:border-gray-800/80">
           <div>
             <div class="flex items-center gap-2.5 flex-wrap">
-              <span class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-brand text-white flex items-center justify-center text-sm font-black shadow-md shadow-brand/20">
+              <span
+                class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500 to-brand text-white flex items-center justify-center text-sm font-black shadow-md shadow-brand/20">
                 <i class="fa-solid fa-award"></i>
               </span>
               <h2 class="text-xl font-black text-gray-900 dark:text-white">Consistency Milestone Badges</h2>
-              <span class="px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand text-[10px] font-black uppercase tracking-wider">EduStack Edition</span>
+              <span
+                class="px-3 py-1 rounded-full bg-brand/10 border border-brand/20 text-brand text-[10px] font-black uppercase tracking-wider">EduStack
+                Edition</span>
             </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold mt-1">Solve daily problems to build your streak and automatically earn official 3D milestone badges on your profile!</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold mt-1">Solve daily problems to build your
+              streak and automatically earn official 3D milestone badges on your profile!</p>
           </div>
-          
+
           <div class="flex items-center gap-2.5">
             <div class="px-3.5 py-1.5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-center">
               <div class="text-[9px] font-black uppercase text-amber-600 dark:text-amber-400">Current Streak</div>
-              <div id="badgeSectionStreakVal" class="text-xs sm:text-sm font-black text-amber-600 dark:text-amber-300 mt-0.5">0 Days 🔥</div>
+              <div id="badgeSectionStreakVal"
+                class="text-xs sm:text-sm font-black text-amber-600 dark:text-amber-300 mt-0.5">0 Days 🔥</div>
             </div>
             <div class="px-3.5 py-1.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center">
               <div class="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400">Unlocked</div>
-              <div id="badgeSectionCountVal" class="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-300 mt-0.5">0 / 12 🎖️</div>
+              <div id="badgeSectionCountVal"
+                class="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-300 mt-0.5">0 / 12 🎖️</div>
             </div>
           </div>
         </div>
 
         <!-- LEETCODE-STYLE USER OBTAINED BADGES PANEL (SEPARATE SHOWCASE) -->
-        <div id="userObtainedBadgesPanel" class="my-4 p-4 rounded-2xl bg-gradient-to-r from-gray-900/90 via-[#191828] to-[#12111d] border border-amber-500/30 shadow-lg text-white">
+        <div id="userObtainedBadgesPanel"
+          class="my-4 p-4 rounded-2xl bg-gradient-to-r from-gray-900/90 via-[#191828] to-[#12111d] border border-amber-500/30 shadow-lg text-white">
           <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div class="flex items-center gap-4">
               <!-- Left: Badge Count -->
@@ -582,12 +723,14 @@
 
               <!-- Center: Hexagonal / 3D Unlocked Badges Icons Preview -->
               <div id="obtainedBadgesRow" class="flex items-center gap-3 overflow-x-auto custom-scrollbar py-1">
-                <div class="text-xs text-gray-400 font-medium italic">No badges unlocked yet. Solve daily challenges to build your streak!</div>
+                <div class="text-xs text-gray-400 font-medium italic">No badges unlocked yet. Solve daily challenges to
+                  build your streak!</div>
               </div>
             </div>
 
             <!-- Right: Most Recent Badge Info -->
-            <div id="mostRecentBadgeSection" class="hidden md:flex flex-col text-left md:text-right border-t md:border-t-0 md:border-l border-white/10 pt-2 md:pt-0 md:pl-4 min-w-[180px]">
+            <div id="mostRecentBadgeSection"
+              class="hidden md:flex flex-col text-left md:text-right border-t md:border-t-0 md:border-l border-white/10 pt-2 md:pt-0 md:pl-4 min-w-[180px]">
               <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Most Recent Badge</span>
               <span id="mostRecentBadgeTitleVal" class="text-xs font-black text-amber-400 truncate mt-0.5">—</span>
             </div>
@@ -596,13 +739,17 @@
 
         <!-- Milestone Tier Selector Tabs (EduStack Themed) -->
         <div class="flex items-center gap-2 my-4 overflow-x-auto custom-scrollbar pb-1">
-          <button onclick="switchBadgeTab(0)" id="badgeTabBtn_0" class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer shadow-md shadow-brand/20 border-0" style="background: linear-gradient(135deg, #ff385c, #e02447); color: #ffffff;">
+          <button onclick="switchBadgeTab(0)" id="badgeTabBtn_0"
+            class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer shadow-md shadow-brand/20 border-0"
+            style="background: linear-gradient(135deg, #ff385c, #e02447); color: #ffffff;">
             Slide 1: Foundation (3d - 31d)
           </button>
-          <button onclick="switchBadgeTab(1)" id="badgeTabBtn_1" class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer bg-gray-100 dark:bg-[#14141c] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-brand/40">
+          <button onclick="switchBadgeTab(1)" id="badgeTabBtn_1"
+            class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer bg-gray-100 dark:bg-[#14141c] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-brand/40">
             Slide 2: Dedication (50d - 200d)
           </button>
-          <button onclick="switchBadgeTab(2)" id="badgeTabBtn_2" class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer bg-gray-100 dark:bg-[#14141c] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-brand/40">
+          <button onclick="switchBadgeTab(2)" id="badgeTabBtn_2"
+            class="badge-tab-btn px-4 py-2 rounded-2xl text-xs font-black transition-all cursor-pointer bg-gray-100 dark:bg-[#14141c] text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:border-brand/40">
             Slide 3: Cosmos (250d - 500d)
           </button>
         </div>
@@ -615,50 +762,68 @@
 
       <!-- GOOGLE SHEET HEADINGS (ATTRACTIVE GRADIENT BANNER - NO LOGO) -->
       <div class="max-w-3xl mx-auto my-6 px-4">
-        <div style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 30%, #2563eb 70%, #7c3aed 100%); border-radius: 9999px; padding: 14px 28px; box-shadow: 0 8px 25px -4px rgba(6, 182, 212, 0.35); text-align: center; border: 1.5px solid rgba(255, 255, 255, 0.4);">
-          <span style="color: #ffffff; font-size: 20px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0,0,0,0.25); display: inline-block;">
+        <div
+          style="background: linear-gradient(135deg, #0d9488 0%, #06b6d4 30%, #2563eb 70%, #7c3aed 100%); border-radius: 9999px; padding: 14px 28px; box-shadow: 0 8px 25px -4px rgba(6, 182, 212, 0.35); text-align: center; border: 1.5px solid rgba(255, 255, 255, 0.4);">
+          <span
+            style="color: #ffffff; font-size: 20px; font-weight: 900; letter-spacing: 0.06em; text-transform: uppercase; text-shadow: 0 2px 6px rgba(0,0,0,0.25); display: inline-block;">
             DSA Sheet By Shubham Kumar
           </span>
         </div>
       </div>
 
       <!-- FILTER & SEARCH CONTROL CARD (WITH ATTRACTIVE LOGO & CHECKBOX MULTI-SELECT DROPDOWNS) -->
-      <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card space-y-5">
+      <div
+        class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card space-y-5">
         <div class="flex flex-col lg:flex-row items-center justify-between gap-4">
           <!-- Search Input -->
           <div class="relative w-full lg:w-96 flex items-center">
-            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none z-10"></i>
-            <input id="searchInput" type="text" placeholder="Search problem or topic (e.g. Two Sum)..." oninput="filterProblems()" class="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none z-10"></i>
+            <input id="searchInput" type="text" placeholder="Search problem or topic (e.g. Two Sum)..."
+              oninput="filterProblems()"
+              class="w-full pl-11 pr-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-brand">
           </div>
 
           <!-- Multi-Select Filter Controls (Company, Difficulty, Status) -->
           <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto justify-between lg:justify-end">
-            
+
             <!-- 1. COMPANY MULTI-SELECT DROPDOWN WITH ACTUAL LOGOS -->
             <div class="relative" id="companyDropdownWrapper">
-              <button id="companyDropdownBtn" type="button" onclick="toggleCompanyDropdown(event)" class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[150px]">
+              <button id="companyDropdownBtn" type="button" onclick="toggleCompanyDropdown(event)"
+                class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[150px]">
                 <div class="flex items-center gap-2 truncate">
                   <i class="fa-solid fa-building text-brand"></i>
                   <span id="companyDropdownLabel">Company</span>
                 </div>
-                <span id="companySelectedBadge" class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200" id="companyDropdownArrow"></i>
+                <span id="companySelectedBadge"
+                  class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200"
+                  id="companyDropdownArrow"></i>
               </button>
 
               <!-- Company Dropdown Panel -->
-              <div id="companyDropdownPanel" class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-72 sm:w-80 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2.5 text-xs">
+              <div id="companyDropdownPanel"
+                class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-72 sm:w-80 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2.5 text-xs">
                 <!-- Search bar inside company dropdown -->
                 <div class="relative flex items-center">
-                  <i class="fa-solid fa-magnifying-glass" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 12px; pointer-events: none; z-index: 2;"></i>
-                  <input id="companySearchInput" type="text" placeholder="Search 50+ companies..." oninput="onCompanySearchInput(this.value)" style="padding-left: 38px !important; padding-right: 12px; padding-top: 9px; padding-bottom: 9px;" class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand">
+                  <i class="fa-solid fa-magnifying-glass"
+                    style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 12px; pointer-events: none; z-index: 2;"></i>
+                  <input id="companySearchInput" type="text" placeholder="Search 50+ companies..."
+                    oninput="onCompanySearchInput(this.value)"
+                    style="padding-left: 38px !important; padding-right: 12px; padding-top: 9px; padding-bottom: 9px;"
+                    class="w-full rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-bold text-gray-900 dark:text-white focus:outline-none focus:ring-1 focus:ring-brand">
                 </div>
                 <!-- Actions (Select All, Clear) -->
-                <div class="flex items-center justify-between text-[11px] font-black pt-1 pb-1 px-1 border-b border-gray-100 dark:border-gray-800">
+                <div
+                  class="flex items-center justify-between text-[11px] font-black pt-1 pb-1 px-1 border-b border-gray-100 dark:border-gray-800">
                   <span id="companyCountSummary" class="text-gray-400 font-bold">0 selected</span>
                   <div class="flex items-center gap-2">
-                    <button type="button" onclick="selectAllCompanies()" class="text-brand hover:underline bg-transparent border-0 p-0 cursor-pointer font-bold">Select All</button>
+                    <button type="button" onclick="selectAllCompanies()"
+                      class="text-brand hover:underline bg-transparent border-0 p-0 cursor-pointer font-bold">Select
+                      All</button>
                     <span class="text-gray-300 dark:text-gray-700">|</span>
-                    <button type="button" onclick="clearCompanies()" class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
+                    <button type="button" onclick="clearCompanies()"
+                      class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
                   </div>
                 </div>
                 <!-- Scrollable List of Companies with Checkboxes + Logos -->
@@ -670,20 +835,26 @@
 
             <!-- 2. DIFFICULTY MULTI-SELECT DROPDOWN WITH CHECKBOXES -->
             <div class="relative" id="diffDropdownWrapper">
-              <button id="diffDropdownBtn" type="button" onclick="toggleDiffDropdown(event)" class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[135px]">
+              <button id="diffDropdownBtn" type="button" onclick="toggleDiffDropdown(event)"
+                class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[135px]">
                 <div class="flex items-center gap-2 truncate">
                   <i class="fa-solid fa-bolt text-amber-500"></i>
                   <span id="diffDropdownLabel">Difficulty</span>
                 </div>
-                <span id="diffSelectedBadge" class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200" id="diffDropdownArrow"></i>
+                <span id="diffSelectedBadge"
+                  class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200"
+                  id="diffDropdownArrow"></i>
               </button>
 
               <!-- Difficulty Dropdown Panel -->
-              <div id="diffDropdownPanel" class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-56 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2 text-xs">
-                <div class="flex items-center justify-between text-[11px] font-black pb-1.5 border-b border-gray-100 dark:border-gray-800">
+              <div id="diffDropdownPanel"
+                class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-56 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2 text-xs">
+                <div
+                  class="flex items-center justify-between text-[11px] font-black pb-1.5 border-b border-gray-100 dark:border-gray-800">
                   <span class="text-gray-400 font-bold">Difficulty</span>
-                  <button type="button" onclick="clearDifficulties()" class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
+                  <button type="button" onclick="clearDifficulties()"
+                    class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
                 </div>
                 <div id="diffOptionsList" class="space-y-1.5">
                   <!-- Populated by JS -->
@@ -693,20 +864,26 @@
 
             <!-- 3. STATUS MULTI-SELECT DROPDOWN WITH CHECKBOXES -->
             <div class="relative" id="statusDropdownWrapper">
-              <button id="statusDropdownBtn" type="button" onclick="toggleStatusDropdown(event)" class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[130px]">
+              <button id="statusDropdownBtn" type="button" onclick="toggleStatusDropdown(event)"
+                class="px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#14141c] text-xs font-black text-gray-700 dark:text-gray-200 hover:border-brand/50 focus:outline-none focus:ring-2 focus:ring-brand flex items-center justify-between gap-2.5 transition-all shadow-sm cursor-pointer min-w-[130px]">
                 <div class="flex items-center gap-2 truncate">
                   <i class="fa-solid fa-circle-check text-emerald-500"></i>
                   <span id="statusDropdownLabel">Status</span>
                 </div>
-                <span id="statusSelectedBadge" class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
-                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200" id="statusDropdownArrow"></i>
+                <span id="statusSelectedBadge"
+                  class="hidden text-[10px] bg-brand text-white px-1.5 py-0.5 rounded-full font-black"></span>
+                <i class="fa-solid fa-chevron-down text-[10px] text-gray-400 transition-transform duration-200"
+                  id="statusDropdownArrow"></i>
               </button>
 
               <!-- Status Dropdown Panel -->
-              <div id="statusDropdownPanel" class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-60 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2 text-xs">
-                <div class="flex items-center justify-between text-[11px] font-black pb-1.5 border-b border-gray-100 dark:border-gray-800">
+              <div id="statusDropdownPanel"
+                class="dropdown-popover hidden absolute right-0 top-[calc(100%+6px)] w-60 bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-2xl z-[9999] p-3 space-y-2 text-xs">
+                <div
+                  class="flex items-center justify-between text-[11px] font-black pb-1.5 border-b border-gray-100 dark:border-gray-800">
                   <span class="text-gray-400 font-bold">Status Filter</span>
-                  <button type="button" onclick="clearStatuses()" class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
+                  <button type="button" onclick="clearStatuses()"
+                    class="text-gray-400 hover:text-rose-500 bg-transparent border-0 p-0 cursor-pointer font-bold">Clear</button>
                 </div>
                 <div id="statusOptionsList" class="space-y-1.5">
                   <!-- Populated by JS -->
@@ -719,24 +896,30 @@
 
         <!-- Topic Filter Pills -->
         <div id="topicPillsContainer" class="flex items-center gap-2 overflow-x-auto custom-scrollbar pb-1 text-xs">
-          <button onclick="setTopic('ALL')" class="topic-pill filter-btn active px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#14141c] font-black text-gray-700 dark:text-gray-300 whitespace-nowrap cursor-pointer">All Topics</button>
+          <button onclick="setTopic('ALL')"
+            class="topic-pill filter-btn active px-4 py-2 rounded-full border border-gray-200 dark:border-gray-700 bg-gray-100 dark:bg-[#14141c] font-black text-gray-700 dark:text-gray-300 whitespace-nowrap cursor-pointer">All
+            Topics</button>
         </div>
       </div>
 
       <!-- PROBLEM TABLE CARD -->
-      <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 md:p-8 shadow-xl glow-card overflow-hidden">
+      <div
+        class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 md:p-8 shadow-xl glow-card overflow-hidden">
         <div class="flex items-center justify-between gap-4 mb-6 pb-4 border-b border-gray-100 dark:border-gray-800">
           <div>
             <h3 class="text-xl font-black text-gray-900 dark:text-white flex items-center gap-2">
               <i class="fa-solid fa-fire text-amber-500"></i> Top SDE Interview Problems
             </h3>
-            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">Check off solved problems to dynamically track your readiness.</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 font-semibold">Check off solved problems to
+              dynamically track your readiness.</p>
           </div>
           <div class="flex items-center gap-2 flex-wrap justify-end">
-            <span id="showingCountBadge" class="bg-brand/10 text-brand font-black text-xs px-3.5 py-1.5 rounded-full border border-brand/20">
+            <span id="showingCountBadge"
+              class="bg-brand/10 text-brand font-black text-xs px-3.5 py-1.5 rounded-full border border-brand/20">
               Showing 0 Problems
             </span>
-            <span id="lastSyncedBadge" class="hidden bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] px-3 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
+            <span id="lastSyncedBadge"
+              class="hidden bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold text-[10px] px-3 py-1.5 rounded-full border border-emerald-500/20 flex items-center gap-1">
               🟢 Live from Sheet
             </span>
           </div>
@@ -746,7 +929,8 @@
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse text-xs md:text-sm">
             <thead>
-              <tr class="border-b border-gray-200 dark:border-gray-800 text-gray-400 font-extrabold uppercase text-[11px] tracking-wider">
+              <tr
+                class="border-b border-gray-200 dark:border-gray-800 text-gray-400 font-extrabold uppercase text-[11px] tracking-wider">
                 <th class="py-3 px-4 text-center">Status</th>
                 <th class="py-3 px-4 text-center">#</th>
                 <th class="py-3 px-4">Questions</th>
@@ -758,7 +942,8 @@
                 <th class="py-3 px-4">Approaches (Hint / Logic)</th>
               </tr>
             </thead>
-            <tbody id="problemsTableBody" class="divide-y divide-gray-100 dark:divide-gray-800/60 font-semibold text-gray-800 dark:text-gray-200">
+            <tbody id="problemsTableBody"
+              class="divide-y divide-gray-100 dark:divide-gray-800/60 font-semibold text-gray-800 dark:text-gray-200">
               <!-- Dynamically populated via JavaScript -->
             </tbody>
           </table>
@@ -766,24 +951,31 @@
       </div>
 
       <!-- DEDICATED IMPLEMENTATION BASED DSA & ALGORITHMIC PATTERN LECTURES SECTION -->
-      <div class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card space-y-6">
+      <div
+        class="bg-white dark:bg-[#1c1c24] border border-gray-200 dark:border-gray-800 rounded-3xl p-6 shadow-xl glow-card space-y-6">
         <div class="flex items-center justify-between border-b border-gray-200 dark:border-gray-800 pb-4">
           <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-400/30 text-indigo-500 flex items-center justify-center font-black">
+            <div
+              class="w-10 h-10 rounded-2xl bg-indigo-500/10 border border-indigo-400/30 text-indigo-500 flex items-center justify-center font-black">
               <i class="fa-solid fa-chalkboard-user"></i>
             </div>
             <div>
-              <h3 class="text-lg font-black text-gray-900 dark:text-white">Implementation Based DSA & Algorithmic Pattern Lectures</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold">Core Conceptual Lectures, Pattern Modules & System Design</p>
+              <h3 class="text-lg font-black text-gray-900 dark:text-white">Implementation Based DSA & Algorithmic
+                Pattern Lectures</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 font-semibold">Core Conceptual Lectures, Pattern
+                Modules & System Design</p>
             </div>
           </div>
-          <span class="text-xs bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full font-bold">16 Essential Modules</span>
+          <span
+            class="text-xs bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded-full font-bold">16
+            Essential Modules</span>
         </div>
 
         <div class="overflow-x-auto custom-scrollbar">
           <table class="w-full text-left border-collapse min-w-[900px]">
             <thead>
-              <tr class="border-b border-gray-200 dark:border-gray-800 text-gray-400 font-extrabold uppercase text-[11px] tracking-wider">
+              <tr
+                class="border-b border-gray-200 dark:border-gray-800 text-gray-400 font-extrabold uppercase text-[11px] tracking-wider">
                 <th class="py-3 px-4 text-center">#</th>
                 <th class="py-3 px-4">Some Conceptual & Pattern Lectures</th>
                 <th class="py-3 px-4 text-center">Difficulty</th>
@@ -793,7 +985,8 @@
                 <th class="py-3 px-4">Lecture 4</th>
               </tr>
             </thead>
-            <tbody id="lectureTableBody" class="divide-y divide-gray-100 dark:divide-gray-800/60 font-semibold text-gray-800 dark:text-gray-200">
+            <tbody id="lectureTableBody"
+              class="divide-y divide-gray-100 dark:divide-gray-800/60 font-semibold text-gray-800 dark:text-gray-200">
               <!-- Dynamically populated via renderLectures() -->
             </tbody>
           </table>
@@ -804,14 +997,18 @@
   </main>
 
   <!-- SOLUTION & HINT MODAL -->
-  <div id="solutionModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4">
-    <div class="bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-purple-500/30 rounded-3xl max-w-3xl w-full p-6 md:p-8 text-gray-900 dark:text-white shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
-      <button onclick="closeModal()" class="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center justify-center border-0 cursor-pointer">
+  <div id="solutionModal"
+    class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4">
+    <div
+      class="bg-white dark:bg-[#1f1e2c] border border-gray-200 dark:border-purple-500/30 rounded-3xl max-w-3xl w-full p-6 md:p-8 text-gray-900 dark:text-white shadow-2xl relative max-h-[90vh] overflow-y-auto custom-scrollbar">
+      <button onclick="closeModal()"
+        class="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/20 text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white flex items-center justify-center border-0 cursor-pointer">
         <i class="fa-solid fa-xmark"></i>
       </button>
 
       <div class="flex items-center gap-3 mb-2">
-        <span id="modalDiff" class="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Easy</span>
+        <span id="modalDiff"
+          class="px-3 py-1 rounded-full text-xs font-black bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">Easy</span>
         <span id="modalCategory" class="text-xs text-brand font-black uppercase tracking-wider">Arrays</span>
       </div>
 
@@ -823,21 +1020,27 @@
       </div>
 
       <!-- Intuition & Complexity -->
-      <div class="bg-gray-50 dark:bg-[#14141c] border border-gray-200 dark:border-purple-500/20 rounded-2xl p-4 mb-6 space-y-2 text-xs">
+      <div
+        class="bg-gray-50 dark:bg-[#14141c] border border-gray-200 dark:border-purple-500/20 rounded-2xl p-4 mb-6 space-y-2 text-xs">
         <p id="modalIntuition" class="text-gray-600 dark:text-gray-300 leading-relaxed font-medium">
-          Use a hash map to store seen elements and their index. For each number, check if target - current exists in map.
+          Use a hash map to store seen elements and their index. For each number, check if target - current exists in
+          map.
         </p>
       </div>
 
       <!-- Code Snippet -->
       <div>
         <div class="flex items-center justify-between mb-3">
-          <span class="text-xs font-black text-brand uppercase tracking-wider"><i class="fa-solid fa-code mr-1"></i> C++ Solution Code</span>
-          <button onclick="copyCode()" class="text-xs bg-brand hover:brightness-110 text-white font-bold px-4 py-2 rounded-xl border-0 cursor-pointer flex items-center gap-1.5 shadow-md shadow-brand/20">
+          <span class="text-xs font-black text-brand uppercase tracking-wider"><i class="fa-solid fa-code mr-1"></i> C++
+            Solution Code</span>
+          <button onclick="copyCode()"
+            class="text-xs bg-brand hover:brightness-110 text-white font-bold px-4 py-2 rounded-xl border-0 cursor-pointer flex items-center gap-1.5 shadow-md shadow-brand/20">
             <i class="fa-solid fa-copy"></i> <span id="copyBtnText">Copy Code</span>
           </button>
         </div>
-        <pre class="bg-[#0f0e17] border border-gray-800 p-4 rounded-2xl text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar leading-relaxed" id="modalCode">
+        <pre
+          class="bg-[#0f0e17] border border-gray-800 p-4 rounded-2xl text-xs font-mono text-emerald-400 overflow-x-auto custom-scrollbar leading-relaxed"
+          id="modalCode">
 // Code snippet here
         </pre>
       </div>
@@ -845,107 +1048,148 @@
   </div>
 
   <!-- POTD 10-POINT CELEBRATION MODAL (LEETCODE-STYLE) -->
-  <div id="potdCelebrationModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
-    <div style="background: linear-gradient(180deg, #181622 0%, #12101a 60%, #0a0910 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.6) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 50px rgba(245, 158, 11, 0.25) !important; border-radius: 28px; max-width: 440px; width: 100%; padding: 32px 24px; text-align: center; color: #ffffff !important; position: relative; overflow: hidden; margin: auto;">
-      
+  <div id="potdCelebrationModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4"
+    style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
+    <div
+      style="background: linear-gradient(180deg, #181622 0%, #12101a 60%, #0a0910 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.6) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 50px rgba(245, 158, 11, 0.25) !important; border-radius: 28px; max-width: 440px; width: 100%; padding: 32px 24px; text-align: center; color: #ffffff !important; position: relative; overflow: hidden; margin: auto;">
+
       <!-- Particle Canvas for Confetti -->
       <canvas id="potdConfettiCanvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
-      
+
       <!-- Close Button -->
-      <button onclick="closePotdCelebrationModal()" style="position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; padding: 0; outline: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(255,255,255,0.12)'; this.style.color='#e2e8f0';">
+      <button onclick="closePotdCelebrationModal()"
+        style="position: absolute; top: 18px; right: 18px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; padding: 0; outline: none; transition: all 0.2s;"
+        onmouseover="this.style.background='rgba(255,255,255,0.25)'; this.style.color='#fff';"
+        onmouseout="this.style.background='rgba(255,255,255,0.12)'; this.style.color='#e2e8f0';">
         <i class="fa-solid fa-xmark text-sm" style="display: block; line-height: 1;"></i>
       </button>
 
       <!-- LeetCode-Style 3D Gold Coin with Radiating Glow -->
-      <div style="position: relative; width: 110px; height: 110px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
+      <div
+        style="position: relative; width: 110px; height: 110px; margin: 0 auto 16px; display: flex; align-items: center; justify-content: center;">
         <!-- Glow Aura -->
-        <div style="position: absolute; inset: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(245, 158, 11, 0) 70%); filter: blur(12px);"></div>
+        <div
+          style="position: absolute; inset: -10px; border-radius: 50%; background: radial-gradient(circle, rgba(245, 158, 11, 0.4) 0%, rgba(245, 158, 11, 0) 70%); filter: blur(12px);">
+        </div>
         <div class="absolute inset-2 rounded-full border border-amber-400/50 animate-ping opacity-70"></div>
 
         <!-- 3D Realistic Gold Coin SVG -->
-        <svg class="w-24 h-24 mx-auto animate-bounce" style="filter: drop-shadow(0 10px 20px rgba(245, 158, 11, 0.65));" viewBox="0 0 100 100" fill="none">
+        <svg class="w-24 h-24 mx-auto animate-bounce" style="filter: drop-shadow(0 10px 20px rgba(245, 158, 11, 0.65));"
+          viewBox="0 0 100 100" fill="none">
           <defs>
             <linearGradient id="lcCoinOuterG" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#fffbeb"/>
-              <stop offset="30%" stop-color="#fef08a"/>
-              <stop offset="70%" stop-color="#f59e0b"/>
-              <stop offset="100%" stop-color="#b45309"/>
+              <stop offset="0%" stop-color="#fffbeb" />
+              <stop offset="30%" stop-color="#fef08a" />
+              <stop offset="70%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#b45309" />
             </linearGradient>
             <linearGradient id="lcCoinInnerG" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stop-color="#fef08a"/>
-              <stop offset="50%" stop-color="#f59e0b"/>
-              <stop offset="100%" stop-color="#92400e"/>
+              <stop offset="0%" stop-color="#fef08a" />
+              <stop offset="50%" stop-color="#f59e0b" />
+              <stop offset="100%" stop-color="#92400e" />
             </linearGradient>
             <radialGradient id="lcCoinCenterG" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stop-color="#fef9c3"/>
-              <stop offset="60%" stop-color="#fbbf24"/>
-              <stop offset="100%" stop-color="#d97706"/>
+              <stop offset="0%" stop-color="#fef9c3" />
+              <stop offset="60%" stop-color="#fbbf24" />
+              <stop offset="100%" stop-color="#d97706" />
             </radialGradient>
           </defs>
           <!-- Outer Rim -->
-          <circle cx="50" cy="50" r="46" fill="url(#lcCoinOuterG)" stroke="#78350f" stroke-width="2"/>
+          <circle cx="50" cy="50" r="46" fill="url(#lcCoinOuterG)" stroke="#78350f" stroke-width="2" />
           <!-- Inner Ring -->
-          <circle cx="50" cy="50" r="38" fill="url(#lcCoinInnerG)" stroke="#fef08a" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="38" fill="url(#lcCoinInnerG)" stroke="#fef08a" stroke-width="1.5" />
           <!-- Recessed Center -->
-          <circle cx="50" cy="50" r="32" fill="url(#lcCoinCenterG)" stroke="#b45309" stroke-width="1.5"/>
+          <circle cx="50" cy="50" r="32" fill="url(#lcCoinCenterG)" stroke="#b45309" stroke-width="1.5" />
           <!-- Beaded Ring Dots -->
-          <circle cx="50" cy="16" r="1.8" fill="#fff"/>
-          <circle cx="84" cy="50" r="1.8" fill="#fff"/>
-          <circle cx="50" cy="84" r="1.8" fill="#fff"/>
-          <circle cx="16" cy="50" r="1.8" fill="#fff"/>
+          <circle cx="50" cy="16" r="1.8" fill="#fff" />
+          <circle cx="84" cy="50" r="1.8" fill="#fff" />
+          <circle cx="50" cy="84" r="1.8" fill="#fff" />
+          <circle cx="16" cy="50" r="1.8" fill="#fff" />
           <!-- Center Emblem: 3D Star & EduStack 'E' -->
-          <polygon points="50,25 55,39 70,39 58,49 62,64 50,54 38,64 42,49 30,39 45,39" fill="#ffffff" opacity="0.95" stroke="#92400e" stroke-width="1.2"/>
-          <text x="50" y="75" text-anchor="middle" font-size="9.5" font-weight="900" fill="#78350f" letter-spacing="1">EDUSTACK</text>
+          <polygon points="50,25 55,39 70,39 58,49 62,64 50,54 38,64 42,49 30,39 45,39" fill="#ffffff" opacity="0.95"
+            stroke="#92400e" stroke-width="1.2" />
+          <text x="50" y="75" text-anchor="middle" font-size="9.5" font-weight="900" fill="#78350f"
+            letter-spacing="1">EDUSTACK</text>
         </svg>
       </div>
 
       <!-- LeetCode Style Pill -->
-      <div style="display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 18px; border-radius: 9999px; margin-bottom: 12px;">
+      <div
+        style="display: inline-flex; align-items: center; gap: 6px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 18px; border-radius: 9999px; margin-bottom: 12px;">
         <i class="fa-solid fa-crown text-amber-400 text-xs"></i>
         <span>Daily Challenge Solved!</span>
       </div>
 
       <!-- Headline -->
-      <h2 style="font-size: 28px; font-weight: 900; color: #ffffff; margin: 0 0 8px; line-height: 1.2; letter-spacing: -0.02em;">
+      <h2
+        style="font-size: 28px; font-weight: 900; color: #ffffff; margin: 0 0 8px; line-height: 1.2; letter-spacing: -0.02em;">
         <span style="color: #fbbf24; text-shadow: 0 0 25px rgba(251, 191, 36, 0.6);">+10</span> EduStack Coins
       </h2>
 
       <!-- Subtitle -->
-      <p id="potdCelebrationProblemName" style="color: #cbd5e1; font-size: 13px; font-weight: 600; line-height: 1.6; margin: 0 0 20px; padding: 0 8px;">
+      <p id="potdCelebrationProblemName"
+        style="color: #cbd5e1; font-size: 13px; font-weight: 600; line-height: 1.6; margin: 0 0 20px; padding: 0 8px;">
         Great work! You solved today's Problem of the Day and kept your streak alive.
       </p>
 
       <!-- 3-Col Stats Bar (LeetCode Style) -->
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 14px 8px; margin-bottom: 24px; text-align: center;">
+      <div
+        style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 14px 8px; margin-bottom: 24px; text-align: center;">
         <div>
-          <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Reward</div>
-          <div id="potdModalPoints" style="color: #fbbf24; font-size: 18px; font-weight: 900; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+          <div
+            style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+            Reward</div>
+          <div id="potdModalPoints"
+            style="color: #fbbf24; font-size: 18px; font-weight: 900; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;">
             <!-- Coin SVG -->
-            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 2px 8px rgba(245,158,11,0.7)); flex-shrink:0">
-              <defs><linearGradient id="mCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient><radialGradient id="mCC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient></defs>
-              <circle cx="50" cy="50" r="46" fill="url(#mCG)" stroke="#78350f" stroke-width="2"/>
-              <circle cx="50" cy="50" r="36" fill="url(#mCC)"/>
-              <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+            <svg width="20" height="20" viewBox="0 0 100 100" fill="none"
+              style="filter:drop-shadow(0 2px 8px rgba(245,158,11,0.7)); flex-shrink:0">
+              <defs>
+                <linearGradient id="mCG" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#fffbeb" />
+                  <stop offset="40%" stop-color="#fef08a" />
+                  <stop offset="100%" stop-color="#b45309" />
+                </linearGradient>
+                <radialGradient id="mCC" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#fef9c3" />
+                  <stop offset="70%" stop-color="#f59e0b" />
+                </radialGradient>
+              </defs>
+              <circle cx="50" cy="50" r="46" fill="url(#mCG)" stroke="#78350f" stroke-width="2" />
+              <circle cx="50" cy="50" r="36" fill="url(#mCC)" />
+              <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9"
+                stroke="#92400e" stroke-width="1" />
             </svg>
             +10
           </div>
         </div>
         <div style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
-          <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Total Coins</div>
-          <div id="potdModalTotalPoints" style="color: #ffffff; font-size: 18px; font-weight: 900; margin-top: 2px;">10</div>
+          <div
+            style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+            Total Coins</div>
+          <div id="potdModalTotalPoints" style="color: #ffffff; font-size: 18px; font-weight: 900; margin-top: 2px;">10
+          </div>
         </div>
         <div>
-          <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Streak</div>
-          <div id="potdModalStreak" style="color: #fb7185; font-size: 18px; font-weight: 900; margin-top: 2px;">1 Day 🔥</div>
+          <div
+            style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">
+            Streak</div>
+          <div id="potdModalStreak" style="color: #fb7185; font-size: 18px; font-weight: 900; margin-top: 2px;">1 Day 🔥
+          </div>
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div style="display: flex; align-items: center; gap: 12px;">
-        <button onclick="closePotdCelebrationModal(); openPotdProblem();" style="flex: 1; padding: 13px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; font-weight: 800; font-size: 12px; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.08)';">
+        <button onclick="closePotdCelebrationModal(); openPotdProblem();"
+          style="flex: 1; padding: 13px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; font-weight: 800; font-size: 12px; cursor: pointer; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(255,255,255,0.15)';"
+          onmouseout="this.style.background='rgba(255,255,255,0.08)';">
           <i class="fa-solid fa-lightbulb" style="color: #fbbf24; margin-right: 6px;"></i> Solution Code
         </button>
-        <button onclick="closePotdCelebrationModal()" style="flex: 1; padding: 13px 20px; border-radius: 16px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #d97706 100%); color: #0a0a0f; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.5); border: 0; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
+        <button onclick="closePotdCelebrationModal()"
+          style="flex: 1; padding: 13px 20px; border-radius: 16px; background: linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #d97706 100%); color: #0a0a0f; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 8px 24px -4px rgba(245, 158, 11, 0.5); border: 0; cursor: pointer; transition: all 0.2s;"
+          onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
           Claim & Continue
         </button>
       </div>
@@ -953,11 +1197,17 @@
   </div>
 
   <!-- BADGE MILESTONE CELEBRATION MODAL -->
-  <div id="badgeCelebrationModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
-    <div style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.4) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.15) !important; border-radius: 28px; max-width: 440px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 28px 22px; text-align: center; color: #ffffff !important; position: relative; margin: auto;" class="custom-scrollbar">
+  <div id="badgeCelebrationModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4"
+    style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
+    <div
+      style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.4) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.15) !important; border-radius: 28px; max-width: 440px; width: 100%; max-height: 88vh; overflow-y: auto; padding: 28px 22px; text-align: center; color: #ffffff !important; position: relative; margin: auto;"
+      class="custom-scrollbar">
       <canvas id="badgeConfettiCanvas" class="absolute inset-0 pointer-events-none w-full h-full"></canvas>
 
-      <button onclick="closeBadgeCelebrationModal()" style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; padding: 0; outline: none; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+      <button onclick="closeBadgeCelebrationModal()"
+        style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; padding: 0; outline: none; transition: all 0.2s;"
+        onmouseover="this.style.background='rgba(255,255,255,0.2)';"
+        onmouseout="this.style.background='rgba(255,255,255,0.1)';">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
 
@@ -966,26 +1216,34 @@
         <!-- SVG Badge Injected -->
       </div>
 
-      <div style="display: inline-block; background: rgba(255, 56, 92, 0.18); border: 1px solid rgba(255, 56, 92, 0.4); color: #ff859d; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 16px; border-radius: 9999px; margin-bottom: 12px;">
+      <div
+        style="display: inline-block; background: rgba(255, 56, 92, 0.18); border: 1px solid rgba(255, 56, 92, 0.4); color: #ff859d; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 16px; border-radius: 9999px; margin-bottom: 12px;">
         🏆 Consistency Milestone Badge
       </div>
 
       <!-- Badge Title -->
-      <h3 id="badgeModalTitle" style="color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
+      <h3 id="badgeModalTitle"
+        style="color: #ffffff; font-size: 24px; font-weight: 900; letter-spacing: -0.02em; margin: 0 0 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.5);">
         Star (3 Days)
       </h3>
 
       <!-- Badge Desc -->
-      <p id="badgeModalDesc" style="color: #cbd5e1; font-size: 13px; font-weight: 600; line-height: 1.6; margin: 0 0 24px; padding: 0 8px;">
+      <p id="badgeModalDesc"
+        style="color: #cbd5e1; font-size: 13px; font-weight: 600; line-height: 1.6; margin: 0 0 24px; padding: 0 8px;">
         You reached a consecutive streak of daily problem solving! This badge has been unlocked on your profile.
       </p>
 
       <!-- Action Buttons -->
       <div style="display: flex; align-items: center; gap: 12px;">
-        <a href="/auth/edit-profile.html" style="flex: 1; padding: 13px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; font-weight: 800; font-size: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.15)';" onmouseout="this.style.background='rgba(255,255,255,0.08)';">
+        <a href="/auth/edit-profile.html"
+          style="flex: 1; padding: 13px 16px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); color: #f8fafc; font-weight: 800; font-size: 12px; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(255,255,255,0.15)';"
+          onmouseout="this.style.background='rgba(255,255,255,0.08)';">
           <i class="fa-solid fa-user"></i> View Profile
         </a>
-        <button onclick="closeBadgeCelebrationModal()" style="flex: 1; padding: 13px 20px; border-radius: 16px; background: linear-gradient(135deg, #ff385c 0%, #e02447 50%, #f43f5e 100%); color: #ffffff; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 8px 24px -4px rgba(255, 56, 92, 0.5); border: 0; cursor: pointer; transition: all 0.2s;" onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
+        <button onclick="closeBadgeCelebrationModal()"
+          style="flex: 1; padding: 13px 20px; border-radius: 16px; background: linear-gradient(135deg, #ff385c 0%, #e02447 50%, #f43f5e 100%); color: #ffffff; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.06em; box-shadow: 0 8px 24px -4px rgba(255, 56, 92, 0.5); border: 0; cursor: pointer; transition: all 0.2s;"
+          onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
           Awesome!
         </button>
       </div>
@@ -993,63 +1251,89 @@
   </div>
 
   <!-- RANDOM PRACTICE PROBLEM CHALLENGE MODAL -->
-  <div id="randomProblemModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
-    <div style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.5) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 50px rgba(245, 158, 11, 0.2) !important; border-radius: 28px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; color: #ffffff !important; position: relative; padding: 26px 22px; margin: auto;" class="custom-scrollbar">
-      
+  <div id="randomProblemModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-4"
+    style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
+    <div
+      style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.5) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 50px rgba(245, 158, 11, 0.2) !important; border-radius: 28px; max-width: 480px; width: 100%; max-height: 90vh; overflow-y: auto; color: #ffffff !important; position: relative; padding: 26px 22px; margin: auto;"
+      class="custom-scrollbar">
+
       <!-- Close Button -->
-      <button onclick="closeRandomProblemModal()" style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+      <button onclick="closeRandomProblemModal()"
+        style="position: absolute; top: 16px; right: 16px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.2s;"
+        onmouseover="this.style.background='rgba(255,255,255,0.2)';"
+        onmouseout="this.style.background='rgba(255,255,255,0.1)';">
         <i class="fa-solid fa-xmark text-sm"></i>
       </button>
 
       <!-- Modal Header -->
       <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px;">
-        <div style="width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4); flex-shrink: 0;">
+        <div
+          style="width: 42px; height: 42px; border-radius: 14px; background: linear-gradient(135deg, #f59e0b, #ea580c); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 18px; box-shadow: 0 6px 18px rgba(245, 158, 11, 0.4); flex-shrink: 0;">
           <i class="fa-solid fa-dice"></i>
         </div>
         <div>
-          <span style="font-size: 10px; font-weight: 900; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; display: block;">Practice Challenge</span>
-          <h3 style="font-size: 17px; font-weight: 900; color: #ffffff; margin: 0; line-height: 1.2;">Random DSA Problem</h3>
+          <span
+            style="font-size: 10px; font-weight: 900; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.08em; display: block;">Practice
+            Challenge</span>
+          <h3 style="font-size: 17px; font-weight: 900; color: #ffffff; margin: 0; line-height: 1.2;">Random DSA Problem
+          </h3>
         </div>
       </div>
 
       <!-- Problem Showcase Card -->
-      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 18px; margin-bottom: 18px;">
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
-          <span id="randomModalCategory" style="padding: 3px 10px; border-radius: 9999px; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.35); color: #c4b5fd; font-size: 10px; font-weight: 800; text-transform: uppercase;">
+      <div
+        style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 18px; margin-bottom: 18px;">
+        <div
+          style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; flex-wrap: wrap;">
+          <span id="randomModalCategory"
+            style="padding: 3px 10px; border-radius: 9999px; background: rgba(139, 92, 246, 0.15); border: 1px solid rgba(139, 92, 246, 0.35); color: #c4b5fd; font-size: 10px; font-weight: 800; text-transform: uppercase;">
             Arrays
           </span>
-          <span id="randomModalDifficulty" style="padding: 3px 10px; border-radius: 9999px; font-size: 10px; font-weight: 900; text-transform: uppercase;">
+          <span id="randomModalDifficulty"
+            style="padding: 3px 10px; border-radius: 9999px; font-size: 10px; font-weight: 900; text-transform: uppercase;">
             Medium
           </span>
         </div>
 
-        <h4 id="randomModalTitle" style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 0 0 8px; line-height: 1.3;">
+        <h4 id="randomModalTitle"
+          style="font-size: 18px; font-weight: 900; color: #ffffff; margin: 0 0 8px; line-height: 1.3;">
           Two Sum
         </h4>
 
         <!-- Companies Tag List -->
-        <div id="randomModalCompanies" style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
+        <div id="randomModalCompanies"
+          style="display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 12px;">
           <!-- Injected badges -->
         </div>
 
         <!-- Problem Intuition / Summary -->
-        <div id="randomModalIntuition" style="font-size: 12px; font-weight: 600; color: #cbd5e1; line-height: 1.6; background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
-          Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
+        <div id="randomModalIntuition"
+          style="font-size: 12px; font-weight: 600; color: #cbd5e1; line-height: 1.6; background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 10px 12px; border: 1px solid rgba(255, 255, 255, 0.06);">
+          Given an array of integers nums and an integer target, return indices of the two numbers such that they add up
+          to target.
         </div>
       </div>
 
       <!-- Action Buttons -->
       <div style="display: flex; flex-direction: column; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 10px;">
-          <a id="randomModalSolveBtn" href="#" target="_blank" rel="noopener" style="flex: 1; padding: 12px 18px; border-radius: 16px; background: linear-gradient(135deg, #ff385c 0%, #e02447 50%, #f43f5e 100%); color: #ffffff; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; text-decoration: none; box-shadow: 0 6px 20px rgba(255, 56, 92, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
+          <a id="randomModalSolveBtn" href="#" target="_blank" rel="noopener"
+            style="flex: 1; padding: 12px 18px; border-radius: 16px; background: linear-gradient(135deg, #ff385c 0%, #e02447 50%, #f43f5e 100%); color: #ffffff; font-weight: 900; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; text-align: center; text-decoration: none; box-shadow: 0 6px 20px rgba(255, 56, 92, 0.4); display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;"
+            onmouseover="this.style.filter='brightness(1.1)';" onmouseout="this.style.filter='none';">
             <i class="fa-solid fa-arrow-up-right-from-square"></i> Solve on LeetCode
           </a>
-          <a id="randomModalCodeBtn" href="#" target="_blank" rel="noopener" style="flex: 1; padding: 12px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); color: #f8fafc; font-weight: 800; font-size: 12px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.16)';" onmouseout="this.style.background='rgba(255,255,255,0.08)';">
+          <a id="randomModalCodeBtn" href="#" target="_blank" rel="noopener"
+            style="flex: 1; padding: 12px 18px; border-radius: 16px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.18); color: #f8fafc; font-weight: 800; font-size: 12px; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;"
+            onmouseover="this.style.background='rgba(255,255,255,0.16)';"
+            onmouseout="this.style.background='rgba(255,255,255,0.08)';">
             <i class="fa-brands fa-github text-indigo-400"></i> Solution Code
           </a>
         </div>
 
-        <button onclick="pickRandomProblem()" style="width: 100%; padding: 10px 16px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;" onmouseover="this.style.background='rgba(245, 158, 11, 0.25)';" onmouseout="this.style.background='rgba(245, 158, 11, 0.15)';">
+        <button onclick="pickRandomProblem()"
+          style="width: 100%; padding: 10px 16px; border-radius: 14px; background: rgba(245, 158, 11, 0.15); border: 1px solid rgba(245, 158, 11, 0.35); color: #fbbf24; font-weight: 900; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(245, 158, 11, 0.25)';"
+          onmouseout="this.style.background='rgba(245, 158, 11, 0.15)';">
           <i class="fa-solid fa-dice"></i> Pick Another Random Problem
         </button>
       </div>
@@ -1058,66 +1342,90 @@
   </div>
 
   <!-- EDUSTACK ACHIEVEMENTS & BADGES MODAL (COMPACT & FULLY RESPONSIVE) -->
-  <div id="badgesShowcaseModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-3 sm:p-4" style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
-    <div style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.4) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.15) !important; border-radius: 28px; max-width: 460px; width: 100%; max-height: 88vh; overflow-y: auto; color: #ffffff !important; position: relative; padding: 22px 18px; margin: auto;" class="custom-scrollbar">
-      
+  <div id="badgesShowcaseModal" class="fixed inset-0 z-[100000] hidden items-center justify-center p-3 sm:p-4"
+    style="background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(14px);">
+    <div
+      style="background: linear-gradient(180deg, #1e1b2e 0%, #151322 60%, #0d0c15 100%) !important; border: 1.5px solid rgba(245, 158, 11, 0.4) !important; box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.15) !important; border-radius: 28px; max-width: 460px; width: 100%; max-height: 88vh; overflow-y: auto; color: #ffffff !important; position: relative; padding: 22px 18px; margin: auto;"
+      class="custom-scrollbar">
+
       <!-- Top Navigation Bar -->
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
+      <div
+        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);">
         <div style="display: flex; align-items: center; gap: 8px;">
           <span style="font-size: 20px;">🏆</span>
           <div>
-            <h3 style="font-size: 16px; font-weight: 900; color: #ffffff; margin: 0; line-height: 1.2;">Achievements & Streaks</h3>
-            <span style="font-size: 10px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.05em;">EduStack Edition</span>
+            <h3 style="font-size: 16px; font-weight: 900; color: #ffffff; margin: 0; line-height: 1.2;">Achievements &
+              Streaks</h3>
+            <span
+              style="font-size: 10px; font-weight: 800; color: #fbbf24; text-transform: uppercase; letter-spacing: 0.05em;">EduStack
+              Edition</span>
           </div>
         </div>
-        <button onclick="closeBadgesShowcaseModal()" style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.1)';">
+        <button onclick="closeBadgesShowcaseModal()"
+          style="width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.18); color: #e2e8f0; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; transition: all 0.2s;"
+          onmouseover="this.style.background='rgba(255,255,255,0.2)';"
+          onmouseout="this.style.background='rgba(255,255,255,0.1)';">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
       <!-- Quick Daily Problem Mini Bar -->
-      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
+      <div
+        style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
-          <div style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #ff385c, #e02447); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 56, 92, 0.3);">
+          <div
+            style="width: 36px; height: 36px; border-radius: 12px; background: linear-gradient(135deg, #ff385c, #e02447); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 14px; flex-shrink: 0; box-shadow: 0 4px 10px rgba(255, 56, 92, 0.3);">
             <i class="fa-solid fa-code"></i>
           </div>
           <div style="min-width: 0;">
-            <h4 id="linkedinPotdTitle" style="font-size: 12px; font-weight: 900; color: #ffffff; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Daily Problem</h4>
-            <p id="linkedinPotdSub" style="font-size: 10px; font-weight: 700; color: #94a3b8; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Today · +10 Points</p>
+            <h4 id="linkedinPotdTitle"
+              style="font-size: 12px; font-weight: 900; color: #ffffff; margin: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              Daily Problem</h4>
+            <p id="linkedinPotdSub"
+              style="font-size: 10px; font-weight: 700; color: #94a3b8; margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+              Today · +10 Points</p>
           </div>
         </div>
-        <button id="linkedinPotdSolveBtn" onclick="claimPotdPoints()" style="padding: 6px 14px; border-radius: 9999px; background: linear-gradient(135deg, #ff385c, #e02447); color: #fff; font-weight: 900; font-size: 11px; border: 0; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255, 56, 92, 0.35);">
+        <button id="linkedinPotdSolveBtn" onclick="claimPotdPoints()"
+          style="padding: 6px 14px; border-radius: 9999px; background: linear-gradient(135deg, #ff385c, #e02447); color: #fff; font-weight: 900; font-size: 11px; border: 0; cursor: pointer; flex-shrink: 0; box-shadow: 0 4px 12px rgba(255, 56, 92, 0.35);">
           Solve
         </button>
       </div>
 
       <!-- 4-Stat Performance Grid -->
-      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 12px 6px; margin-bottom: 14px;">
+      <div
+        style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 18px; padding: 12px 6px; margin-bottom: 14px;">
         <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; text-align: center;">
           <div>
             <div id="statPlays" style="font-size: 16px; font-weight: 900; color: #ffffff;">0</div>
-            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">Solved</div>
+            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">
+              Solved</div>
           </div>
           <div style="border-left: 1px solid rgba(255, 255, 255, 0.06);">
             <div id="statWinPct" style="font-size: 16px; font-weight: 900; color: #ffffff;">100%</div>
-            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">Win %</div>
+            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">
+              Win %</div>
           </div>
           <div style="border-left: 1px solid rgba(255, 255, 255, 0.06);">
             <div id="statPoints" style="font-size: 16px; font-weight: 900; color: #fbbf24;">0</div>
-            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">Points</div>
+            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">
+              Points</div>
           </div>
           <div style="border-left: 1px solid rgba(255, 255, 255, 0.06);">
             <div id="statMaxStreak" style="font-size: 16px; font-weight: 900; color: #f43f5e;">0</div>
-            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">Streak</div>
+            <div style="font-size: 9px; font-weight: 800; color: #94a3b8; text-transform: uppercase; margin-top: 2px;">
+              Streak</div>
           </div>
         </div>
       </div>
 
       <!-- Streak Banner with 7-Day Timeline -->
-      <div style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(217, 119, 6, 0.06) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 14px 16px; margin-bottom: 14px;">
+      <div
+        style="background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(217, 119, 6, 0.06) 100%); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 20px; padding: 14px 16px; margin-bottom: 14px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
           <div>
-            <h4 id="linkedinStreakHeadline" style="font-size: 15px; font-weight: 900; color: #fbbf24; margin: 0; line-height: 1.2;">
+            <h4 id="linkedinStreakHeadline"
+              style="font-size: 15px; font-weight: 900; color: #fbbf24; margin: 0; line-height: 1.2;">
               0-day coding streak
             </h4>
             <p id="linkedinStreakSub" style="font-size: 11px; font-weight: 700; color: #cbd5e1; margin: 2px 0 0;">
@@ -1129,39 +1437,57 @@
 
         <!-- 7-Day Timeline Track -->
         <div style="position: relative;">
-          <div id="linkedinStreakTimeline" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
+          <div id="linkedinStreakTimeline"
+            style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; text-align: center;">
             <!-- Dynamically populated 7 days -->
           </div>
         </div>
       </div>
 
       <!-- Badges Card Section (EduStack 4-Col Grid) -->
-      <div style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 14px 12px;">
+      <div
+        style="background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 14px 12px;">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;">
           <div style="display: flex; align-items: center; gap: 6px;">
             <span style="font-size: 13px; font-weight: 900; color: #ffffff;">Milestone Badges</span>
-            <span id="unlockedBadgesCountBadge" style="padding: 2px 8px; border-radius: 9999px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 9px; font-weight: 900;">0 / 12</span>
+            <span id="unlockedBadgesCountBadge"
+              style="padding: 2px 8px; border-radius: 9999px; background: rgba(245, 158, 11, 0.2); border: 1px solid rgba(245, 158, 11, 0.4); color: #fbbf24; font-size: 9px; font-weight: 900;">0
+              / 12</span>
           </div>
           <div style="display: flex; align-items: center; gap: 6px;">
-            <button onclick="prevBadgePage()" style="width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.08)';">
+            <button onclick="prevBadgePage()"
+              style="width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; transition: all 0.2s;"
+              onmouseover="this.style.background='rgba(255,255,255,0.2)';"
+              onmouseout="this.style.background='rgba(255,255,255,0.08)';">
               <i class="fa-solid fa-chevron-left"></i>
             </button>
-            <button onclick="nextBadgePage()" style="width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; transition: all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)';" onmouseout="this.style.background='rgba(255,255,255,0.08)';">
+            <button onclick="nextBadgePage()"
+              style="width: 26px; height: 26px; border-radius: 50%; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.15); color: #e2e8f0; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 10px; transition: all 0.2s;"
+              onmouseover="this.style.background='rgba(255,255,255,0.2)';"
+              onmouseout="this.style.background='rgba(255,255,255,0.08)';">
               <i class="fa-solid fa-chevron-right"></i>
             </button>
           </div>
         </div>
 
         <!-- 4 Badges Active Horizontal Grid -->
-        <div id="linkedinBadgesList" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: stretch; width: 100%;">
+        <div id="linkedinBadgesList"
+          style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; align-items: stretch; width: 100%;">
           <!-- Populated by JS -->
         </div>
 
         <!-- 3 Interactive Pagination Indicator Dots -->
-        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px;" id="badgePaginationDots">
-          <button onclick="setBadgePage(0)" style="width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; border: 0; cursor: pointer; padding: 0;" id="badgeDot0" title="Slide 1: 3d - 31d"></button>
-          <button onclick="setBadgePage(1)" style="width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 0; cursor: pointer; padding: 0;" id="badgeDot1" title="Slide 2: 50d - 200d"></button>
-          <button onclick="setBadgePage(2)" style="width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 0; cursor: pointer; padding: 0;" id="badgeDot2" title="Slide 3: 250d - 500d"></button>
+        <div style="display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px;"
+          id="badgePaginationDots">
+          <button onclick="setBadgePage(0)"
+            style="width: 8px; height: 8px; border-radius: 50%; background: #fbbf24; border: 0; cursor: pointer; padding: 0;"
+            id="badgeDot0" title="Slide 1: 3d - 31d"></button>
+          <button onclick="setBadgePage(1)"
+            style="width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 0; cursor: pointer; padding: 0;"
+            id="badgeDot1" title="Slide 2: 50d - 200d"></button>
+          <button onclick="setBadgePage(2)"
+            style="width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.25); border: 0; cursor: pointer; padding: 0;"
+            id="badgeDot2" title="Slide 3: 250d - 500d"></button>
         </div>
       </div>
 
@@ -1193,11 +1519,11 @@
       let row = [];
       let inQuotes = false;
       let currentStr = '';
-      
+
       for (let i = 0; i < text.length; i++) {
         const char = text[i];
         const nextChar = text[i + 1];
-        
+
         if (char === '"') {
           if (inQuotes && nextChar === '"') {
             currentStr += '"';
@@ -1343,10 +1669,10 @@
           const difficulty = (rawDiff === 'Easy' || rawDiff === 'Medium' || rawDiff === 'Hard') ? rawDiff : (staticRef.difficulty || 'Medium');
           const github = (cols[6] || '').startsWith('http') ? cols[6].trim() : (staticRef.github || '');
           const video = (cols[7] || '').startsWith('http') ? cols[7].trim() : (staticRef.video || '');
-          
+
           const compStr = (cols[8] || '').trim();
           const companies = compStr ? compStr.split(/[,\/|]/).map(s => s.trim().replace(/^"|"$/g, '')).filter(Boolean) : (staticRef.companies || []);
-          
+
           let rawIntuition = (cols[9] || '').trim();
           if (isOnlyCompanyNames(rawIntuition)) {
             rawIntuition = '';
@@ -1448,19 +1774,19 @@
     }
 
     // ── State Variables & Local Storage Keys ───────────────────────
-    let solvedIds           = JSON.parse(localStorage.getItem('edustack_dsa_solved') || '[]');
-    let bookmarkedIds       = JSON.parse(localStorage.getItem('edustack_dsa_bookmarked') || '[]');
-    let attemptedIds        = JSON.parse(localStorage.getItem('edustack_dsa_attempted') || '[]');
-    let edustackPoints      = parseInt(localStorage.getItem('edustack_points') || '0', 10);
-    let potdCompletedDates  = JSON.parse(localStorage.getItem('edustack_potd_dates') || '[]');
-    let unlockedBadges      = JSON.parse(localStorage.getItem('edustack_dsa_badges') || '[]');
+    let solvedIds = JSON.parse(localStorage.getItem('edustack_dsa_solved') || '[]');
+    let bookmarkedIds = JSON.parse(localStorage.getItem('edustack_dsa_bookmarked') || '[]');
+    let attemptedIds = JSON.parse(localStorage.getItem('edustack_dsa_attempted') || '[]');
+    let edustackPoints = parseInt(localStorage.getItem('edustack_points') || '0', 10);
+    let potdCompletedDates = JSON.parse(localStorage.getItem('edustack_potd_dates') || '[]');
+    let unlockedBadges = JSON.parse(localStorage.getItem('edustack_dsa_badges') || '[]');
 
-    let selectedCompanies   = new Set();
+    let selectedCompanies = new Set();
     let selectedDifficulties = new Set();
-    let selectedStatuses    = new Set();
-    let currentTopic        = 'ALL';
-    let currentPotdProblem  = null;
-    let companySearchQuery  = '';
+    let selectedStatuses = new Set();
+    let currentTopic = 'ALL';
+    let currentPotdProblem = null;
+    let companySearchQuery = '';
 
     // ── WEB AUDIO CHIME & FANFARE ENGINE ───────────────────────────
     function playFanfare() {
@@ -1483,7 +1809,7 @@
           osc.start(now + i * 0.1);
           osc.stop(now + i * 0.1 + 0.5);
         });
-      } catch(e) {}
+      } catch (e) { }
     }
 
     // ── HTML5 CANVAS CONFETTI PARTICLE SYSTEM ──────────────────────
@@ -1732,7 +2058,7 @@
       const whiteF = '#ffffff'; // Gloss reflection
       const uid = `${type}_${isUnlocked ? 'unl' : 'lck'}_${Math.random().toString(36).substr(2, 4)}`;
 
-      switch(type) {
+      switch (type) {
         // 1. Star (3 days)
         case 'star':
           return `
@@ -2109,9 +2435,9 @@
               <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-black text-[9px] uppercase tracking-wider shadow-sm">
                 <i class="fa-solid fa-medal text-amber-500 text-[8px]"></i> ${b.tier}
               </span>
-              ${isUnlocked 
-                ? '<span class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1"><i class="fa-solid fa-check text-[8px]"></i> Unlocked</span>' 
-                : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-black text-[9px] uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-lock text-[8px]"></i> ${curStreak}/${b.days}d</span>`}
+              ${isUnlocked
+            ? '<span class="px-2.5 py-0.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-black text-[9px] uppercase tracking-wider shadow-sm flex items-center gap-1"><i class="fa-solid fa-check text-[8px]"></i> Unlocked</span>'
+            : `<span class="px-2.5 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-700 dark:text-amber-300 font-black text-[9px] uppercase tracking-wider flex items-center gap-1"><i class="fa-solid fa-lock text-[8px]"></i> ${curStreak}/${b.days}d</span>`}
             </div>
             
             <!-- 3D Glowing Yellow Badge Icon Pedestal (Zero Overlap) -->
@@ -2147,7 +2473,7 @@
       const bStreak = document.getElementById('badgeSectionStreakVal');
       if (bStreak) bStreak.textContent = `${curStreak} Days 🔥`;
       const bCount = document.getElementById('badgeSectionCountVal');
-      
+
       const allUnlocked = CONSISTENCY_BADGES.filter(b => unlockedBadges.includes(b.id) || unlockedBadges.some(item => (item.id || item) === b.id) || (curStreak >= b.days));
       const totalUnlocked = allUnlocked.length;
 
@@ -2323,7 +2649,7 @@
         if (lSub) lSub.textContent = `Today · +10 Points · ${currentPotdProblem.difficulty}`;
         if (lBtn) {
           lBtn.textContent = isClaimedToday ? 'Solved ✔' : 'Solve';
-          lBtn.className = isClaimedToday 
+          lBtn.className = isClaimedToday
             ? 'px-4 py-2 rounded-full bg-emerald-600 text-white font-black text-xs transition-all flex-shrink-0 border-0 cursor-default shadow-md'
             : 'px-4 py-2 rounded-full bg-blue-600 hover:bg-blue-700 text-white font-black text-xs transition-all flex-shrink-0 border-0 cursor-pointer shadow-md active:scale-95';
         }
@@ -2362,7 +2688,7 @@
         for (let i = 6; i >= 0; i--) {
           const d = new Date();
           d.setDate(today.getDate() - i);
-          const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+          const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
           const isDone = act.has(key);
           const isToday = i === 0;
           const dayLetter = daysShort[d.getDay()];
@@ -2370,11 +2696,10 @@
           timelineHTML += `
             <div class="flex flex-col items-center">
               <span class="text-[10px] font-black ${isToday ? 'text-amber-400' : 'text-gray-400'} mb-1">${dayLetter}</span>
-              <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all shadow-sm ${
-                isDone 
-                  ? 'bg-gradient-to-tr from-amber-400 to-yellow-300 text-amber-950 ring-2 ring-amber-400/50' 
-                  : (isToday ? 'bg-amber-400/20 text-amber-300 ring-1 ring-amber-400/40' : 'bg-white/5 text-gray-500 border border-white/10')
-              }">
+              <div class="w-7 h-7 rounded-full flex items-center justify-center text-xs font-black transition-all shadow-sm ${isDone
+              ? 'bg-gradient-to-tr from-amber-400 to-yellow-300 text-amber-950 ring-2 ring-amber-400/50'
+              : (isToday ? 'bg-amber-400/20 text-amber-300 ring-1 ring-amber-400/40' : 'bg-white/5 text-gray-500 border border-white/10')
+            }">
                 ${isDone ? '<i class="fa-solid fa-check text-[10px]"></i>' : (isToday ? '•' : '')}
               </div>
             </div>
@@ -2829,7 +3154,7 @@
 
     function todayKey() {
       const d = new Date();
-      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+      return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     }
 
     function getActivity() {
@@ -2849,14 +3174,14 @@
 
       let best = 1, cur = 1;
       for (let i = 1; i < act.length; i++) {
-        const prev = new Date(act[i-1]), next = new Date(act[i]);
+        const prev = new Date(act[i - 1]), next = new Date(act[i]);
         const diff = (next - prev) / 86400000;
         if (diff === 1) { cur++; best = Math.max(best, cur); }
         else if (diff > 1) cur = 1;
       }
       const last = new Date(act[act.length - 1]);
-      const today = new Date(); today.setHours(0,0,0,0);
-      last.setHours(0,0,0,0);
+      const today = new Date(); today.setHours(0, 0, 0, 0);
+      last.setHours(0, 0, 0, 0);
       const daysSinceLast = Math.round((today - last) / 86400000);
       if (daysSinceLast > 1) cur = 0;
 
@@ -2864,14 +3189,14 @@
     }
 
     function renderCalendar() {
-      const grid    = document.getElementById('calGrid');
-      const label   = document.getElementById('calMonthLabel');
+      const grid = document.getElementById('calGrid');
+      const label = document.getElementById('calMonthLabel');
       if (!grid || !label) return;
 
-      const act    = getActivity();
-      const today  = new Date();
-      const y      = calViewDate.getFullYear();
-      const m      = calViewDate.getMonth();
+      const act = getActivity();
+      const today = new Date();
+      const y = calViewDate.getFullYear();
+      const m = calViewDate.getMonth();
 
       label.textContent = calViewDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
 
@@ -2884,10 +3209,10 @@
       }
 
       for (let d = 1; d <= daysInMonth; d++) {
-        const key = `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-        const isToday   = (y === today.getFullYear() && m === today.getMonth() && d === today.getDate());
-        const isSolved  = act.has(key);
-        const isFuture  = new Date(y, m, d) > today;
+        const key = `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        const isToday = (y === today.getFullYear() && m === today.getMonth() && d === today.getDate());
+        const isSolved = act.has(key);
+        const isFuture = new Date(y, m, d) > today;
 
         let cls = 'w-7 h-7 mx-auto flex items-center justify-center rounded-full text-[10px] font-black transition-all ';
         if (isToday && isSolved) {
@@ -2924,7 +3249,7 @@
       calViewDate.setMonth(calViewDate.getMonth() + dir);
       const today = new Date();
       if (calViewDate.getFullYear() > today.getFullYear() ||
-          (calViewDate.getFullYear() === today.getFullYear() && calViewDate.getMonth() > today.getMonth())) {
+        (calViewDate.getFullYear() === today.getFullYear() && calViewDate.getMonth() > today.getMonth())) {
         calViewDate = new Date();
       }
       renderCalendar();
@@ -2933,8 +3258,8 @@
     function startCountdown() {
       if (_countdownTimer) clearInterval(_countdownTimer);
       function tick() {
-        const now  = new Date();
-        const eod  = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+        const now = new Date();
+        const eod = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
         const diff = eod - now;
         const h = String(Math.floor(diff / 3600000)).padStart(2, '0');
         const min = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
@@ -2947,7 +3272,7 @@
     }
 
     // ── LEADERBOARD ENGINE ─────────────────────────────────────────
-    const BOARD_MEDALS = ['🥇','🥈','🥉'];
+    const BOARD_MEDALS = ['🥇', '🥈', '🥉'];
     const BOARD_COLORS = [
       'from-amber-400/20 to-amber-300/10 border-amber-400/30',
       'from-gray-300/20 to-gray-200/10 border-gray-400/20 dark:border-gray-600/20',
@@ -2964,17 +3289,17 @@
         try {
           const { current: curStreak, best: bestStreak } = computeStreaks();
           await fetch('/api/users/dsa-progress', {
-            method:      'PUT',
+            method: 'PUT',
             credentials: 'include',
-            headers:     { 'Content-Type': 'application/json' },
-            body:        JSON.stringify({
-              solvedCount:       solvedIds.length,
-              solvedProblems:    solvedIds,          // Persist actual IDs for cross-device restore
-              edustackPoints:    edustackPoints,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              solvedCount: solvedIds.length,
+              solvedProblems: solvedIds,          // Persist actual IDs for cross-device restore
+              edustackPoints: edustackPoints,
               streak: { current: curStreak, best: bestStreak, lastActiveDate: todayKey() },
-              unlockedBadges:    unlockedBadges,
+              unlockedBadges: unlockedBadges,
               bookmarkedProblems: bookmarkedIds,
-              attemptedProblems:  attemptedIds,
+              attemptedProblems: attemptedIds,
               potdCompletedDates: potdCompletedDates,
             }),
           });
@@ -2992,7 +3317,7 @@
     }
 
     async function renderLeaderboard(currentUser) {
-      const list   = document.getElementById('leaderboardList');
+      const list = document.getElementById('leaderboardList');
       const signIn = document.getElementById('leaderboardSignIn');
       if (!list) return;
 
@@ -3005,7 +3330,7 @@
             board = apiData.data.board;
           }
         }
-      } catch (err) {}
+      } catch (err) { }
 
       if (board.length === 0) {
         const localCount = solvedIds.length;
@@ -3034,9 +3359,9 @@
       }
 
       list.innerHTML = board.map((entry, idx) => {
-        const medal   = BOARD_MEDALS[idx] || `#${idx + 1}`;
-        const color   = BOARD_COLORS[idx] || 'border-gray-200/20 dark:border-gray-800/20';
-        const isYou   = currentUser && String(entry.id) === String(currentUser._id);
+        const medal = BOARD_MEDALS[idx] || `#${idx + 1}`;
+        const color = BOARD_COLORS[idx] || 'border-gray-200/20 dark:border-gray-800/20';
+        const isYou = currentUser && String(entry.id) === String(currentUser._id);
 
         const hasRealAvatar = entry.avatar && entry.avatar !== 'default-avatar.png' && entry.avatar !== 'null';
         const avatarSrc = hasRealAvatar
@@ -3093,7 +3418,7 @@
             return;
           }
         }
-      } catch (e) {}
+      } catch (e) { }
 
       try {
         const res = await fetch('/api/dsa-sheet/sync?bust=' + Date.now());
@@ -3158,12 +3483,12 @@
       // 2. Clear search and reset topic filter so the problem is visible in the table
       const searchInput = document.getElementById('searchInput');
       if (searchInput) searchInput.value = '';
-      
+
       currentTopic = 'ALL';
       selectedDifficulties.clear();
       selectedCompanies.clear();
       selectedStatuses.clear();
-      
+
       renderTopics();
       renderProblems();
 
@@ -3196,7 +3521,7 @@
       const codeBtn = document.getElementById('randomModalCodeBtn');
 
       if (catEl) catEl.textContent = p.subTopic || p.category || 'General DSA';
-      
+
       if (diffEl) {
         diffEl.textContent = p.difficulty || 'Medium';
         if (p.difficulty === 'Easy') {
@@ -3224,8 +3549,8 @@
       }
 
       if (intEl) {
-        intEl.textContent = (p.intuition && !isOnlyCompanyNames(p.intuition)) 
-          ? p.intuition 
+        intEl.textContent = (p.intuition && !isOnlyCompanyNames(p.intuition))
+          ? p.intuition
           : `Master this ${p.difficulty || ''} level problem covering ${p.category || 'core algorithms'} to strengthen your interview problem solving.`;
       }
 
@@ -3371,7 +3696,7 @@
     function handleLogoError(img) {
       const company = (img.getAttribute('data-company') || img.title || '?').trim();
       const initials = company.split(/[\s&]+/).map(w => w[0]).filter(Boolean).join('').slice(0, 2).toUpperCase();
-      const palette = ['#e11d48','#7c3aed','#2563eb','#0891b2','#059669','#d97706','#9333ea','#0f766e','#b45309','#be185d'];
+      const palette = ['#e11d48', '#7c3aed', '#2563eb', '#0891b2', '#059669', '#d97706', '#9333ea', '#0f766e', '#b45309', '#be185d'];
       let h = 0;
       for (let i = 0; i < company.length; i++) h = company.charCodeAt(i) + ((h << 5) - h);
       const bg = palette[Math.abs(h) % palette.length];
@@ -3860,7 +4185,7 @@
       // references the freshly-indexed problem (keeps POTD modal correct).
       loadGoogleSheetData().then(() => {
         if (problems && problems.length > 0) initPOTD();
-      }).catch(() => {});
+      }).catch(() => { });
 
       // 5. Live Search Input listener
       const searchInput = document.getElementById('searchInput');
@@ -3873,12 +4198,13 @@
       // 6. Outside click listener to auto-close dropdowns
       document.addEventListener('click', (e) => {
         if (!e.target.closest('#companyDropdownWrapper') &&
-            !e.target.closest('#diffDropdownWrapper') &&
-            !e.target.closest('#statusDropdownWrapper')) {
+          !e.target.closest('#diffDropdownWrapper') &&
+          !e.target.closest('#statusDropdownWrapper')) {
           closeAllDropdowns();
         }
       });
     });
   </script>
 </body>
+
 </html>
