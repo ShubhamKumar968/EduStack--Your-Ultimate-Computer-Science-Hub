@@ -22,6 +22,7 @@ const morgan = require('morgan');
 const mongoSanitize = require('express-mongo-sanitize');
 const passport = require('passport');
 const passportGoogle = require('passport-google-oauth20');
+const rateLimit = require('express-rate-limit');
 
 const { generateToken, attachCookieToken } = require('./utils/generateToken');
 const errorHandler = require('./middlewares/errorHandler');
@@ -50,6 +51,7 @@ const notificationRoutes = require('./routes/notificationRoutes');
 const enrollmentRoutes   = require('./routes/enrollmentRoutes');
 const aiRoutes           = require('./routes/aiRoutes');
 const contributorRequestRoutes = require('./routes/contributorRequestRoutes');
+const dsaRoutes              = require('./routes/dsaRoutes');
 
 // ── Create Express App ────────────────────────────────────────
 const app = express();
@@ -72,7 +74,53 @@ store.on('error', function(error) {
 // ============================================================
 // ⚙️ GLOBAL MIDDLEWARES
 // ============================================================
-app.use(helmet({ contentSecurityPolicy: false })); // Flexible for local asset & CDN loading
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: [
+        "'self'",
+        "'unsafe-inline'",           // Required for inline scripts in HTML pages
+        'https://cdnjs.cloudflare.com',
+        'https://checkout.razorpay.com',
+        'https://cdn.jsdelivr.net',
+        'https://fonts.googleapis.com',
+      ],
+      styleSrc: [
+        "'self'",
+        "'unsafe-inline'",           // Required for Tailwind/inline styles
+        'https://cdnjs.cloudflare.com',
+        'https://fonts.googleapis.com',
+      ],
+      fontSrc:  ["'self'", 'https://fonts.gstatic.com', 'https://cdnjs.cloudflare.com'],
+      imgSrc:   ["'self'", 'data:', 'https:', 'blob:'],
+      connectSrc: ["'self'", 'https://docs.google.com', 'https://api.razorpay.com'],
+      frameSrc:  ["'none'"],
+      objectSrc: ["'none'"],
+      upgradeInsecureRequests: IS_PRODUCTION ? [] : null,
+    }
+  }
+}));
+
+// ── Rate Limiters ─────────────────────────────────────────────
+// Auth endpoints: 5 requests per 15 minutes per IP (brute-force protection)
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many attempts. Please wait 15 minutes and try again.' },
+  skip: (req) => process.env.NODE_ENV === 'development' && req.ip === '::1', // Skip in local dev from localhost
+});
+
+// General API: 100 requests per 15 minutes per IP (DDoS mitigation)
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many requests. Please slow down.' },
+});
 
 // ── CORS ─────────────────────────────────────────────────────
 // Build allowed origins from env: supports localhost in dev and your Render domain in prod.
@@ -238,356 +286,9 @@ app.get('/', (req, res) => {
   });
 });
 
-// ── Google Sheet Live Sync — In-Memory Cache ─────────────────
-// Caches parsed CSV for 5 minutes to avoid hammering Google on every request.
-// On Render free tier this is reset on each cold start (OK — will re-fetch on next visit).
-let _dsaSheetCache = null;
-let _dsaSheetCacheTime = 0;
-const DSA_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-const GOOGLE_SHEET_CSV_URL =
-  'https://docs.google.com/spreadsheets/d/e/2PACX-1vSWl0OsRO5q5cdOUY3t--QiGg4WozIQVKBo9h2WrPyb5Rv7MC9DYt9bdap-6bGQLLlS0UsqKLJOhwaa/pub?gid=0&single=true&output=csv';
-
-/**
- * Fetch raw CSV text from a URL using built-in https module.
- * Returns a Promise<string>.
- */
-function fetchCSV(url) {
-  return new Promise((resolve, reject) => {
-    const client = url.startsWith('https') ? https : require('http');
-    client.get(url, { headers: { 'User-Agent': 'EduStack-Server/1.0' } }, (resp) => {
-      // Follow HTTP redirects (301, 302, 303, 307, 308 - Google Sheets redirect)
-      if ([301, 302, 303, 307, 308].includes(resp.statusCode) && resp.headers.location) {
-        return fetchCSV(resp.headers.location).then(resolve).catch(reject);
-      }
-      if (resp.statusCode !== 200) {
-        return reject(new Error(`CSV fetch failed: HTTP ${resp.statusCode}`));
-      }
-      let raw = '';
-      resp.on('data', chunk => { raw += chunk; });
-      resp.on('end', () => resolve(raw));
-    }).on('error', reject);
-  });
-}
-
-/**
- * Parse CSV text into array of row arrays.
- * Handles quoted fields, escaped quotes and CRLF.
- */
-function parseCSVText(text) {
-  const lines = [];
-  let row = [], inQ = false, cur = '';
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i], n = text[i + 1];
-    if (c === '"') {
-      if (inQ && n === '"') { cur += '"'; i++; }
-      else inQ = !inQ;
-    } else if (c === ',' && !inQ) {
-      row.push(cur.trim()); cur = '';
-    } else if ((c === '\r' || c === '\n') && !inQ) {
-      if (c === '\r' && n === '\n') i++;
-      row.push(cur.trim());
-      if (row.some(v => v !== '')) lines.push(row);
-      row = []; cur = '';
-    } else {
-      cur += c;
-    }
-  }
-  if (cur || row.length > 0) { row.push(cur.trim()); if (row.some(v => v !== '')) lines.push(row); }
-  return lines;
-}
-
-const KNOWN_COMPANIES = [
-  'google', 'amazon', 'microsoft', 'meta', 'facebook', 'flipkart', 'adobe', 'apple', 'uber',
-  'samsung', 'netflix', 'goldman sachs', 'goldman', 'oracle', 'paytm', 'visa', 'intuit', 'linkedin',
-  'walmart', 'capgemini', 'ola', 'oyo', 'tcs', 'infosys', 'wipro', 'atlassian', 'paypal',
-  'salesforce', 'morgan stanley', 'jp morgan', 'jpmorgan', 'swiggy', 'zomato', 'meesho', 'cred', 'phonepe',
-  'byju', 'unacademy', 'accenture', 'cognizant', 'deloitte', 'ey', 'pwc', 'kpmg', 'ibm', 'cisco',
-  'npci', 'mastercard', 'amex', 'barclays', 'hsbc', 'deutsche bank', 'standard chartered',
-  'airtel', 'jio', 'tata', 'reliance', 'zoho', 'freshworks', 'postman', 'groww', 'zerodha',
-  'upstox', 'slice', 'navi', 'bharatpe', 'dream11', 'mpl', 'urban company', 'makemytrip',
-  'goibibo', 'cleartrip', 'cars24', 'spinny', 'inmobi', 'sharechat', 'dailyhunt', 'scaler',
-  'snapdeal', 'media.net', 'bloomberg', 'vmware', 'nvidia', 'intel', 'amd', 'qualcomm', 'citadel',
-  'jane street', 'two sigma', 'nutanix', 'rubrik', 'cohesity', 'servicenow', 'workday', 'twilio',
-  'stripe', 'square', 'plaid', 'robinhood', 'coinbase', 'affirm', 'chime', 'klarna', 'revolut',
-  'monzo', 'wise', 'instacart', 'doordash', 'grubhub', 'delivery hero', 'grab', 'gojek', 'shopee',
-  'rakuten', 'line', 'kakao', 'naver', 'baidu', 'alibaba', 'tencent', 'bytedance', 'xiaomi',
-  'huawei', 'didi', 'tech mahindra', 'l&t', 'mphasis', 'mindtree', 'persistent', 'kpit', 'cyient',
-  'zensar', 'hexaware', 'tata elxsi', 'naukri', 'info edge', 'housing', 'magicbricks', 'nobroker',
-  'urbancompany', 'dunzo', 'blinkit', 'zepto', 'bigbasket', 'grofers', 'nykaa', 'lenskart',
-  'myntra', 'ajio', 'shopclues', 'firstcry', 'purplle', 'boat', 'noise', 'fireboltt', 'rapido',
-  'redbus', 'yatra', 'easemytrip', 'ixigo', 'bookmyshow', 'pine labs', 'razorpay', 'cashfree',
-  'billdesk', 'payu', 'juspay', 'instamojo', 'jupiter', 'fi', 'niyo', 'epifi', 'simpl', 'mobikwik'
-];
-
-function isOnlyCompanyNames(str) {
-  if (!str || typeof str !== 'string') return false;
-  const trimmed = str.trim().replace(/^"|"$/g, '');
-  if (!trimmed) return false;
-
-  const parts = trimmed.split(/[,\/|;]/).map(s => s.trim().toLowerCase()).filter(Boolean);
-  if (parts.length === 0) return false;
-
-  const allMatched = parts.every(part => {
-    return KNOWN_COMPANIES.some(comp => {
-      if (comp.length <= 3) {
-        return part === comp || new RegExp('\\b' + comp + '\\b', 'i').test(part);
-      }
-      return part === comp || part.includes(comp);
-    });
-  });
-
-  if (allMatched) return true;
-
-  const dsaKeywords = ['sum', 'sub', 'array', 'map', 'node', 'tree', 'dp', 'graph', 'pointer', 'index', 'for', 'while', 'if', 'return', 'int', 'min', 'max', 'count', 'length', 'hash', 'grid', 'binary', 'sort', 'search', 'bfs', 'dfs', 'stack', 'queue', 'heap', 'k', 'matrix', 'val', 'element', 'subarray', 'subsequence', 'logic', 'approach', 'find', 'calculate', 'check', 'traverse', 'store', 'update', 'sliding', 'window', 'two', 'left', 'right', 'root', 'parent', 'child', 'leaf', 'set', 'list', 'reverse', 'apply', 'use', 'implement', 'mark', 'push', 'pop', 'insert', 'delete', 'preorder', 'postorder', 'inorder', 'dijkstra', 'bellman', 'floyd', 'tarjan', 'kruskal', 'prim', 'topo', 'dsu', 'union', 'path', 'cycle', 'memo', 'cache', 'prefix', 'suffix', 'bit', 'mod', 'size', 'pair', 'edge', 'vertex', 'level', 'depth', 'distance', 'weight', 'cost', 'step', 'character', 'string', 'digit', 'number', 'odd', 'even', 'negative', 'positive', 'frequency', 'pivot', 'divide', 'conquer', 'greedy', 'backtrack', 'recursion', 'iterative', 'dynamic', 'programming', 'hashing', 'bitmask', 'geometry', 'string', 'pattern', 'matching', 'trie', 'segment', 'fenwick', 'disjoint', 'set', 'dsu', 'euler', 'hamilton', 'bipartite', 'connected', 'strongly', 'components', 'bridge', 'articulation', 'mst', 'shortest', 'flow', 'cut', 'tsp', 'knapsack', 'lis', 'lcs', 'palindrome', 'anagram', 'permutation', 'combination', 'subset', 'subsets', 'subsequence', 'subarray', 'partition', 'split', 'group', 'merge', 'sort', 'quick', 'heap', 'radix', 'counting', 'bucket', 'search', 'binary', 'ternary', 'interpolation', 'jump', 'exponential', 'select', 'median', 'kth', 'order', 'statistic', 'top', 'k', 'freq', 'most', 'least', 'frequent', 'unique', 'duplicate', 'missing', 'first', 'last', 'next', 'prev', 'previous', 'current', 'target', 'start', 'end', 'begin', 'finish', 'limit', 'boundary', 'corner', 'edge', 'case', 'special', 'optimization', 'complexity', 'space', 'time', 'efficiency'];
-  const lowerStr = trimmed.toLowerCase();
-  const hasDsaWord = dsaKeywords.some(kw => new RegExp('\\b' + kw + '\\b').test(lowerStr));
-
-  if (!hasDsaWord && trimmed.length < 30 && !/[:;\->\/\(\)\[\]#\.']/.test(trimmed)) {
-    return true;
-  }
-
-  return false;
-}
-
-function csvLinesToProblems(lines) {
-  if (!lines || lines.length <= 1) return [];
-
-  const staticMap = {};
-  try {
-    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-    if (fs.existsSync(jsonPath)) {
-      const staticProblems = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-      staticProblems.forEach(p => {
-        if (p.title) staticMap[p.title.trim().toLowerCase()] = p;
-      });
-    }
-  } catch (e) {}
-
-  let currentCategory = 'Graphs';
-  let currentSubtopic = '';
-  const problems = [];
-
-  for (let i = 0; i < lines.length; i++) {
-    const cols = lines[i];
-    if (!cols || cols.length === 0) continue;
-
-    if (cols[0] && cols[0].trim() && !cols[0].toLowerCase().includes('sheet') && !cols[0].toLowerCase().includes('edit') && !cols[0].toLowerCase().includes('do not')) {
-      currentCategory = cols[0].trim();
-    }
-
-    const col1 = (cols[1] || '').trim();
-    const col2 = (cols[2] || '').trim();
-    const col3 = (cols[3] || '').trim();
-
-    if (col3.toLowerCase().includes('dsa sheet') || col3.toLowerCase().includes('questions') || col1.toLowerCase().includes('mark as done') || col3.toLowerCase().includes('do not send')) {
-      continue;
-    }
-
-    const lowerCol3 = col3.toLowerCase();
-    const lowerCol0 = (cols[0] || '').toLowerCase();
-    if (lowerCol3.includes('implementation based') || lowerCol3.includes('conceptual video') || lowerCol3.includes('algorithmic pattern') || lowerCol0.includes('implementation based') || lowerCol0.includes('conceptual video')) {
-      continue;
-    }
-
-    const isIdNum = !isNaN(parseInt(col2)) && parseInt(col2) > 0;
-    const col4Val = (cols[4] || '').trim();
-    const isPlaceholderLink = col4Val === '' || col4Val === 'Problem Link';
-    if (col3 && !isIdNum && (col1 === '' || col1 === 'FALSE' || col1 === 'TRUE') && isPlaceholderLink) {
-      currentSubtopic = col3;
-      continue;
-    }
-
-    const lowerCat = (currentCategory || '').toLowerCase();
-    const lowerSub = (currentSubtopic || '').toLowerCase();
-    if (lowerCat.includes('implementation based') || lowerCat.includes('conceptual video') || lowerSub.includes('implementation based') || lowerSub.includes('conceptual video')) {
-      continue;
-    }
-
-    if (col3 && isIdNum) {
-      const id = problems.length + 1;
-      const title = col3;
-      // Match ONLY by exact title to avoid cross-category ID hint leaks
-      const staticRef = staticMap[title.toLowerCase()] || {};
-
-      const problemLink = (cols[4] || '').startsWith('http') ? cols[4].trim() : (staticRef.problemLink || '');
-      const rawDiff = (cols[5] || '').trim();
-      const difficulty = (rawDiff === 'Easy' || rawDiff === 'Medium' || rawDiff === 'Hard') ? rawDiff : (staticRef.difficulty || 'Medium');
-      const github = (cols[6] || '').startsWith('http') ? cols[6].trim() : (staticRef.github || '');
-      const video = (cols[7] || '').startsWith('http') ? cols[7].trim() : (staticRef.video || '');
-      
-      const compStr = (cols[8] || '').trim();
-      const companies = compStr ? compStr.split(/[,\/|]/).map(s => s.trim().replace(/^"|"$/g, '')).filter(Boolean) : (staticRef.companies || []);
-      
-      let rawIntuition = (cols[9] || '').trim();
-      if (isOnlyCompanyNames(rawIntuition)) {
-        rawIntuition = '';
-      }
-      let intuition = rawIntuition !== '' ? rawIntuition : (staticRef.intuition && staticRef.intuition !== 'Refer to problem logic & hints.' ? staticRef.intuition : '');
-      if (isOnlyCompanyNames(intuition)) {
-        intuition = '';
-      }
-
-      problems.push({
-        id,
-        title,
-        category: currentCategory || staticRef.category || 'General',
-        subTopic: currentSubtopic || staticRef.subTopic || '',
-        difficulty,
-        companies,
-        problemLink,
-        github,
-        video,
-        intuition,
-        code: staticRef.code || `// Logic & hint for: ${title}\n// Refer to problem link for full description.`
-      });
-    }
-  }
-  return problems;
-}
-
-/**
- * GET /api/dsa-sheet/sync
- * Fetches the LIVE Google Sheet CSV, parses it, caches for 5 min, returns JSON.
- * Falls back to the static parsed_problems.json on network/parse errors.
- * This makes Google Sheet edits reflect on the website within 5 minutes.
- */
-app.get('/api/dsa-sheet/sync', async (req, res) => {
-  const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-
-  // ── Serve from in-memory cache if still fresh ─────────────
-  const bustCache = req.query.bust || false;
-  const isFresh = _dsaSheetCache && (Date.now() - _dsaSheetCacheTime < DSA_CACHE_TTL_MS);
-  if (isFresh && !bustCache) {
-    return res.status(200).json({
-      success: true,
-      source: 'cache',
-      count: _dsaSheetCache.length,
-      data: _dsaSheetCache,
-      lastSynced: new Date(_dsaSheetCacheTime).toISOString()
-    });
-  }
-
-  // ── Try to fetch LIVE from Google Sheet ───────────────────
-  try {
-    console.log('🔄 [DSA Sheet Sync] Fetching live data from Google Sheets…');
-    const csvText = await fetchCSV(GOOGLE_SHEET_CSV_URL);
-    const csvLines = parseCSVText(csvText);
-    const liveProblems = csvLinesToProblems(csvLines);
-
-    if (liveProblems && liveProblems.length > 5) {
-      // ── Merge live data with existing static JSON so manually-added
-      // problemLinks are never overwritten by a sync (since Google Sheets
-      // CSV export strips hyperlink URLs, leaving only placeholder text).
-      let mergedProblems = liveProblems;
-      try {
-        if (fs.existsSync(jsonPath)) {
-          const existingData = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-          const existingMap = {};
-          existingData.forEach(p => { if (p.title) existingMap[p.title.trim().toLowerCase()] = p; });
-          mergedProblems = liveProblems.map(lp => {
-            const existing = existingMap[lp.title.trim().toLowerCase()] || {};
-            return {
-              ...lp,
-              // Preserve existing URLs if live CSV didn't provide a real one
-              problemLink: lp.problemLink || existing.problemLink || '',
-              github:      lp.github      || existing.github      || '',
-              video:       lp.video       || existing.video       || '',
-            };
-          });
-        }
-      } catch (mergeErr) {
-        console.warn('⚠️ [DSA Sheet Sync] Merge with existing JSON failed, using live data:', mergeErr.message);
-      }
-
-      // Update in-memory cache
-      _dsaSheetCache = mergedProblems;
-      _dsaSheetCacheTime = Date.now();
-
-      // Persist to disk so /api/dsa-sheet/live also stays fresh
-      try {
-        fs.writeFileSync(jsonPath, JSON.stringify(mergedProblems, null, 2), 'utf-8');
-        console.log(`✅ [DSA Sheet Sync] Wrote ${mergedProblems.length} problems to parsed_problems.json`);
-      } catch (writeErr) {
-        console.warn('⚠️ [DSA Sheet Sync] Could not write parsed_problems.json:', writeErr.message);
-      }
-
-      return res.status(200).json({
-        success: true,
-        source: 'live',
-        count: mergedProblems.length,
-        data: mergedProblems,
-        lastSynced: new Date().toISOString()
-      });
-    }
-
-    throw new Error('Parsed 0 problems from live sheet — falling back');
-  } catch (liveErr) {
-    console.warn('⚠️ [DSA Sheet Sync] Live fetch failed, using static file:', liveErr.message);
-
-    // ── Fallback: read from disk ───────────────────────────
-    try {
-      if (fs.existsSync(jsonPath)) {
-        const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-        _dsaSheetCache = data;
-        _dsaSheetCacheTime = Date.now();
-        return res.status(200).json({
-          success: true,
-          source: 'cached-file',
-          count: data.length,
-          data: data,
-          lastSynced: new Date().toISOString()
-        });
-      }
-      return res.status(200).json({ success: true, source: 'empty', count: 0, data: [] });
-    } catch (fsErr) {
-      console.error('❌ [DSA Sheet Sync] Static fallback also failed:', fsErr.message);
-      return res.status(500).json({ success: false, error: fsErr.message });
-    }
-  }
-});
-
-/**
- * GET /api/dsa-sheet/live
- * Fast: serves pre-parsed static JSON from disk (committed to repo).
- * Use /api/dsa-sheet/sync for live Google Sheet reflection.
- */
-app.get('/api/dsa-sheet/live', (req, res) => {
-  try {
-    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
-    res.setHeader('Pragma', 'no-cache');
-    res.setHeader('Expires', '0');
-
-    const jsonPath = path.join(__dirname, '../client/public/parsed_problems.json');
-    const lecPath  = path.join(__dirname, '../client/public/parsed_lectures.json');
-
-    let data = [];
-    let lectures = [];
-
-    if (fs.existsSync(jsonPath)) {
-      data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-    }
-    if (fs.existsSync(lecPath)) {
-      lectures = JSON.parse(fs.readFileSync(lecPath, 'utf-8'));
-    }
-
-    return res.status(200).json({
-      success: true,
-      count: data.length,
-      data: data,
-      lectures: lectures,
-      lastSynced: new Date().toISOString()
-    });
-  } catch (err) {
-    return res.status(500).json({ success: false, error: err.message });
-  }
-});
-
-/**
- * GET /api/config
- * Exposes safe client-side configuration (no secrets).
- * Frontend reads this once on load to know the ML service URL.
- */
+// ── Safe client-side config endpoint ──────────────────────────
+// Exposes only non-secret configuration values to the frontend.
 app.get('/api/config', (req, res) => {
   res.status(200).json({
     success: true,
@@ -596,6 +297,7 @@ app.get('/api/config', (req, res) => {
   });
 });
 
+// ── Health check ───────────────────────────────────────────────
 app.get('/api/health', (req, res) => {
   res.status(200).json({
     success: true,
@@ -606,20 +308,25 @@ app.get('/api/health', (req, res) => {
 });
 
 
+
 // ============================================================
 // 🛣️ API ROUTE PIPELINES
 // ============================================================
+// DSA Sheet endpoints (extracted to dsaRoutes.js for modularity)
+app.use('/api/dsa-sheet',     dsaRoutes);
+
+// Auth routes get strict brute-force rate limiting (5 req / 15 min per IP)
 app.use('/api/ai',            aiRoutes);
-app.use('/api/auth',          authRoutes);
-app.use('/api/users',         userRoutes);
-app.use('/api/user',          userRoutes);
-app.use('/api/subjects',      subjectRoutes);
-app.use('/api/resources',     resourceRoutes);
-app.use('/api/favourites',    favouriteRoutes);
-app.use('/api/enrollments',   enrollmentRoutes);
-app.use('/api/payments',      paymentRoutes);
-app.use('/api/notifications',        notificationRoutes);
-app.use('/api/contributor-requests', contributorRequestRoutes);
+app.use('/api/auth',          authLimiter, authRoutes);
+app.use('/api/users',         generalLimiter, userRoutes);
+app.use('/api/user',          generalLimiter, userRoutes);
+app.use('/api/subjects',      generalLimiter, subjectRoutes);
+app.use('/api/resources',     generalLimiter, resourceRoutes);
+app.use('/api/favourites',    generalLimiter, favouriteRoutes);
+app.use('/api/enrollments',   generalLimiter, enrollmentRoutes);
+app.use('/api/payments',      generalLimiter, paymentRoutes);
+app.use('/api/notifications',        generalLimiter, notificationRoutes);
+app.use('/api/contributor-requests', generalLimiter, contributorRequestRoutes);
 // ── Google OAuth root-level aliases ──────────────────────────
 // These MUST live at root because Google Cloud Console's Authorized
 // Redirect URI is set to: https://your-app.onrender.com/auth/google/callback

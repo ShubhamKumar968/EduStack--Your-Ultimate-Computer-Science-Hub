@@ -284,7 +284,17 @@
           <i class="fa-solid fa-crown text-amber-500"></i> EduStack SDE Practice Intelligence
         </div>
         <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/40 text-amber-600 dark:text-amber-300 text-xs font-black shadow-sm">
-          <i class="fa-solid fa-coins text-amber-500"></i>
+          <!-- EduStack Coin Logo -->
+          <svg class="w-4 h-4 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 2px 4px rgba(245,158,11,0.5))">
+            <defs>
+              <linearGradient id="hdrCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="35%" stop-color="#fef08a"/><stop offset="70%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+              <radialGradient id="hdrCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="60%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#d97706"/></radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="46" fill="url(#hdrCoinG)" stroke="#78350f" stroke-width="2"/>
+            <circle cx="50" cy="50" r="38" fill="url(#hdrCoinC)" stroke="#fef08a" stroke-width="1.5"/>
+            <polygon points="50,25 55,39 70,39 58,49 62,64 50,54 38,64 42,49 30,39 45,39" fill="#ffffff" opacity="0.95" stroke="#92400e" stroke-width="1.2"/>
+            <text x="50" y="80" text-anchor="middle" font-size="9" font-weight="900" fill="#78350f" letter-spacing="0.5">EDU</text>
+          </svg>
           <span><strong id="userPointsHeaderVal" class="text-sm font-black text-amber-600 dark:text-amber-300">0</strong> EduStack Coins</span>
         </div>
       </div>
@@ -313,8 +323,17 @@
                 <h2 class="text-base font-black text-rose-600 dark:text-rose-400">EduStack SDE 450+</h2>
               </div>
               <div class="px-2.5 py-1 rounded-xl bg-amber-500/15 border border-amber-400/30 text-amber-600 dark:text-amber-300 text-[11px] font-black flex items-center gap-1.5 shadow-sm">
-                <i class="fa-solid fa-coins text-amber-500 text-xs"></i>
-                <span id="cardCoinsCounter">0</span> Pts
+                <!-- EduStack Coin inline -->
+                <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
+                  <defs>
+                    <linearGradient id="crdCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+                    <radialGradient id="crdCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient>
+                  </defs>
+                  <circle cx="50" cy="50" r="46" fill="url(#crdCoinG)" stroke="#78350f" stroke-width="2"/>
+                  <circle cx="50" cy="50" r="36" fill="url(#crdCoinC)"/>
+                  <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+                </svg>
+                <span id="cardCoinsCounter">0</span>
               </div>
             </div>
             <p class="text-[11px] text-gray-500 dark:text-gray-400 font-semibold leading-relaxed mb-3">
@@ -409,6 +428,27 @@
               </div>
             </div>
           </div>
+
+          <!-- LeetCode-Style Earned Badges Row -->
+          <div class="mt-2 pt-2 border-t border-purple-100 dark:border-purple-900/30">
+            <div class="flex items-center justify-between mb-1.5">
+              <span class="text-[9px] font-black text-purple-600 dark:text-purple-400 uppercase tracking-wider flex items-center gap-1">
+                <i class="fa-solid fa-award text-amber-500"></i> Badges
+              </span>
+              <div class="flex items-center gap-1.5">
+                <span id="miniUnlockedCount" class="text-[9px] font-black bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-0.5 rounded-full border border-amber-400/30">0 / 12</span>
+                <button onclick="openBadgesShowcaseModal()" class="text-[8px] font-black text-brand hover:underline bg-transparent border-0 cursor-pointer">See all →</button>
+              </div>
+            </div>
+            <!-- Scrollable Badge Hexagons (LeetCode Style) -->
+            <div id="miniBadgesRow" class="flex items-center gap-1.5 overflow-x-auto custom-scrollbar pb-0.5">
+              <div class="flex-shrink-0 text-[10px] text-gray-400 font-semibold italic">Solve daily to earn badges</div>
+            </div>
+            <!-- Most Recent Badge Label -->
+            <div id="mostRecentBadgeLabel" class="hidden mt-1.5 text-[9px] text-gray-500 dark:text-gray-400 font-semibold">
+              Most Recent: <span id="mostRecentBadgeName" class="text-brand font-black">—</span>
+            </div>
+          </div>
         </div>
 
         <!-- CARD 3: LEADERBOARD & SHEET SYNC -->
@@ -455,8 +495,18 @@
                   <i class="fa-solid fa-star text-[9px]"></i> Problem of the Day
                 </span>
                 <span id="potdDateBadge" class="text-xs font-bold text-gray-500 dark:text-gray-400"></span>
-                <span class="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1">
-                  <i class="fa-solid fa-coins text-amber-500"></i> +10 EduStack Points (<span id="potdCoinsBalance">0</span> Total)
+                <span class="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                  <!-- EduStack Coin -->
+                  <svg class="w-3.5 h-3.5 flex-shrink-0" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 1px 3px rgba(245,158,11,0.5))">
+                    <defs>
+                      <linearGradient id="potdCoinG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient>
+                      <radialGradient id="potdCoinC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient>
+                    </defs>
+                    <circle cx="50" cy="50" r="46" fill="url(#potdCoinG)" stroke="#78350f" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="36" fill="url(#potdCoinC)"/>
+                    <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#ffffff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+                  </svg>
+                  +10 EduStack Coins (<span id="potdCoinsBalance">0</span> Total)
                 </span>
               </div>
               <h3 id="potdTitle" class="text-base md:text-xl font-black text-gray-900 dark:text-white flex items-center gap-2 flex-wrap">
@@ -476,7 +526,12 @@
               <i class="fa-solid fa-code"></i> Solve Challenge
             </button>
             <button id="potdClaimBtn" onclick="claimPotdPoints()" class="px-5 py-3 rounded-2xl bg-gradient-to-r from-amber-500 via-rose-500 to-brand hover:brightness-110 text-white font-black text-xs transition-all cursor-pointer flex items-center gap-2 shadow-md shadow-rose-500/25 active:scale-95 border-0">
-              <i class="fa-solid fa-circle-check"></i> <span id="potdClaimText">Mark Solved (+10 Pts)</span>
+              <i class="fa-solid fa-circle-check"></i>
+              <span id="potdClaimText">Mark Solved</span>
+              <span class="flex items-center gap-1 bg-white/15 px-2 py-0.5 rounded-full">
+                <svg class="w-3 h-3" viewBox="0 0 100 100" fill="none"><defs><linearGradient id="clmCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="100%" stop-color="#f59e0b"/></linearGradient></defs><circle cx="50" cy="50" r="46" fill="url(#clmCG)"/><polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9"/></svg>
+                +10
+              </span>
             </button>
           </div>
         </div>
@@ -508,6 +563,33 @@
             <div class="px-3.5 py-1.5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center">
               <div class="text-[9px] font-black uppercase text-emerald-600 dark:text-emerald-400">Unlocked</div>
               <div id="badgeSectionCountVal" class="text-xs sm:text-sm font-black text-emerald-600 dark:text-emerald-300 mt-0.5">0 / 12 🎖️</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- LEETCODE-STYLE USER OBTAINED BADGES PANEL (SEPARATE SHOWCASE) -->
+        <div id="userObtainedBadgesPanel" class="my-4 p-4 rounded-2xl bg-gradient-to-r from-gray-900/90 via-[#191828] to-[#12111d] border border-amber-500/30 shadow-lg text-white">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <!-- Left: Badge Count -->
+              <div class="flex-shrink-0 cursor-pointer" onclick="openBadgesShowcaseModal()" title="View All Badges">
+                <div class="text-[10px] font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1">
+                  <span>Badges</span>
+                  <i class="fa-solid fa-arrow-right text-[9px] text-gray-400 group-hover:text-amber-400"></i>
+                </div>
+                <div id="obtainedBadgesCount" class="text-2xl font-black text-white mt-0.5">0</div>
+              </div>
+
+              <!-- Center: Hexagonal / 3D Unlocked Badges Icons Preview -->
+              <div id="obtainedBadgesRow" class="flex items-center gap-3 overflow-x-auto custom-scrollbar py-1">
+                <div class="text-xs text-gray-400 font-medium italic">No badges unlocked yet. Solve daily challenges to build your streak!</div>
+              </div>
+            </div>
+
+            <!-- Right: Most Recent Badge Info -->
+            <div id="mostRecentBadgeSection" class="hidden md:flex flex-col text-left md:text-right border-t md:border-t-0 md:border-l border-white/10 pt-2 md:pt-0 md:pl-4 min-w-[180px]">
+              <span class="text-[10px] font-extrabold text-gray-400 uppercase tracking-wider">Most Recent Badge</span>
+              <span id="mostRecentBadgeTitleVal" class="text-xs font-black text-amber-400 truncate mt-0.5">—</span>
             </div>
           </div>
         </div>
@@ -837,11 +919,20 @@
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.12); border-radius: 18px; padding: 14px 8px; margin-bottom: 24px; text-align: center;">
         <div>
           <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Reward</div>
-          <div id="potdModalPoints" style="color: #fbbf24; font-size: 18px; font-weight: 900; margin-top: 2px;">+10 Pts</div>
+          <div id="potdModalPoints" style="color: #fbbf24; font-size: 18px; font-weight: 900; margin-top: 4px; display: flex; align-items: center; justify-content: center; gap: 5px;">
+            <!-- Coin SVG -->
+            <svg width="20" height="20" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 2px 8px rgba(245,158,11,0.7)); flex-shrink:0">
+              <defs><linearGradient id="mCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient><radialGradient id="mCC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient></defs>
+              <circle cx="50" cy="50" r="46" fill="url(#mCG)" stroke="#78350f" stroke-width="2"/>
+              <circle cx="50" cy="50" r="36" fill="url(#mCC)"/>
+              <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+            </svg>
+            +10
+          </div>
         </div>
         <div style="border-left: 1px solid rgba(255,255,255,0.1); border-right: 1px solid rgba(255,255,255,0.1);">
           <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Total Coins</div>
-          <div id="potdModalTotalPoints" style="color: #ffffff; font-size: 18px; font-weight: 900; margin-top: 2px;">10 Coins</div>
+          <div id="potdModalTotalPoints" style="color: #ffffff; font-size: 18px; font-weight: 900; margin-top: 2px;">10</div>
         </div>
         <div>
           <div style="color: #94a3b8; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;">Streak</div>
@@ -1549,8 +1640,14 @@
 
     function openPotdProblem() {
       if (!currentPotdProblem) return;
-      openModal(currentPotdProblem.id);
+      // FIX: Match by title (stable) not by mutable sequential id.
+      // The sequential id changes each time problems are re-indexed after
+      // the live Google Sheet is re-fetched. Title is always stable.
+      const p = problems.find(item => item.title === currentPotdProblem.title);
+      if (p) openModal(p.id);
     }
+
+    let _pendingMilestoneBadge = null;
 
     function openPotdCelebrationModal() {
       const modal = document.getElementById('potdCelebrationModal');
@@ -1561,7 +1658,17 @@
 
       const { current: curStreak } = computeStreaks();
 
-      if (ptsEl) ptsEl.textContent = '+10 Pts';
+      if (ptsEl) {
+        ptsEl.innerHTML = `
+          <svg width="20" height="20" viewBox="0 0 100 100" fill="none" style="filter:drop-shadow(0 2px 6px rgba(245,158,11,0.6)); flex-shrink:0">
+            <defs><linearGradient id="mCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#fffbeb"/><stop offset="40%" stop-color="#fef08a"/><stop offset="100%" stop-color="#b45309"/></linearGradient><radialGradient id="mCC" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fef9c3"/><stop offset="70%" stop-color="#f59e0b"/></radialGradient></defs>
+            <circle cx="50" cy="50" r="46" fill="url(#mCG)" stroke="#78350f" stroke-width="2"/>
+            <circle cx="50" cy="50" r="36" fill="url(#mCC)"/>
+            <polygon points="50,26 54,38 68,38 57,47 61,61 50,52 39,61 43,47 32,38 46,38" fill="#fff" opacity="0.9" stroke="#92400e" stroke-width="1"/>
+          </svg>
+          <span>+10 Coins</span>
+        `;
+      }
       if (totPtsEl) totPtsEl.textContent = `${edustackPoints} Coins`;
       if (streakEl) streakEl.textContent = `${curStreak} Day${curStreak === 1 ? '' : 's'} 🔥`;
       if (problemNameEl && currentPotdProblem) {
@@ -1581,6 +1688,15 @@
       if (modal) {
         modal.classList.add('hidden');
         modal.classList.remove('flex');
+      }
+
+      // If a milestone badge was unlocked during this solve, celebrate it right after!
+      if (_pendingMilestoneBadge) {
+        const b = _pendingMilestoneBadge;
+        _pendingMilestoneBadge = null;
+        setTimeout(() => {
+          openBadgeCelebrationModal(b, false);
+        }, 350);
       }
     }
 
@@ -2031,9 +2147,80 @@
       const bStreak = document.getElementById('badgeSectionStreakVal');
       if (bStreak) bStreak.textContent = `${curStreak} Days 🔥`;
       const bCount = document.getElementById('badgeSectionCountVal');
+      
+      const allUnlocked = CONSISTENCY_BADGES.filter(b => unlockedBadges.includes(b.id) || unlockedBadges.some(item => (item.id || item) === b.id) || (curStreak >= b.days));
+      const totalUnlocked = allUnlocked.length;
+
       if (bCount) {
-        const totalUnlocked = CONSISTENCY_BADGES.filter(b => unlockedBadges.includes(b.id) || unlockedBadges.some(item => (item.id || item) === b.id) || (curStreak >= b.days)).length;
         bCount.textContent = `${totalUnlocked} / 12 🎖️`;
+      }
+
+      // ── RENDER MINI BADGES IN CALENDAR CARD (LEETCODE-STYLE) ──
+      const miniRow = document.getElementById('miniBadgesRow');
+      const miniCount = document.getElementById('miniUnlockedCount');
+      const mostRecentLbl = document.getElementById('mostRecentBadgeLabel');
+      const mostRecentName = document.getElementById('mostRecentBadgeName');
+
+      if (miniCount) miniCount.textContent = `${totalUnlocked} / 12`;
+
+      if (miniRow) {
+        if (allUnlocked.length === 0) {
+          miniRow.innerHTML = `<div class="flex-shrink-0 text-[10px] text-gray-400 font-semibold italic">Solve daily to earn streak badges</div>`;
+        } else {
+          miniRow.innerHTML = allUnlocked.map(b => {
+            const svgIcon = getLinkedInBadgeSVG(b.iconType, true);
+            return `
+              <div onclick="showBadgeDetailPrompt('${b.id}')" title="${b.title} (${b.days} Days Streak) — Unlocked!" class="w-8 h-8 rounded-xl bg-gradient-to-tr from-amber-500/20 to-yellow-400/20 border border-amber-400/50 flex-shrink-0 flex items-center justify-center p-1 cursor-pointer hover:scale-110 transition-transform shadow-sm">
+                <div class="w-6 h-6 flex items-center justify-center">
+                  ${svgIcon}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      const mostRecentBadge = allUnlocked.length > 0 ? allUnlocked[allUnlocked.length - 1] : null;
+      if (mostRecentBadge) {
+        const curYear = new Date().getFullYear();
+        if (mostRecentLbl) mostRecentLbl.classList.remove('hidden');
+        if (mostRecentName) mostRecentName.textContent = `${mostRecentBadge.title} (${mostRecentBadge.days}d) ${curYear}`;
+      } else {
+        if (mostRecentLbl) mostRecentLbl.classList.add('hidden');
+      }
+
+      // ── RENDER USER OBTAINED BADGES PANEL (SEPARATE LEETCODE SHOWCASE) ──
+      const obtCount = document.getElementById('obtainedBadgesCount');
+      const obtRow = document.getElementById('obtainedBadgesRow');
+      const recSection = document.getElementById('mostRecentBadgeSection');
+      const recTitle = document.getElementById('mostRecentBadgeTitleVal');
+
+      if (obtCount) obtCount.textContent = totalUnlocked;
+
+      if (obtRow) {
+        if (allUnlocked.length === 0) {
+          obtRow.innerHTML = `<div class="text-xs text-gray-400 font-medium italic">No badges unlocked yet. Complete daily problems to build your streak!</div>`;
+        } else {
+          obtRow.innerHTML = allUnlocked.map(b => {
+            const svgIcon = getLinkedInBadgeSVG(b.iconType, true);
+            return `
+              <div onclick="showBadgeDetailPrompt('${b.id}')" title="${b.title} · ${b.days} Days (${b.tier})" class="group/b flex flex-col items-center flex-shrink-0 cursor-pointer p-1.5 rounded-2xl bg-white/5 hover:bg-white/15 border border-amber-400/30 hover:border-amber-400 transition-all duration-200">
+                <div class="relative w-11 h-11 flex items-center justify-center filter drop-shadow-[0_4px_10px_rgba(245,158,11,0.6)] group-hover/b:scale-110 transition-transform">
+                  ${svgIcon}
+                </div>
+                <span class="text-[9px] font-black text-amber-300 mt-1">${b.days}d</span>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      if (mostRecentBadge) {
+        const curYear = new Date().getFullYear();
+        if (recSection) recSection.classList.remove('hidden');
+        if (recTitle) recTitle.textContent = `${mostRecentBadge.title} Badge ${curYear} (${mostRecentBadge.days} Days)`;
+      } else {
+        if (recSection) recSection.classList.add('hidden');
       }
     }
 
@@ -2061,9 +2248,14 @@
       renderBadgeSection();
 
       if (newlyUnlocked && triggerPopups) {
-        setTimeout(() => {
-          openBadgeCelebrationModal(newlyUnlocked, false);
-        }, 500);
+        const potdModal = document.getElementById('potdCelebrationModal');
+        if (potdModal && !potdModal.classList.contains('hidden')) {
+          _pendingMilestoneBadge = newlyUnlocked;
+        } else {
+          setTimeout(() => {
+            openBadgeCelebrationModal(newlyUnlocked, false);
+          }, 450);
+        }
       }
     }
 
@@ -2776,12 +2968,13 @@
             credentials: 'include',
             headers:     { 'Content-Type': 'application/json' },
             body:        JSON.stringify({
-              solvedCount: solvedIds.length,
-              edustackPoints: edustackPoints,
+              solvedCount:       solvedIds.length,
+              solvedProblems:    solvedIds,          // Persist actual IDs for cross-device restore
+              edustackPoints:    edustackPoints,
               streak: { current: curStreak, best: bestStreak, lastActiveDate: todayKey() },
-              unlockedBadges: unlockedBadges,
+              unlockedBadges:    unlockedBadges,
               bookmarkedProblems: bookmarkedIds,
-              attemptedProblems: attemptedIds,
+              attemptedProblems:  attemptedIds,
               potdCompletedDates: potdCompletedDates,
             }),
           });
@@ -2817,7 +3010,8 @@
       if (board.length === 0) {
         const localCount = solvedIds.length;
         if (currentUser && localCount > 0) {
-          const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
+          // Use full name — same format as what the backend now returns
+          const name = [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || 'You';
           board = [{ id: currentUser._id || 'you', name, avatar: currentUser.avatar || null, solved: localCount }];
         } else {
           list.innerHTML = `
@@ -2833,7 +3027,8 @@
       if (currentUser) {
         const userInBoard = board.some(e => String(e.id) === String(currentUser._id));
         if (!userInBoard && solvedIds.length > 0) {
-          const name = (currentUser.firstName || 'You') + (currentUser.lastName ? ' ' + currentUser.lastName[0] + '.' : '');
+          // Use full name — same as backend now sends
+          const name = [currentUser.firstName, currentUser.lastName].filter(Boolean).join(' ') || 'You';
           board.push({ id: currentUser._id, name, avatar: currentUser.avatar || null, solved: solvedIds.length, _isYouAppended: true });
         }
       }
@@ -3628,6 +3823,11 @@
             attemptedIds = [...new Set([...attemptedIds, ...u.attemptedProblems])];
             localStorage.setItem('edustack_dsa_attempted', JSON.stringify(attemptedIds));
           }
+          // Restore solved problem IDs from DB (cross-device persistence)
+          if (Array.isArray(u.solvedProblems) && u.solvedProblems.length > 0) {
+            solvedIds = [...new Set([...solvedIds, ...u.solvedProblems])];
+            localStorage.setItem('edustack_dsa_solved', JSON.stringify(solvedIds));
+          }
           if (Array.isArray(u.potdCompletedDates)) {
             potdCompletedDates = [...new Set([...potdCompletedDates, ...u.potdCompletedDates])];
             localStorage.setItem('edustack_potd_dates', JSON.stringify(potdCompletedDates));
@@ -3656,7 +3856,11 @@
       checkConsistencyBadges(curStreak, false);
 
       // 4. Background fetch latest from live sheet
-      loadGoogleSheetData();
+      // After live data loads, re-run initPOTD so currentPotdProblem
+      // references the freshly-indexed problem (keeps POTD modal correct).
+      loadGoogleSheetData().then(() => {
+        if (problems && problems.length > 0) initPOTD();
+      }).catch(() => {});
 
       // 5. Live Search Input listener
       const searchInput = document.getElementById('searchInput');

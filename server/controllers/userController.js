@@ -45,6 +45,7 @@ exports.getProfile = asyncHandler(async (req, res) => {
       unlockedBadges:     user.unlockedBadges || [],
       bookmarkedProblems: user.bookmarkedProblems || [],
       attemptedProblems:  user.attemptedProblems || [],
+      solvedProblems:     user.solvedProblems || [],
       potdCompletedDates: user.potdCompletedDates || [],
       createdAt:          user.createdAt,
     },
@@ -246,6 +247,7 @@ exports.becomeContributor = asyncHandler(async (req, res) => {
 exports.updateDsaProgress = asyncHandler(async (req, res) => {
   const {
     solvedCount,
+    solvedProblems,
     edustackPoints,
     streak,
     unlockedBadges,
@@ -258,6 +260,14 @@ exports.updateDsaProgress = asyncHandler(async (req, res) => {
 
   if (typeof solvedCount === 'number' && solvedCount >= 0) {
     updates.dsaSolvedCount = solvedCount;
+  }
+  // Persist actual solved problem IDs so progress restores across devices
+  if (Array.isArray(solvedProblems)) {
+    updates.solvedProblems = solvedProblems;
+    // Keep dsaSolvedCount in sync even if not explicitly passed
+    if (typeof solvedCount !== 'number') {
+      updates.dsaSolvedCount = solvedProblems.length;
+    }
   }
   if (typeof edustackPoints === 'number' && edustackPoints >= 0) {
     updates.edustackPoints = edustackPoints;
@@ -294,6 +304,7 @@ exports.updateDsaProgress = asyncHandler(async (req, res) => {
 
   return sendSuccess(res, 'DSA progress saved.', {
     dsaSolvedCount:     updatedUser.dsaSolvedCount,
+    solvedProblems:     updatedUser.solvedProblems,
     edustackPoints:     updatedUser.edustackPoints,
     streak:             updatedUser.streak,
     unlockedBadges:     updatedUser.unlockedBadges,
@@ -322,7 +333,8 @@ exports.getLeaderboard = asyncHandler(async (req, res) => {
 
   const board = topUsers.map(u => ({
     id:     u._id,
-    name:   `${u.firstName} ${u.lastName ? u.lastName[0] + '.' : ''}`.trim(),
+    // Return full name — frontend should display as-is
+    name:   `${u.firstName}${u.lastName ? ' ' + u.lastName : ''}`.trim(),
     avatar: u.avatar || null,
     solved: u.dsaSolvedCount,
   }));

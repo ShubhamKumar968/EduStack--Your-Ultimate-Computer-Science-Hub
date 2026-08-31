@@ -175,6 +175,13 @@ const userSchema = new mongoose.Schema(
       default: [],
     },
 
+    // Solved problems list (array of problem IDs)
+    // Persisted so progress is restored across devices / sessions.
+    solvedProblems: {
+      type:    [Number],
+      default: [],
+    },
+
     // Dates when Problem of the Day was completed (YYYY-MM-DD strings)
     potdCompletedDates: {
       type:    [String],
