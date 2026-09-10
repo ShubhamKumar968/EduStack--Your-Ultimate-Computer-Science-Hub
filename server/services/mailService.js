@@ -87,27 +87,39 @@ const sendOtpEmail = async (to, otp) => {
   // ── 1. Resend HTTPS REST API (Bypasses Render SMTP port blocking) ──
   if (process.env.RESEND_API_KEY) {
     try {
+      // ⚠️ In Resend, you CANNOT send from @gmail.com or other unverified domains.
+      // Use RESEND_FROM if custom domain is verified; otherwise MUST use 'EduStack <onboarding@resend.dev>'.
+      let resendFrom = 'EduStack <onboarding@resend.dev>';
+      if (process.env.RESEND_FROM) {
+        resendFrom = process.env.RESEND_FROM.trim();
+      } else if (process.env.MAIL_FROM && !process.env.MAIL_FROM.includes('@gmail.') && !process.env.MAIL_FROM.includes('@yahoo.') && !process.env.MAIL_FROM.includes('@outlook.')) {
+        resendFrom = process.env.MAIL_FROM.trim();
+      }
+
+      console.log(`📡 [Resend API]: Sending OTP to ${to} from ${resendFrom}...`);
+
       const response = await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY.trim()}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: process.env.MAIL_FROM || 'EduStack <onboarding@resend.dev>',
+          from: resendFrom,
           to: [to],
           subject: '🔐 Your EduStack Verification Code',
           html: emailHtml,
         }),
       });
+
       const data = await response.json();
       if (response.ok) {
         console.log(`✅ [Resend API]: OTP delivered to ${to} via HTTPS (id: ${data.id})`);
         return { delivered: true, provider: 'resend', id: data.id };
       }
-      console.warn('⚠️ [Resend API Warning]:', data);
+      console.error(`❌ [Resend API Rejected]: HTTP ${response.status} - ${data.message || JSON.stringify(data)}`);
     } catch (apiErr) {
-      console.warn('⚠️ [Resend API Error]:', apiErr.message);
+      console.error('❌ [Resend API Network Error]:', apiErr.message);
     }
   }
 
@@ -195,14 +207,21 @@ const sendWelcomeEmail = async (to, name) => {
 
   if (process.env.RESEND_API_KEY) {
     try {
+      let resendFrom = 'EduStack <onboarding@resend.dev>';
+      if (process.env.RESEND_FROM) {
+        resendFrom = process.env.RESEND_FROM.trim();
+      } else if (process.env.MAIL_FROM && !process.env.MAIL_FROM.includes('@gmail.') && !process.env.MAIL_FROM.includes('@yahoo.') && !process.env.MAIL_FROM.includes('@outlook.')) {
+        resendFrom = process.env.MAIL_FROM.trim();
+      }
+
       await fetch('https://api.resend.com/emails', {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY.trim()}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          from: process.env.MAIL_FROM || 'EduStack <onboarding@resend.dev>',
+          from: resendFrom,
           to: [to],
           subject: '🎉 Welcome to EduStack — Your CS Resource Hub!',
           html: welcomeHtml,
