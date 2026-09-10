@@ -164,9 +164,13 @@ exports.verifyOtp = asyncHandler(async (req, res) => {
   const { email, otp } = req.body;
   const normalizedEmail = email.toLowerCase().trim();
 
-  // otpService.verifyOtp throws descriptive errors on failure
-  // asyncHandler catches them and forwards to errorHandler
-  await otpService.verifyOtp(normalizedEmail, otp);
+  // otpService.verifyOtp throws descriptive errors on failure.
+  // We catch them here and return 400 so they don't become 500 errors.
+  try {
+    await otpService.verifyOtp(normalizedEmail, otp);
+  } catch (err) {
+    return sendError(res, err.message || 'Invalid or expired OTP.', 400);
+  }
 
   // ── Mark user as verified ──────────────────────────────────
   const user = await User.findOneAndUpdate(
@@ -260,7 +264,17 @@ exports.login = asyncHandler(async (req, res) => {
     );
   }
 
-  // ── Compare passwords ──────────────────────────────────────
+  // ── Compare passwords ──────────────────────────────────────────────
+  // Guard: Google OAuth users have no password — block email/password login
+  // and guide them to use Google Sign-In instead.
+  if (!user.password) {
+    return sendError(
+      res,
+      'This account was created with Google Sign-In. Please use the “Continue with Google” button to log in.',
+      401
+    );
+  }
+
   // user.comparePassword is an instance method defined in User model
   const isMatch = await user.comparePassword(password);
   if (!isMatch) {
