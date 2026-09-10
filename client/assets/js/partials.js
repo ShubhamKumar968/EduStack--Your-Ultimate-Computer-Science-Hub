@@ -1295,14 +1295,22 @@ document.addEventListener('DOMContentLoaded', () => {
       // ─────────────────────────────────────────────────────────────────
 
 
-      fetch('/api/auth/me', { credentials: 'include' })
-        .then(res => res.json())
-        .then(resData => {
-          if (resData && resData.success && resData.data && resData.data.user) {
-            const u = resData.data.user;
-            // Store user info globally for easy page access
-            window.currentUser = u;
-            const container = document.getElementById('nav-auth-container');
+      // Skip /api/auth/me session check on authentication pages (login, register, forgot-password, etc.)
+      // where visitors are expected to be unauthenticated, preventing misleading 401 console errors.
+      const isAuthPage = /(login|register|forgot-password|reset-password|verify-otp|verify-forgot-otp)\.html/i.test(window.location.pathname);
+
+      if (!isAuthPage) {
+        fetch('/api/auth/me', { credentials: 'include' })
+          .then(res => {
+            if (res.status === 401) return null; // Expected when visitor is not logged in
+            return res.json();
+          })
+          .then(resData => {
+            if (resData && resData.success && resData.data && resData.data.user) {
+              const u = resData.data.user;
+              // Store user info globally for easy page access
+              window.currentUser = u;
+              const container = document.getElementById('nav-auth-container');
             if (container) {
               let rawName = `${u.firstName || ''} ${u.lastName || ''}`.trim();
               if (!rawName && u.email) {
@@ -1479,6 +1487,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           }
         })
+        .catch(() => {});
+      }
           if (isAdmin) {
             window.showCustomModal({
               title: '⛔ Admin Access Restricted',
