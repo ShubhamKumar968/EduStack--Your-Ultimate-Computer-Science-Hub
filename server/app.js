@@ -24,7 +24,7 @@ const passport = require('passport');
 const passportGoogle = require('passport-google-oauth20');
 const rateLimit = require('express-rate-limit');
 
-const { generateToken, attachCookieToken } = require('./utils/generateToken');
+const { generateToken, attachCookieToken, attachTokenPair } = require('./utils/generateToken');
 const errorHandler = require('./middlewares/errorHandler');
 const User = require('./models/user');
 
@@ -160,10 +160,16 @@ app.use(session({
 // 🔒 PASSPORT GOOGLE OAUTH CONFIGURATION
 // ============================================================
 const getGoogleCallbackURL = () => {
-  const envUrl = process.env.GOOGLE_CALLBACK_URL;
-  if (envUrl && !envUrl.includes('localhost')) return envUrl;
-  if (process.env.RENDER_EXTERNAL_URL) return `${process.env.RENDER_EXTERNAL_URL}/api/auth/google/callback`;
-  return envUrl || 'http://localhost:3000/auth/google/callback';
+  // 1. Explicit production override set in Render dashboard env vars
+  if (process.env.GOOGLE_CALLBACK_URL && !process.env.GOOGLE_CALLBACK_URL.includes('localhost')) {
+    return process.env.GOOGLE_CALLBACK_URL;
+  }
+  // 2. Auto-detect Render deployment URL (Render sets this automatically)
+  if (process.env.RENDER_EXTERNAL_URL) {
+    return `${process.env.RENDER_EXTERNAL_URL}/auth/google/callback`;
+  }
+  // 3. Local development fallback
+  return process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/auth/google/callback';
 };
 
 const GoogleStrategy = passportGoogle.Strategy;
@@ -307,9 +313,14 @@ app.use('/api/contributor-requests', generalLimiter, contributorRequestRoutes);
 // Redirect URI is set to: https://your-app.onrender.com/auth/google/callback
 // All other auth endpoints are strictly under /api/auth/
 app.get('/auth/google',          passport.authenticate('google', { scope: ['profile', 'email'], prompt: 'select_account' }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/auth/login.html?error=oauth_failed' }), (req, res) => {
-  const { attachCookieToken } = require('./utils/generateToken');
-  attachCookieToken(res, req.user._id);
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/auth/login.html?error=oauth_failed' }), async (req, res) => {
+  try {
+    await attachTokenPair(res, req.user._id);
+  } catch (err) {
+    console.error('⚠️ [Google OAuth root] Token pair error, falling back:', err.message);
+    // Fallback to legacy single-token so the user isn't completely locked out
+    attachCookieToken(res, req.user._id);
+  }
   if (req.session) {
     req.session.isLoggedIn = true;
     req.session.user = {
@@ -397,14 +408,15 @@ mongoose.connect(DB_PATH)
 
     // ── Start HTTP Server ───────────────────────────────────
     const server = app.listen(PORT, () => {
+      const publicUrl = process.env.RENDER_EXTERNAL_URL || `http://localhost:${PORT}`;
       console.log(`
   ╔═══════════════════════════════════════════════╗
   ║        🚀  EduStack API Server Started         ║
   ╠═══════════════════════════════════════════════╣
   ║  Port : ${PORT}
   ║  Mode : ${process.env.NODE_ENV || 'development'}
-  ║  URL  : http://localhost:${PORT}
-  ║  Health: http://localhost:${PORT}/api/health
+  ║  URL  : ${publicUrl}
+  ║  Health: ${publicUrl}/api/health
   ╚═══════════════════════════════════════════════╝
       `);
     });

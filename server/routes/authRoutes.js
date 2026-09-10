@@ -8,16 +8,17 @@
 // BASE PATH (mounted in app.js): /api/auth
 //
 // FULL ENDPOINT TABLE:
-//   POST  /api/auth/register          → Register new user
-//   POST  /api/auth/verify-otp        → Verify email OTP
-//   POST  /api/auth/resend-otp        → Resend OTP
-//   POST  /api/auth/login             → Login
-//   POST  /api/auth/logout            → Logout
-//   POST  /api/auth/forgot-password   → Send reset OTP
-//   POST  /api/auth/reset-password    → Set new password
-//   GET   /api/auth/me                → Get own profile (private)
-//   GET   /api/auth/google            → Google OAuth redirect
-//   GET   /api/auth/google/callback   → Google OAuth callback
+//   POST   /api/auth/register          → Register new user
+//   POST   /api/auth/verify-otp        → Verify email OTP
+//   POST   /api/auth/resend-otp        → Resend OTP
+//   POST   /api/auth/login             → Login (returns access + refresh tokens)
+//   POST   /api/auth/logout            → Logout (clears cookies + deletes refresh token from DB)
+//   POST   /api/auth/refresh           → Issue new access token using refresh token
+//   POST   /api/auth/forgot-password   → Send reset OTP
+//   POST   /api/auth/reset-password    → Set new password
+//   GET    /api/auth/me                → Get own profile (private)
+//   GET    /api/auth/google            → Google OAuth redirect
+//   GET    /api/auth/google/callback   → Google OAuth callback
 // ============================================================
 
 const express  = require('express');
@@ -36,7 +37,7 @@ const {
   verifyOtpRules,
   resetPasswordRules,
 } = require('../validators/authValidator');
-const { generateToken, attachCookieToken } = require('../utils/generateToken');
+const { attachTokenPair } = require('../utils/generateToken');
 
 // ── Multer (memory storage — no disk writes) ─────────────────
 // Files are stored as Buffer in memory, then sent to Cloudinary
@@ -127,6 +128,11 @@ router.post('/reset-password',         resetPasswordRules, validateRequest, auth
 router.post('/logout', isAuth, authController.logout);
 router.get('/me',      isAuth, authController.getMe);
 
+// ── Token Refresh (public — uses refresh token cookie) ───────
+// No isAuth here — the access token may be expired when this is called.
+// The refresh token in the httpOnly cookie is verified inside the controller.
+router.post('/refresh', authController.refreshToken);
+
 
 // ── Google OAuth Routes ───────────────────────────────────────
 
@@ -144,23 +150,27 @@ const handleGoogleCallback = [
   passport.authenticate('google', {
     failureRedirect: '/auth/login.html?error=oauth_failed',
   }),
-  (req, res) => {
-    // Attach JWT Cookie
-    const token = attachCookieToken(res, req.user._id);
+  async (req, res) => {
+    try {
+      // Issue full access + refresh token pair (same as email login)
+      await attachTokenPair(res, req.user._id);
+    } catch (err) {
+      console.error('⚠️ [Google OAuth] Token pair error, falling back:', err.message);
+      // Graceful fallback — session still works via passport
+    }
 
-    // Save session memory so res.locals.isLoggedIn and res.locals.user work
+    // Save session so res.locals.isLoggedIn works in server-rendered views
     if (req.session) {
       req.session.isLoggedIn = true;
       req.session.user = {
-        _id: req.user._id.toString(),
-        email: req.user.email,
-        name: `${req.user.firstName} ${req.user.lastName}`,
-        role: req.user.role,
-        avatar: req.user.avatar
+        _id:    req.user._id.toString(),
+        email:  req.user.email,
+        name:   `${req.user.firstName} ${req.user.lastName}`,
+        role:   req.user.role,
+        avatar: req.user.avatar,
       };
     }
 
-    // Redirect to home page
     res.redirect('/');
   }
 ];

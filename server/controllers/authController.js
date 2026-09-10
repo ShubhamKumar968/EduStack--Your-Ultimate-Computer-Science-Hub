@@ -29,11 +29,13 @@
 const bcrypt        = require('bcryptjs');
 const asyncHandler  = require('../utils/asyncHandler');
 const { sendSuccess, sendError } = require('../utils/apiResponse');
-const { generateToken, attachCookieToken } = require('../utils/generateToken');
+const { attachTokenPair, hashToken } = require('../utils/generateToken');
 const User          = require('../models/user');
+const RefreshToken  = require('../models/refreshToken');
 const otpService    = require('../services/otpService');
 const mailService   = require('../services/mailService');
 const { cloudinary, bufferToBase64Uri } = require('../config/cloudinary');
+const jwt           = require('jsonwebtoken');
 
 // ── Password hashing cost factor ────────────────────────────
 // 12 rounds = secure enough for production, ~300ms on modern hardware.
@@ -183,11 +185,13 @@ exports.verifyOtp = asyncHandler(async (req, res) => {
     console.warn('⚠️  [Auth]: Welcome email failed to send —', err.message);
   });
 
-  // ── Issue JWT ──────────────────────────────────────────────
-  const token = attachCookieToken(res, user._id); // Also sets httpOnly cookie
+  // ── Issue Access + Refresh Token Pair ─────────────────────
+  // attachTokenPair: generates both tokens, saves refresh hash to DB,
+  // and sets both as httpOnly cookies on the response.
+  const { accessToken } = await attachTokenPair(res, user._id);
 
   return sendSuccess(res, 'Email verified successfully! Welcome to EduStack.', {
-    token,
+    accessToken,
     user: {
       id:        user._id,
       firstName: user.firstName,
@@ -273,14 +277,21 @@ exports.login = asyncHandler(async (req, res) => {
     await user.save();
   }
 
-  // ── Issue JWT ──────────────────────────────────────────────
-  const token = attachCookieToken(res, user._id);
+  // ── Issue Access + Refresh Token Pair ─────────────────────
+  // INTERVIEW POINT:
+  //   "On login we issue two tokens:
+  //    1. A short-lived ACCESS token (15 min) — used for every API call.
+  //    2. A long-lived REFRESH token (30 days) — stored in DB (hashed).
+  //       Used only to get a new access token when the old one expires.
+  //    Both are sent as httpOnly cookies (XSS-safe) AND in the response
+  //    body (for mobile/SPA clients that store in memory)."
+  const { accessToken } = await attachTokenPair(res, user._id);
 
   // Strip password from the response object
   user.password = undefined;
 
   return sendSuccess(res, 'Logged in successfully.', {
-    token,
+    accessToken,
     user: {
       id:        user._id,
       firstName: user.firstName,
@@ -299,13 +310,34 @@ exports.login = asyncHandler(async (req, res) => {
 // @access  Private (isAuth)
 // ============================================================
 exports.logout = asyncHandler(async (req, res) => {
-  // Clear the httpOnly cookie by setting maxAge to 0
-  res.cookie('edustack_token', '', {
+  const IS_PRODUCTION = process.env.NODE_ENV === 'production';
+  const cookieOpts = {
     httpOnly: true,
-    secure:   process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    maxAge:   0, // Immediately expire the cookie
-  });
+    secure:   IS_PRODUCTION,
+    sameSite: IS_PRODUCTION ? 'none' : 'strict',
+    maxAge:   0, // Expire immediately
+  };
+
+  // ── Delete refresh token from DB ───────────────────────────
+  // INTERVIEW POINT:
+  //   "Unlike stateless JWTs, our refresh tokens are DB-backed.
+  //    On logout we physically DELETE the token from MongoDB.
+  //    This means the token is immediately invalid — no 30-day
+  //    wait for the JWT to naturally expire."
+  const refreshTokenRaw = req.cookies?.edustack_refresh_token;
+  if (refreshTokenRaw) {
+    try {
+      const tokenHash = hashToken(refreshTokenRaw);
+      await RefreshToken.deleteOne({ tokenHash });
+    } catch (_) {
+      // Non-critical — proceed with logout even if DB delete fails
+    }
+  }
+
+  // ── Clear all auth cookies ─────────────────────────────────
+  res.cookie('edustack_access_token',  '', cookieOpts);
+  res.cookie('edustack_refresh_token', '', cookieOpts);
+  res.cookie('edustack_token',         '', cookieOpts); // Clear legacy cookie too
 
   return sendSuccess(res, 'Logged out successfully.');
 });
@@ -435,6 +467,96 @@ exports.getMe = asyncHandler(async (req, res) => {
       attemptedProblems:  user.attemptedProblems || [],
       potdCompletedDates: user.potdCompletedDates || [],
       createdAt:          user.createdAt,
+    },
+  });
+});
+
+
+// ============================================================
+// @route   POST /api/auth/refresh
+// @desc    Issue a new access token using a valid refresh token
+// @access  Public (requires valid refresh token in cookie)
+// ============================================================
+// INTERVIEW EXPLANATION:
+//   "The /refresh endpoint implements TOKEN ROTATION:
+//    1. Client sends the refresh token (from httpOnly cookie).
+//    2. We verify its JWT signature with JWT_REFRESH_SECRET.
+//    3. We hash it and look it up in MongoDB — if it's been
+//       revoked (e.g. after logout) we reject it immediately.
+//    4. We DELETE the old refresh token from DB (one-time use!).
+//    5. We issue a BRAND NEW access token (15 min) + refresh token (30 days).
+//    6. The new refresh token hash is saved to DB.
+//    This rotation means a stolen refresh token can only be used ONCE.
+//    If an attacker uses it before the real user does, the next /refresh
+//    call by the real user will fail — alerting them to the breach."
+exports.refreshToken = asyncHandler(async (req, res) => {
+  // ── 1. Extract refresh token from cookie ──────────────────
+  const rawRefreshToken = req.cookies?.edustack_refresh_token;
+
+  if (!rawRefreshToken) {
+    return sendError(res, 'No refresh token provided. Please log in again.', 401);
+  }
+
+  // ── 2. Verify JWT signature of the refresh token ──────────
+  // This checks: valid format, correct secret, not expired
+  let decoded;
+  try {
+    decoded = jwt.verify(
+      rawRefreshToken,
+      process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET
+    );
+  } catch (err) {
+    if (err.name === 'TokenExpiredError') {
+      return sendError(res, 'Refresh token expired. Please log in again.', 401);
+    }
+    return sendError(res, 'Invalid refresh token. Please log in again.', 401);
+  }
+
+  // ── 3. Look up hashed token in MongoDB ────────────────────
+  // If it's not in the DB (revoked, already used, or never existed)
+  // we reject the request. This prevents replay attacks.
+  const tokenHash   = hashToken(rawRefreshToken);
+  const storedToken = await RefreshToken.findOne({ tokenHash });
+
+  if (!storedToken) {
+    // Possible replay attack — token was already used or user logged out
+    return sendError(res, 'Refresh token is invalid or has already been used. Please log in again.', 401);
+  }
+
+  if (storedToken.isRevoked) {
+    // Manually revoked (e.g. forced logout by admin)
+    return sendError(res, 'Session has been revoked. Please log in again.', 401);
+  }
+
+  // ── 4. Verify the userId still exists in DB ───────────────
+  const user = await User.findById(decoded.id).select('-password');
+  if (!user) {
+    await RefreshToken.deleteOne({ tokenHash }); // Clean up orphaned token
+    return sendError(res, 'User not found. Please register again.', 401);
+  }
+
+  if (!user.isVerified) {
+    return sendError(res, 'Account not verified. Please verify your email first.', 403);
+  }
+
+  // ── 5. TOKEN ROTATION: Delete old refresh token from DB ───
+  // The old token is now consumed — it cannot be reused.
+  await RefreshToken.deleteOne({ tokenHash });
+
+  // ── 6. Issue brand-new token pair ─────────────────────────
+  // New access token (15 min) + new refresh token (30 days).
+  // New refresh token hash is saved to DB by attachTokenPair.
+  const { accessToken } = await attachTokenPair(res, user._id);
+
+  return sendSuccess(res, 'Token refreshed successfully.', {
+    accessToken,
+    user: {
+      id:        user._id,
+      firstName: user.firstName,
+      lastName:  user.lastName,
+      email:     user.email,
+      role:      user.role,
+      avatar:    user.avatar,
     },
   });
 });

@@ -4,148 +4,511 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>EduStack — Verify OTP</title>
+  <meta name="description" content="Enter your 6-digit verification code to activate your EduStack account.">
   <script src="/assets/js/partials.js" defer></script>
   <link rel="stylesheet" href="/assets/css/output.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', sans-serif; box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: #f1f5f9;
+    }
+
+    .page-center {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+    }
+
+    /* ── Card ── */
+    .otp-card {
+      display: flex;
+      width: 100%;
+      max-width: 760px;
+      min-height: 400px;
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.14);
+    }
+
+    /* ── Left Panel ── */
+    .left-panel {
+      width: 42%;
+      background: linear-gradient(145deg, #2563eb 0%, #1d4ed8 60%, #1e40af 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 40px 36px 36px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .left-panel::before {
+      content: '';
+      position: absolute;
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.06);
+      top: -80px; right: -80px;
+    }
+    .left-panel::after {
+      content: '';
+      position: absolute;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.04);
+      bottom: -50px; left: -50px;
+    }
+
+    /* EduStack text logo */
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+    .brand-logo .logo-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px;
+      color: #fff;
+      font-weight: 900;
+      letter-spacing: -1px;
+      border: 1.5px solid rgba(255,255,255,0.25);
+    }
+    .brand-logo .logo-text {
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.3px;
+    }
+    .brand-logo .logo-text span {
+      color: #fbbf24;
+    }
+
+    .left-content {
+      position: relative; z-index: 1;
+    }
+    .left-content h2 {
+      font-size: 26px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 10px;
+      line-height: 1.2;
+    }
+    .left-content p {
+      font-size: 13.5px;
+      color: rgba(255,255,255,0.78);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    /* Decorative shield icon bottom */
+    .left-deco {
+      position: relative; z-index: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+    .shield-wrap {
+      width: 88px; height: 88px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.1);
+      border: 2px solid rgba(255,255,255,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      color: #fbbf24;
+    }
+
+    /* ── Right Panel ── */
+    .right-panel {
+      flex: 1;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 36px;
+    }
+
+    .info-banner {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 10px;
+      padding: 12px 16px;
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .info-banner .info-label {
+      font-size: 12.5px;
+      color: #4b5563;
+      margin: 0 0 3px;
+    }
+    .info-banner .info-email {
+      font-size: 14px;
+      font-weight: 700;
+      color: #2563eb;
+    }
+    .info-banner .info-time {
+      font-size: 11.5px;
+      color: #6b7280;
+      margin-top: 4px;
+      display: flex; align-items: center; justify-content: center; gap: 4px;
+    }
+
+    /* ── 6 OTP Boxes ── */
+    .otp-boxes {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+    .otp-box {
+      width: 48px; height: 56px;
+      border: 2px solid #d1d5db;
+      border-radius: 10px;
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      color: #111827;
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+      caret-color: #2563eb;
+    }
+    .otp-box:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
+      transform: translateY(-2px);
+    }
+    .otp-box.filled {
+      border-color: #2563eb;
+      background: #eff6ff;
+    }
+    .otp-box.error {
+      border-color: #ef4444;
+      background: #fef2f2;
+      animation: shake 0.3s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* ── Alert boxes ── */
+    .alert { display:none; border-radius:10px; padding:11px 14px; font-size:13px; font-weight:500; margin-bottom:16px; text-align:center; }
+    .alert.error   { background:#fef2f2; border:1px solid #fecaca; color:#dc2626; }
+    .alert.success { background:#f0fdf4; border:1px solid #bbf7d0; color:#16a34a; }
+    .alert.show { display: block; }
+
+    /* ── Submit Button ── */
+    .btn-confirm {
+      width: 100%;
+      padding: 14px;
+      background: #f97316;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+      box-shadow: 0 4px 14px rgba(249,115,22,0.35);
+      margin-bottom: 18px;
+    }
+    .btn-confirm:hover  { background: #ea6c10; box-shadow: 0 6px 20px rgba(249,115,22,0.4); }
+    .btn-confirm:active { transform: scale(0.98); }
+    .btn-confirm:disabled { background: #d1d5db; box-shadow: none; cursor: not-allowed; color: #9ca3af; }
+
+    /* ── Resend Row ── */
+    .resend-row {
+      text-align: center;
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+    .resend-row #resend-btn {
+      background: none; border: none; cursor: pointer;
+      color: #2563eb; font-weight: 600; font-size: 13px;
+      text-decoration: underline; padding: 0;
+    }
+    .resend-row #resend-btn:disabled { color: #9ca3af; cursor: default; text-decoration: none; }
+    #countdown { font-weight: 600; color: #2563eb; }
+
+    /* ── Return Link ── */
+    .return-link {
+      text-align: center;
+    }
+    .return-link a {
+      font-size: 13px;
+      color: #6b7280;
+      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 5px;
+      transition: color 0.2s;
+    }
+    .return-link a:hover { color: #2563eb; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .otp-card { flex-direction: column; max-width: 400px; border-radius: 16px; }
+      .left-panel { width: 100%; min-height: 160px; padding: 28px 24px 24px; flex-direction: row; align-items: center; justify-content: space-between; }
+      .left-content h2 { font-size: 20px; }
+      .left-deco { display: none; }
+      .right-panel { padding: 28px 24px; }
+      .otp-box { width: 42px; height: 50px; font-size: 20px; }
+    }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
+<body>
   <div id="nav-placeholder"></div>
-  
-  <main class="flex-grow flex items-center justify-center px-4 py-12 relative z-0">
-    <div class="w-full max-w-md bg-white dark:bg-[#222222] p-8 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-800 text-center relative overflow-hidden">
-      
-      <div class="w-16 h-16 rounded-full bg-brand/10 text-brand flex items-center justify-center mx-auto mb-4 text-2xl font-bold">
-        <i class="fa-solid fa-envelope-circle-check"></i>
-      </div>
 
-      <h1 class="text-2xl font-bold text-gray-800 dark:text-gray-100 tracking-tight">Verify Your Email</h1>
-      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 mb-6">
-        Enter the 6-digit verification code sent to <br>
-        <strong id="target-email" class="text-gray-800 dark:text-gray-200">your email address</strong>
-      </p>
+  <div class="page-center">
+    <div class="otp-card">
 
-      <div id="error-box" class="hidden bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-900/50 text-red-600 dark:text-red-400 p-3.5 rounded-xl mb-5 text-sm font-medium"></div>
-      <div id="success-box" class="hidden bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 text-emerald-600 dark:text-emerald-400 p-3.5 rounded-xl mb-5 text-sm font-medium"></div>
-
-      <form id="otp-form" class="space-y-6">
-        <div>
-          <input 
-            id="otp-input"
-            type="text" 
-            maxlength="6" 
-            required 
-            placeholder="000000"
-            class="w-full text-center text-3xl font-extrabold tracking-[0.5em] py-3.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all"
-          >
+      <!-- ══ LEFT PANEL ══ -->
+      <div class="left-panel">
+        <!-- EduStack Logo -->
+        <div class="brand-logo">
+          <div class="logo-icon">E</div>
+          <div class="logo-text">Edu<span>Stack</span></div>
         </div>
 
-        <button 
-          type="submit" 
-          class="w-full bg-brand hover:bg-brand-deep text-white font-bold py-3 px-4 rounded-xl shadow-md hover:shadow-lg transition-all active:scale-[0.98] border-0 cursor-pointer text-sm"
-        >
-          Verify & Continue
-        </button>
-      </form>
+        <!-- Heading + tagline -->
+        <div class="left-content">
+          <h2>Verification</h2>
+          <p>Enter the 6-digit code sent to your email to verify your EduStack account.</p>
+        </div>
 
-      <div class="mt-6 pt-5 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400 flex items-center justify-between">
-        <span>Didn't receive the code?</span>
-        <button 
-          id="resend-btn" 
-          type="button" 
-          class="text-brand hover:underline font-bold border-0 bg-transparent cursor-pointer p-0 text-sm"
-        >
-          Resend OTP
-        </button>
+        <!-- Decorative bottom icon -->
+        <div class="left-deco">
+          <div class="shield-wrap">
+            <i class="fa-solid fa-envelope-open-text"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ RIGHT PANEL ══ -->
+      <div class="right-panel">
+        <!-- Info banner -->
+        <div class="info-banner">
+          <p class="info-label">Please enter the 6-digit OTP sent to:</p>
+          <p class="info-email" id="target-email">your email</p>
+          <p class="info-time">
+            <i class="fa-regular fa-clock"></i>
+            Valid for 10 minutes
+          </p>
+        </div>
+
+        <!-- Alert boxes -->
+        <div id="error-box"   class="alert error"></div>
+        <div id="success-box" class="alert success"></div>
+
+        <!-- 6 OTP boxes -->
+        <form id="otp-form" autocomplete="off">
+          <div class="otp-boxes">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-0" aria-label="OTP digit 1">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-1" aria-label="OTP digit 2">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-2" aria-label="OTP digit 3">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-3" aria-label="OTP digit 4">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-4" aria-label="OTP digit 5">
+            <input class="otp-box" type="text" maxlength="1" inputmode="numeric" pattern="[0-9]" id="otp-5" aria-label="OTP digit 6">
+          </div>
+
+          <button type="submit" class="btn-confirm" id="submit-btn">
+            Confirm &amp; Activate
+          </button>
+        </form>
+
+        <!-- Resend row with countdown -->
+        <div class="resend-row">
+          <span id="resend-label">Resend in <span id="countdown">60s</span></span>
+          <button id="resend-btn" type="button" style="display:none;">Resend Code</button>
+        </div>
+
+        <!-- Return link -->
+        <div class="return-link">
+          <a href="login.html">
+            <i class="fa-solid fa-arrow-left-long"></i>
+            Return to Login
+          </a>
+        </div>
       </div>
 
     </div>
-  </main>
-
-  <footer class="py-4 text-center text-xs text-gray-400 dark:text-gray-500 mt-auto border-t border-transparent dark:border-gray-800/40">
-    Built with <span class="text-brand">♥</span> by a CSE student, for CSE students — EduStack
-  </footer>
+  </div>
 
   <script src="/assets/js/theme-toggle.js"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const email = urlParams.get('email') || '';
-      
-      const emailDisplay = document.getElementById('target-email');
-      const otpInput     = document.getElementById('otp-input');
-      const otpForm      = document.getElementById('otp-form');
-      const resendBtn    = document.getElementById('resend-btn');
-      const errorBox     = document.getElementById('error-box');
-      const successBox   = document.getElementById('success-box');
+      // ── State ──────────────────────────────────────────────
+      const urlParams  = new URLSearchParams(window.location.search);
+      const email      = urlParams.get('email') || '';
+      const boxes      = Array.from(document.querySelectorAll('.otp-box'));
+      const form       = document.getElementById('otp-form');
+      const submitBtn  = document.getElementById('submit-btn');
+      const resendBtn  = document.getElementById('resend-btn');
+      const resendLbl  = document.getElementById('resend-label');
+      const countdownEl= document.getElementById('countdown');
+      const errorBox   = document.getElementById('error-box');
+      const successBox = document.getElementById('success-box');
 
-      if (email) {
-        emailDisplay.textContent = email;
-      } else {
-        emailDisplay.textContent = 'your registered email';
-      }
+      document.getElementById('target-email').textContent = email || 'your registered email';
 
-      otpForm.addEventListener('submit', async (e) => {
+      // ── Helpers ────────────────────────────────────────────
+      const showAlert = (box, msg) => {
+        errorBox.classList.remove('show');
+        successBox.classList.remove('show');
+        boxes.forEach(b => b.classList.remove('error'));
+        box.textContent = msg;
+        box.classList.add('show');
+      };
+
+      const getOtp = () => boxes.map(b => b.value.trim()).join('');
+
+      // ── 60-second Countdown ────────────────────────────────
+      let seconds = 60;
+      const tick = () => {
+        seconds--;
+        countdownEl.textContent = seconds + 's';
+        if (seconds <= 0) {
+          clearInterval(timer);
+          resendLbl.style.display  = 'none';
+          resendBtn.style.display  = 'inline';
+        }
+      };
+      let timer = setInterval(tick, 1000);
+
+      // ── OTP Box keyboard navigation ────────────────────────
+      boxes.forEach((box, i) => {
+        box.addEventListener('input', (e) => {
+          // Only allow digits
+          box.value = box.value.replace(/\D/g, '');
+          if (box.value) {
+            box.classList.add('filled');
+            box.classList.remove('error');
+            if (i < 5) boxes[i + 1].focus();
+          } else {
+            box.classList.remove('filled');
+          }
+        });
+
+        box.addEventListener('keydown', (e) => {
+          if (e.key === 'Backspace' && !box.value && i > 0) {
+            boxes[i - 1].value = '';
+            boxes[i - 1].classList.remove('filled');
+            boxes[i - 1].focus();
+          }
+          // Submit on Enter when last box is filled
+          if (e.key === 'Enter') form.dispatchEvent(new Event('submit'));
+        });
+
+        // Handle paste (e.g. paste "123456")
+        box.addEventListener('paste', (e) => {
+          e.preventDefault();
+          const text = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '');
+          text.split('').slice(0, 6).forEach((ch, j) => {
+            if (boxes[j]) {
+              boxes[j].value = ch;
+              boxes[j].classList.add('filled');
+            }
+          });
+          const next = Math.min(text.length, 5);
+          boxes[next].focus();
+        });
+      });
+
+      // Focus first box on load
+      boxes[0].focus();
+
+      // ── Form Submit ────────────────────────────────────────
+      form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        errorBox.classList.add('hidden');
-        successBox.classList.add('hidden');
+        const otp = getOtp();
 
-        const otp = otpInput.value.trim();
         if (otp.length !== 6) {
-          errorBox.textContent = '❌ Please enter the full 6-digit OTP.';
-          errorBox.classList.remove('hidden');
+          boxes.forEach(b => { if (!b.value) b.classList.add('error'); });
+          showAlert(errorBox, '❌ Please enter the full 6-digit OTP.');
           return;
         }
 
+        submitBtn.disabled    = true;
+        submitBtn.textContent = 'Verifying…';
+
         try {
-          const res = await fetch('/api/auth/verify-otp', {
-            method: 'POST',
+          const res  = await fetch('/api/auth/verify-otp', {
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, otp })
+            body:    JSON.stringify({ email, otp })
           });
           const data = await res.json();
 
           if (res.ok && data.success) {
-            successBox.textContent = '🎉 Email verified successfully! Redirecting to login...';
-            successBox.classList.remove('hidden');
-            setTimeout(() => {
-              window.location.href = 'login.html';
-            }, 1500);
+            showAlert(successBox, '🎉 Email verified successfully! Redirecting…');
+            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
           } else {
-            errorBox.textContent = `❌ ${data.message || (data.errors && data.errors[0]?.message) || 'Invalid OTP code.'}`;
-            errorBox.classList.remove('hidden');
+            const msg = data.message || (data.errors && data.errors[0]?.message) || 'Invalid OTP code.';
+            boxes.forEach(b => b.classList.add('error'));
+            showAlert(errorBox, '❌ ' + msg);
+            submitBtn.disabled    = false;
+            submitBtn.textContent = 'Confirm & Activate';
           }
         } catch (err) {
-          errorBox.textContent = '❌ Server error. Please try again.';
-          errorBox.classList.remove('hidden');
+          showAlert(errorBox, '❌ Server error. Please try again.');
+          submitBtn.disabled    = false;
+          submitBtn.textContent = 'Confirm & Activate';
         }
       });
 
+      // ── Resend OTP ─────────────────────────────────────────
       resendBtn.addEventListener('click', async () => {
         if (!email) {
-          alert('Email parameter missing. Please go back to login or registration.');
+          alert('Email missing. Please go back to registration.');
           return;
         }
-        try {
-          resendBtn.disabled = true;
-          resendBtn.textContent = 'Sending...';
+        resendBtn.disabled    = true;
+        resendBtn.textContent = 'Sending…';
 
-          const res = await fetch('/api/auth/resend-otp', {
-            method: 'POST',
+        try {
+          const res  = await fetch('/api/auth/resend-otp', {
+            method:  'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email })
+            body:    JSON.stringify({ email })
           });
           const data = await res.json();
 
           if (res.ok && data.success) {
-            alert('📩 A new OTP code has been sent to your email address!');
+            showAlert(successBox, '📩 A new OTP has been sent to your email!');
+            // Restart countdown
+            seconds = 60;
+            countdownEl.textContent = '60s';
+            resendBtn.style.display = 'none';
+            resendLbl.style.display = 'inline';
+            timer = setInterval(tick, 1000);
           } else {
-            alert(`❌ ${data.message || 'Failed to resend OTP.'}`);
+            showAlert(errorBox, '❌ ' + (data.message || 'Failed to resend OTP.'));
           }
-        } catch (err) {
-          alert('❌ Connection error while resending OTP.');
+        } catch {
+          showAlert(errorBox, '❌ Connection error while resending OTP.');
         } finally {
-          resendBtn.disabled = false;
-          resendBtn.textContent = 'Resend OTP';
+          resendBtn.disabled    = false;
+          resendBtn.textContent = 'Resend Code';
         }
       });
     });
