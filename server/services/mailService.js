@@ -84,7 +84,37 @@ const sendOtpEmail = async (to, otp) => {
     </div>
   `;
 
-  // ── 1. Resend HTTPS REST API (Bypasses Render SMTP port blocking) ──
+  // ── 1. Brevo HTTPS REST API (Bypasses Render SMTP port blocking — sends to ALL users) ──
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.MAIL_USER || 'no-reply@edustack.com';
+      console.log(`📡 [Brevo API]: Sending OTP to ${to} from ${senderEmail}...`);
+
+      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY.trim(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: 'EduStack', email: senderEmail },
+          to: [{ email: to }],
+          subject: '🔐 Your EduStack Verification Code',
+          htmlContent: emailHtml,
+        }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        console.log(`✅ [Brevo API]: OTP delivered to ${to} via HTTPS (id: ${data.messageId})`);
+        return { delivered: true, provider: 'brevo', id: data.messageId };
+      }
+      console.error(`❌ [Brevo API Rejected]: HTTP ${response.status} - ${data.message || JSON.stringify(data)}`);
+    } catch (brevoErr) {
+      console.error('❌ [Brevo API Error]:', brevoErr.message);
+    }
+  }
+
+  // ── 2. Resend HTTPS REST API (Bypasses Render SMTP port blocking) ──
   if (process.env.RESEND_API_KEY) {
     try {
       // ⚠️ In Resend, you CANNOT send from @gmail.com or other unverified domains.
@@ -120,34 +150,6 @@ const sendOtpEmail = async (to, otp) => {
       console.error(`❌ [Resend API Rejected]: HTTP ${response.status} - ${data.message || JSON.stringify(data)}`);
     } catch (apiErr) {
       console.error('❌ [Resend API Network Error]:', apiErr.message);
-    }
-  }
-
-  // ── 2. Brevo HTTPS REST API (Bypasses Render SMTP port blocking) ────
-  if (process.env.BREVO_API_KEY) {
-    try {
-      const senderEmail = process.env.MAIL_USER || 'no-reply@edustack.com';
-      const response = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'api-key': process.env.BREVO_API_KEY,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          sender: { name: 'EduStack', email: senderEmail },
-          to: [{ email: to }],
-          subject: '🔐 Your EduStack Verification Code',
-          htmlContent: emailHtml,
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        console.log(`✅ [Brevo API]: OTP delivered to ${to} via HTTPS (id: ${data.messageId})`);
-        return { delivered: true, provider: 'brevo', id: data.messageId };
-      }
-      console.warn('⚠️ [Brevo API Warning]:', data);
-    } catch (brevoErr) {
-      console.warn('⚠️ [Brevo API Error]:', brevoErr.message);
     }
   }
 
@@ -205,6 +207,28 @@ const sendWelcomeEmail = async (to, name) => {
     </div>
   `;
 
+  // ── 1. Brevo HTTPS REST API (Bypasses Render SMTP port blocking — sends to ALL users) ──
+  if (process.env.BREVO_API_KEY) {
+    try {
+      const senderEmail = process.env.BREVO_SENDER_EMAIL || process.env.MAIL_USER || 'no-reply@edustack.com';
+      await fetch('https://api.brevo.com/v3/smtp/email', {
+        method: 'POST',
+        headers: {
+          'api-key': process.env.BREVO_API_KEY.trim(),
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sender: { name: 'EduStack', email: senderEmail },
+          to: [{ email: to }],
+          subject: '🎉 Welcome to EduStack — Your CS Resource Hub!',
+          htmlContent: welcomeHtml,
+        }),
+      });
+      return { delivered: true, provider: 'brevo' };
+    } catch (_) {}
+  }
+
+  // ── 2. Resend HTTPS REST API ────────────────────────────────
   if (process.env.RESEND_API_KEY) {
     try {
       let resendFrom = 'EduStack <onboarding@resend.dev>';
