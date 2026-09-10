@@ -144,12 +144,15 @@ exports.register = asyncHandler(async (req, res) => {
 
   // ── Send verification OTP ──────────────────────────────────
   // otpService generates a code, saves to OTP collection, emails it
-  await otpService.saveAndSendOtp(normalizedEmail);
+  const otpResult = await otpService.saveAndSendOtp(normalizedEmail);
+  const isDelivered = otpResult?.mailResult?.delivered;
 
   return sendSuccess(
     res,
-    'Account created! A 6-digit verification code has been sent to your email.',
-    { email: normalizedEmail },
+    isDelivered
+      ? 'Account created! A 6-digit verification code has been sent to your email.'
+      : 'Account created! Please enter your 6-digit verification code (check your email or Render server logs).',
+    { email: normalizedEmail, delivered: !!isDelivered },
     201 // 201 Created
   );
 });
@@ -228,9 +231,15 @@ exports.resendOtp = asyncHandler(async (req, res) => {
   }
 
   // saveAndSendOtp upserts the OTP — automatically handles resend
-  await otpService.saveAndSendOtp(normalizedEmail);
+  const otpResult = await otpService.saveAndSendOtp(normalizedEmail);
+  const isDelivered = otpResult?.mailResult?.delivered;
 
-  return sendSuccess(res, 'A new OTP has been sent to your email.');
+  return sendSuccess(
+    res,
+    isDelivered
+      ? 'A new OTP has been sent to your email.'
+      : 'A new OTP has been generated. Please check your email or Render server logs.'
+  );
 });
 
 
@@ -385,21 +394,27 @@ exports.forgotPassword = asyncHandler(async (req, res) => {
     );
   }
 
+  let otpResult;
   try {
-    await otpService.saveAndSendOtp(normalizedEmail);
+    otpResult = await otpService.saveAndSendOtp(normalizedEmail);
   } catch (err) {
     console.error('❌ [ForgotPassword]: OTP send failed:', err.message);
     return sendError(
       res,
-      `Unable to send OTP email: ${err.message}. Please verify your email or try again.`,
+      `Unable to generate reset OTP: ${err.message}. Please try again.`,
       500
     );
   }
 
+  const isDelivered = otpResult?.mailResult?.delivered;
+  const isBlocked   = otpResult?.mailResult?.blocked;
+
   return sendSuccess(
     res,
-    'A 6-digit password reset code has been sent to your email.',
-    { email: normalizedEmail }
+    isDelivered
+      ? 'A 6-digit password reset code has been sent to your email.'
+      : 'Reset code generated! If Render blocks outbound email on the Free tier, retrieve the code from your Render logs or add RESEND_API_KEY.',
+    { email: normalizedEmail, delivered: !!isDelivered, blocked: !!isBlocked }
   );
 });
 

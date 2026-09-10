@@ -54,12 +54,11 @@ const saveAndSendOtp = async (email) => {
     { upsert: true, new: true }
   );
 
-  // Send email — if this throws, the error bubbles up to the controller
-  // which wraps everything in asyncHandler → forwarded to errorHandler
-  await mailService.sendOtpEmail(email, otp);
+  // Send email via mailService (Resend HTTPS / Brevo HTTPS / Nodemailer SMTP)
+  const mailResult = await mailService.sendOtpEmail(email, otp);
 
-  console.log(`✅ [OTP Service]: OTP sent to ${email}`);
-  return otp; // Useful for logging in dev; never send this back to client
+  console.log(`✅ [OTP Service]: OTP generated and processed for ${email}`);
+  return { otp, mailResult };
 };
 
 
