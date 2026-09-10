@@ -109,6 +109,41 @@ const userSchema = new mongoose.Schema(
       default: null,
     },
 
+    dob: {
+      type:    Date,
+      default: null,
+    },
+
+    gender: {
+      type:    String,
+      enum:    ['Male', 'Female', 'Other', 'Not Specified'],
+      default: 'Not Specified',
+    },
+
+    college: {
+      type:    String,
+      trim:    true,
+      default: '',
+    },
+
+    city: {
+      type:    String,
+      trim:    true,
+      default: '',
+    },
+
+    state: {
+      type:    String,
+      trim:    true,
+      default: '',
+    },
+
+    pincode: {
+      type:    String,
+      trim:    true,
+      default: '',
+    },
+
     bio: {
       type:     String,
       maxlength: [300, 'Bio cannot exceed 300 characters'],

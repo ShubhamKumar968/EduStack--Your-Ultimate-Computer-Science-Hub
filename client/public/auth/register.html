@@ -4,6 +4,126 @@
   <script src="../../assets/js/partials.js"></script>
   <link rel="stylesheet" href="../../assets/css/output.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+  <style>
+    /* Custom EduStack Theme for Flatpickr */
+    .flatpickr-calendar {
+      background: #ffffff !important;
+      border-radius: 16px !important;
+      border: 1px solid #e5e7eb !important;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.15) !important;
+      font-family: inherit !important;
+      padding: 6px !important;
+      z-index: 99999 !important;
+    }
+    .dark .flatpickr-calendar {
+      background: #222222 !important;
+      border-color: #333333 !important;
+      box-shadow: 0 25px 50px -10px rgba(0, 0, 0, 0.6) !important;
+    }
+    .flatpickr-calendar .flatpickr-months {
+      background: transparent !important;
+      padding: 4px 0 !important;
+    }
+    .flatpickr-current-month .flatpickr-monthDropdown-months,
+    .flatpickr-current-month input.cur-year {
+      font-weight: 700 !important;
+      font-size: 15px !important;
+      color: #1f2937 !important;
+    }
+    .dark .flatpickr-current-month .flatpickr-monthDropdown-months,
+    .dark .flatpickr-current-month input.cur-year {
+      color: #f3f4f6 !important;
+      background: transparent !important;
+    }
+    .dark .flatpickr-monthDropdown-month {
+      background-color: #222222 !important;
+      color: #f3f4f6 !important;
+    }
+    .flatpickr-months .flatpickr-prev-month:hover svg,
+    .flatpickr-months .flatpickr-next-month:hover svg {
+      fill: #FF385C !important;
+    }
+    .dark .flatpickr-months .flatpickr-prev-month svg,
+    .dark .flatpickr-months .flatpickr-next-month svg {
+      fill: #9ca3af !important;
+    }
+    span.flatpickr-weekday {
+      color: #9ca3af !important;
+      font-weight: 600 !important;
+      font-size: 12px !important;
+    }
+    .flatpickr-day {
+      border-radius: 10px !important;
+      font-weight: 500 !important;
+      color: #374151 !important;
+      transition: all 0.15s ease !important;
+    }
+    .dark .flatpickr-day {
+      color: #d1d5db !important;
+    }
+    .flatpickr-day:hover {
+      background: rgba(255, 56, 92, 0.15) !important;
+      color: #FF385C !important;
+      border-color: transparent !important;
+    }
+    .dark .flatpickr-day:hover {
+      background: rgba(255, 56, 92, 0.25) !important;
+      color: #ffffff !important;
+    }
+    .flatpickr-day.selected,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.selected:focus {
+      background: #FF385C !important;
+      border-color: #FF385C !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 4px 12px rgba(255, 56, 92, 0.35) !important;
+    }
+    .flatpickr-day.today {
+      border-color: #FF385C !important;
+    }
+    .flatpickr-day.today:hover {
+      background: #FF385C !important;
+      color: #ffffff !important;
+    }
+    .flatpickr-day.prevMonthDay,
+    .flatpickr-day.nextMonthDay {
+      color: #cbd5e1 !important;
+    }
+    .dark .flatpickr-day.prevMonthDay,
+    .dark .flatpickr-day.nextMonthDay {
+      color: #4b5563 !important;
+    }
+    /* Fallback native indicator styling */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: 0.7;
+      filter: invert(0.2);
+      transition: all 0.2s ease;
+      padding: 4px;
+      border-radius: 6px;
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      opacity: 1;
+      filter: invert(0.4) sepia(1) saturate(5) hue-rotate(310deg);
+      background: rgba(255, 56, 92, 0.1);
+    }
+    .dark input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.85);
+    }
+    .dark input[type="date"]::-webkit-calendar-picker-indicator:hover {
+      filter: invert(1);
+      background: rgba(255, 56, 92, 0.2);
+    }
+    input[type="date"] {
+      color-scheme: light dark;
+    }
+    .dark input[type="date"] {
+      color-scheme: dark;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-900 dark:bg-[#181818] dark:text-gray-100 transition-colors duration-300 min-h-screen flex flex-col">
   <div id="nav-placeholder"></div>
@@ -52,10 +172,18 @@
           </div>
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Date of Birth <span class="text-brand font-bold">*</span></label>
-              <div class="relative">
-                <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500"><i class="fa-regular fa-calendar"></i></span>
-                <input type="date" name="dob" required class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm" />
+              <label for="dob-input" class="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">Date of Birth <span class="text-brand font-bold">*</span></label>
+              <div class="relative cursor-pointer" id="dob-container" onclick="openDobPicker(event)">
+                <span id="dob-calendar-icon" class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400 dark:text-gray-500 cursor-pointer z-10 hover:text-brand transition-colors"><i class="fa-regular fa-calendar"></i></span>
+                <input 
+                  type="text" 
+                  id="dob-input" 
+                  name="dob" 
+                  required 
+                  placeholder="Select Date of Birth"
+                  readonly
+                  class="w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer" 
+                />
               </div>
             </div>
             <div>
@@ -286,7 +414,19 @@
       3: { title: "Profile Setup", subtitle: "Set your role and upload a profile picture." },
       4: { title: "Secure Credentials", subtitle: "Set a password for your account." }
     };
+    let fpInstance = null;
+
     function navigateWizard(current, target) {
+      if (target > current) {
+        const currentPanel = document.getElementById(`step-panel-${current}`);
+        const inputs = currentPanel.querySelectorAll('input, select');
+        for (const input of inputs) {
+          if (!input.checkValidity()) {
+            input.reportValidity();
+            return;
+          }
+        }
+      }
       document.getElementById(`step-panel-${current}`).classList.replace('block', 'hidden');
       document.getElementById(`step-panel-${target}`).classList.replace('hidden', 'block');
       document.getElementById('wizard-title').textContent = titles[target].title;
@@ -302,7 +442,59 @@
         }
       }
     }
+
+    function openDobPicker(e) {
+      if (fpInstance) {
+        fpInstance.open();
+        return;
+      }
+      const dobInput = document.getElementById('dob-input');
+      if (!dobInput) return;
+      try {
+        dobInput.showPicker();
+      } catch (err) {
+        dobInput.focus();
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+      // Setup Date of Birth picker interaction (Flatpickr with native fallback)
+      const dobInput = document.getElementById('dob-input');
+      const dobIcon = document.getElementById('dob-calendar-icon');
+
+      if (typeof flatpickr !== 'undefined' && dobInput) {
+        fpInstance = flatpickr(dobInput, {
+          dateFormat: 'Y-m-d',
+          altInput: true,
+          altFormat: 'd M Y',
+          altInputClass: 'w-full pl-10 pr-4 py-2.5 border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#181818] rounded-xl text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-brand focus:border-transparent transition-all text-sm cursor-pointer',
+          maxDate: new Date(),
+          defaultDate: '2004-01-01',
+          monthSelectorType: 'dropdown',
+          disableMobile: true,
+          allowInput: false
+        });
+
+        dobIcon?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          fpInstance.open();
+        });
+      } else if (dobInput) {
+        dobInput.type = 'date';
+        dobInput.removeAttribute('readonly');
+        const today = new Date().toISOString().split('T')[0];
+        dobInput.max = today;
+
+        dobInput.addEventListener('click', () => {
+          try { dobInput.showPicker(); } catch (err) {}
+        });
+
+        dobIcon?.addEventListener('click', (e) => {
+          e.stopPropagation();
+          try { dobInput.showPicker(); } catch (err) { dobInput.focus(); }
+        });
+      }
+
       // Setup Dropzone
       const dropzone = document.getElementById('profile-dropzone');
       const input = document.getElementById('profile-file-input');
