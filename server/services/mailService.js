@@ -19,29 +19,45 @@
 
 const nodemailer = require('nodemailer');
 
-// ── Create Reusable Transporter ─────────────────────────────
-// The transporter is created ONCE and reused for all emails.
-// Creating it inside a function would open a new SMTP connection
-// on every email — wasteful and slow.
-const transporter = nodemailer.createTransport({
-  host:   process.env.MAIL_HOST || 'smtp.gmail.com',
-  port:   parseInt(process.env.MAIL_PORT) || 587,
-  secure: process.env.MAIL_PORT === '465', // true for port 465 (SSL), false for 587 (TLS)
-  family: 4, // Force IPv4 to prevent ENETUNREACH IPv6 errors on Render/cloud hosts
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-});
+const isGmail = (!process.env.MAIL_HOST || process.env.MAIL_HOST.includes('gmail'));
+
+const transporter = nodemailer.createTransport(
+  isGmail
+    ? {
+        service: 'gmail',
+        pool: true,
+        maxConnections: 3,
+        maxMessages: 100,
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 12000,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      }
+    : {
+        host:   process.env.MAIL_HOST || 'smtp.gmail.com',
+        port:   parseInt(process.env.MAIL_PORT) || 587,
+        secure: process.env.MAIL_PORT === '465',
+        family: 4,
+        pool: true,
+        connectionTimeout: 8000,
+        greetingTimeout: 8000,
+        socketTimeout: 12000,
+        auth: {
+          user: process.env.MAIL_USER,
+          pass: process.env.MAIL_PASS,
+        },
+      }
+);
 
 // ── Verify SMTP connection at startup ────────────────────────
-// This logs a warning during development if credentials are wrong.
-// We wrap in a try-catch so it never crashes the server on startup.
 transporter.verify((error) => {
   if (error) {
-    console.warn('⚠️  [Nodemailer]: SMTP connection failed —', error.message);
+    console.warn('⚠️  [Nodemailer]: SMTP connection warning —', error.message);
   } else {
-    console.log('✅ [Nodemailer]: SMTP server is ready to send emails.');
+    console.log('✅ [Nodemailer]: SMTP server is ready with warm connection pool.');
   }
 });
 
@@ -98,10 +114,12 @@ const sendOtpEmail = async (to, otp) => {
   };
 
   try {
-    return await transporter.sendMail(mailOptions);
-  } catch (err) {
-    console.warn(`⚠️ [Nodemailer]: SMTP send warning for ${to}: ${err.message}. OTP code is stored in DB: ${otp}`);
+    const info = await transporter.sendMail(mailOptions);
+    console.log(`✅ [Nodemailer]: OTP email delivered to ${to} (id: ${info.messageId})`);
     return true;
+  } catch (err) {
+    console.error(`❌ [Nodemailer]: SMTP send error for ${to}: ${err.message}`);
+    throw new Error(`Email delivery failed (${err.message}). Please check if MAIL_USER and MAIL_PASS are set in Render.`);
   }
 };
 

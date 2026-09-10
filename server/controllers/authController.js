@@ -368,16 +368,33 @@ exports.forgotPassword = asyncHandler(async (req, res) => {
 
   const user = await User.findOne({ email: normalizedEmail });
 
-  // Security note: We always return the same message whether the user
-  // exists or not — prevents email enumeration attacks.
   if (!user) {
-    return sendSuccess(
+    return sendError(
       res,
-      'If an account with this email exists, a reset OTP has been sent.'
+      'No account found with this email address. Please check your spelling or create an account first.',
+      404
     );
   }
 
-  await otpService.saveAndSendOtp(normalizedEmail);
+  // Google OAuth accounts don't use passwords
+  if (user.googleId && !user.password) {
+    return sendError(
+      res,
+      'This account was created with Google Sign-In and does not have a password. Please log in directly with Google.',
+      400
+    );
+  }
+
+  try {
+    await otpService.saveAndSendOtp(normalizedEmail);
+  } catch (err) {
+    console.error('❌ [ForgotPassword]: OTP send failed:', err.message);
+    return sendError(
+      res,
+      `Unable to send OTP email: ${err.message}. Please verify your email or try again.`,
+      500
+    );
+  }
 
   return sendSuccess(
     res,
