@@ -17,40 +17,33 @@
 //   sendWelcomeEmail(to, name)    → Welcome email after OTP verified
 // ============================================================
 
+const dns = require('dns');
 const nodemailer = require('nodemailer');
 
-const isGmail = (!process.env.MAIL_HOST || process.env.MAIL_HOST.includes('gmail'));
+// ⚠️ Force IPv4 resolution across Node.js to eliminate ENETUNREACH errors on cloud hosts like Render
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
 
-const transporter = nodemailer.createTransport(
-  isGmail
-    ? {
-        service: 'gmail',
-        pool: true,
-        maxConnections: 3,
-        maxMessages: 100,
-        connectionTimeout: 8000,
-        greetingTimeout: 8000,
-        socketTimeout: 12000,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
-      }
-    : {
-        host:   process.env.MAIL_HOST || 'smtp.gmail.com',
-        port:   parseInt(process.env.MAIL_PORT) || 587,
-        secure: process.env.MAIL_PORT === '465',
-        family: 4,
-        pool: true,
-        connectionTimeout: 8000,
-        greetingTimeout: 8000,
-        socketTimeout: 12000,
-        auth: {
-          user: process.env.MAIL_USER,
-          pass: process.env.MAIL_PASS,
-        },
-      }
-);
+const mailHost = process.env.MAIL_HOST || 'smtp.gmail.com';
+const mailPort = parseInt(process.env.MAIL_PORT, 10) || 465;
+
+const transporter = nodemailer.createTransport({
+  host:   mailHost,
+  port:   mailPort,
+  secure: mailPort === 465, // true for port 465 (SSL), false for 587 (TLS)
+  family: 4,               // 🔒 CRITICAL: Force IPv4 — avoids ENETUNREACH on Render
+  pool:   true,            // Warm connection pool for fast sends
+  maxConnections: 3,
+  maxMessages: 100,
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 15000,
+  auth: {
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
+  },
+});
 
 // ── Verify SMTP connection at startup ────────────────────────
 transporter.verify((error) => {
