@@ -78,14 +78,19 @@ app.use(helmet({ contentSecurityPolicy: false })); // Flexible for local asset &
 
 
 // ── Rate Limiters ─────────────────────────────────────────────
-// Auth endpoints: 5 requests per 15 minutes per IP (brute-force protection)
+// Global auth umbrella limiter — prevents DDoS-level abuse on /api/auth/*
+// NOTE: Individual routes have their own stricter limiters:
+//   • loginLimiter    → 10 req / 15 min  (brute-force on /login)
+//   • otpLimiter      →  5 req / 10 min  (OTP spam on /forgot-password, /resend-otp)
+//   • registerLimiter →  5 req / 1 hour  (registration spam)
+// This global limiter is intentionally generous — it's a last-resort safety net.
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: 100, // 100 requests per 15 min per IP — prevents DDoS, not normal use
   standardHeaders: true,
   legacyHeaders: false,
-  message: { success: false, message: 'Too many attempts. Please wait 15 minutes and try again.' },
-  skip: (req) => process.env.NODE_ENV === 'development' && req.ip === '::1', // Skip in local dev from localhost
+  message: { success: false, message: 'Too many requests. Please slow down and try again.' },
+  skip: (req) => process.env.NODE_ENV === 'development', // Skip entirely in local dev
 });
 
 // General API: 100 requests per 15 minutes per IP (DDoS mitigation)
