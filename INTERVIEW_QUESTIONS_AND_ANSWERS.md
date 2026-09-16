@@ -1,20 +1,111 @@
-# 🎓 EduStack — Comprehensive Interview Preparation Guide
+# 🎓 EduStack — Comprehensive Interview Preparation & Engineering Defense Guide
 ## 30 Most-Asked Technical & Behavioral Interview Questions with In-Depth Answers
 
 > **Project:** EduStack (CS/Engineering Student Resource & AI Learning Hub)  
 > **Target Roles:** Full Stack Developer, Backend Engineer (Node.js/MERN), Software Development Engineer (SDE-1)  
-> **Key Tech Stack:** Node.js, Express.js, MongoDB (Atlas), Google OAuth 2.0, Passport.js, Brevo (Sendinblue), Cloudinary, Razorpay, JWT, Python FastAPI, Google Gemini, Render.
+> **Key Tech Stack:** Node.js, Express.js, MongoDB Atlas (10 Collections), Google OAuth 2.0, Passport.js, Brevo (Sendinblue), Cloudinary, Razorpay, JWT (Dual-Token Rotation), Python FastAPI, Google Gemini 1.5/2.0 Flash, Render.
 
 ---
 
 ## 📑 Quick Navigation
 
+0. [Category 0: Technology Triage (WHY did I use it? HOW does it work in MY project? WHAT happens if it fails?)](#category-0-technology-triage)
 1. [Category 1: Project Overview & Architecture (Q1 – Q5)](#category-1-project-overview--architecture)
 2. [Category 2: Database Design & MongoDB (Q6 – Q10)](#category-2-database-design--mongodb)
 3. [Category 3: Authentication, Authorization & Security (Q11 – Q16)](#category-3-authentication-authorization--security)
 4. [Category 4: Third-Party Integrations (OAuth, Brevo, Cloudinary, Razorpay, Gemini) (Q17 – Q22)](#category-4-third-party-integrations)
 5. [Category 5: Real Challenges & Difficulties Faced (Q23 – Q27)](#category-5-real-challenges--difficulties-faced)
 6. [Category 6: Performance, Scalability & System Design (Q28 – Q30)](#category-6-performance-scalability--system-design)
+
+---
+
+## Category 0: Technology Triage
+
+For every technology in EduStack, here is the exact three-part answer: **WHY did I use it? HOW does it work in MY project? WHAT happens if it fails?**
+
+### 1. Brevo (Sendinblue) / Resend / Nodemailer
+- **WHY:** Standard Nodemailer SMTP ports (25, 465, 587) are strictly blocked by cloud hosting providers like Render's free tier to prevent spam. This caused signup and password reset OTP requests to hang indefinitely and fail with `ETIMEDOUT`.
+- **HOW:** `server/services/mailService.js` implements a resilient 3-tier delivery cascade:
+  1. Primary: **Brevo HTTPS REST API** (`POST https://api.brevo.com/v3/smtp/email` on Port 443 — immune to SMTP blocks).
+  2. Secondary: **Resend HTTPS REST API** (`POST https://api.resend.com/emails` on Port 443).
+  3. Tertiary: **Nodemailer SMTP** (for localhost/unblocked environments).
+  4. Enforces IPv4 resolution via `dns.setDefaultResultOrder('ipv4first')` to eliminate Linux IPv6 resolution delays.
+- **FAILURE:** If all external email APIs fail, `mailService.js` outputs `🔑 [EduStack OTP Code]: <code_here>` directly into Render server logs so evaluators and developers can verify accounts immediately.
+
+### 2. JSON Web Tokens (JWT) & Dual-Token Rotation
+- **WHY:** Single long-lived tokens stored in browser `localStorage` are vulnerable to script theft via XSS. Stateless JWTs without revocation prevent admins from revoking compromised sessions.
+- **HOW:** `server/utils/generateToken.js` implements a dual-token rotation architecture:
+  - **Access Token:** 15-minute lifespan (`JWT_ACCESS_EXPIRES_IN`), signed with `JWT_ACCESS_SECRET`, stored in an `httpOnly`, `secure`, `sameSite` cookie named `edustack_access_token`.
+  - **Refresh Token:** 30-day lifespan (`JWT_REFRESH_EXPIRES_IN`), signed with `JWT_REFRESH_SECRET`. The raw token is **never stored in plaintext**; its `SHA-256` cryptographic digest is stored in the `RefreshToken` MongoDB collection.
+  - **Rotation & Replay Detection:** When `/api/auth/refresh` is hit, the existing refresh token hash is deleted from the DB and a brand-new token pair is issued. If an already-consumed token is presented (replay attack), the system revokes **all** active sessions for that user ID.
+- **FAILURE:** Expired access token triggers `401 Session expired`. Client-side `api.js` catches this, calls `/api/auth/refresh` silently, and transparently retries the failed request. If the refresh token is also expired or revoked, the user is redirected to `/auth/login.html`.
+
+### 3. Google Generative AI (Gemini 1.5 / 2.0 Flash)
+- **WHY:** State-of-the-art LLM with a 1-million-token context window, sub-second latency, structured JSON output capabilities, and generous free-tier quotas for student learning.
+- **HOW:** In `ml_services/main.py`, Python FastAPI queries `LightRAGStore` to perform keyword retrieval over academic notes, injects the top-3 document chunks into a structured prompt, and queries Gemini. For quizzes, Gemini returns strictly formatted JSON validated via Pydantic. Dynamic model selection (`get_available_gemini_models()`) ensures seamless operation across `gemini-1.5-flash` and `gemini-2.0-flash`.
+- **FAILURE:** If Gemini's API quota is exceeded (429) or safety filters trigger, FastAPI catches the exception and returns `HTTP 503 Service Unavailable`. The Node gateway forwards this to the client as an interactive alert toast without crashing.
+
+### 4. MongoDB Atlas & Mongoose ODM
+- **WHY:** EduStack stores heterogeneous educational content (notes, PYQs, playlists, DSA sheets) with varying schemas. MongoDB handles polymorphic BSON documents without complex multi-table joins, while native TTL indexes handle automated cleanup.
+- **HOW:** Mongoose ODM connects with connection pooling and retry listeners. 10 schemas enforce validations, pre-save password hashing, and unique compound indexes (e.g. `{ user: 1, subject: 1 }` on `Enrollment` to prevent race-condition duplicate enrollments).
+- **FAILURE:** If MongoDB Atlas becomes unreachable, Mongoose triggers disconnected events and `errorHandler.js` returns a sanitized 500 JSON message. Duplicate key violations (`E11000`) are cleanly caught and translated to `409 Conflict`.
+
+### 5. Node.js & Express.js (Core API Gateway)
+- **WHY:** High-throughput, non-blocking asynchronous event loop based on `libuv`. Ideal for I/O-heavy API gateways managing concurrent client traffic, file streaming, and third-party API calls.
+- **HOW:** `server/app.js` coordinates security headers, CORS, body parsing, static HTML/asset delivery, modular REST routers (`/api/*`), and proxies AI requests to Python on port 8000.
+- **FAILURE:** Synchronous errors pass to `errorHandler.js`. Uncaught exceptions and unhandled promise rejections are intercepted at the process level, triggering a graceful server drain and DB connection pool closure via `SIGTERM`/`SIGINT` handlers.
+
+### 6. Python FastAPI & Uvicorn (AI Microservice)
+- **WHY:** Parsing 100-page academic PDFs and running NLP tokenization in single-threaded Node.js blocks the event loop, causing severe latency for all browsing students. Python possesses the mature AI/ML ecosystem.
+- **HOW:** Runs on ASGI Uvicorn server (`port 8000`), proxied by Node.js via `postToMLService`. Uses Pydantic for request validation, in-memory `LightRAGStore` for search, and asynchronous handlers.
+- **FAILURE:** If Python crashes on a corrupted PDF or OOM event, Node.js catches `ECONNREFUSED` or socket timeout and returns `503 AI Service Unavailable`. The primary web application and database operations remain 100% functional.
+
+### 7. pypdf (Document Text Extraction)
+- **WHY:** Extracting text from student-uploaded syllabi and notes is required for LLM summarization. Unlike PyMuPDF or Tesseract OCR, `pypdf` is pure Python with **zero external C++ system dependencies**, allowing seamless deployment on containerized platforms (Render).
+- **HOW:** Reads the PDF memory buffer via `io.BytesIO(contents)`, iterates through pages, extracts text streams, and passes truncated tokens to Gemini.
+- **FAILURE:** Password-protected PDFs trigger `reader.is_encrypted` -> returns `400 Encrypted PDFs not supported`. Scanned image PDFs return empty text -> returns `400 Scanned image PDFs without OCR not supported`.
+
+### 8. Cloudinary & Multer (Ephemeral-Safe Media Engine)
+- **WHY:** Render, Heroku, and containerized Docker environments use **ephemeral filesystems**. Any file saved to local disk (`/uploads`) is wiped when the container restarts or scales down.
+- **HOW:** Multer intercepts multi-part requests into memory buffers (`multer.memoryStorage()`). `cloudinary.uploader.upload_stream` streams the buffer directly to Cloudinary's CDN, returning secure HTTPS URLs stored in MongoDB.
+- **FAILURE:** Files > 5MB are rejected by Multer before hitting memory (`LIMIT_FILE_SIZE` -> 400 Bad Request). If Cloudinary is down, the controller aborts and preserves the user's existing avatar URL.
+
+### 9. Razorpay & Node Crypto (HMAC Payment Security)
+- **WHY:** Enables monetization for the premium DSA problem tracker (₹5 nominal fee). Cryptographic signature verification ensures students cannot bypass payment.
+- **HOW:** Server initiates orders via `razorpay.orders.create({ amount: 500, currency: 'INR' })`. Upon client payment, the server re-computes `HMAC-SHA256(order_id + '|' + payment_id, SECRET)` and verifies it using `crypto.timingSafeEqual()`.
+- **FAILURE:** If the signature does not match, `Payment.status` is set to `'failed'`, `user.isPremium` remains `false`, and `400 Invalid payment signature` is returned. `crypto.timingSafeEqual()` eliminates side-channel timing attacks that exist with standard `===` comparisons.
+
+### 10. Passport.js & Google OAuth 2.0
+- **WHY:** One-click Google login eliminates password fatigue and guarantees verified student email addresses without requiring an initial OTP flow.
+- **HOW:** `passport-google-oauth20` redirects to Google's consent screen. Callback extracts the verified email, checks `ADMIN_EMAILS` env list for automatic admin role promotion, finds or creates the user record, sets `isVerified: true`, and issues dual-token JWT cookies via `attachTokenPair()`.
+- **FAILURE:** User cancellation or Google server errors trigger the failure callback: redirects to `/auth/login.html?error=oauth_failed` where an informative error alert is rendered.
+
+### 11. Bcryptjs (Cryptographic Password Hashing)
+- **WHY:** Fast hashing algorithms (MD5, SHA-256) are vulnerable to GPU brute-force cracking. Bcrypt is an adaptive, CPU-intensive key derivation function resistant to rainbow tables.
+- **HOW:** Mongoose pre-save hook on `userSchema` generates a salt with **12 rounds** (~250–300ms work factor) and hashes the password before persistence. `password` is marked `select: false` so it is never returned in DB queries by default.
+- **FAILURE:** Invalid password comparison in `loginController` returns generic `401 Invalid credentials` to prevent account enumeration.
+
+### 12. Helmet & Express Security Suite
+- **WHY:** Protects against OWASP Top 10 web vulnerabilities: Clickjacking, XSS, MIME-sniffing, NoSQL query injection, and brute-force traffic saturation.
+- **HOW:** 
+  - `helmet()` configures 14 secure HTTP headers (`X-Frame-Options`, `X-Content-Type-Options`, `HSTS`).
+  - `express-mongo-sanitize()` strips `$` and `.` from inputs, neutralizing NoSQL injections like `{"$gt": ""}`.
+  - `express-rate-limit()` enforces tiered sliding windows: 10 req/15min on login, 5 req/hr on register, 30 req/10min on AI routes.
+  - `express-validator` validates boundaries and formats before controller execution.
+- **FAILURE:** Rate limit breaches return `429 Too Many Requests`. Schema validation failures abort immediately with `400 Bad Request` and structured field errors.
+
+### 13. Tailwind CSS & Vanilla JavaScript
+- **WHY:** Eliminates 200KB–1MB of framework bundle overhead (React/Next.js), delivering instant First Contentful Paint (FCP) on slow college Wi-Fi or mobile data.
+- **HOW:** Tailwind compiles utility CSS to `output.css`. `partials.js` (1849 lines) acts as client-side component router: checks `/api/auth/me`, injects dynamic navigation, mounts the notification bell, and manages dark/light themes.
+- **FAILURE:** DOM logic is encapsulated in component-level `try...catch` blocks; static HTML remains fully readable even if dynamic JavaScript encounters an exception.
+
+### 14. Google Sheets CSV Sync Engine & Multi-Tier Cache
+- **WHY:** Managing 450+ DSA problems directly in a database requires building a complex CMS. Faculty and student contributors maintain the problem list in a shared Google Sheet.
+- **HOW:** Custom state-machine CSV parser (`parseCSVText`) in `server/app.js` runs a 3-tier caching strategy:
+  1. Tier 1: In-Memory Cache (`_dsaSheetCache` — serves requests in < 5ms).
+  2. Tier 2: Live Google Sheets CSV sync every 5 minutes (`/api/dsa-sheet/sync`).
+  3. Tier 3: Local disk fallback (`parsed_problems.json` — 448KB).
+- **FAILURE:** If Google Sheets times out or sheet permissions change, the server automatically catches the network error and falls back to `parsed_problems.json` on disk. Users experience zero downtime.
 
 ---
 
@@ -31,7 +122,7 @@ EduStack unifies this into a single platform:
 2. **Interactive 450+ DSA Sheet:** Multi-company tagged problem tracker synchronized with Google Sheets, offering video explanations and GitHub solutions.
 3. **AI-Powered Learning Hub:** A microservice powered by Google Gemini and FastAPI that performs PDF summarization, smart Q&A tutoring, and dynamic PYQ mock quiz generation.
 4. **Community Contributor Workflow:** A role-based peer contribution pipeline with admin moderation.
-5. **Monetization & Security:** Razorpay integration for premium DSA sheet access, hardened with JWT in httpOnly cookies, rate limiting, and NoSQL sanitization."
+5. **Monetization & Security:** Razorpay integration for premium DSA sheet access, hardened with JWT dual-token rotation in httpOnly cookies, rate limiting, and NoSQL sanitization."
 
 ---
 
@@ -51,12 +142,12 @@ EduStack unifies this into a single platform:
 ### Q3. What is your complete tech stack and why did you choose these specific tools?
 **Answer:**  
 - **Backend:** Node.js & Express.js — lightweight, highly customizable middleware pipeline, vast npm ecosystem.
-- **Database:** MongoDB Atlas with Mongoose ODM — flexible schema design for polymorphic resources (notes, videos, links), built-in TTL indexing, and native JSON representation.
-- **Authentication:** JWT (JSON Web Tokens) with `httpOnly` secure cookies + Google OAuth 2.0 via Passport.js.
+- **Database:** MongoDB Atlas with Mongoose ODM — flexible schema design for polymorphic resources (notes, videos, links), built-in TTL indexing, and native JSON representation across 10 collections.
+- **Authentication:** JWT (JSON Web Tokens) with dual-token rotation in `httpOnly` secure cookies + Google OAuth 2.0 via Passport.js.
 - **File & Media Storage:** Multer (memory buffer) + Cloudinary CDN for cloud media transformation and delivery.
-- **Transactional Emails:** Brevo (Sendinblue) via HTTPS REST API (with Nodemailer fallback) for OTP delivery and notifications.
-- **Payment Processing:** Razorpay API with cryptographic webhook and HMAC SHA256 signature verification.
-- **AI Engine:** Python FastAPI with Google Gemini 1.5/Pro models.
+- **Transactional Emails:** Brevo (Sendinblue) via HTTPS REST API (with Resend and Nodemailer fallback) for OTP delivery.
+- **Payment Processing:** Razorpay API with constant-time HMAC-SHA256 signature verification (`crypto.timingSafeEqual`).
+- **AI Engine:** Python FastAPI with Google Gemini 1.5/2.0 Flash models.
 - **Security Suite:** Helmet, express-rate-limit, express-mongo-sanitize, bcryptjs (12 salt rounds), and CORS.
 - **Deployment:** Render.com for backend services and MongoDB Atlas for database.
 
@@ -77,8 +168,8 @@ EduStack unifies this into a single platform:
 1. The client never communicates directly with the Python AI microservice.
 2. When a user requests an AI summary or quiz (`/api/ai/*`), the request first hits Node.js.
 3. The Node.js `isAuth` middleware validates the user's JWT cookie.
-4. An `express-rate-limit` rule ensures the user cannot spam costly LLM endpoints.
-5. If valid, Node.js uses `axios`/`fetch` to forward the payload internally to `ML_SERVICE_URL` (`http://localhost:8000` or Render internal private network).
+4. An `express-rate-limit` rule ensures the user cannot spam costly LLM endpoints (30 req/10 min).
+5. If valid, Node.js uses `fetch` to forward the payload internally to `ML_SERVICE_URL` (`http://localhost:8000` or Render internal private network).
 6. **Benefits:**
    - The Python service remains completely hidden behind the private network.
    - Centralized authentication and rate limiting.
@@ -93,29 +184,30 @@ EduStack unifies this into a single platform:
 "We selected MongoDB for three key technical reasons:
 1. **Heterogeneous / Polymorphic Resource Models:** Educational resources vary widely in structure. A 'Lecture Note' has a Google Drive link and file size; a 'PYQ' has an exam year, semester, and question type; a 'Playlist' has a YouTube playlist ID and lecture count. In MongoDB, a single `Resource` collection handles varied metadata cleanly using flexible BSON documents without requiring multiple sparse SQL join tables.
 2. **Speed of Development & Native JSON:** The entire application runs on JavaScript/Node.js. Working with JSON natively eliminates the object-relational impedance mismatch without needing heavy ORM abstraction layers.
-3. **Built-in Automatic TTL (Time-To-Live) Collections:** For OTP verification and session storage, MongoDB provides native background document expiration without requiring external workers or Redis."
+3. **Built-in Automatic TTL (Time-To-Live) Collections:** For OTP verification and refresh token expiration, MongoDB provides native background document expiration without requiring external workers or Redis."
 
 ---
 
 ### Q7. How did you design your MongoDB schemas, and how did you choose between Embedding vs Referencing?
 **Answer:**  
-"We followed standard MongoDB data modeling principles based on access patterns:
+"We followed standard MongoDB data modeling principles across 10 collections based on access patterns:
 - **Referencing (Normalized):**
   - `User` ⟷ `Enrollment` ⟷ `Subject`: A user can enroll in many subjects, and a subject can have thousands of students. Embedding enrollments directly into the User document would risk hitting the 16MB BSON document limit and cause unbounded array growth. Thus, `Enrollment` is a separate collection referencing `user` and `subject` ObjectIds.
   - `Resource` references `Subject` via `subject: { type: ObjectId, ref: 'Subject' }`.
+  - `RefreshToken` references `User` and stores the SHA-256 hash.
 - **Embedding (Denormalized):**
-  - User social links, notification preferences, or subject module metadata are embedded directly inside their parent documents because they are always read together, bounded in size (1:few), and updated atomically."
+  - User notification read status (`readBy: [ObjectId]`) is embedded directly inside the parent `Notification` document because the recipient list is bounded and checked together with the alert."
 
 ---
 
-### Q8. How does your OTP expiration work in MongoDB? Why use a TTL index instead of a cron job?
+### Q8. How does your OTP and Session expiration work in MongoDB? Why use a TTL index instead of a cron job?
 **Answer:**  
-"In our `otp.js` Mongoose model, we leverage MongoDB's native **TTL (Time-To-Live) Index**:
+"In our `otp.js` and `refreshToken.js` Mongoose models, we leverage MongoDB's native **TTL (Time-To-Live) Index**:
 ```javascript
 const otpSchema = new mongoose.Schema({
   email: { type: String, required: true },
-  otp: { type: String, required: true },
-  createdAt: { type: Date, default: Date.now, index: { expires: '10m' } }
+  code: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now, expires: 600 } // 10 minutes
 });
 ```
 **Why this is superior to a cron job:**
@@ -127,8 +219,8 @@ const otpSchema = new mongoose.Schema({
 
 ### Q9. What indexes did you create in your database, and how did you prevent race conditions (like duplicate enrollments)?
 **Answer:**  
-"We created several strategic indexes:
-1. **Unique Indexes:** `email` on the `User` model, `name` on the `Subject` model, and `razorpayOrderId` on the `Payment` model.
+"We created several strategic indexes across our 10 collections:
+1. **Unique Indexes:** `email` on `User`, `name` on `Subject`, `razorpayOrderId` on `Payment`, and `tokenHash` on `RefreshToken`.
 2. **Compound Unique Index for Race Conditions:** To prevent a user from enrolling in the same subject twice (e.g., clicking the 'Enroll' button rapidly before the first request finishes), we enforced a compound unique index on the `Enrollment` schema:
    ```javascript
    enrollmentSchema.index({ user: 1, subject: 1 }, { unique: true });
@@ -154,18 +246,21 @@ Therefore:
 
 ## Category 3: Authentication, Authorization & Security
 
-### Q11. Explain your authentication workflow: How do JWT and Google OAuth 2.0 work together in EduStack?
+### Q11. Explain your authentication workflow: How do JWT Dual-Token Rotation and Google OAuth 2.0 work together in EduStack?
 **Answer:**  
-"We implemented a unified hybrid authentication architecture:
+"We implemented a unified hybrid authentication architecture with production-grade dual-token rotation:
 1. **Traditional Flow (Email/Password):**
    - User signs up $\rightarrow$ Password hashed with `bcryptjs` (12 rounds) $\rightarrow$ 6-digit OTP sent via Brevo $\rightarrow$ Upon OTP verification, `isVerified` is set to `true`.
-   - On login, credentials are confirmed $\rightarrow$ A signed JWT containing `{ id: user._id }` is generated $\rightarrow$ Attached as an `httpOnly` secure cookie.
+   - On login, credentials are confirmed $\rightarrow$ Two tokens are generated:
+     - **Access Token (15 mins):** Signed with `JWT_ACCESS_SECRET`, payload `{ id: userId }`, sent in an `httpOnly` cookie `edustack_access_token`.
+     - **Refresh Token (30 days):** Signed with `JWT_REFRESH_SECRET`. Hashed via `SHA-256` and saved in MongoDB's `RefreshToken` collection.
+   - When the access token expires, client hits `/api/auth/refresh`. The server checks the DB hash, rotates the tokens, and issues a fresh pair. Replay attacks trigger immediate revocation of all sessions.
 2. **Google OAuth 2.0 Flow (Passport.js):**
    - User clicks 'Sign in with Google' $\rightarrow$ Redirects to Google consent screen.
    - Google returns an authorization code to our callback `/auth/google/callback`.
    - Passport exchanges the code for the user profile.
    - If the user exists, we retrieve them; if new, we create a record with `googleId` and auto-verify `isVerified: true`.
-   - **Bridging OAuth to JWT:** Instead of keeping an open session in memory, our callback issues the standard signed JWT `httpOnly` cookie and redirects the user directly to the dashboard."
+   - **Bridging OAuth to JWT:** Instead of keeping an open session in memory, our callback issues the standard dual JWT `httpOnly` cookies via `attachTokenPair()` and redirects the user directly to the dashboard."
 
 ---
 
@@ -177,7 +272,7 @@ By storing the JWT in an **`httpOnly` cookie**:
 1. JavaScript running in the browser cannot read or access the cookie (`document.cookie` returns nothing for that token).
 2. The browser automatically attaches the cookie to same-origin HTTP requests.
 3. We set `secure: true` (in production) so cookies are only transmitted over encrypted HTTPS connections.
-4. We configure `sameSite: 'strict'` (or `'lax'`) to protect against Cross-Site Request Forgery (CSRF)."
+4. We configure `sameSite: 'none'` (with `secure: true`) in production to allow Google OAuth redirects while protecting against Cross-Site Request Forgery (CSRF)."
 
 ---
 
@@ -207,7 +302,7 @@ It is enforced using composable Express middleware:
 If an admin demotes or bans a user, or revokes a contributor's privileges:
 - If role was read purely from the stateless JWT, that user would retain elevated privileges until the token expired (e.g., 7 days).
 - By verifying the token ID and fetching `await User.findById(decoded.id).select('-password')` in `isAuth`:
-  1. Any status change (ban, role downgrade, account deactivation) takes effect **instantly**.
+  1. Any status change (ban, role downgrade, account deactivation) takes effect **instantly on the next HTTP request**.
   2. We verify the user still exists in the database.
 - *Performance consideration:* For large-scale systems, this lookup can be cached in Redis with a 60-second TTL to avoid hitting MongoDB on every request while preserving prompt revocation."
 
@@ -218,7 +313,7 @@ If an admin demotes or bans a user, or revokes a contributor's privileges:
 "We implemented a multi-layered defense-in-depth security suite:
 1. **NoSQL Injection:** Protected via `express-mongo-sanitize`, which strips out `$` and `.` from user inputs (`req.body`, `req.query`, `req.params`) preventing queries like `{"$gt": ""}`.
 2. **HTTP Header Hardening:** Configured `helmet()` to set Secure Headers (Content Security Policy, X-Frame-Options against clickjacking, HSTS, X-Content-Type-Options).
-3. **Brute-Force & DDoS Rate Limiting:** Using `express-rate-limit`, we restricted general API access and placed a strict limiter on auth endpoints (max 5 login/OTP attempts per 15-minute window).
+3. **Brute-Force & DDoS Rate Limiting:** Using `express-rate-limit`, we restricted general API access and placed a strict limiter on auth endpoints (max 10 login / 15-minute window; max 5 OTP requests / 10-minute window).
 4. **Data Leak Prevention:** Mongoose password field set to `select: false`.
 5. **CORS Control:** Explicitly whitelisted trusted origins (`CLIENT_URL` / Render domains)."
 
@@ -253,7 +348,7 @@ This is a standard implementation of the **Defense-in-Depth** design principle."
   3. Google redirects back to `/api/auth/google/callback` with a one-time code.
   4. Passport verifies the code and invokes the `verify` callback where we search for an existing `googleId` or matching `email`.
 - **Key Production Challenge Faced:**
-  In local development, the callback is `http://localhost:3000/api/auth/google/callback`. When deploying to Render, Google OAuth strictly rejects unauthorized redirect URIs. We had to configure production callback URLs with dynamic environment variables (`GOOGLE_CALLBACK_URL`) and ensure HTTPS was strictly enforced in Google Cloud Console."
+  In local development, the callback is `http://localhost:3000/auth/google/callback`. When deploying to Render, Google OAuth strictly rejects unauthorized redirect URIs. We had to configure production callback URLs with dynamic environment variables (`GOOGLE_CALLBACK_URL`), ensure HTTPS was strictly enforced in Google Cloud Console, and enable `app.set('trust proxy', 1)` in Express."
 
 ---
 
@@ -265,7 +360,7 @@ This is a standard implementation of the **Defense-in-Depth** design principle."
 We transitioned to **Brevo (Sendinblue) via its HTTPS REST API (Port 443)**.
 1. HTTPS port 443 is never blocked by cloud providers.
 2. REST API requests execute as standard HTTP POST requests (`api.brevo.com/v3/smtp/email`), completing in under 200ms compared to the multi-step TCP/TLS SMTP handshake.
-3. We architected `mailService.js` to automatically use the HTTPS API in production while allowing fallback to local SMTP for offline development."
+3. We architected `mailService.js` with a 3-tier cascade: Brevo HTTPS REST $\rightarrow$ Resend HTTPS REST $\rightarrow$ Nodemailer SMTP, ensuring 100% email delivery across both cloud and local environments."
 
 ---
 
@@ -277,7 +372,7 @@ We transitioned to **Brevo (Sendinblue) via its HTTPS REST API (Port 443)**.
 1. **Multer Memory Storage:** We configured Multer with `multer.memoryStorage()`, meaning the uploaded image is received as an in-memory buffer (`req.file.buffer`) rather than being written to disk.
 2. **Cloudinary Stream Upload:** Using Cloudinary's `upload_stream`, we stream the buffer directly to Cloudinary's CDN:
    ```javascript
-   cloudinary.uploader.upload_stream({ folder: 'edustack/profiles' }, (err, result) => { ... }).end(req.file.buffer);
+   cloudinary.uploader.upload_stream({ folder: 'edustack/avatars' }, (err, result) => { ... }).end(req.file.buffer);
    ```
 3. **Benefits:**
    - Stateless server architecture.
@@ -290,15 +385,15 @@ We transitioned to **Brevo (Sendinblue) via its HTTPS REST API (Port 443)**.
 **Answer:**  
 "We implemented a 2-step verification protocol:
 1. **Order Creation (Server-side):**
-   - When a user clicks 'Buy Premium', the client calls `/api/payment/create-order`.
-   - The server calls `razorpay.orders.create({ amount, currency: 'INR', receipt })` and saves a pending record in our `Payment` collection.
+   - When a user clicks 'Buy Premium', the client calls `/api/payments/create-order`.
+   - The server calls `razorpay.orders.create({ amount: 500, currency: 'INR', receipt })` and saves a pending record in our `Payment` collection.
    - The `order_id` is sent to the client, which initializes the Razorpay checkout modal.
 2. **Signature Verification (Server-side):**
    - After payment completion, Razorpay returns `razorpay_payment_id`, `razorpay_order_id`, and `razorpay_signature`.
-   - The client posts these to `/api/payment/verify`.
+   - The client posts these to `/api/payments/verify`.
    - The server generates an expected HMAC signature:
      `HMAC-SHA256(order_id + '|' + payment_id, RAZORPAY_KEY_SECRET)`
-   - If the generated hash matches `razorpay_signature`, the payment is marked `successful` and user premium access is unlocked."
+   - If the generated hash matches `razorpay_signature` using constant-time comparison, the payment is marked `paid` and `user.isPremium` is set to `true`."
 
 ---
 
@@ -348,7 +443,7 @@ We transitioned to **Brevo (Sendinblue) via its HTTPS REST API (Port 443)**.
 **Answer:**  
 "In student resource portals, users often try to gain contributor or admin rights to tamper with study materials or download restricted files.
 1. **Workflow Enforcement:** A user cannot make themselves a contributor. They must submit a `ContributorRequest` form specifying their branch, year, and sample contributions.
-2. **Server-Side Validation:** The `role` attribute is strictly omitted from user profile update endpoints. Only designated admins can approve requests via `/api/admin/contributors/:id/approve`.
+2. **Server-Side Validation:** The `role` attribute is strictly omitted from user profile update endpoints. Only designated admins can approve requests via `/api/contributor-requests/:id/approve`.
 3. **Startup Contributor Role Synchronization:** On application startup, EduStack runs a background reconciliation check verifying that every user with `role === 'contributor'` has a corresponding approved `ContributorRequest` record in the database, preventing unauthorized manual DB modifications."
 
 ---
@@ -359,8 +454,8 @@ We transitioned to **Brevo (Sendinblue) via its HTTPS REST API (Port 443)**.
 
 **Solution: Multi-Tier Caching Pipeline:**
 1. **Disk Cache (`parsed_problems.json`):** A pre-compiled JSON file containing the full problem set is stored locally on the server.
-2. **In-Memory Cache (5-Minute TTL):** When `/api/dsa/live` is called, the server serves data directly from in-memory cache ($O(1)$ response time, < 10ms).
-3. **On-Demand Admin Sync (`/api/dsa/sync`):** Only authenticated admins can trigger a live re-fetch from the Google Sheets API to refresh the disk and memory caches."
+2. **In-Memory Cache (5-Minute TTL):** When `/api/dsa-sheet/live` is called, the server serves data directly from in-memory cache ($O(1)$ response time, < 5ms).
+3. **Periodic & On-Demand Sync (`/api/dsa-sheet/sync`):** The server refreshes the sheet every 5 minutes and updates both the memory cache and the disk fallback."
 
 ---
 
@@ -372,7 +467,7 @@ In `server.js`, we implemented graceful termination:
 ```javascript
 const shutdown = () => {
   server.close(async () => {
-    await mongoose.connection.close();
+    await mongoose.connection.close(false);
     process.exit(0);
   });
   // Force shutdown if requests take longer than 10s
@@ -419,4 +514,4 @@ This allows active HTTP requests to complete, closes database connection pools c
 
 ---
 
-*Compiled for EduStack Technical Interview Preparation*
+*Compiled for EduStack Technical Interview Preparation & System Architecture Defense.*
