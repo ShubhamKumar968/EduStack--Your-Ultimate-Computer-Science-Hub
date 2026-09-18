@@ -3,7 +3,8 @@
 
 > **Project:** EduStack (CS/Engineering Student Resource & AI Learning Hub)  
 > **Target Roles:** Full Stack Developer, Backend Engineer (Node.js/MERN), Software Development Engineer (SDE-1)  
-> **Key Tech Stack:** Node.js, Express.js, MongoDB Atlas (10 Collections), Google OAuth 2.0, Passport.js, Brevo (Sendinblue), Cloudinary, Razorpay, JWT (Dual-Token Rotation), Python FastAPI, Google Gemini 1.5/2.0 Flash, Render.
+> **Key Tech Stack:** Node.js, Express.js, MongoDB Atlas (10 Collections), Google OAuth 2.0, Passport.js, Brevo (Sendinblue), Cloudinary, Razorpay, JWT (Dual-Token Rotation), Python FastAPI, Google Gemini 1.5/2.0 Flash, Render.  
+> **Master Cross-Examination & Architecture Defense Guide:** See [CROSS_EXAMINATION_AND_INTERVIEW_DEFENSE.md](file:///c:/Users/HP/Desktop/EduStack/CROSS_EXAMINATION_AND_INTERVIEW_DEFENSE.md) for deep-dive grilling defenses, trade-off justifications, Google Drive migration to Cloudflare R2, and system design edge-cases.
 
 ---
 
