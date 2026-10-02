@@ -2445,7 +2445,7 @@
       "OLA cabs",
       "Morgan Stanely"
     ],
-    "problemLink": "https://www.geeksforgeeks.org/problems/longest-palindrome-in-a-string1956/1",
+    "problemLink": "https://www.geeksforgeeks.org/problems/count-palindrome-sub-strings-of-a-string0652/1",
     "github": "https://github.com/ShubhamKumar968/data-Structures/blob/main/(10). Dynamic programming/(4) DP on String (LCS Pattern)/06_countAllPalindromicSubstrings.cpp",
     "video": "https://youtu.be/jCK_y0h8VVE?si=pVdTxKAxvIa2LQ2x",
     "intuition": "Refer to problem logic & hints.",
